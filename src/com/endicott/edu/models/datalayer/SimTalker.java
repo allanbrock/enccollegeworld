@@ -3,6 +3,7 @@ package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
 import com.endicott.edu.models.models.CollegeModel;
 import com.endicott.edu.models.models.DormitoriesModel;
 import com.endicott.edu.models.models.DormitoryModel;
+import com.endicott.edu.models.models.NewsFeedItemModel;
 import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
 import com.google.gson.Gson;
@@ -33,13 +34,14 @@ public class SimTalker {
             logger.info("Found college: " + runId);
         }
 
-        // Attempt to fetch dorms
         DormitoryModel[] dorms = SimTalker.getDormitories(runId, msg);
+        NewsFeedItemModel[] news = SimTalker.getNews(runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("dorms",dorms);
+        request.setAttribute("news",news);
     }
 
     static public CollegeModel getCollege(String runId){
@@ -79,6 +81,28 @@ public class SimTalker {
             return null;
         }
         return dorms;
+    }
+
+    static public NewsFeedItemModel[] getNews(String runId, UiMessage msg){
+        NewsFeedItemModel[] news;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "newsfeed/" + runId);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("News as string: " +responseAsString);
+
+        try {
+            news = gson.fromJson(responseAsString, NewsFeedItemModel[].class);
+        } catch (Exception e) {
+            msg.setMessage(e.getMessage());
+            logger.severe("Exception getting news: " + e.getMessage());
+            return null;
+        }
+        logger.info("News is: " +news[0].getMessage());
+        return news;
     }
 
     static public CollegeModel nextDayAtCollege(String runId){

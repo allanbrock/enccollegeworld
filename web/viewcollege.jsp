@@ -1,7 +1,8 @@
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %><%--
+<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
+<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -26,8 +27,13 @@
   }
   DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
   if (dorms == null) {
-      dorms = new DormitoryModel[0];  // This is really bad
-      msg.setMessage(msg.getMessage() + "Attribute for dorms missing.");
+    dorms = new DormitoryModel[0];  // This is really bad
+    msg.setMessage(msg.getMessage() + "Attribute for dorms missing.");
+  }
+  NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+  if (news == null) {
+    news = new NewsFeedItemModel[0];  // This is really bad
+    msg.setMessage(msg.getMessage() + "Attribute for news missing.");
   }
 %>
 <h1>College <%=college.getRunId()%>
@@ -60,6 +66,16 @@
       </td>
     </tr>
   </table>
+  <p></p><table align="center" bgcolor="#DDDDFF" border="1" width="40%">
+  <%
+    for (int i=0; i<news.length; i++) {
+  %>
+  <tr>
+    <td>News</td>
+    <td><%=news[i].getMessage()%>
+    </td>
+  </tr>
+  <% } %>
 </form>
 </body>
 </html>
