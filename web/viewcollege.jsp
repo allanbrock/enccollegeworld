@@ -68,7 +68,7 @@
       </td>
     </tr>
     <%
-      for (int i=0; i<news.length; i++) {
+      for (int i=0; i<dorms.length; i++) {
     %>
     <tr>
       <td>Dorm</td>
