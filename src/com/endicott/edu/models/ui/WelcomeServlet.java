@@ -22,11 +22,13 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId=request.getParameter("runid");
+        String server=request.getParameter("server");
+        request.setAttribute("server", server);
 
         // Maybe the user wants to create the college...
         String buttonValue = request.getParameter("button");
         if (buttonValue != null && buttonValue.equals("Create College")) {
-            if (!SimTalker.createCollege(runId)) {
+            if (!SimTalker.createCollege(server, runId)) {
                 UiMessage msg = new UiMessage();
                 msg.setMessage("Unable to create the college.  See log for details.");
                 request.setAttribute("message", msg);
@@ -40,7 +42,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(runId, request);
+        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         logger.info("Attribute college: " + request.getAttribute("college"));
         if (request.getAttribute("college") == null) {

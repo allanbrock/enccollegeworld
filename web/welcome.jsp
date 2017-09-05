@@ -32,7 +32,12 @@
   <table align="center" bgcolor="#DDDDFF" border="1" width="40%">
     <tr>
       <td align="right">College ID
-      <input type="text" name="runid" maxlength="10" value="<%=college.getRunId()%>"</td>
+        <input type="text" name="runid" maxlength="10" value="<%=college.getRunId()%>">
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Sim Server
+        <input type="text" name="server" maxlength="10" value="http://localhost:8080/enccollegesim/"></td>
     </tr>
     <tr>
       <td colspan="1" align="center">

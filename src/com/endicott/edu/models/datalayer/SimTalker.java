@@ -1,7 +1,6 @@
 package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.models.models.CollegeModel;
-import com.endicott.edu.models.models.DormitoriesModel;
 import com.endicott.edu.models.models.DormitoryModel;
 import com.endicott.edu.models.models.NewsFeedItemModel;
 import com.endicott.edu.models.ui.ServiceUtils;
@@ -10,22 +9,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class SimTalker {
     private static Logger logger = Logger.getLogger("SimTalker");
 
-    public static void openCollegeAndStoreInRequest(String runId, HttpServletRequest request) {
+    public static void openCollegeAndStoreInRequest(String server, String runId, HttpServletRequest request) {
         CollegeModel college;
         UiMessage msg = new UiMessage();
 
-        college = SimTalker.getCollege(runId);
+        college = SimTalker.getCollege(server, runId);
         if (college == null) {
             msg.setMessage("Failed to find college.");
             logger.info(msg.getMessage());
@@ -34,8 +31,8 @@ public class SimTalker {
             logger.info("Found college: " + runId);
         }
 
-        DormitoryModel[] dorms = SimTalker.getDormitories(runId, msg);
-        NewsFeedItemModel[] news = SimTalker.getNews(runId, msg);
+        DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
+        NewsFeedItemModel[] news = SimTalker.getNews(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
@@ -44,10 +41,10 @@ public class SimTalker {
         request.setAttribute("news",news);
     }
 
-    static public CollegeModel getCollege(String runId){
+    static public CollegeModel getCollege(String server, String runId){
         CollegeModel college;
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "college/" + runId);
+        WebTarget webTarget = client.target(server + "college/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.get();
@@ -57,22 +54,23 @@ public class SimTalker {
         try {
             college = gson.fromJson(responseAsString, CollegeModel.class);
         } catch (Exception e) {
-            logger.severe("Exception getting college: " + ServiceUtils.LOCAL_SERVICE_URL + "college/" + runId + " " + e.getMessage() + " College: " + responseAsString);
+            logger.severe("Exception getting college: " + server + "college/" + runId + " " + e.getMessage() + " College: " + responseAsString);
             return null;
         }
 
         return college;
     }
 
-    static public  DormitoryModel[] getDormitories(String runId, UiMessage msg){
+    static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
         DormitoryModel[] dorms;
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "dorms/" + runId);
+        WebTarget webTarget = client.target(server + "dorms/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
+        logger.info("Dorms as string: " +responseAsString);
 
         try {
             dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
@@ -83,10 +81,10 @@ public class SimTalker {
         return dorms;
     }
 
-    static public NewsFeedItemModel[] getNews(String runId, UiMessage msg){
+    static public NewsFeedItemModel[] getNews(String server, String runId, UiMessage msg){
         NewsFeedItemModel[] news;
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "newsfeed/" + runId);
+        WebTarget webTarget = client.target(server + "newsfeed/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.get();
@@ -105,10 +103,10 @@ public class SimTalker {
         return news;
     }
 
-    static public CollegeModel nextDayAtCollege(String runId){
+    static public CollegeModel nextDayAtCollege(String server, String runId){
         CollegeModel college;
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "college/" + runId + "/nextDay");
+        WebTarget webTarget = client.target(server + "college/" + runId + "/nextDay");
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.put(Entity.json(""));
@@ -123,14 +121,14 @@ public class SimTalker {
         return college;
     }
 
-    public static boolean createCollege(String runId) {
+    public static boolean createCollege(String server, String runId) {
         CollegeModel college = new CollegeModel();
         college.setRunId(runId);
 
         logger.info("Creating college " + runId);
 
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(ServiceUtils.LOCAL_SERVICE_URL + "college/" + runId);
+        WebTarget webTarget = client.target(server + "college/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         // In the post we have a minimal JSON for the college just having the runID.

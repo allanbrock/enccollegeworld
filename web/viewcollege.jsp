@@ -16,6 +16,7 @@
 </head>
 <body>
 <%
+  String server = (String) request.getAttribute("server");
   UiMessage msg = (UiMessage) request.getAttribute("message");
   if (msg == null) {
     msg = new UiMessage();
@@ -43,7 +44,19 @@
 </h2>
 <form action="updateCollege" method="post">
   <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+  <input type="hidden" name="server" value="<%=server%>">
   <table align="center" bgcolor="#DDDDFF" border="1" width="40%">
+    <tr>
+      <td colspan="2" align="center">
+        <input type="submit" name="nextDayButton" value="Next Day">
+        <input type="submit" name="refreshButton" value="Refresh">
+      </td>
+    </tr>
+    <tr>
+      <td>Server</td>
+      <td><%=server%>
+      </td>
+    </tr>
     <tr>
       <td>Day</td>
       <td><%=college.getCurrentDay()%>
@@ -54,17 +67,15 @@
       <td>$<%=college.getAvailableCash()%>
       </td>
     </tr>
+    <%
+      for (int i=0; i<news.length; i++) {
+    %>
     <tr>
-      <td>Number of Dorms</td>
-      <td><%=dorms.length%>
+      <td>Dorm</td>
+      <td><%=dorms[i].getName()%>
       </td>
     </tr>
-    <tr>
-      <td colspan="2" align="center">
-        <input type="submit" name="nextDayButton" value="Next Day">
-        <input type="submit" name="refreshButton" value="Refresh">
-      </td>
-    </tr>
+    <% } %>
   </table>
   <p></p><table align="center" bgcolor="#DDDDFF" border="1" width="40%">
   <%
@@ -72,6 +83,7 @@
   %>
   <tr>
     <td>News</td>
+    <td>Day <%=news[i].getHour()/24%>
     <td><%=news[i].getMessage()%>
     </td>
   </tr>
