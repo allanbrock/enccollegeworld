@@ -8,18 +8,18 @@ import java.io.Serializable;
 public class DormitoryModel implements Serializable {
     private int capacity = 0;
     private int costPerHour = 0;
+    private int hourLastUpdated = 0;
+    private String name = "unknown";
     private String runId = "unknown";
     private String note = "no note";
-    private int hourLastTimeBillPaid = 0;
-    private String name = "unknown";
 
     public DormitoryModel() {
     }
 
-    public DormitoryModel(int capacity, int costPerHour, int elapsedHoursSinceCharge, String name, String runId) {
+    public DormitoryModel(int capacity, int costPerHour, int hourLastUpdated, String name, String runId) {
         this.capacity = capacity;
         this.costPerHour = costPerHour;
-        this.hourLastTimeBillPaid = elapsedHoursSinceCharge;
+        this.hourLastUpdated = hourLastUpdated;
         this.name = name;
         this.runId = runId;
     }
@@ -40,12 +40,12 @@ public class DormitoryModel implements Serializable {
         this.costPerHour = costPerHour;
     }
 
-    public int getHourLastTimeBillPaid() {
-        return hourLastTimeBillPaid;
+    public int getHourLastUpdated() {
+        return hourLastUpdated;
     }
 
-    public void setHourLastTimeBillPaid(int hourLastTimeBillPaid) {
-        this.hourLastTimeBillPaid = hourLastTimeBillPaid;
+    public void setHourLastUpdated(int hourLastUpdated) {
+        this.hourLastUpdated = hourLastUpdated;
     }
 
     public String getName() {
