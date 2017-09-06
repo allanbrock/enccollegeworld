@@ -1,14 +1,10 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="enccollegeworld:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/enccollegeworld_war_exploded</output-path>
-    <root id="root">
-      <element id="javaee-facet-resources" facet="enccollegeworld/web/Web" />
+  <artifact type="war" name="enccollegeworld">
+    <output-path>$PROJECT_DIR$/out/artifacts/enccollegeworld</output-path>
+    <root id="archive" name="enccollegeworld.war">
+      <element id="artifact" artifact-name="enccollegeworld:war exploded" />
       <element id="directory" name="WEB-INF">
-        <element id="directory" name="classes">
-          <element id="module-output" name="enccollegeworld" />
-        </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="com.google.code.gson:gson:2.7" />
           <element id="library" level="project" name="javax.ws.rs:javax.ws.rs-api:2.0.1" />
           <element id="library" level="project" name="org.glassfish.jersey.core:jersey-client:2.25.1" />
           <element id="library" level="project" name="org.glassfish.jersey.media:jersey-media-moxy:2.25.1" />
