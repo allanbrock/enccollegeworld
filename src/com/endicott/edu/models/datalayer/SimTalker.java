@@ -99,7 +99,6 @@ public class SimTalker {
             logger.severe("Exception getting news: " + e.getMessage());
             return null;
         }
-        logger.info("News is: " +news[0].getMessage());
         return news;
     }
 

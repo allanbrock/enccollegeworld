@@ -77,12 +77,12 @@
     </tr>
     <% } %>
   </table>
+  <h3>News</h3>
   <p></p><table align="center" bgcolor="#DDDDFF" border="1" width="40%">
   <%
-    for (int i=0; i<news.length; i++) {
+    for (int i=news.length-1; i>=0; i--) {
   %>
   <tr>
-    <td>News</td>
     <td>Day <%=news[i].getHour()/24%>
     <td><%=news[i].getMessage()%>
     </td>

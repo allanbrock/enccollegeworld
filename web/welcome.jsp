@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <td align="right">Sim Server
-        <input type="text" name="server" maxlength="10" value="http://localhost:8080/enccollegesim/"></td>
+        <input type="text" name="server" maxlength="64" value="http://localhost:8080/enccollegesim/"></td>
     </tr>
     <tr>
       <td colspan="1" align="center">
