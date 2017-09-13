@@ -10,6 +10,15 @@
 <html>
 <title>Enc College World</title>
 <link rel="stylesheet" href = "resources/style.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <%
@@ -23,10 +32,19 @@
       college = new CollegeModel();
   }
 %>
-<h1>Endicott College World</h1>
+<p></p>
+<p></p>
+<div class="container">
+  <div class="jumbotron">
+    <h1>Endicott College World</h1>
+    <p>A simulation of college life: students, dorms, sporting events, financials, unexpected events and more.</p>
+  </div>
+</div>
 
 <!-- Display a message if defined -->
-<h2><%=msg.getMessage()%></h2>
+<div class="alert alert-success">
+  <strong>Info</strong> <%=msg.getMessage()%>
+</div>
 
 <form action="welcome" method="post">
   <table align="center" bgcolor="#DDDDFF" border="1" width="40%">
