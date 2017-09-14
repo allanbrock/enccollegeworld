@@ -41,22 +41,25 @@
   </div>
 </div>
 
-<!-- Display a message if defined -->
-<div class="alert alert-success">
-  <strong>Info</strong> <%=msg.getMessage()%>
-</div>
+<div class="container">
+  <!-- Display a message if defined -->
+  <% if (msg.getMessage().length() > 0) { %>
+  <div class="alert alert-success">
+    <strong>Info</strong> <%=msg.getMessage()%>
+  </div>
+  <% } %>
 
 <form action="welcome" method="post">
-  <table align="center" bgcolor="#DDDDFF" border="1" width="40%">
-    <tr>
-      <td align="right">College ID
-        <input type="text" name="runid" maxlength="10" value="<%=college.getRunId()%>">
-      </td>
-    </tr>
-    <tr>
-      <td align="right">Sim Server
-        <input type="text" name="server" maxlength="64" value="http://localhost:8080/enccollegesim/"></td>
-    </tr>
+  <div class="form-group">
+    <label for="runid">College ID:</label>
+    <input type="text" name="runid" class="form-control" id="runid" value="<%=college.getRunId()%>">
+  </div>
+  <div class="form-group">
+    <label for="server">Server:</label>
+    <input type="text" class="form-control" id="server" name="server" value="http://localhost:8080/enccollegesim/">
+  </div>
+
+  <table align="center" border="0" width="40%">
     <tr>
       <td colspan="1" align="center">
         <input type="submit" name="button" value="Open College">
@@ -65,5 +68,6 @@
     </tr>
   </table>
 </form>
+</div>
 </body>
 </html>
