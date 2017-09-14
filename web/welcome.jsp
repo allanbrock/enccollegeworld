@@ -59,14 +59,10 @@
     <input type="text" class="form-control" id="server" name="server" value="http://localhost:8080/enccollegesim/">
   </div>
 
-  <table align="center" border="0" width="40%">
-    <tr>
-      <td colspan="1" align="center">
-        <input type="submit" name="button" value="Open College">
-        <input type="submit" name="button" value="Create College">
-      </td>
-    </tr>
-  </table>
+  <div class="container">
+        <input type="submit" class="btn btn-info" name="button" value="Open College">
+        <input type="submit" class="btn btn-info" name="button" value="Create College">
+  </div>
 </form>
 </div>
 </body>
