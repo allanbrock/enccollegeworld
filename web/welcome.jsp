@@ -35,11 +35,20 @@
 <p></p>
 <p></p>
 <div class="container">
+
+  <form action="welcome" method="post">
   <div class="jumbotron">
     <h1>Endicott College World</h1>
     <p>A simulation of college life: students, dorms, sporting events, financials, unexpected events and more.</p>
+    <div class="form-group">
+      <label for="runid">College ID:</label>
+      <input type="text" name="runid" class="form-control" id="runid" value="<%=college.getRunId()%>">
+    </div>
+    <div class="container">
+      <input type="submit" class="btn btn-info" name="button" value="Open College">
+      <input type="submit" class="btn btn-info" name="button" value="Create College">
+    </div>
   </div>
-</div>
 
 <div class="container">
   <!-- Display a message if defined -->
@@ -49,20 +58,12 @@
   </div>
   <% } %>
 
-<form action="welcome" method="post">
-  <div class="form-group">
-    <label for="runid">College ID:</label>
-    <input type="text" name="runid" class="form-control" id="runid" value="<%=college.getRunId()%>">
-  </div>
+
   <div class="form-group">
     <label for="server">Server:</label>
     <input type="text" class="form-control" id="server" name="server" value="http://localhost:8080/enccollegesim/">
   </div>
 
-  <div class="container">
-        <input type="submit" class="btn btn-info" name="button" value="Open College">
-        <input type="submit" class="btn btn-info" name="button" value="Create College">
-  </div>
 </form>
 </div>
 </body>

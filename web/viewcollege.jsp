@@ -12,7 +12,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>Enc College World</title>
-<link rel="stylesheet" href="resources/style.css"
+<link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -51,43 +51,39 @@
   }
 %>
 
-<div class="container">
-  <h1>College <%=college.getRunId()%>
-  </h1>
-  <!-- Display a message if defined -->
 
-  <form action="updateCollege" method="post">
+<form action="updateCollege" method="post">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#"><%=college.getRunId()%></a></li>
+        <!-- <li><a href="#">Dorms</a></li> -->
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="jumbotron">
+    <h2>Balance $<%=college.getAvailableCash()%> </h2>
+    <p>Day <%=college.getCurrentDay()%></p>
+    <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+  </div>
+  <!-- Display a message if defined -->
     <input type="hidden" name="runid" value="<%=college.getRunId()%>">
     <input type="hidden" name="server" value="<%=server%>">
-
-    <table class="table table-condensed">
-      <tbody>
-      <tr>
-        <td>Server</td>
-        <td><%=server%>
-        </td>
-      </tr>
-      <tr>
-        <td>Day</td>
-        <td><%=college.getCurrentDay()%>
-        </td>
-      </tr>
-      <tr>
-        <td>Funding</td>
-        <td>$<%=college.getAvailableCash()%>
-        </td>
-      </tr>
-      <%
-        for (int i = 0; i < dorms.length; i++) {
-      %>
-      <tr>
-        <td>Dorm</td>
-        <td><%=dorms[i].getName()%>
-        </td>
-      </tr>
-      <% } %>
-      </tbody>
-    </table>
     <p></p>
     <div class="well well-sm">
       <h3>News</h3>
@@ -100,9 +96,26 @@
         <% } %>
       </ul>
     </div>
-    <p></p>
-    <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
-    <input type="submit" class="btn btn-info" name="refreshButton" value="Refresh">
+    <table class="table table-condensed">
+      <tbody>
+      <tr>
+        <td>Server</td>
+        <td><%=server%>
+        </td>
+      </tr>
+
+      <%
+        for (int i = 0; i < dorms.length; i++) {
+      %>
+      <tr>
+        <td>Dorm</td>
+        <td><%=dorms[i].getName()%>
+        </td>
+      </tr>
+      <% } %>
+      </tbody>
+    </table>
+</div>
   </form>
   <div class="alert alert-success">
     <strong>Info</strong> <%=msg.getMessage()%>
