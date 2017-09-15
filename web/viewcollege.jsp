@@ -12,15 +12,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>Enc College World</title>
-<link rel="stylesheet" href = "resources/style.css"
+<link rel="stylesheet" href="resources/style.css"
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+      integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -46,58 +50,63 @@
     msg.setMessage(msg.getMessage() + "Attribute for news missing.");
   }
 %>
-<h1>College <%=college.getRunId()%>
-</h1>
-<!-- Display a message if defined -->
-<div class="alert alert-success">
-  <strong>Info</strong> <%=msg.getMessage()%>
+
+<div class="container">
+  <h1>College <%=college.getRunId()%>
+  </h1>
+  <!-- Display a message if defined -->
+
+  <form action="updateCollege" method="post">
+    <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+    <input type="hidden" name="server" value="<%=server%>">
+
+    <table class="table table-condensed">
+      <tbody>
+      <tr>
+        <td>Server</td>
+        <td><%=server%>
+        </td>
+      </tr>
+      <tr>
+        <td>Day</td>
+        <td><%=college.getCurrentDay()%>
+        </td>
+      </tr>
+      <tr>
+        <td>Funding</td>
+        <td>$<%=college.getAvailableCash()%>
+        </td>
+      </tr>
+      <%
+        for (int i = 0; i < dorms.length; i++) {
+      %>
+      <tr>
+        <td>Dorm</td>
+        <td><%=dorms[i].getName()%>
+        </td>
+      </tr>
+      <% } %>
+      </tbody>
+    </table>
+    <p></p>
+    <div class="well well-sm">
+      <h3>News</h3>
+      <ul class="list-group">
+        <%
+          for (int i = news.length - 1; i >= 0; i--) {
+        %>
+        <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+    <p></p>
+    <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+    <input type="submit" class="btn btn-info" name="refreshButton" value="Refresh">
+  </form>
+  <div class="alert alert-success">
+    <strong>Info</strong> <%=msg.getMessage()%>
+  </div>
 </div>
-<form action="updateCollege" method="post">
-  <input type="hidden" name="runid" value="<%=college.getRunId()%>">
-  <input type="hidden" name="server" value="<%=server%>">
-  <table align="center" bgcolor="#DDDDFF" border="1" width="40%">
-    <tr>
-      <td colspan="2" align="center">
-        <input type="submit" name="nextDayButton" value="Next Day">
-        <input type="submit" name="refreshButton" value="Refresh">
-      </td>
-    </tr>
-    <tr>
-      <td>Server</td>
-      <td><%=server%>
-      </td>
-    </tr>
-    <tr>
-      <td>Day</td>
-      <td><%=college.getCurrentDay()%>
-      </td>
-    </tr>
-    <tr>
-      <td>Funding</td>
-      <td>$<%=college.getAvailableCash()%>
-      </td>
-    </tr>
-    <%
-      for (int i=0; i<dorms.length; i++) {
-    %>
-    <tr>
-      <td>Dorm</td>
-      <td><%=dorms[i].getName()%>
-      </td>
-    </tr>
-    <% } %>
-  </table>
-  <h3>News</h3>
-  <p></p><table align="center" bgcolor="#DDDDFF" border="1" width="40%">
-  <%
-    for (int i=news.length-1; i>=0; i--) {
-  %>
-  <tr>
-    <td>Day <%=news[i].getHour()/24%>
-    <td><%=news[i].getMessage()%>
-    </td>
-  </tr>
-  <% } %>
-</form>
 </body>
 </html>
