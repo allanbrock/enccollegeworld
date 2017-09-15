@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class WelcomeServlet extends javax.servlet.http.HttpServlet {
-    Logger logger = Logger.getLogger(getClass().getName());
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId=request.getParameter("runid");
@@ -30,9 +30,9 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         if (buttonValue != null && buttonValue.equals("Create College")) {
             if (!SimTalker.createCollege(server, runId)) {
                 UiMessage msg = new UiMessage();
-                msg.setMessage("Unable to create the college.  See log for details.");
+                msg.setMessage("Unable to create the college.  See glassfish server log for details.");
                 request.setAttribute("message", msg);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome");
+                RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
