@@ -32,7 +32,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
                 UiMessage msg = new UiMessage();
                 msg.setMessage("Unable to create the college.  See log for details.");
                 request.setAttribute("message", msg);
-                RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome");
+                RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
