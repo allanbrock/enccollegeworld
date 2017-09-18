@@ -25,6 +25,19 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String runId=request.getParameter("runid");
+        String server=request.getParameter("server");
+        request.setAttribute("server", server);
 
+        if (request.getParameter("nextDayButton") != null) {
+            SimTalker.nextDayAtCollege(server, runId);
+        }
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
+        dispatcher.forward(request, response);
     }
 }

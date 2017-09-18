@@ -56,6 +56,7 @@
 
 <form action="updateCollege" method="post">
 
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -67,11 +68,14 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="viewcollege.jsp"><%=college.getRunId()%>
+                    <li><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%>
                     </a></li>
-                    <li class="active"><a href="#">Dorms</a></li>
+                    <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
+                    <li class="active"><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
+                    <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
@@ -94,7 +98,6 @@
                     for (int i = 0; i < dorms.length; i++) {
                 %>
                 <tr>
-                    <td>Dorm</td>
                     <td><%=dorms[i].getName()%>
                     </td>
                 </tr>
@@ -106,7 +109,7 @@
     </div>
 </form>
 <div class="container">
-<div class="alert alert-danger">
+<div class="alert alert-success">
     <strong>Info</strong> <%=msg.getMessage()%>
 </div>
 </div>

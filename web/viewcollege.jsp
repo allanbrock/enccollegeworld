@@ -39,11 +39,6 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-    if (dorms == null) {
-        dorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for dorms missing.");
-    }
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
@@ -52,28 +47,32 @@
 %>
 
 
-<form action="updateCollege" method="post">
+<form action="viewCollege" method="post">
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#"><%=college.getRunId()%></a></li>
-        <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%></a></li>
+                    <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
+                    <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
+                    <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
+                    <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
 <div class="container">
   <div class="jumbotron">
@@ -103,16 +102,6 @@
         <td><%=server%>
         </td>
       </tr>
-
-      <%
-        for (int i = 0; i < dorms.length; i++) {
-      %>
-      <tr>
-        <td>Dorm</td>
-        <td><%=dorms[i].getName()%>
-        </td>
-      </tr>
-      <% } %>
       </tbody>
     </table>
 </div>
