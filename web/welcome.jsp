@@ -41,8 +41,7 @@
     <h1>Endicott College World</h1>
     <p>A simulation of college life: students, dorms, sporting events, financials, unexpected events and more.</p>
     <div class="form-group">
-      <label for="runid">College ID:</label>
-      <input type="text" name="runid" class="form-control" id="runid" value="<%=college.getRunId()%>">
+      <input type="text" name="runid" class="form-control" id="runid" placeholder="Enter college ID">
     </div>
     <div class="container">
       <input type="submit" class="btn btn-info" name="button" value="Open College">
@@ -53,7 +52,7 @@
 <div class="container">
   <!-- Display a message if defined -->
   <% if (msg.getMessage().length() > 0) { %>
-  <div class="alert alert-success">
+  <div class="alert alert-danger">
     <strong>Info</strong> <%=msg.getMessage()%>
   </div>
   <% } %>

@@ -19,4 +19,12 @@
         <servlet-name>welcomeServlet</servlet-name>
         <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewDormServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewDormServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewDormServlet</servlet-name>
+        <url-pattern>/viewDorm</url-pattern>
+    </servlet-mapping>
 </web-app>

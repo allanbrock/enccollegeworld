@@ -29,26 +29,26 @@
 </head>
 <body>
 <%
-  String server = (String) request.getAttribute("server");
-  UiMessage msg = (UiMessage) request.getAttribute("message");
-  if (msg == null) {
-    msg = new UiMessage();
-  }
-  CollegeModel college = (CollegeModel) request.getAttribute("college");
-  if (college == null) {
-    college = new CollegeModel();
-    msg.setMessage("Attribute for college missing.");
-  }
-  DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-  if (dorms == null) {
-    dorms = new DormitoryModel[0];  // This is really bad
-    msg.setMessage(msg.getMessage() + "Attribute for dorms missing.");
-  }
-  NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
-  if (news == null) {
-    news = new NewsFeedItemModel[0];  // This is really bad
-    msg.setMessage(msg.getMessage() + "Attribute for news missing.");
-  }
+    String server = (String) request.getAttribute("server");
+    UiMessage msg = (UiMessage) request.getAttribute("message");
+    if (msg == null) {
+        msg = new UiMessage();
+    }
+    CollegeModel college = (CollegeModel) request.getAttribute("college");
+    if (college == null) {
+        college = new CollegeModel();
+        msg.setMessage("Attribute for college missing.");
+    }
+    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
+    if (dorms == null) {
+        dorms = new DormitoryModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for dorms missing.");
+    }
+    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+    if (news == null) {
+        news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    }
 %>
 
 
@@ -66,7 +66,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#"><%=college.getRunId()%></a></li>
-        <!-- <li><a href="#">Dorms</a></li> -->
+        <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
