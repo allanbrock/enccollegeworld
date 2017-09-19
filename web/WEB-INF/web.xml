@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <servlet>
-        <servlet-name>updateCollegeServlet</servlet-name>
+        <servlet-name>viewCollegeServlet</servlet-name>
         <servlet-class>com.endicott.edu.models.ui.ViewCollegeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>updateCollegeServlet</servlet-name>
-        <url-pattern>/updateCollege</url-pattern>
+        <servlet-name>viewCollegeServlet</servlet-name>
+        <url-pattern>/viewCollege</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>welcomeServlet</servlet-name>
@@ -18,5 +18,13 @@
     <servlet-mapping>
         <servlet-name>welcomeServlet</servlet-name>
         <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>viewDormServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewDormServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewDormServlet</servlet-name>
+        <url-pattern>/viewDorm</url-pattern>
     </servlet-mapping>
 </web-app>

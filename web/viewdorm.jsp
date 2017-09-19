@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: abrocken
+  Date: 9/15/2017
+  Time: 7:54 AM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
@@ -11,7 +18,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<title>Enc College World</title>
+<title>College World Dorm</title>
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -39,15 +46,15 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
-    if (news == null) {
-        news = new NewsFeedItemModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
+    if (dorms == null) {
+        dorms = new DormitoryModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
     }
 %>
 
 
-<form action="viewCollege" method="post">
+<form action="updateCollege" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -61,9 +68,10 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%></a></li>
+                    <li><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%>
+                    </a></li>
                     <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
-                    <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
+                    <li class="active"><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
                     <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -74,41 +82,38 @@
         </div>
     </nav>
 
-<div class="container">
-  <div class="jumbotron">
-    <h2>Balance $<%=college.getAvailableCash()%> </h2>
-    <p>Day <%=college.getCurrentDay()%></p>
-    <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
-  </div>
-  <!-- Display a message if defined -->
-    <input type="hidden" name="runid" value="<%=college.getRunId()%>">
-    <input type="hidden" name="server" value="<%=server%>">
-    <p></p>
-    <div class="well well-sm">
-      <h3>News</h3>
-      <ul class="list-group">
-        <%
-          for (int i = news.length - 1; i >= 0; i--) {
-        %>
-        <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-        </li>
-        <% } %>
-      </ul>
+    <div class="container">
+        <div class="jumbotron">
+            <h2>Dorms</h2>
+            <p>0 open beds</p>
+        </div>
+        <!-- Display a message if defined -->
+        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" name="server" value="<%=server%>">
+        <p></p>
+        <div class="well well-sm">
+            <table class="table table-condensed">
+                <tbody>
+                <%
+                    for (int i = 0; i < dorms.length; i++) {
+                %>
+                <tr>
+                    <td><%=dorms[i].getName()%>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+
+        </div>
     </div>
-    <table class="table table-condensed">
-      <tbody>
-      <tr>
-        <td>Server</td>
-        <td><%=server%>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-</div>
-  </form>
-  <div class="alert alert-success">
+</form>
+<div class="container">
+<div class="alert alert-success">
     <strong>Info</strong> <%=msg.getMessage()%>
-  </div>
+</div>
+</div>
 </div>
 </body>
 </html>
+
