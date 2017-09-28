@@ -27,4 +27,12 @@
         <servlet-name>viewDormServlet</servlet-name>
         <url-pattern>/viewDorm</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewStudentServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewStudentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewStudentServlet</servlet-name>
+        <url-pattern>/viewStudent</url-pattern>
+    </servlet-mapping>
 </web-app>
