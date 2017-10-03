@@ -85,8 +85,8 @@
 
     <div class="container">
         <div class="jumbotron">
-            <h2>Students</h2>
-            <p>0 students</p>
+            <h2>Sports</h2>
+            <p>0 sports</p>
         </div>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
