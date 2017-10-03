@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="javax.servlet-api">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../glassfish4/mq/lib/javax.servlet-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
