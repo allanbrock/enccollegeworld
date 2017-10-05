@@ -88,6 +88,12 @@
             <h2>Students</h2>
             <p>0 students</p>
         </div>
+        <h4>Student Body Happiness</h4>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                <span class="sr-only">50% Complete</span>
+            </div>
+        </div>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">

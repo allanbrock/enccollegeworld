@@ -77,6 +77,12 @@
 <div class="container">
   <div class="jumbotron">
     <h2>Balance $<%=college.getAvailableCash()%> </h2>
+      <h3>Student Body Happiness</h3>
+      <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+              <span class="sr-only">50% Complete</span>
+          </div>
+      </div>
     <p>Day <%=college.getCurrentDay()%></p>
     <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
   </div>
