@@ -12,11 +12,67 @@ public class DormitoryModel implements Serializable {
     private String name = "unknown";
     private String runId = "unknown";
     private String note = "no note";
+    private int hoursToComplete = 0;
+    public int numStudents = 0;
+    public String curDisaster = "none";
+    //There are small, medium, or large classes of dorms.
+    private String dormClass = "unknown";
+    //dorms start at a middle reputation (5/10) upon creation. (0/10 is the worst reputation, 10/10 is the best).
+    public int reputation = 5;
+
+    public int getHoursToComplete() {
+        return hoursToComplete;
+    }
+
+    public void setHoursToComplete(int hoursToComplete) {
+        this.hoursToComplete = hoursToComplete;
+    }
+
+    public int getNumStudents() {
+        return numStudents;
+    }
+
+    public void setNumStudents(int numStudents) {
+        this.numStudents = numStudents;
+    }
+
+    public String getCurDisaster() {
+        return curDisaster;
+    }
+
+    public void setCurDisaster(String curDisaster) {
+        this.curDisaster = curDisaster;
+    }
+
+    public String getDormClass() {
+        return dormClass;
+    }
+
+    public void setDormClass(String dormClass) {
+        this.dormClass = dormClass;
+    }
+
+    public int getReputation() {
+        return reputation;
+    }
+
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
+    }
+
+//    private int hoursToComplete = 0;
+//    public int numStudents = 0;
+//    public String curDisaster = "none";
+//    //There are small, medium, or large classes of dorms.
+//    private String dormClass = "unknown";
+//    //dorms start at a middle reputation (5/10) upon creation. (0/10 is the worst reputation, 10/10 is the best).
+//    public int reputation = 5;
 
     public DormitoryModel() {
     }
 
-    public DormitoryModel(int capacity, int costPerHour, int hourLastUpdated, String name, String runId) {
+    public DormitoryModel(int capacity, int costPerHour, int hourLastUpdated, String name, int hoursToComplete,
+                          int numStudents, String curDisaster, String dormClass, int reputation, String runId) {
         this.capacity = capacity;
         this.costPerHour = costPerHour;
         this.hourLastUpdated = hourLastUpdated;
