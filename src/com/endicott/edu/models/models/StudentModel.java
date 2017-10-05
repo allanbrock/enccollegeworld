@@ -1,4 +1,4 @@
-package com.endicott.edu.models;
+package com.endicott.edu.models.models;
 
 import java.io.Serializable;
 
@@ -9,13 +9,14 @@ public class StudentModel implements Serializable {
 
     private String name = "unknown";
     private int idNumber = 0;
-    private int happinessLevel = 0;
+    private int happinessLevel = 0; //0-100
     private boolean athlete = false;
-    private int athleticAbility = 0;
+    private int athleticAbility = 0; //0-10
     private String team = "unknown";
     private String dorm = "unknown";
     private String gender = "unknown";
     private String runId = "unknown";
+    private String note = "no note";
 
 
     public StudentModel() {
@@ -56,9 +57,9 @@ public class StudentModel implements Serializable {
         return team;
     }
 
-    public String getDorm() {
-        return dorm;
-    }
+    public String getDorm() { return dorm; }
+
+    public String getNote() { return note; }
 
     public String getGender() {
         return gender;
@@ -67,6 +68,7 @@ public class StudentModel implements Serializable {
     public String getRunId() {
         return runId;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -101,5 +103,7 @@ public class StudentModel implements Serializable {
     }
 
     public void setRunId(String runId) { this.runId = runId; }
+
+    public void setNote(String note) { this.note = note; }
 }
 
