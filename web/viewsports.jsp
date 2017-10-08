@@ -88,6 +88,29 @@
             <h2>Sports</h2>
             <p>0 sports</p>
         </div>
+        <div class ="container">
+            <h2>Sports Record</h2>
+            <table class="table table-bordered">
+                <thread>
+                    <tr>
+                        <th>Team</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Games Played</th>
+                        <th>In Season</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    <tr>
+                        <td>Men's Soccer</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">

@@ -11,7 +11,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String runId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
         request.setAttribute("server", server);
 
