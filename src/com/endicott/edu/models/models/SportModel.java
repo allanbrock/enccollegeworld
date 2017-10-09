@@ -1,11 +1,11 @@
-package com.endicott.edu.models;
+package com.endicott.edu.models.models;
 
 import java.io.Serializable;
 
 /**
  * Created by nScrivani on 10/2/2017.
  */
-public class SportsModel implements Serializable {
+public class SportModel implements Serializable {
     private int minPlayers = 0;
     private int maxPlayers = 0;
     private int costPerDay = 0;
@@ -20,10 +20,10 @@ public class SportsModel implements Serializable {
     private String sportName = "unknown";
     private String note = "no note";
 
-    public SportsModel() {
+    public SportModel() {
     }
 
-    public SportsModel(int minPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId) {
+    public SportModel(int minPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId) {
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
         this.costPerDay = costPerDay;
