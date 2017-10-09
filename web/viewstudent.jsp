@@ -6,10 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.*" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -19,7 +16,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-<title>College World Dorm</title>
+<title>College World Student</title>
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -47,10 +44,10 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-    if (dorms == null) {
-        dorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
 %>
 
@@ -101,11 +98,14 @@
         <div class="well well-sm">
             <table class="table table-condensed">
                 <tbody>
+                <h4>Students</h4>
                 <%
-                    for (int i = 0; i < dorms.length; i++) {
+                    for (int i = 0; i < students.length; i++) {
                 %>
                 <tr>
-                    <%--<td><%=dorms[i].getName()%>--%>
+                    <li class="list-group-item"> <%=students[i].getIdNumber()%>
+                    </li>
+                    <%--<td ><%=students[i].getIdNumber()%>--%>
                     <%--</td>--%>
                 </tr>
                 <% } %>
