@@ -1,8 +1,5 @@
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.*" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -44,6 +41,12 @@
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+    }
+
 %>
 
 
@@ -79,7 +82,18 @@
     <h2>Balance $<%=college.getAvailableCash()%> </h2>
       <h3>Student Body Happiness</h3>
       <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+<%
+    int nStudents = students.length;
+    if (nStudents < 10) {
+%>
+     <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<%=students.length%>" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+<%
+    } else {
+%>
+    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+<%
+    }
+%>
               <span class="sr-only">50% Complete</span>
           </div>
       </div>
