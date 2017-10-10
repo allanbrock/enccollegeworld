@@ -2,7 +2,9 @@
 <%@ page import="com.endicott.edu.models.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
+<%@ page import="com.endicott.edu.models.models.StudentModel" %>
 <%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.StudentModel" %>
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -44,6 +46,11 @@
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+    }
 %>
 
 
@@ -77,11 +84,22 @@
 <div class="container">
   <div class="jumbotron">
     <h2>Balance $<%=college.getAvailableCash()%> </h2>
-      <h3>Student Body Happiness</h3>
+      <h4>Student Body Happiness</h4>
       <div class="progress">
+              <% int nStudents = students.length;
+                if (nStudents < 6){ %>
+                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:25%">
+                        <%=students.length%> Students
+                         <span class="sr-only">50% Complete</span>
+                     </div>
+      <%
+                } else {
+              %>
           <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
               <span class="sr-only">50% Complete</span>
           </div>
+      <% }
+      %>
       </div>
     <p>Day <%=college.getCurrentDay()%></p>
     <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
