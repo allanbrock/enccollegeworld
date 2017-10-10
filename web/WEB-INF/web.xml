@@ -36,11 +36,11 @@
         <url-pattern>/viewStudent</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>viewSportsServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewSportsServlet</servlet-class>
+        <servlet-name>viewFacultyServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewStudentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>viewSportsServlet</servlet-name>
-        <url-pattern>/viewSports</url-pattern>
+        <servlet-name>viewFacultyServlet</servlet-name>
+        <url-pattern>/viewFaculty</url-pattern>
     </servlet-mapping>
 </web-app>
