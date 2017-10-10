@@ -41,7 +41,7 @@ public class DormitoryModel implements Serializable {
         this.squareFeet = 250 * numRooms;
         this.maintenanceCost = maintenanceCost;
         this.costPerHour = (squareFeet * 2) / 24;
-        this.hoursToComplete = squareFeet * 2;
+        this.hoursToComplete = squareFeet * 2; 
     }
 
     public float getHoursToComplete() {
