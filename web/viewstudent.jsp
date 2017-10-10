@@ -83,7 +83,8 @@
     <div class="container">
         <div class="jumbotron">
             <h2>Students</h2>
-            <p>0 students</p>
+            <p></p>
+            <h3><%=students.length%> students</h3>
         </div>
         <h4>Student Body Happiness</h4>
         <div class="progress">
