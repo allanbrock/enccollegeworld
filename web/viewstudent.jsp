@@ -1,8 +1,12 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: abrocken
+  Date: 9/15/2017
+  Time: 7:54 AM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.*" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -11,7 +15,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<title>Enc College World</title>
+<head>
+<title>College World Student</title>
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -39,15 +44,15 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
-    if (news == null) {
-        news = new NewsFeedItemModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
 %>
 
 
-<form action="viewCollege" method="post">
+<form action="updateCollege" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -61,8 +66,9 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%></a></li>
-                    <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
+                    <li><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%>
+                    </a></li>
+                    <li class="active"><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
                     <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
                     <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
                 </ul>
@@ -74,47 +80,48 @@
         </div>
     </nav>
 
-<div class="container">
-  <div class="jumbotron">
-    <h2>Balance $<%=college.getAvailableCash()%> </h2>
-      <h3>Student Body Happiness</h3>
-      <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
-              <span class="sr-only">50% Complete</span>
-          </div>
-      </div>
-    <p>Day <%=college.getCurrentDay()%></p>
-    <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
-  </div>
-  <!-- Display a message if defined -->
-    <input type="hidden" name="runid" value="<%=college.getRunId()%>">
-    <input type="hidden" name="server" value="<%=server%>">
-    <p></p>
-    <div class="well well-sm">
-      <h3>News</h3>
-      <ul class="list-group">
-        <%
-          for (int i = news.length - 1; i >= 0; i--) {
-        %>
-        <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-        </li>
-        <% } %>
-      </ul>
+    <div class="container">
+        <div class="jumbotron">
+            <h2>Students</h2>
+            <p></p>
+            <h3><%=students.length%> students</h3>
+        </div>
+        <h4>Student Body Happiness</h4>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                <span class="sr-only">50% Complete</span>
+            </div>
+        </div>
+        <!-- Display a message if defined -->
+        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" name="server" value="<%=server%>">
+        <p></p>
+        <div class="well well-sm">
+            <table class="table table-condensed">
+                <tbody>
+                <h4>Students</h4>
+                <%
+                    for (int i = 0; i < students.length; i++) {
+                %>
+                <tr>
+                    <li class="list-group-item"> <%=students[i].getIdNumber()%>
+                    </li>
+                    <%--<td ><%=students[i].getIdNumber()%>--%>
+                    <%--</td>--%>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+
+        </div>
     </div>
-    <table class="table table-condensed">
-      <tbody>
-      <tr>
-        <td>Server</td>
-        <td><%=server%>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-</div>
-  </form>
-  <div class="alert alert-success">
+</form>
+<div class="container">
+<div class="alert alert-success">
     <strong>Info</strong> <%=msg.getMessage()%>
-  </div>
+</div>
+</div>
 </div>
 </body>
 </html>
+

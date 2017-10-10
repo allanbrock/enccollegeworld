@@ -1,8 +1,6 @@
 package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.models.CollegeModel;
-import com.endicott.edu.models.models.DormitoryModel;
-import com.endicott.edu.models.models.NewsFeedItemModel;
+import com.endicott.edu.models.models.*;
 import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
 import com.google.gson.Gson;
@@ -33,12 +31,16 @@ public class SimTalker {
 
         DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = SimTalker.getNews(server, runId, msg);
+        SportModel[] sport = SimTalker.getSports(server, runId, msg);
+        StudentModel[] students = SimTalker.getStudents(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("dorms",dorms);
         request.setAttribute("news",news);
+        request.setAttribute("sports", sport);
+        request.setAttribute("students",students);
     }
 
     static public CollegeModel getCollege(String server, String runId){
@@ -80,6 +82,48 @@ public class SimTalker {
         }
         return dorms;
     }
+
+
+    static public  SportModel[] getSports(String server, String runId, UiMessage msg){
+        SportModel[] sport;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "sports/" + runId);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("Sports as string: " +responseAsString);
+
+        try {
+            sport = gson.fromJson(responseAsString, SportModel[].class);
+        } catch (Exception e) {
+            msg.setMessage(e.getMessage());
+            return null;
+        }
+        return sport;
+    }
+
+    static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
+        StudentModel[] students;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "students/" + runId);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("Students as string: " +responseAsString);
+
+        try {
+            students = gson.fromJson(responseAsString, StudentModel[].class);
+        } catch (Exception e) {
+            msg.setMessage(e.getMessage());
+            return null;
+        }
+        return students;
+    }
+
 
     static public NewsFeedItemModel[] getNews(String server, String runId, UiMessage msg){
         NewsFeedItemModel[] news;
