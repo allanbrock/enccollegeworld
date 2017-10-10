@@ -11,7 +11,7 @@ public class DormitoryModel implements Serializable {
     private float hoursToComplete = 0;
     public int numStudents = 0;
     public String curDisaster = "none";
-    private String name = "unknown";
+    public String name = "unknown";
     private String runId = "unknown";
     private String note = "no note";
     //dorms start at a middle reputation (5/10) upon creation. (0/10 is the worst reputation, 10/10 is the best).
