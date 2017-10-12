@@ -14,6 +14,7 @@ public class StudentModel implements Serializable {
     private String team = "unknown";
     private String dorm = "unknown";
     private String gender = "unknown";
+    private boolean isSick = false;
     private String runId = "unknown";
     private String note = "no note";
 
@@ -21,13 +22,14 @@ public class StudentModel implements Serializable {
     public StudentModel() {
     }
 
-    public StudentModel(int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, String runId) {
+    public StudentModel(int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, boolean isSick, String runId) {
         this.idNumber = idNumber;
         this.happinessLevel = happinessLevel;
         this.athlete = athlete;
         this.athleticAbility = athleticAbility;
         this.dorm = dorm;
         this.gender = gender;
+        this.isSick = isSick;
         this.runId = runId;
     }
 
@@ -58,6 +60,8 @@ public class StudentModel implements Serializable {
     public String getGender() {
         return gender;
     }
+
+    public boolean isSick() { return isSick; }
 
     public String getRunId() {
         return runId;
@@ -90,6 +94,8 @@ public class StudentModel implements Serializable {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    public void setSick(boolean sick) { isSick = sick; }
 
     public void setRunId(String runId) { this.runId = runId; }
 
