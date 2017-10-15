@@ -55,7 +55,7 @@
 %>
 
 
-<form action="updateCollege" method="post">
+<form action="viewSports" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -130,6 +130,9 @@
             </table>
 
         </div>
+        <input type="text" name="sportName" class="form-control" id="sportName" placeholder="Enter sport name">
+        <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
+
     </div>
 </form>
 <div class="container">
