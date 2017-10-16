@@ -3,7 +3,7 @@ package com.endicott.edu.models.models;
 import java.io.Serializable;
 
 /**
- * Created by Connor Frazier on 7/10/2017.
+ * Created by Connor Frazier on 9/12/2017.
  */
 public class StudentModel implements Serializable {
 
