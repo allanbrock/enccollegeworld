@@ -130,7 +130,16 @@
             </table>
 
         </div>
-        <input type="text" name="sportName" class="form-control" id="sportName" placeholder="Enter sport name">
+        <div class="form-group">
+           <label for="sportName">Select Sport to Add</label>
+            <select class="form-control" id="sportName" name="sportName">
+                <option>Men's Basketball</option>
+                <option>Women's Basketball</option>
+                <option>Women's Soccer</option>
+                <option>Baseball</option>
+                <option>Softball</option>
+            </select>
+        </div>
         <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
 
     </div>
