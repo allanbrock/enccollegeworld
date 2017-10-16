@@ -3,10 +3,11 @@ package com.endicott.edu.models.models;
 import java.io.Serializable;
 
 /**
- * Created by nScrivani on 10/2/2017.
+ * Created by abrocken on 7/10/2017.
  */
 public class SportModel implements Serializable {
     private int minPlayers = 0;
+    private int currentPlayers = 0;
     private int maxPlayers = 0;
     private int costPerDay = 0;
     private int hourLastUpdated = 0;
@@ -19,12 +20,15 @@ public class SportModel implements Serializable {
     private String runId = "unknown";
     private String sportName = "unknown";
     private String note = "no note";
+    private boolean isActive = false;
 
     public SportModel() {
+
     }
 
-    public SportModel(int minPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId) {
+    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, Boolean isActive) {
         this.minPlayers = minPlayers;
+        this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
         this.costPerDay = costPerDay;
         this.hourLastUpdated = hourLastUpdated;
@@ -34,6 +38,12 @@ public class SportModel implements Serializable {
         this.gamesTied = gamesTied;
         this.numGames = numGames;
         this.startupCost = startupCost;
+        this.sportName = sportName;
+        this.runId = runId;
+        this.isActive = isActive;
+    }
+
+    public SportModel(String sportName, String runId){
         this.sportName = sportName;
         this.runId = runId;
     }
@@ -84,5 +94,85 @@ public class SportModel implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getMinPlayers() {
+        return minPlayers;
+    }
+
+    public void setMinPlayers(int minPlayers) {
+        this.minPlayers = minPlayers;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public int getCostPerDay() {
+        return costPerDay;
+    }
+
+    public void setCostPerDay(int costPerDay) {
+        this.costPerDay = costPerDay;
+    }
+
+    public int getReputation() {
+        return reputation;
+    }
+
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public void setGamesWon(int gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+
+    public int getGamesLost() {
+        return gamesLost;
+    }
+
+    public void setGamesLost(int gamesLost) {
+        this.gamesLost = gamesLost;
+    }
+
+    public int getGamesTied() {
+        return gamesTied;
+    }
+
+    public void setGamesTied(int gamesTied) {
+        this.gamesTied = gamesTied;
+    }
+
+    public int getNumGames() {
+        return numGames;
+    }
+
+    public void setNumGames(int numGames) {
+        this.numGames = numGames;
+    }
+
+    public int getStartupCost() {
+        return startupCost;
+    }
+
+    public void setStartupCost(int startupCost) {
+        this.startupCost = startupCost;
+    }
+
+    public String getSportName() {
+        return sportName;
+    }
+
+    public void setSportName(String sportName) {
+        this.sportName = sportName;
     }
 }
