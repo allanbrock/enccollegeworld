@@ -77,7 +77,7 @@ public class SimTalker {
         try {
             dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
         } catch (Exception e) {
-            msg.setMessage(e.getMessage());
+            msg.setMessage("Dorm Failure: " + e.getMessage());
             return null;
         }
         return dorms;
@@ -98,7 +98,7 @@ public class SimTalker {
         try {
             sport = gson.fromJson(responseAsString, SportModel[].class);
         } catch (Exception e) {
-            msg.setMessage(e.getMessage());
+            msg.setMessage("Sports Failure:" + e.getMessage());
             return null;
         }
         return sport;
@@ -118,7 +118,7 @@ public class SimTalker {
         try {
             students = gson.fromJson(responseAsString, StudentModel[].class);
         } catch (Exception e) {
-            msg.setMessage(e.getMessage());
+            msg.setMessage("Student Failure" + e.getMessage());
             return null;
         }
         return students;
