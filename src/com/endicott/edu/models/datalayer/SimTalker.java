@@ -189,4 +189,30 @@ public class SimTalker {
             return true;
         }
     }
+
+//    public static boolean addDorm(String server, String runId, String dormName, String dormType) {
+//
+//        Client client = ClientBuilder.newClient(new ClientConfig());
+//        WebTarget webTarget = client.target(server + "dorms");//dorms?
+//        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+//        String json = "{    \"runId\" : \"" + runId + "\"," +
+//                "   \"dormName\" : \"" + dormName + "\"," +
+//                "   \"dormType\" : \"" + dormType + "\"" +
+//                "}";
+//        logger.info("Creating a dorm: " + json);
+//
+//        Response response = invocationBuilder.post(Entity.entity(json, MediaType.APPLICATION_JSON_TYPE));
+//        String responseAsString = response.readEntity(String.class);
+//
+//        if(response.getStatus() != 200){
+//            logger.severe("Bad response: " + response.getStatus());
+//            return false;
+//        }
+//        else{
+//            logger.info("Good response: " + runId);
+//            return true;
+//        }
+//
+//
+//    }
 }
