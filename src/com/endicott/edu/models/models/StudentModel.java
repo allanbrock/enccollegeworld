@@ -3,7 +3,7 @@ package com.endicott.edu.models.models;
 import java.io.Serializable;
 
 /**
- * Created by Connor Frazier on 7/10/2017.
+ * Created by Connor Frazier on 9/12/2017.
  */
 public class StudentModel implements Serializable {
 
@@ -11,6 +11,7 @@ public class StudentModel implements Serializable {
     private int happinessLevel = 0; //0-100
     private boolean athlete = false;
     private int athleticAbility = 0; //0-10
+    private static int tuitionCost = 100;
     private String team = "unknown";
     private String dorm = "unknown";
     private String gender = "unknown";
@@ -67,6 +68,8 @@ public class StudentModel implements Serializable {
         return runId;
     }
 
+    public static int getTuitionCost() {return tuitionCost; }
+
     public void setIdNumber(int idNumber) {
         this.idNumber = idNumber;
     }
@@ -100,5 +103,9 @@ public class StudentModel implements Serializable {
     public void setRunId(String runId) { this.runId = runId; }
 
     public void setNote(String note) { this.note = note; }
+
+    public static void setTuitionCost(int tuitionCost){ tuitionCost = tuitionCost; }
+
+
 }
 
