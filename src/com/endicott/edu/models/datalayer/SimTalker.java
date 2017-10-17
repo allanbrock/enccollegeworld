@@ -192,7 +192,7 @@ public class SimTalker {
 
     public static boolean addSport(String runId, String server, String sportName) {
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "sports");
+        WebTarget webTarget = client.target(server + "sports/" + runId + "/" + sportName);
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
 
         String json = "{  \"runID\" : \"" + runId + "\"," +
@@ -204,11 +204,11 @@ public class SimTalker {
         String responseAsString = response.readEntity(String.class);
 
         if (response.getStatus() != 200) {
-            logger.severe("Got a bad response: " + response.getStatus());
+            logger.severe("Add sport: Got a bad response: " + response.getStatus());
             return false;
         }
         else {
-            logger.info("Got a ok response: " + runId);
+            logger.info("Add sport: Got a ok response: " + runId);
             return true;
         }
     }
