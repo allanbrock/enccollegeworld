@@ -12,7 +12,6 @@ public class StudentModel implements Serializable {
     private boolean athlete = false;
     private int athleticAbility = 0; //0-10
     private static int tuitionCost = 100;
-    private int hourLastUpdated = 0;
     private String team = "unknown";
     private String dorm = "unknown";
     private String gender = "unknown";
@@ -107,8 +106,6 @@ public class StudentModel implements Serializable {
 
     public static void setTuitionCost(int tuitionCost){ tuitionCost = tuitionCost; }
 
-    public int getHourLastUpdated() { return hourLastUpdated; }
 
-    public void setHourLastUpdated(int hourLastUpdated) { this.hourLastUpdated = hourLastUpdated; }
 }
 
