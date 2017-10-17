@@ -15,9 +15,6 @@ public class DormitoryModel implements Serializable {
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
 
-
-    private int dormType = 1;
-
     public DormitoryModel() {
     }
 
@@ -30,23 +27,15 @@ public class DormitoryModel implements Serializable {
     }
 
     public DormitoryModel(int capacity, int hourLastUpdated, String name, int numStudents,
-                          String curDisaster, int reputation, String runId, int numRooms) {
-        this.capacity = capacity;
-        this.hourLastUpdated = hourLastUpdated;
-        this.name = name;
-        this.numStudents = numStudents;
-        this.curDisaster = curDisaster;
-        this.reputation = reputation;
-        this.runId = runId;
-        this.numRooms = numRooms;
-    }
-
-    public int getDormType() {
-        return dormType;
-    }
-
-    public void setDormType(int dormType) {
-        this.dormType = dormType;
+                          String curDisaster, int reputation, String runId, int numRooms){
+        this.capacity=capacity;
+        this.hourLastUpdated=hourLastUpdated;
+        this.name=name;
+        this.numStudents=numStudents;
+        this.curDisaster=curDisaster;
+        this.reputation=reputation;
+        this.runId=runId;
+        this.numRooms=numRooms;
     }
 
     public int getCapacity() {
@@ -99,7 +88,7 @@ public class DormitoryModel implements Serializable {
 
     public int getMaintenanceCostPerHour() {
         float squareFeet = 250 * numRooms;
-        float maintenanceCostPerHour = (int) (squareFeet * 2) / (365 * 24);
+        float maintenanceCostPerHour = (int)(squareFeet * 2)/(365*24);
         return (int) (maintenanceCostPerHour + 0.5);
     }
 

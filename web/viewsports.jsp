@@ -6,10 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.*" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -47,15 +44,15 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-    if (dorms == null) {
-        dorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
+    SportModel sport[] = (SportModel[]) request.getAttribute("sports");
+    if (sport == null) {
+        sport = new SportModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for sports missing.");
     }
 %>
 
 
-<form action="updateCollege" method="post">
+<form action="viewSports" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -83,34 +80,14 @@
         </div>
     </nav>
 
+    <!--create array of sport teams -->
     <div class="container">
         <div class="jumbotron">
             <h2>Sports</h2>
-            <p>0 sports</p>
+            <p><%=sport.length%> sports</p>
         </div>
-        <div class ="container">
-            <h2>Sports Record</h2>
-            <table class="table table-bordered">
-                <thread>
-                    <tr>
-                        <th>Team</th>
-                        <th>Wins</th>
-                        <th>Losses</th>
-                        <th>Games Played</th>
-                        <th>In Season</th>
-                    </tr>
-                </thread>
-                <tbody>
-                    <tr>
-                        <td>Men's Soccer</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
@@ -118,18 +95,44 @@
         <div class="well well-sm">
             <table class="table table-condensed">
                 <tbody>
-                <%
-                    for (int i = 0; i < dorms.length; i++) {
-                %>
-                <tr>
-                    <%--<td><%=dorms[i].getName()%>--%>
-                    <%--</td>--%>
-                </tr>
-                <% } %>
+                <h4>Sports Record</h4>
+                    <thread>
+                        <tr>
+                          <th>Team</th>
+                            <th>Wins</th>
+                            <th>Losses</th>
+                            <th>Games Played</th>
+                            <th>In Season</th>
+                        </tr>
+                    </thread>
+                    <%
+                        for (int i = 0; i < sport.length; i++) {
+                    %>
+
+                    <tr>
+                        <td><%=sport[i].getName()%> </td>
+                        <td><%=sport[i].getGamesWon()%> </td>
+                        <td><%=sport[i].getGamesLost()%> </td>
+                        <td><%=sport[i].getGamesWon() + sport[i].getGamesLost() + sport[i].getGamesTied()%> </td>
+                        <td> </td>
+                    </tr>
+                    <% } %>
                 </tbody>
             </table>
 
         </div>
+        <div class="form-group">
+           <label for="sportName">Select Sport to Add</label>
+            <select class="form-control" id="sportName" name="sportName">
+                <option>Men's Basketball</option>
+                <option>Women's Basketball</option>
+                <option>Women's Soccer</option>
+                <option>Baseball</option>
+                <option>Softball</option>
+            </select>
+        </div>
+        <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
+
     </div>
 </form>
 <div class="container">
