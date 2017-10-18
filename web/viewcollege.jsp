@@ -117,15 +117,17 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="well well-sm">
-                    <h3><%=college.getRunId()%> News</h3>
-                    <ul class="list-group">
-                        <%
-                            for (int i = news.length - 1; i >= 0; i--) {
-                        %>
-                        <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-                        </li>
-                        <% } %>
-                    </ul>
+                    <div class="pre-scrollable">
+                        <h3><%=college.getRunId()%> News</h3>
+                        <ul class="list-group">
+                            <%
+                                for (int i = news.length - 1; i >= 0; i--) {
+                            %>
+                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4">
