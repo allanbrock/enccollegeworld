@@ -114,34 +114,41 @@
 
         <!-- Newsfeed -->
         <p></p>
-        <div class="well well-sm">
-            <h3>News</h3>
-            <ul class="list-group">
-                <%
-                    for (int i = news.length - 1; i >= 0; i--) {
-                %>
-                <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-                </li>
-                <% } %>
-            </ul>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    <h3>News</h3>
+                    <ul class="list-group">
+                        <%
+                            for (int i = news.length - 1; i >= 0; i--) {
+                        %>
+                        <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                        </li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Server -->
-        <table class="table table-condensed">
-            <tbody>
-            <tr>
-                <td>Server</td>
-                <td><%=server%>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    Server: <%=server%>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="alert alert-success">
+                    <strong>Info</strong> <%=msg.getMessage()%>
+                </div>
+            </div>
+        </div>
 
     </div> <!-- container -->
 </form>
-<div class="alert alert-success">
-    <strong>Info</strong> <%=msg.getMessage()%>
-</div>
 </div>
 </body>
 </html>
