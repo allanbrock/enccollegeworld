@@ -115,9 +115,9 @@
         <!-- Newsfeed -->
         <p></p>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <div class="well well-sm">
-                    <h3>News</h3>
+                    <h3><%=college.getRunId()%> News</h3>
                     <ul class="list-group">
                         <%
                             for (int i = news.length - 1; i >= 0; i--) {
@@ -128,11 +128,20 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    <h3>Financial News</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item"> Coming soon!
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Server -->
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <div class="well well-sm">
                     Server: <%=server%>
                 </div>
