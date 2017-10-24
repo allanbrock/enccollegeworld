@@ -5,9 +5,20 @@ import java.io.Serializable;
 /**
  * Created by abrocken on 7/10/2017.
  */
+//@XmlRootElement
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;
     private int availableCash = 0;
+    private int yearlyTuitionCost = 40000; //the amount it costs to attend the school for a single year
+
+    public int getYearlyTuitionCost() {
+        return yearlyTuitionCost;
+    }
+
+    public void setYearlyTuitionCost(int yearlyTuitionCost) {
+        this.yearlyTuitionCost = yearlyTuitionCost;
+    }
+
     private String runId = "unknown";
     private String note = "empty";
 
