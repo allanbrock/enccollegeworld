@@ -83,6 +83,12 @@
         <!-- jumbotron -->
         <div class="jumbotron">
             <h2>Balance $<%=college.getAvailableCash()%>
+                <% if(college.getAvailableCash() <= 0) { %>
+                    <h2> <p class = "text-danger">Bankrupt</h2>
+                <%}
+                else {%>
+
+                <%}%>
             </h2>
             <h4>Student Body Happiness</h4>
             <div class="progress">
