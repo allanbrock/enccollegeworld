@@ -15,6 +15,10 @@ public class DormitoryModel implements Serializable {
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
 
+
+
+    private int dormType = 1;
+
     public DormitoryModel() {
     }
 
@@ -36,6 +40,14 @@ public class DormitoryModel implements Serializable {
         this.reputation=reputation;
         this.runId=runId;
         this.numRooms=numRooms;
+    }
+
+    public int getDormType() {
+        return dormType;
+    }
+
+    public void setDormType(int dormType) {
+        this.dormType = dormType;
     }
 
     public int getCapacity() {
