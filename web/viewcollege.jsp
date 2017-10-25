@@ -112,7 +112,13 @@
                 <% } %>
             <p>Day <%=college.getCurrentDay()%>
             </p>
+            <% if(college.getAvailableCash() <= 0) { %>
+            <h2> <p class = "text-danger">Bankrupt</h2>
+            <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+            <%}
+            else {%>
             <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+            <%}%>
         </div>
 
         <!-- Hidden Parameters That Will Be Passed in Request! -->

@@ -54,7 +54,7 @@
 %>
 
 
-<form action="updateCollege" method="post">
+<form action="viewDorm" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -85,11 +85,12 @@
     <div class="container">
         <div class="jumbotron">
             <h2>Dorms</h2>
+            <!-- change-->
             <p>0 open beds</p>
         </div>
         <!-- Display a message if defined -->
-        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
-        <input type="hidden" name="server" value="<%=server%>">
+        <input type="hidden" dormName="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" dormName="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
             <table class="table table-condensed">
@@ -106,6 +107,21 @@
             </table>
 
         </div>
+
+        <div class="form-group">
+            <label for="dormType">Select a dorm type to add</label>
+            <select class="form-control" id="dormType" dormName="dormType">
+                <option>Small</option>
+                <option>Medium</option>
+                <option>Large</option>
+            </select>
+            <div class="form-group">
+                <input type="text" dormName="dormName" class="form-control" id="dormName" placeholder="Enter dorm dormName">
+            </div>
+            <!-- Button -->
+            <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
+        </div>
+
     </div>
 </form>
 <div class="container">
