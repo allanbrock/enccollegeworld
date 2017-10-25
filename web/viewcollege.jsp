@@ -85,24 +85,31 @@
             <h2>Balance $<%=college.getAvailableCash()%>
             </h2>
             <h4>Student Body Happiness</h4>
-            <div class="progress">
-                <% int nStudents = students.length;
-                    if (nStudents < 6) { %>
-                <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
-                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:25%">
-                    <%=students.length%> Students
-                    <span class="sr-only">50% Complete</span>
+                <% if (college.getStudentBodyHappiness() >= 80) { %>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar"
+                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                        <%=college.getStudentBodyHappiness()%>%
+                    </div>
                 </div>
                 <%
-                } else {
+                } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80 ){
                 %>
-                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                     style="width:50%">
-                    <span class="sr-only">50% Complete</span>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning" role="progressbar"
+                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                        <%=college.getStudentBodyHappiness()%>%
+                    </div>
                 </div>
-                <% }
+                <% } else if (college.getStudentBodyHappiness() < 50){
                 %>
-            </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar"
+                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                        <%=college.getStudentBodyHappiness()%>%
+                    </div>
+                </div>
+                <% } %>
             <p>Day <%=college.getCurrentDay()%>
             </p>
             <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
