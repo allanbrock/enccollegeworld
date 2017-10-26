@@ -8,8 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
+<%@ page import="com.endicott.edu.models.models.FacultyModel" %>
 <%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %>
 <html>
 <head>
@@ -27,6 +26,67 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            min-height: 75rem; /* Can be removed; just added for demo purposes */
+        }
+
+        .navbar {
+            margin-bottom: 0;
+        }
+
+        .jumbotron {
+            padding-top: 6rem;
+            padding-bottom: 6rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron-heading {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
+        }
+
+        .album {
+            min-height: 50rem; /* Can be removed; just added for demo purposes */
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            background-color: #f7f7f7;
+        }
+
+        .card {
+            float: left;
+            width: 33.333%;
+            padding: .75rem;
+            margin-bottom: 2rem;
+            border: 0;
+        }
+
+        .card > img {
+            margin-bottom: .75rem;
+        }
+
+        .card-text {
+            font-size: 85%;
+        }
+
+        footer {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        footer p {
+            margin-bottom: .25rem;
+        }
+    </style>
 </head>
 <body>
 <%
@@ -40,10 +100,10 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-    if (dorms == null) {
-        dorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
+    FacultyModel faculty[] = (FacultyModel[]) request.getAttribute("faculty");
+    if (faculty == null) {
+        faculty = new FacultyModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
 %>
 
@@ -75,120 +135,100 @@
         </div>
     </nav>
 
-    <div class="container">
 
-        <h1>Bootstrap grid examples</h1>
-        <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
 
-        <h3>Five grid tiers</h3>
-        <p>There are five tiers to the Bootstrap grid system, one for each range of devices we support. Each tier starts at a minimum viewport size and automatically applies to the larger devices unless overridden.</p>
+    <%--<div class="container">--%>
+        <%--<div class="jumbotron">--%>
+            <%--<h2>Students</h2>--%>
+            <%--<p></p>--%>
+            <%--<h3><%=faculty.length%> faculty</h3>--%>
+        <%--</div>--%>
+        <%--<!-- Display a message if defined -->--%>
+        <%--<input type="hidden" name="runid" value="<%=college.getRunId()%>">--%>
+        <%--<input type="hidden" name="server" value="<%=server%>">--%>
+        <%--<p></p>--%>
+        <%--<div class="well well-sm">--%>
+            <%--<table class="table table-condensed">--%>
+                <%--<tbody>--%>
+                <%--<h4>Faculty</h4>--%>
+                <%--<%--%>
+                    <%--for (int i = 0; i < faculty.length; i++) {--%>
+                <%--%>--%>
+                <%--<tr>--%>
+                    <%--<li class="list-group-item"> <%=faculty[i].getIdNumber()%>--%>
+                    <%--</li>--%>
+                <%--</tr>--%>
+                <%--<% } %>--%>
+                <%--</tbody>--%>
+            <%--</table>--%>
 
-        <div class="row">
-            <div class="col-4">.col-4</div>
-            <div class="col-4">.col-4</div>
-            <div class="col-4">.col-4</div>
+        <%--</div>--%>
+    <%--</div>--%>
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Faculty</h1>
+            <p class="lead text-muted">This is a list of all the faculty currently employed at <%=college.getRunId()%></p>
+            <p class="lead text-muted">There are currently <%=faculty.length%> faculty members employed</p>
+            <p>
+                <!-- TO-DO -->
+                <!-- Add functionality to add faculty button -->
+                <a href="#" class="btn btn-primary">Add a new faculty member</a>
+            </p>
         </div>
+    </section>
 
-        <div class="row">
-            <div class="col-sm-4">.col-sm-4</div>
-            <div class="col-sm-4">.col-sm-4</div>
-            <div class="col-sm-4">.col-sm-4</div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-        </div>
+    <!-- TO-DO -->
+    <!-- Populate 'album' indexes properly -->
+    <div class="album text-muted">
+        <div class="container">
 
-        <div class="row">
-            <div class="col-lg-4">.col-lg-4</div>
-            <div class="col-lg-4">.col-lg-4</div>
-            <div class="col-lg-4">.col-lg-4</div>
-        </div>
+            <div class="row">
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
 
-        <div class="row">
-            <div class="col-xl-4">.col-xl-4</div>
-            <div class="col-xl-4">.col-xl-4</div>
-            <div class="col-xl-4">.col-xl-4</div>
-        </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
 
-        <h3>Three equal columns</h3>
-        <p>Get three equal-width columns <strong>starting at desktops and scaling to large desktops</strong>. On mobile devices, tablets and below, the columns will automatically stack.</p>
-        <div class="row">
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-            <div class="col-md-4">.col-md-4</div>
-        </div>
-
-        <h3>Three unequal columns</h3>
-        <p>Get three columns <strong>starting at desktops and scaling to large desktops</strong> of various widths. Remember, grid columns should add up to twelve for a single horizontal block. More than that, and columns start stacking no matter the viewport.</p>
-        <div class="row">
-            <div class="col-md-3">.col-md-3</div>
-            <div class="col-md-6">.col-md-6</div>
-            <div class="col-md-3">.col-md-3</div>
-        </div>
-
-        <h3>Two columns</h3>
-        <p>Get two columns <strong>starting at desktops and scaling to large desktops</strong>.</p>
-        <div class="row">
-            <div class="col-md-8">.col-md-8</div>
-            <div class="col-md-4">.col-md-4</div>
-        </div>
-
-        <h3>Full width, single column</h3>
-        <p class="text-warning">No grid classes are necessary for full-width elements.</p>
-
-        <hr>
-
-        <h3>Two columns with two nested columns</h3>
-        <p>Per the documentation, nesting is easy—just put a row of columns within an existing column. This gives you two columns <strong>starting at desktops and scaling to large desktops</strong>, with another two (equal widths) within the larger column.</p>
-        <p>At mobile device sizes, tablets and down, these columns and their nested columns will stack.</p>
-        <div class="row">
-            <div class="col-md-8">
-                .col-md-8
-                <div class="row">
-                    <div class="col-md-6">.col-md-6</div>
-                    <div class="col-md-6">.col-md-6</div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                    <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                 </div>
             </div>
-            <div class="col-md-4">.col-md-4</div>
-        </div>
 
-        <hr>
+        </div>
+    </div>
 
-        <h3>Mixed: mobile and desktop</h3>
-        <p>The Bootstrap v4 grid system has five tiers of classes: xs (extra small), sm (small), md (medium), lg (large), and xl (extra large). You can use nearly any combination of these classes to create more dynamic and flexible layouts.</p>
-        <p>Each tier of classes scales up, meaning if you plan on setting the same widths for xs and sm, you only need to specify xs.</p>
-        <div class="row">
-            <div class="col-12 col-md-8">.col-12 .col-md-8</div>
-            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-        </div>
-        <div class="row">
-            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-        </div>
-        <div class="row">
-            <div class="col-6">.col-6</div>
-            <div class="col-6">.col-6</div>
-        </div>
 
-        <hr>
-
-        <h3>Mixed: mobile, tablet, and desktop</h3>
-        <p></p>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-lg-8">.col-12 .col-sm-6 .col-lg-8</div>
-            <div class="col-6 col-lg-4">.col-6 .col-lg-4</div>
-        </div>
-        <div class="row">
-            <div class="col-6 col-sm-4">.col-6 .col-sm-4</div>
-            <div class="col-6 col-sm-4">.col-6 .col-sm-4</div>
-            <div class="col-6 col-sm-4">.col-6 .col-sm-4</div>
-        </div>
-
-    </div> <!-- /container -->
 
 </form>
 
