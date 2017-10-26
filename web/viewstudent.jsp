@@ -71,6 +71,7 @@
                     <li class="active"><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
                     <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
                     <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
+                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>&server=<%=server%>">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
@@ -93,11 +94,31 @@
             </div>
         </div>
         <h4>Student Body Happiness</h4>
+        <% if (college.getStudentBodyHappiness() >= 80) { %>
         <div class="progress">
-            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
-                <span class="sr-only">50% Complete</span>
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                <%=college.getStudentBodyHappiness()%>%
             </div>
         </div>
+        <%
+        } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80 ){
+        %>
+        <div class="progress">
+            <div class="progress-bar progress-bar-warning" role="progressbar"
+                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                <%=college.getStudentBodyHappiness()%>%
+            </div>
+        </div>
+        <% } else if (college.getStudentBodyHappiness() < 50){
+        %>
+        <div class="progress">
+            <div class="progress-bar progress-bar-danger" role="progressbar"
+                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                <%=college.getStudentBodyHappiness()%>%
+            </div>
+        </div>
+        <% } %>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
