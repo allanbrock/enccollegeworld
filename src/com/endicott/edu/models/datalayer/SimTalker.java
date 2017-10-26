@@ -30,7 +30,7 @@ public class SimTalker {
         }
 
         DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
-        NewsFeedItemModel[] news = SimTalker.getNews(server, runId, msg);
+        NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
 
@@ -124,27 +124,6 @@ public class SimTalker {
         return students;
     }
 
-
-    static public NewsFeedItemModel[] getNews(String server, String runId, UiMessage msg){
-        NewsFeedItemModel[] news;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "newsfeed/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-        logger.info("News as string: " +responseAsString);
-
-        try {
-            news = gson.fromJson(responseAsString, NewsFeedItemModel[].class);
-        } catch (Exception e) {
-            msg.setMessage(e.getMessage());
-            logger.severe("Exception getting news: " + e.getMessage());
-            return null;
-        }
-        return news;
-    }
 
     static public CollegeModel nextDayAtCollege(String server, String runId){
         CollegeModel college;
