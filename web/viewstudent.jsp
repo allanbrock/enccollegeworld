@@ -103,22 +103,23 @@
         <input type="hidden" name="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
-            <table class="table table-condensed">
-                <tbody>
-                <h4>Students</h4>
-                <%
-                    for (int i = 0; i < students.length; i++) {
-                %>
-                <tr>
-                    <li class="list-group-item"> <%=students[i].getIdNumber()%>
-                    </li>
-                    <%--<td ><%=students[i].getIdNumber()%>--%>
-                    <%--</td>--%>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
-
+            <div class="pre-scrollable">
+                <table class="table table-condensed">
+                    <tbody>
+                    <h4>Students</h4>
+                    <%
+                      for (int i = 0; i < students.length; i++) {
+                    %>
+                    <tr>
+                        <li class="list-group-item"> <%=students[i].getIdNumber()%>
+                        </li>
+                        <%--<td ><%=students[i].getIdNumber()%>--%>
+                        <%--</td>--%>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </form>
