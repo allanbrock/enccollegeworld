@@ -83,8 +83,16 @@
     <!--create array of sport teams -->
     <div class="container">
         <div class="jumbotron">
-            <h2>Sports</h2>
-            <p><%=sport.length%> sports</p>
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/stadium.png">
+                </div>
+                <div class="col-md-10">
+
+                    <h2>Sports</h2>
+                    <h3><%=sport.length%> sports</h3>
+                </div>
+            </div>
         </div>
 
 

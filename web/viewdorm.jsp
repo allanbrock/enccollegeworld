@@ -84,9 +84,15 @@
 
     <div class="container">
         <div class="jumbotron">
-            <h2>Dorms</h2>
-            <!-- change-->
-            <p>0 open beds</p>
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/dorm.png">
+                </div>
+                <div class="col-md-10">
+                    <h2>Dorms</h2>
+                    <h3><p>0 open beds</p></h3>
+                </div>
+            </div>
         </div>
         <!-- Display a message if defined -->
         <input type="hidden" dormName="runid" value="<%=college.getRunId()%>">

@@ -82,9 +82,15 @@
 
     <div class="container">
         <div class="jumbotron">
-            <h2>Students</h2>
-            <p></p>
-            <h3><%=students.length%> students</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/student.png">
+                </div>
+                <div class="col-md-10">
+                    <h2>Students</h2>
+                    <h3><%=students.length%> students</h3>
+                </div>
+            </div>
         </div>
         <h4>Student Body Happiness</h4>
         <div class="progress">
@@ -97,22 +103,23 @@
         <input type="hidden" name="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
-            <table class="table table-condensed">
-                <tbody>
-                <h4>Students</h4>
-                <%
-                    for (int i = 0; i < students.length; i++) {
-                %>
-                <tr>
-                    <li class="list-group-item"> <%=students[i].getIdNumber()%>
-                    </li>
-                    <%--<td ><%=students[i].getIdNumber()%>--%>
-                    <%--</td>--%>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
-
+            <div class="pre-scrollable">
+                <table class="table table-condensed">
+                    <tbody>
+                    <h4>Students</h4>
+                    <%
+                      for (int i = 0; i < students.length; i++) {
+                    %>
+                    <tr>
+                        <li class="list-group-item"> <%=students[i].getIdNumber()%>
+                        </li>
+                        <%--<td ><%=students[i].getIdNumber()%>--%>
+                        <%--</td>--%>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </form>

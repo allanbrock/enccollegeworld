@@ -43,4 +43,12 @@
         <servlet-name>viewSportsServlet</servlet-name>
         <url-pattern>/viewSports</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewFacultyServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewFacultyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewFacultyServlet</servlet-name>
+        <url-pattern>/viewFaculty</url-pattern>
+    </servlet-mapping>
 </web-app>
