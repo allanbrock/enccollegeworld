@@ -82,9 +82,15 @@
 
     <div class="container">
         <div class="jumbotron">
-            <h2>Students</h2>
-            <p></p>
-            <h3><%=students.length%> students</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/student.png">
+                </div>
+                <div class="col-md-10">
+                    <h2>Students</h2>
+                    <h3><%=students.length%> students</h3>
+                </div>
+            </div>
         </div>
         <h4>Student Body Happiness</h4>
         <div class="progress">
