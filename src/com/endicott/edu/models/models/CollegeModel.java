@@ -10,6 +10,18 @@ public class CollegeModel implements Serializable {
     private int hoursAlive = 0;
     private int availableCash = 0;
     private int yearlyTuitionCost = 40000; //the amount it costs to attend the school for a single year
+    private int reputation = 50; //reputation of college based on 1-100
+    private String runId = "unknown";
+    private String note = "empty";
+    private int studentBodyHappiness;
+
+    public int getReputation() {
+        return reputation;
+    }
+
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
+    }
 
     public int getYearlyTuitionCost() {
         return yearlyTuitionCost;
@@ -19,9 +31,6 @@ public class CollegeModel implements Serializable {
         this.yearlyTuitionCost = yearlyTuitionCost;
     }
 
-    private String runId = "unknown";
-    private String note = "empty";
-
     public int getAvailableCash() {
         return availableCash;
     }
@@ -30,10 +39,7 @@ public class CollegeModel implements Serializable {
         this.availableCash = availableCash;
     }
 
-    public String getRunId() {
-        return runId;
-
-    }
+    public String getRunId() { return runId; }
 
     public void setRunId(String runId) {
         this.runId = runId;
@@ -62,4 +68,10 @@ public class CollegeModel implements Serializable {
     public int getCurrentDay() {
         return hoursAlive / 24 + 1;
     }
+
+    public int getStudentBodyHappiness() { return studentBodyHappiness; }
+
+    public void setStudentBodyHappiness(int studentBodyHappiness) { this.studentBodyHappiness = studentBodyHappiness; }
+
+
 }
