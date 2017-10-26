@@ -71,6 +71,7 @@
                     <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
                     <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
                     <li class="active"><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
+                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>&server=<%=server%>">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
