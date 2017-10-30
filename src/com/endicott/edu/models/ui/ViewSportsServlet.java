@@ -1,6 +1,7 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
         import com.endicott.edu.models.datalayer.SimTalker;
+        import com.endicott.edu.models.datalayer.SportsSimTalker;
 
         import javax.servlet.RequestDispatcher;
         import java.io.IOException;
@@ -22,7 +23,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding sport.");
         }
         else {
-            SimTalker.addSport(runId, server, sportName);
+            SportsSimTalker.addSport(runId, server, sportName);
             logger.info("Added sport: " + sportName + " to " + runId + " at server " + server);
         }
 
