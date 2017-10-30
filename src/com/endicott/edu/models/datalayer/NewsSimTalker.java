@@ -1,13 +1,10 @@
-package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
-
+package com.endicott.edu.models.datalayer;
 import com.endicott.edu.models.models.*;
-import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,7 +23,7 @@ public class NewsSimTalker {
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("News as string: " + responseAsString);
+        logger.info("Retreived news.");
 
         try {
             news = gson.fromJson(responseAsString, NewsFeedItemModel[].class);
