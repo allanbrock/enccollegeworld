@@ -90,7 +90,7 @@
                     <img class="img-responsive" src="resources/images/dorm.png">
                 </div>
                 <div class="col-md-10">
-                    <h2>Dorms</h2>
+                    <h2><%=college.getRunId()%>'s Dorms</h2>
                     <h3><p>0 open beds</p></h3>
                 </div>
             </div>
@@ -101,12 +101,29 @@
         <p></p>
         <div class="well well-sm">
             <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>Dorm Name</th>
+                        <th>Total Capacity</th>
+                        <th>Current Capacity</th>
+                        <th>Current Disaster</th>
+                        <th>Status</th>
+                    </tr>
+                </thread>
                 <tbody>
                 <%
                     for (int i = 0; i < dorms.length; i++) {
                 %>
                 <tr>
                     <td><%=dorms[i].getName()%>
+                    </td>
+                    <td><%=dorms[i].getCapacity()%>
+                    </td>
+                    <td><%=dorms[i].getNumStudents()%>
+                    </td>
+                    <td><%=dorms[i].getCurDisaster()%>
+                    </td>
+                    <td><%=dorms[i].checkIfBeingBuilt()%>
                     </td>
                 </tr>
                 <% } %>
