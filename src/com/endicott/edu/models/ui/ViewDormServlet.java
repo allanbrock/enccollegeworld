@@ -1,5 +1,6 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
+import com.endicott.edu.models.datalayer.DormSimTalker;
 import com.endicott.edu.models.datalayer.SimTalker;
 
 import javax.servlet.RequestDispatcher;
@@ -18,24 +19,27 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         String dormType=request.getParameter("dormType");
         logger.info("In ViewDormServlet.doPost()");
 
-//        if(runId == null || server ==null ||dormName ==null || dormType == null){
-//            UiMessage message = new UiMessage("Cannot add dorm, information is missing");
-//            request.setAttribute("message", message);
-//        }
-//        else{
-//            SimTalker.addDorm(server, runId, dormName, dormType);
-//        }
+        logger.info("Attempting to add dorm: " + dormName + " to " + runId + " at server " + server);
+        if(runId == null || server ==null ||dormName ==null || dormType == null){
+            UiMessage message = new UiMessage("Cannot add dorm, information is missing");
+            request.setAttribute("message", message);
+            logger.severe("Parameters bad for adding a dorm.");
+        }
+        else{
+            DormSimTalker.addDorm(server, runId, dormName, dormType);
+            logger.info("Added dorm: " + dormName + " to " + runId + " at server " + server);
+        }
 
         //load the request with attributes for the dorm
-        //request.setAttribute("server", server);
-        //SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        request.setAttribute("server", server);
+        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        //SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
 
 
