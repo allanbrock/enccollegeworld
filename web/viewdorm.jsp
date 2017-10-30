@@ -115,18 +115,24 @@
 
         </div>
 
-        <div class="form-group">
-            <label for="dormType">Select a dorm type to add</label>
-            <select class="form-control" id="dormType" dormName="dormType">
-                <option>Small</option>
-                <option>Medium</option>
-                <option>Large</option>
-            </select>
-            <div class="form-group">
-                <input type="text" dormName="dormName" class="form-control" id="dormName" placeholder="Enter dorm dormName">
+        <!-- Add Dorm -->
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label for="dormType">Select a dorm type to add</label>
+                    <select class="form-control" id="dormType" dormName="dormType">
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                    </select>
+                    <div class="form-group">
+                        <input type="text" dormName="dormName" class="form-control" id="dormName"
+                               placeholder="Enter dorm name.">
+                    </div>
+                    <!-- Button -->
+                    <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
+                </div>
             </div>
-            <!-- Button -->
-            <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
         </div>
 
     </div>
