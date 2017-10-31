@@ -37,8 +37,6 @@ public class DormSimTalker {
             logger.info("Good response: " + runId);
             return true;
         }
-
-
     }
     static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
         DormitoryModel[] dorms;
