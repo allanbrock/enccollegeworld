@@ -28,7 +28,7 @@ public class SimTalker {
             logger.info("Found college: " + runId);
         }
 
-        DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
+        DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
@@ -62,25 +62,6 @@ public class SimTalker {
         return college;
     }
 
-    static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
-        DormitoryModel[] dorms;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "dorms/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-        logger.info("Retrieved dorms from sim");
-
-        try {
-            dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
-        } catch (Exception e) {
-            msg.setMessage("Dorm Failure: " + e.getMessage());
-            return null;
-        }
-        return dorms;
-    }
 
     static public  SportModel[] getSports(String server, String runId, UiMessage msg){
         SportModel[] sport;
