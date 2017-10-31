@@ -96,8 +96,8 @@
             </div>
         </div>
         <!-- Display a message if defined -->
-        <input type="hidden" dormName="runid" value="<%=college.getRunId()%>">
-        <input type="hidden" dormName="server" value="<%=server%>">
+        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" name="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
             <table class="table table-condensed">
