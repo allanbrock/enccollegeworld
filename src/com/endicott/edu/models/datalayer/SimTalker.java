@@ -31,7 +31,7 @@ public class SimTalker {
 
         DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
-        SportModel[] sport = SimTalker.getSports(server, runId, msg);
+        SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
@@ -81,27 +81,6 @@ public class SimTalker {
             return null;
         }
         return dorms;
-    }
-
-
-    static public  SportModel[] getSports(String server, String runId, UiMessage msg){
-        SportModel[] sport;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "sports/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-        logger.info("Sports as string: " +responseAsString);
-
-        try {
-            sport = gson.fromJson(responseAsString, SportModel[].class);
-        } catch (Exception e) {
-            msg.setMessage("Sports Failure:" + e.getMessage());
-            return null;
-        }
-        return sport;
     }
 
     static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
