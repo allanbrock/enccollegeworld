@@ -1,5 +1,9 @@
 package com.endicott.edu.models.datalayer;
 
+import com.endicott.edu.models.models.SportModel;
+import com.endicott.edu.models.ui.UiMessage;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.ws.rs.client.*;
@@ -31,5 +35,24 @@ public class SportsSimTalker {
             logger.info("Add sport: Got a ok response: " + runId);
             return true;
         }
+    }
+    static public  SportModel[] getSports(String server, String runId, UiMessage msg){
+        SportModel[] sport;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "sports/" + runId);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("Sports as string: " +responseAsString);
+
+        try {
+            sport = gson.fromJson(responseAsString, SportModel[].class);
+        } catch (Exception e) {
+            msg.setMessage("Sports Failure:" + e.getMessage());
+            return null;
+        }
+        return sport;
     }
 }

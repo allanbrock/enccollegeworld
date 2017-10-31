@@ -25,5 +25,6 @@
     <orderEntry type="library" name="com.google.code.gson:gson:2.7" level="project" />
     <orderEntry type="library" name="org.glassfish.jersey.media:jersey-media-moxy:2.25.1" level="project" />
     <orderEntry type="library" name="org.glassfish:javax.json:1.1" level="project" />
+    <orderEntry type="library" name="javax.servlet-api" level="project" />
   </component>
 </module>

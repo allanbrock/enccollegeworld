@@ -1,6 +1,7 @@
-package com.endicott.edu.models.datalayer;
+package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.models.models.*;
+import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,10 +31,10 @@ public class SimTalker {
 
         DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
-        SportModel[] sport = SimTalker.getSports(server, runId, msg);
+        SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
 
-        logger.info("Setting request attributes for college: " + runId);
+        logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("dorms",dorms);
@@ -63,24 +64,24 @@ public class SimTalker {
     }
 
 
-    static public  SportModel[] getSports(String server, String runId, UiMessage msg){
-        SportModel[] sport;
+    static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
+        DormitoryModel[] dorms;
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "sports/" + runId);
+        WebTarget webTarget = client.target(server + "dorms/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("Retreived sports from sim.");
+        logger.info("Dorms as string: " +responseAsString);
 
         try {
-            sport = gson.fromJson(responseAsString, SportModel[].class);
+            dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
         } catch (Exception e) {
-            msg.setMessage("Sports Failure:" + e.getMessage());
+            msg.setMessage("Dorm Failure: " + e.getMessage());
             return null;
         }
-        return sport;
+        return dorms;
     }
 
     static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
@@ -92,7 +93,7 @@ public class SimTalker {
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("Retreived students from sim");
+        logger.info("Students as string: " +responseAsString);
 
         try {
             students = gson.fromJson(responseAsString, StudentModel[].class);
@@ -113,7 +114,6 @@ public class SimTalker {
         Response response = invocationBuilder.put(Entity.json(""));
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("Told sim to go to next day---------------------------------------.");
 
         try {
             college = gson.fromJson(responseAsString, CollegeModel.class);
@@ -127,7 +127,7 @@ public class SimTalker {
         CollegeModel college = new CollegeModel();
         college.setRunId(runId);
 
-        logger.info("Creating college " + runId);
+        logger.info("Creating the college " + runId);
 
         Client client = ClientBuilder.newClient(new ClientConfig());
         WebTarget webTarget = client.target(server + "college/" + runId);
