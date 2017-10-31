@@ -1,4 +1,4 @@
-package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.models.datalayer;
 
 import com.endicott.edu.models.models.SportModel;
 import com.endicott.edu.models.ui.UiMessage;

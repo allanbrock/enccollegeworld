@@ -90,23 +90,40 @@
                     <img class="img-responsive" src="resources/images/dorm.png">
                 </div>
                 <div class="col-md-10">
-                    <h2>Dorms</h2>
+                    <h2><%=college.getRunId()%>'s Dorms</h2>
                     <h3><p>0 open beds</p></h3>
                 </div>
             </div>
         </div>
         <!-- Display a message if defined -->
-        <input type="hidden" dormName="runid" value="<%=college.getRunId()%>">
-        <input type="hidden" dormName="server" value="<%=server%>">
+        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" name="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
             <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>Dorm Name</th>
+                        <th>Total Capacity</th>
+                        <th>Current Capacity</th>
+                        <th>Current Disaster</th>
+                        <th>Status</th>
+                    </tr>
+                </thread>
                 <tbody>
                 <%
                     for (int i = 0; i < dorms.length; i++) {
                 %>
                 <tr>
                     <td><%=dorms[i].getName()%>
+                    </td>
+                    <td><%=dorms[i].getCapacity()%>
+                    </td>
+                    <td><%=dorms[i].getNumStudents()%>
+                    </td>
+                    <td><%=dorms[i].getCurDisaster()%>
+                    </td>
+                    <td><%=dorms[i].checkIfBeingBuilt()%>
                     </td>
                 </tr>
                 <% } %>
@@ -115,18 +132,24 @@
 
         </div>
 
-        <div class="form-group">
-            <label for="dormType">Select a dorm type to add</label>
-            <select class="form-control" id="dormType" dormName="dormType">
-                <option>Small</option>
-                <option>Medium</option>
-                <option>Large</option>
-            </select>
-            <div class="form-group">
-                <input type="text" dormName="dormName" class="form-control" id="dormName" placeholder="Enter dorm dormName">
+        <!-- Add Dorm -->
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label for="dormType">Select a dorm type to add</label>
+                    <select class="form-control" id="dormType" dormName="dormType">
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                    </select>
+                    <div class="form-group">
+                        <input type="text" dormName="dormName" class="form-control" id="dormName"
+                               placeholder="Enter dorm name.">
+                    </div>
+                    <!-- Button -->
+                    <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
+                </div>
             </div>
-            <!-- Button -->
-            <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
         </div>
 
     </div>

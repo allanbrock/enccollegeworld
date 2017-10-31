@@ -37,14 +37,13 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
                 return;
             }
         } else {
-            logger.info("Open College button pressed: " + buttonValue);
+            logger.info("Open College button pressed: " + buttonValue + " -----------------------");
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         SimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
-        logger.info("Attribute college: " + request.getAttribute("college"));
         if (request.getAttribute("college") == null) {
             UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");
             request.setAttribute("message", msg);

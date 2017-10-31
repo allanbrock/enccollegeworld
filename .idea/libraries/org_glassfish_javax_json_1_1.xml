@@ -3,7 +3,9 @@
     <properties maven-id="org.glassfish:javax.json:1.1" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/javax.json/1.1/javax.json-1.1.jar!/" />
-      <root url="jar://$USER_HOME$/glassfish5/glassfish/modules/javax.servlet-api.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/javax.json/1.1/javax.json-1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/javax.json/1.1/javax.json-1.1.jar!/" />
+      <root url="jar://C:/glassfish5.0/glassfish5/glassfish/modules/javax.servlet-api.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
