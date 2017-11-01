@@ -21,12 +21,13 @@ public class SportModel implements Serializable {
     private String sportName = "unknown";
     private String note = "no note";
     private boolean isActive = false;
+    private int hoursUntilNextGame = 0;
 
     public SportModel() {
 
     }
 
-    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, Boolean isActive) {
+    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, Boolean isActive, int hoursUntilNextGame) {
         this.minPlayers = minPlayers;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
@@ -41,6 +42,7 @@ public class SportModel implements Serializable {
         this.sportName = sportName;
         this.runId = runId;
         this.isActive = isActive;
+        this.hoursUntilNextGame = hoursUntilNextGame;
     }
 
     public SportModel(String sportName, String runId){
@@ -175,4 +177,11 @@ public class SportModel implements Serializable {
     public void setSportName(String sportName) {
         this.sportName = sportName;
     }
+
+    public int getHoursUntilNextGame() { return hoursUntilNextGame; }
+
+    public void setHoursUntilNextGame(int hoursUntilNextGame) {
+        this.hoursUntilNextGame = hoursUntilNextGame;
+    }
+
 }
