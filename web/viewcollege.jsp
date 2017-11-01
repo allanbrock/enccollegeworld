@@ -1,9 +1,5 @@
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.StudentModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %>
+<%@ page import="com.endicott.edu.models.models.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -136,21 +132,31 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
+                                    if (news[i].getNoteType() == NewsType.GENERAL_NOTE) {
                             %>
                             <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
-                            <% } %>
+                            <%      }
+                                } %>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="well well-sm">
-                    <h3>Financial News</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item"> Coming soon!
-                        </li>
-                    </ul>
+                    <div class="pre-scrollable">
+                        <h3>Financial News</h3>
+                        <ul class="list-group">
+                            <%
+                                for (int i = news.length - 1; i >= 0; i--) {
+                                    if (news[i].getNoteType() != NewsType.GENERAL_NOTE) {
+                            %>
+                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }
+                            } %>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

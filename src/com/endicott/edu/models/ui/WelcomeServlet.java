@@ -37,7 +37,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
                 return;
             }
         } else {
-            logger.info("Open College button pressed: " + buttonValue + " -----------------------");
+            logger.info("Open College button was pressed: " + buttonValue + " -----------------------");
         }
 
         // Attempt to fetch the college and load into

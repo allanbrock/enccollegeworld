@@ -91,7 +91,16 @@
                 </div>
                 <div class="col-md-10">
                     <h2><%=college.getRunId()%>'s Dorms</h2>
-                    <h3><p>0 open beds</p></h3>
+                    <h3><p><%
+                        int openBeds = 0;
+                        for (DormitoryModel d : dorms){
+                            int numStudents = d.getNumStudents();
+                            int capacity = d.getCapacity();
+                            openBeds += capacity - numStudents;
+                        }
+
+                    %>
+                        <%=openBeds%> Open Beds. </p></h3>
                 </div>
             </div>
         </div>

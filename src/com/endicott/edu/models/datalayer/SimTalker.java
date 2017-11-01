@@ -29,7 +29,7 @@ public class SimTalker {
             logger.info("Found college: " + runId);
         }
 
-        DormitoryModel[] dorms = SimTalker.getDormitories(server, runId, msg);
+        DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
@@ -62,6 +62,7 @@ public class SimTalker {
 
         return college;
     }
+
 
     static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
         DormitoryModel[] dorms;
@@ -126,7 +127,7 @@ public class SimTalker {
         CollegeModel college = new CollegeModel();
         college.setRunId(runId);
 
-        logger.info("Creating college " + runId);
+        logger.info("Creating the college " + runId);
 
         Client client = ClientBuilder.newClient(new ClientConfig());
         WebTarget webTarget = client.target(server + "college/" + runId);
