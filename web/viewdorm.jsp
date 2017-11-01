@@ -99,8 +99,8 @@
                             openBeds += capacity - numStudents;
                         }
 
-                    %><
-                        <%=openBeds%> Open Beds./p></h3>
+                    %>
+                        <%=openBeds%> Open Beds. </p></h3>
                 </div>
             </div>
         </div>
