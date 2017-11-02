@@ -128,7 +128,7 @@
             <div class="col-sm-8">
                 <div class="well well-sm">
                     <div class="pre-scrollable">
-                        <h3><%=college.getRunId()%> News</h3>
+                        <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
@@ -145,7 +145,7 @@
             <div class="col-sm-4">
                 <div class="well well-sm">
                     <div class="pre-scrollable">
-                        <h3>Financial News</h3>
+                        <h3><p class ="text-success">Financial News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
