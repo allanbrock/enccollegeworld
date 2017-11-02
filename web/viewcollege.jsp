@@ -125,7 +125,7 @@
         <!-- Newsfeed -->
         <p></p>
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <div class="well well-sm">
                     <div class="pre-scrollable">
                         <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
@@ -142,7 +142,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="well well-sm">
                     <div class="pre-scrollable">
                         <h3><p class ="text-success">Financial News</h3>
