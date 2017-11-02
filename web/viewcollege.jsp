@@ -151,7 +151,10 @@
                                 for (int i = news.length - 1; i >= 0; i--) {
                                     if (news[i].getNoteType() != NewsType.GENERAL_NOTE) {
                             %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% }
                             } %>
