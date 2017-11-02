@@ -47,7 +47,7 @@ public class DormSimTalker {
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("Retrieved dorms from sim");
+        logger.info("Retrieved the dorms from sim");
 
         try {
             dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
