@@ -146,13 +146,13 @@
             <div class="well well-sm">
                 <div class="form-group">
                     <label for="dormType">Select a dorm type to add</label>
-                    <select class="form-control" id="dormType" dormName="dormType">
+                    <select class="form-control" id="dormType" name="dormType">
                         <option>Small</option>
                         <option>Medium</option>
                         <option>Large</option>
                     </select>
                     <div class="form-group">
-                        <input type="text" dormName="dormName" class="form-control" id="dormName"
+                        <input type="text" class="form-control" id="dormName" name="dormName"
                                placeholder="Enter dorm name.">
                     </div>
                     <!-- Button -->

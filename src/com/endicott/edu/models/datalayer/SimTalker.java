@@ -34,7 +34,6 @@ public class SimTalker {
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         StudentModel[] students = SimTalker.getStudents(server, runId, msg);
 
-        logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("dorms",dorms);
@@ -72,7 +71,6 @@ public class SimTalker {
         Response response = invocationBuilder.get();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
-        logger.info("Students as string: " +responseAsString);
 
         try {
             students = gson.fromJson(responseAsString, StudentModel[].class);
