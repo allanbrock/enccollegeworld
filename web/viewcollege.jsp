@@ -81,7 +81,7 @@
         <div class="jumbotron">
             <h2>Balance $<%=college.getAvailableCash()%>
             </h2>
-            <h4>Student Body Happiness</h4>
+            <h2>&#9786; <small>Student Body Happiness</small></h2>
                 <% if (college.getStudentBodyHappiness() >= 80) { %>
                 <div class="progress">
                     <div class="progress-bar progress-bar-success" role="progressbar"
@@ -160,6 +160,16 @@
                             } %>
                         </ul>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rentention -->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="well well-sm">
+                    <h3>Rentention Rate</h3>
+                    <h4>Coming Soon!</h4>
                 </div>
             </div>
         </div>
