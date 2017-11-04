@@ -81,41 +81,70 @@
         <div class="jumbotron">
             <h2>Balance $<%=college.getAvailableCash()%>
             </h2>
-            <h2>&#9786; <small>Student Body Happiness</small></h2>
-                <% if (college.getStudentBodyHappiness() >= 80) { %>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success" role="progressbar"
-                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                        <%=college.getStudentBodyHappiness()%>%
-                    </div>
-                </div>
-                <%
-                } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80 ){
-                %>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-warning" role="progressbar"
-                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                        <%=college.getStudentBodyHappiness()%>%
-                    </div>
-                </div>
-                <% } else if (college.getStudentBodyHappiness() < 50){
-                %>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-danger" role="progressbar"
-                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                        <%=college.getStudentBodyHappiness()%>%
-                    </div>
-                </div>
-                <% } %>
+
             <p>Day <%=college.getCurrentDay()%>
             </p>
-            <% if(college.getAvailableCash() <= 0) { %>
-            <h2> <p class = "text-danger">Bankrupt</h2>
+            <% if (college.getAvailableCash() <= 0) { %>
+            <h2><p class="text-danger">Bankrupt</h2>
             <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
-            <%}
-            else {%>
+            <%} else {%>
             <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
             <%}%>
+        </div> <!-- jumbotron -->
+
+        <div class="row">
+            <!-- Happiness -->
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    <h2>&#9786;
+                        <small>Student Body Happiness</small>
+                    </h2>
+                    <% if (college.getStudentBodyHappiness() >= 80) { %>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                             style="width:<%=college.getStudentBodyHappiness()%>%">
+                            <%=college.getStudentBodyHappiness()%>%
+                        </div>
+                    </div>
+                    <%
+                    } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80) {
+                    %>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning" role="progressbar"
+                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                             style="width:<%=college.getStudentBodyHappiness()%>%">
+                            <%=college.getStudentBodyHappiness()%>%
+                        </div>
+                    </div>
+                    <% } else if (college.getStudentBodyHappiness() < 50) {
+                    %>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-danger" role="progressbar"
+                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                             style="width:<%=college.getStudentBodyHappiness()%>%">
+                            <%=college.getStudentBodyHappiness()%>%
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Number of Students -->
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    <h3>Students</h3>
+                    <h3><%=students.length%></h3>
+                </div>
+            </div>
+
+            <!-- Retention Rate -->
+            <div class="col-sm-4">
+                <div class="well well-sm">
+                    <h3>Retention Rate</h3>
+                    <h4>Coming Soon!</h4>
+                </div>
+            </div>
         </div>
 
         <!-- Hidden Parameters That Will Be Passed in Request! -->
@@ -136,8 +165,8 @@
                             %>
                             <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
-                            <%      }
-                                } %>
+                            <% }
+                            } %>
                         </ul>
                     </div>
                 </div>
@@ -145,7 +174,7 @@
             <div class="col-sm-6">
                 <div class="well well-sm">
                     <div class="pre-scrollable">
-                        <h3><p class ="text-success">Financial News</h3>
+                        <h3><p class="text-success">Financial News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
@@ -160,16 +189,6 @@
                             } %>
                         </ul>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Rentention -->
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="well well-sm">
-                    <h3>Rentention Rate</h3>
-                    <h4>Coming Soon!</h4>
                 </div>
             </div>
         </div>
