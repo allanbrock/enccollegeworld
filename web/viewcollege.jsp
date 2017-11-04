@@ -133,16 +133,22 @@
             <!-- Number of Students -->
             <div class="col-sm-4">
                 <div class="well well-sm">
-                    <h3>Students</h3>
-                    <h3><%=students.length%></h3>
+                    <div class="text-center">
+                        <h1><%=students.length%>
+                        </h1>
+                        <h3>Students</h3>
+                    </div>
                 </div>
             </div>
 
             <!-- Retention Rate -->
             <div class="col-sm-4">
                 <div class="well well-sm">
-                    <h3>Retention Rate</h3>
-                    <h4>Coming Soon!</h4>
+                    <div class="text-center">
+                        <h1>0
+                        </h1>
+                        <h3>Retention Rate</h3>
+                    </div>
                 </div>
             </div>
         </div>
