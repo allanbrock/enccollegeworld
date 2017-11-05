@@ -124,10 +124,10 @@
         <input type="hidden" name="server" value="<%=server%>">
         <p></p>
         <div class="well well-sm">
+            <h4>Students</h4>
             <div class="pre-scrollable">
                 <table class="table table-condensed">
                     <tbody>
-                    <h4>Students</h4>
                     <%
                       for (int i = 0; i < students.length; i++) {
                     %>
