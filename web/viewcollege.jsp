@@ -145,7 +145,7 @@
             <div class="col-sm-4">
                 <div class="well well-sm">
                     <div class="text-center">
-                        <h1>0
+                        <h1>100%
                         </h1>
                         <h3>Retention Rate</h3>
                     </div>
@@ -164,8 +164,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="well well-sm">
+                    <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
                     <div class="pre-scrollable">
-                        <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
@@ -181,8 +181,8 @@
             </div>
             <div class="col-sm-6">
                 <div class="well well-sm">
+                    <h3><p class="text-success">Financial News</h3>
                     <div class="pre-scrollable">
-                        <h3><p class="text-success">Financial News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
@@ -224,16 +224,14 @@
 
         <!-- Server -->
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <div class="well well-sm">
                     Server: <%=server%>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="alert alert-success">
+            <div class="col-sm-6">
+                <div class="well well-sm">
                     <strong>Info</strong> <%=msg.getMessage()%>
                 </div>
             </div>
