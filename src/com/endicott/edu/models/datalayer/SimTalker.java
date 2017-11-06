@@ -62,6 +62,46 @@ public class SimTalker {
         return college;
     }
 
+
+    static public void deleteCollege(String server, String runId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "college/" + runId + "/delete");
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.TEXT_PLAIN);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+
+        try {
+            String message = gson.fromJson(responseAsString, String.class);
+        } catch (Exception e) {
+            logger.severe("Exception getting college: " + server + "college/" + runId + " " + e.getMessage() + " College: " + responseAsString);
+            return;
+        }
+
+        return;
+    }
+
+    static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
+        DormitoryModel[] dorms;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "dorms/" + runId);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("Dorms as string: " +responseAsString);
+
+        try {
+            dorms = gson.fromJson(responseAsString, DormitoryModel[].class);
+        } catch (Exception e) {
+            msg.setMessage("Dorm Failure: " + e.getMessage());
+            return null;
+        }
+        return dorms;
+    }
+
     static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
         StudentModel[] students;
         Client client = ClientBuilder.newClient(new ClientConfig());
