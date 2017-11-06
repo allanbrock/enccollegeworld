@@ -1,5 +1,6 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
+import com.endicott.edu.models.datalayer.CollegeSimTalker;
 import com.endicott.edu.models.datalayer.SimTalker;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +15,13 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         if (request.getParameter("nextDayButton") != null) {
             SimTalker.nextDayAtCollege(server, runId);
+        }
+        if(request.getParameter("updateTuitionButton") != null){
+            //call update tuition
+            String tuition = request.getParameter("tuitionValue");
+            CollegeSimTalker.updateTuition(server,runId,tuition);
+
+
         }
 
         // Attempt to fetch the college and load into
