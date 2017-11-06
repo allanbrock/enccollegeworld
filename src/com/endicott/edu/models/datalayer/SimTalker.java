@@ -1,4 +1,4 @@
-package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.models.datalayer; // Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.models.models.*;
 import com.endicott.edu.models.ui.ServiceUtils;
@@ -32,7 +32,7 @@ public class SimTalker {
         DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
-        StudentModel[] students = SimTalker.getStudents(server, runId, msg);
+        StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
 
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
@@ -102,24 +102,24 @@ public class SimTalker {
         return dorms;
     }
 
-    static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
-        StudentModel[] students;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "students/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-
-        try {
-            students = gson.fromJson(responseAsString, StudentModel[].class);
-        } catch (Exception e) {
-            msg.setMessage("Student Failure" + e.getMessage());
-            return null;
-        }
-        return students;
-    }
+//    static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
+//        StudentModel[] students;
+//        Client client = ClientBuilder.newClient(new ClientConfig());
+//        WebTarget webTarget = client.target(server + "students/" + runId);
+//        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+//
+//        Response response = invocationBuilder.get();
+//        String responseAsString = response.readEntity(String.class);
+//        Gson gson = new GsonBuilder().create();
+//
+//        try {
+//            students = gson.fromJson(responseAsString, StudentModel[].class);
+//        } catch (Exception e) {
+//            msg.setMessage("Student Failure" + e.getMessage());
+//            return null;
+//        }
+//        return students;
+//    }
 
 
     static public CollegeModel nextDayAtCollege(String server, String runId){
