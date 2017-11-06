@@ -157,6 +157,8 @@
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
 
+
+
         <!-- Newsfeed -->
         <p></p>
         <div class="row">
@@ -196,6 +198,27 @@
                         </ul>
                     </div>
                 </div>
+                <!--Form menu to change the college tuition cost!-->
+                <form id = "tuitionForm">
+                    <div class="well well-sm">
+                        <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
+                        <p>Update Tuition</p>
+                        <form class="form-inline">
+                            <div class="form-group">
+
+                                <label class="sr-only" >Amount (in dollars)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
+                                    <div class="input-group-addon">.00</div>
+                                </div>
+                            </div>
+
+                            <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
+                        </form>
+                    </div>
+                </form>
+
             </div>
         </div>
 
