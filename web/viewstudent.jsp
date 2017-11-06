@@ -88,8 +88,7 @@
                     <img class="img-responsive" src="resources/images/student.png">
                 </div>
                 <div class="col-md-10">
-                    <h2>Students</h2>
-                    <h3><%=students.length%> students</h3>
+                    <h2><%=students.length%> Students</h2>
                 </div>
             </div>
         </div>
