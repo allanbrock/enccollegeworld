@@ -175,7 +175,7 @@
                 <!-- Add functionality to add faculty button -->
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Launch demo modal
+                    Add Faculty Member
                 </button>
             </p>
 
