@@ -228,6 +228,17 @@
                                     <div class="input-group-addon">.00</div>
                                 </div>
                             </div>
+                            <!--This bit of css hides the arrows on the above text box
+                                these are called spin boxes. If this causes problems
+                                just remove the coode in the <style> tag!-->
+                            <style>
+                            input::-webkit-outer-spin-button,
+                            input::-webkit-inner-spin-button {
+                            /* display: none; <- Crashes Chrome on hover */
+                            -webkit-appearance: none;
+                            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                            }
+                            </style>
 
                             <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
                         </form>
