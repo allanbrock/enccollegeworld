@@ -1,4 +1,4 @@
-package com.endicott.edu.models;
+package com.endicott.edu.models.models;
 
 import com.endicott.edu.models.models.NewsType;
 
