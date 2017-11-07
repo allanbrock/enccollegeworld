@@ -33,13 +33,16 @@ public class SimTalker {
         DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
+        SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
         StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
 
+        logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("dorms",dorms);
         request.setAttribute("news",news);
         request.setAttribute("sports", sport);
+        request.setAttribute("availableSports",availableSports);
         request.setAttribute("students",students);
     }
 

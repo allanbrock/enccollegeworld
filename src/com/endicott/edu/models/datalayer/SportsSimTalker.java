@@ -55,4 +55,23 @@ public class SportsSimTalker {
         }
         return sport;
     }
+    static public SportModel[] getAvailableSports(String server, String runId, UiMessage msg){
+        SportModel[] sport;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "sports/" + runId + "/available");
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+        logger.info("Available sports as string: " +responseAsString);
+
+        try {
+            sport = gson.fromJson(responseAsString, SportModel[].class);
+        } catch (Exception e) {
+            msg.setMessage("Sports Failure:" + e.getMessage());
+            return null;
+        }
+        return sport;
+    }
 }
