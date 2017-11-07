@@ -1,5 +1,6 @@
 package com.endicott.edu.models.datalayer; // Created by abrocken on 8/25/2017.
 
+import com.endicott.edu.models.NewsFeedItemModel;
 import com.endicott.edu.models.models.*;
 import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
