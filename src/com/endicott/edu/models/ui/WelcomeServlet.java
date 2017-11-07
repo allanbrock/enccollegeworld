@@ -1,6 +1,6 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.models.datalayer.*;
 import com.endicott.edu.models.models.CollegeModel;
 import com.endicott.edu.models.models.DormitoryModel;
 import com.google.gson.Gson;
@@ -25,8 +25,15 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         String server=request.getParameter("server");
         request.setAttribute("server", server);
 
-        // Maybe the user wants to create the college...
+        //struggled with two forms problem, this is a temporary solution
+        //post recieves and sends to delete if the delete button was hit
         String buttonValue = request.getParameter("button");
+        if (buttonValue != null && buttonValue.equals("Delete College")){
+            doDelete(request, response);
+            return;
+        }
+
+        // Maybe the user wants to create the college...
         if (buttonValue != null && buttonValue.equals("Create College")) {
             if (!SimTalker.createCollege(server, runId)) {
                 UiMessage msg = new UiMessage();
@@ -54,10 +61,34 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
-    }
+
+        }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
 
     }
+
+
+    protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String runId=request.getParameter("runid");
+        String server=request.getParameter("server");
+        request.setAttribute("server", server);
+
+        String buttonValue = request.getParameter("button");
+
+        if (buttonValue != null && buttonValue.equals("Delete College")) {
+
+            CollegeSimTalker.deleteCollege(server, runId);
+
+            UiMessage msg = new UiMessage("College deleted");
+            request.setAttribute("message", msg);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");
+            dispatcher.forward(request, response);
+            return;
+
+        }
+
+    }
+
 
 }

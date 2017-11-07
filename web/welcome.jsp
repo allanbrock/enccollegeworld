@@ -46,6 +46,7 @@
     <div class="container">
       <input type="submit" class="btn btn-info" name="button" value="Open College">
       <input type="submit" class="btn btn-info" name="button" value="Create College">
+      <input type="submit" class="btn btn-info" name="button" value="Delete College">
     </div>
   </div>
 

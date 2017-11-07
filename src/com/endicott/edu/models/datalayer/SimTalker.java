@@ -1,5 +1,6 @@
-package com.endicott.edu.models.datalayer;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.models.datalayer; // Created by abrocken on 8/25/2017.
 
+import com.endicott.edu.models.NewsFeedItemModel;
 import com.endicott.edu.models.models.*;
 import com.endicott.edu.models.ui.ServiceUtils;
 import com.endicott.edu.models.ui.UiMessage;
@@ -20,7 +21,7 @@ public class SimTalker {
         CollegeModel college;
         UiMessage msg = new UiMessage();
 
-        college = SimTalker.getCollege(server, runId);
+        college = CollegeSimTalker.getCollege(server, runId);
         if (college == null) {
             msg.setMessage("Failed to find college.");
             logger.info(msg.getMessage());
@@ -33,7 +34,7 @@ public class SimTalker {
         NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
-        StudentModel[] students = SimTalker.getStudents(server, runId, msg);
+        StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
@@ -45,25 +46,9 @@ public class SimTalker {
         request.setAttribute("students",students);
     }
 
-    static public CollegeModel getCollege(String server, String runId){
-        CollegeModel college;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "college/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
 
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
 
-        try {
-            college = gson.fromJson(responseAsString, CollegeModel.class);
-        } catch (Exception e) {
-            logger.severe("Exception getting college: " + server + "college/" + runId + " " + e.getMessage() + " College: " + responseAsString);
-            return null;
-        }
 
-        return college;
-    }
 
 
     static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
@@ -86,44 +71,26 @@ public class SimTalker {
         return dorms;
     }
 
-    static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
-        StudentModel[] students;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "students/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+//    static public  StudentModel[] getStudents(String server, String runId, UiMessage msg){
+//        StudentModel[] students;
+//        Client client = ClientBuilder.newClient(new ClientConfig());
+//        WebTarget webTarget = client.target(server + "students/" + runId);
+//        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+//
+//        Response response = invocationBuilder.get();
+//        String responseAsString = response.readEntity(String.class);
+//        Gson gson = new GsonBuilder().create();
+//
+//        try {
+//            students = gson.fromJson(responseAsString, StudentModel[].class);
+//        } catch (Exception e) {
+//            msg.setMessage("Student Failure" + e.getMessage());
+//            return null;
+//        }
+//        return students;
+//    }
 
-        Response response = invocationBuilder.get();
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-        logger.info("Students as string: " +responseAsString);
 
-        try {
-            students = gson.fromJson(responseAsString, StudentModel[].class);
-        } catch (Exception e) {
-            msg.setMessage("Student Failure" + e.getMessage());
-            return null;
-        }
-        return students;
-    }
-
-
-    static public CollegeModel nextDayAtCollege(String server, String runId){
-        CollegeModel college;
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "college/" + runId + "/nextDay");
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        Response response = invocationBuilder.put(Entity.json(""));
-        String responseAsString = response.readEntity(String.class);
-        Gson gson = new GsonBuilder().create();
-
-        try {
-            college = gson.fromJson(responseAsString, CollegeModel.class);
-        } catch (Exception e) {
-            return null;
-        }
-        return college;
-    }
 
     public static boolean createCollege(String server, String runId) {
         CollegeModel college = new CollegeModel();

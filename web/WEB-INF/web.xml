@@ -51,4 +51,12 @@
         <servlet-name>viewFacultyServlet</servlet-name>
         <url-pattern>/viewFaculty</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewAdminServlet</servlet-name>
+        <servlet-class>com.endicott.edu.models.ui.ViewAdminServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewAdminServlet</servlet-name>
+        <url-pattern>/viewAdmin</url-pattern>
+    </servlet-mapping>
 </web-app>

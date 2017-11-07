@@ -1,17 +1,42 @@
-package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.models.ui;
 
-        import com.endicott.edu.models.datalayer.SimTalker;
-        import com.endicott.edu.models.datalayer.SportsSimTalker;
+import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.models.datalayer.SportsSimTalker;
+import com.endicott.edu.models.datalayer.CollegeSimTalker;
 
-        import javax.servlet.RequestDispatcher;
-        import java.io.IOException;
-        import java.util.logging.Logger;
+
+import javax.servlet.RequestDispatcher;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
     static private Logger logger = Logger.getLogger("ViewSportsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        if (request.getParameter("addSport") != null) {  // addSport is present if addSport button was pressed
+            addSport(request, response);
+        }
+    }
+
+    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String runId=request.getParameter("runid"); //college ID
+        String server=request.getParameter("server");
+        request.setAttribute("server", server);
+
+        if (request.getParameter("nextDayButton") != null) {
+            CollegeSimTalker.nextDayAtCollege(server, runId);
+        }
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
         String sportName=request.getParameter("sportName");
@@ -34,20 +59,5 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request,response);
     }
 
-    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid"); //college ID
-        String server=request.getParameter("server");
-        request.setAttribute("server", server);
 
-        if (request.getParameter("nextDayButton") != null) {
-            SimTalker.nextDayAtCollege(server, runId);
-        }
-
-        // Attempt to fetch the college and load into
-        // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
-
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
-        dispatcher.forward(request, response);
-    }
 }

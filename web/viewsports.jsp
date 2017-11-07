@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
@@ -30,7 +33,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
-
 </head>
 <body>
 <%
@@ -103,6 +105,9 @@
         </div>
 
 
+
+
+
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
@@ -114,6 +119,7 @@
                     <thread>
                         <tr>
                           <th>Team</th>
+                            <th>Details</th>
                             <th>Wins</th>
                             <th>Losses</th>
                             <th>Games Played</th>
@@ -126,6 +132,12 @@
 
                     <tr>
                         <td><%=sport[i].getName()%> </td>
+                        <td>
+                            <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                            <div id="<%=i%>" class="collapse">
+                                Add some details here.
+                            </div>
+                        </td>
                         <td><%=sport[i].getGamesWon()%> </td>
                         <td><%=sport[i].getGamesLost()%> </td>
                         <td><%=sport[i].getGamesWon() + sport[i].getGamesLost() + sport[i].getGamesTied()%> </td>
