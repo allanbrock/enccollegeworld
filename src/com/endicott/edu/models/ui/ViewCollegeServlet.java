@@ -14,7 +14,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            SimTalker.nextDayAtCollege(server, runId);
+            CollegeSimTalker.nextDayAtCollege(server, runId);
         }
         if(request.getParameter("updateTuitionButton") != null){
             //call update tuition
@@ -38,7 +38,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            SimTalker.nextDayAtCollege(server, runId);
+            CollegeSimTalker.nextDayAtCollege(server, runId);
         }
 
         // Attempt to fetch the college and load into

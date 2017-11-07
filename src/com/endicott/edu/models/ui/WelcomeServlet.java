@@ -1,6 +1,6 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.models.datalayer.*;
 import com.endicott.edu.models.models.CollegeModel;
 import com.endicott.edu.models.models.DormitoryModel;
 import com.google.gson.Gson;
@@ -78,7 +78,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         if (buttonValue != null && buttonValue.equals("Delete College")) {
 
-            SimTalker.deleteCollege(server, runId);
+            CollegeSimTalker.deleteCollege(server, runId);
 
             UiMessage msg = new UiMessage("College deleted");
             request.setAttribute("message", msg);

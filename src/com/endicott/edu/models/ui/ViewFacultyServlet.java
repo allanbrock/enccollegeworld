@@ -1,5 +1,6 @@
 package com.endicott.edu.models.ui;
 
+import com.endicott.edu.models.datalayer.CollegeSimTalker;
 import com.endicott.edu.models.datalayer.SimTalker;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +17,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            SimTalker.nextDayAtCollege(server, runId);
+            CollegeSimTalker.nextDayAtCollege(server, runId);
         }
 
         // Attempt to fetch the college and load into
