@@ -49,6 +49,12 @@
         sport = new SportModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for sports missing.");
     }
+    SportModel availableSports[] = (SportModel[]) request.getAttribute("availableSports");
+    //need to change this later if col has all sports
+    if (availableSports == null){
+        msg.setMessage(msg.getMessage() + " Issue with getting available sports.");
+    }
+
 %>
 
 
@@ -137,11 +143,11 @@
                 <div class="form-group">
                     <label for="sportName">Select Sport to Add</label>
                     <select class="form-control" id="sportName" name="sportName">
-                        <option>Men's Basketball</option>
-                        <option>Women's Basketball</option>
-                        <option>Women's Soccer</option>
-                        <option>Baseball</option>
-                        <option>Softball</option>
+                        <% for(int i = 0; i < availableSports.length; i++) { %>
+                        <tr>
+                            <option><%= availableSports[i].getName()%></option>
+                        </tr>
+                        <% } %>
                     </select>
                 </div>
                 <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
