@@ -1,5 +1,6 @@
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.models.*" %>
+<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -145,7 +146,7 @@
             <div class="col-sm-4">
                 <div class="well well-sm">
                     <div class="text-center">
-                        <h1>0
+                        <h1>100%
                         </h1>
                         <h3>Retention Rate</h3>
                     </div>
@@ -157,13 +158,15 @@
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
 
+
+
         <!-- Newsfeed -->
         <p></p>
         <div class="row">
             <div class="col-sm-6">
                 <div class="well well-sm">
+                    <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
                     <div class="pre-scrollable">
-                        <h3><p class="text-primary"><%=college.getRunId()%> News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
@@ -179,38 +182,82 @@
             </div>
             <div class="col-sm-6">
                 <div class="well well-sm">
+                    <h3><p class="text-success">Financial News</h3>
                     <div class="pre-scrollable">
-                        <h3><p class="text-success">Financial News</h3>
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
                                     if (news[i].getNoteType() != NewsType.GENERAL_NOTE) {
+                                        if(news[i].getAmount() > 0 ){
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
                                 <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
                                 Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
-                            <% }
+                            <% } else {
+                              %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+
+
+
+                            <%
+                            }
+                            }
                             } %>
                         </ul>
                     </div>
                 </div>
+                <!--Form menu to change the college tuition cost!-->
+                <form id = "tuitionForm">
+                    <div class="well well-sm">
+                        <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
+                        <p>Update Tuition</p>
+                        <form class="form-inline">
+                            <div class="form-group">
+
+                                <label class="sr-only" >Amount (in dollars)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
+                                    <div class="input-group-addon">.00</div>
+                                </div>
+                            </div>
+                            <!--This bit of css hides the arrows on the above text box
+                                these are called spin boxes. If this causes problems
+                                just remove the coode in the <style> tag!-->
+                            <style>
+                            input::-webkit-outer-spin-button,
+                            input::-webkit-inner-spin-button {
+                            /* display: none; <- Crashes Chrome on hover */
+                            -webkit-appearance: none;
+                            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                            }
+                            </style>
+
+                            <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
+                        </form>
+                    </div>
+                </form>
+
             </div>
         </div>
 
         <!-- Server -->
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <div class="well well-sm">
                     Server: <%=server%>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="alert alert-success">
+            <div class="col-sm-6">
+                <div class="well well-sm">
                     <strong>Info</strong> <%=msg.getMessage()%>
                 </div>
             </div>

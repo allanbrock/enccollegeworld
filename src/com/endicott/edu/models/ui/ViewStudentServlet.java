@@ -1,9 +1,10 @@
 package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
 
-        import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.models.datalayer.CollegeSimTalker;
 
-        import javax.servlet.RequestDispatcher;
-        import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import java.io.IOException;
 
 public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
@@ -16,7 +17,7 @@ public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            SimTalker.nextDayAtCollege(server, runId);
+            CollegeSimTalker.nextDayAtCollege(server, runId);
         }
 
         // Attempt to fetch the college and load into
