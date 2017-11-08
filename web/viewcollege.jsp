@@ -1,6 +1,5 @@
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.models.*" %>
-<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>

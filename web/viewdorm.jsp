@@ -9,7 +9,8 @@
 <%@ page import="com.endicott.edu.models.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
 <%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %><%--
+<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %>
+<%@ page import="java.util.Base64" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -117,6 +118,7 @@
                         <th>Current Capacity</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
+                        <th></th>
                     </tr>
                 </thread>
                 <tbody>
@@ -133,6 +135,8 @@
                     <td><%=dorms[i].getCurDisaster()%>
                     </td>
                     <td><%=dorms[i].checkIfBeingBuilt()%>
+                    </td>
+                    <td><input type="submit" class="btn btn-info" name=<%=Base64.getEncoder().encodeToString((dorms[i].getName()).getBytes())%> name="sellDorm" value="Sell">
                     </td>
                 </tr>
                 <% } %>
@@ -156,7 +160,7 @@
                                placeholder="Enter dorm name.">
                     </div>
                     <!-- Button -->
-                    <input type="submit" class="btn btn-info" dormName="addDorm" value="Add Dorm">
+                    <input type="submit" class="btn btn-info" name="addDorm" value="Add Dorm">
                 </div>
             </div>
         </div>
