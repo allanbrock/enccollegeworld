@@ -131,7 +131,7 @@
                       for (int i = 0; i < students.length; i++) {
                     %>
                     <tr>
-                        <li class="list-group-item"> <%=students[i].getIdNumber()%>
+                        <li class="list-group-item"> <%=students[i].getName()%>
                         </li>
                         <%--<td ><%=students[i].getIdNumber()%>--%>
                         <%--</td>--%>

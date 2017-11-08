@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Connor Frazier on 9/12/2017.
  */
 public class StudentModel implements Serializable {
-
+    private String name = "unknown";
     private int idNumber = 0;
     private int happinessLevel = 0; //0-100
     private boolean athlete = false;
@@ -24,7 +24,8 @@ public class StudentModel implements Serializable {
     public StudentModel() {
     }
 
-    public StudentModel(int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, String runId, int numberHoursBeenSick, int numberHoursLeftBeingSick, int hourLastUpdated) {
+    public StudentModel(String name, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, String runId, int numberHoursBeenSick, int numberHoursLeftBeingSick, int hourLastUpdated) {
+        this.name = name;
         this.idNumber = idNumber;
         this.happinessLevel = happinessLevel;
         this.athlete = athlete;
@@ -36,6 +37,8 @@ public class StudentModel implements Serializable {
         this.numberHoursLeftBeingSick = numberHoursLeftBeingSick;
         this.hourLastUpdated = hourLastUpdated;
     }
+
+    public String getName() { return name; }
 
     public int getIdNumber() {
         return idNumber;
@@ -68,6 +71,8 @@ public class StudentModel implements Serializable {
     public String getRunId() {
         return runId;
     }
+
+    public void setName(String name) { this.name = name; }
 
     public void setIdNumber(int idNumber) {
         this.idNumber = idNumber;
