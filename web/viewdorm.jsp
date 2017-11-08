@@ -91,8 +91,7 @@
                     <img class="img-responsive" src="resources/images/dorm.png">
                 </div>
                 <div class="col-md-10">
-                    <h2><%=college.getRunId()%>'s Dorms</h2>
-                    <h3><p><%
+                    <h2><%
                         int openBeds = 0;
                         for (DormitoryModel d : dorms){
                             int numStudents = d.getNumStudents();
@@ -101,7 +100,7 @@
                         }
 
                     %>
-                        <%=openBeds%> Open Beds. </p></h3>
+                        <%=openBeds%><br>Open Beds</h2>
                 </div>
             </div>
         </div>
@@ -136,7 +135,9 @@
                     </td>
                     <td><%=dorms[i].checkIfBeingBuilt()%>
                     </td>
-                    <td><input type="submit" class="btn btn-info" name=<%=Base64.getEncoder().encodeToString((dorms[i].getName()).getBytes())%> name="sellDorm" value="Sell">
+                    <td>
+                        <!-- the name of the button is encoding version of dorm name, value of button is "Sell" -->
+                        <input type="submit" class="btn btn-info" name=<%=Base64.getEncoder().encodeToString((dorms[i].getName()).getBytes())%> value="Sell">
                     </td>
                 </tr>
                 <% } %>

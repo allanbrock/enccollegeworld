@@ -21,14 +21,17 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
             addDorm(request, response);
         }
         else {
-            logRequestParameters(request);
+            // Might be selling a dorm.
             Enumeration<String> params = request.getParameterNames();
             while(params.hasMoreElements()) {
+                // We're looking for a parameter whose value is "Sell" and whose name is BASE64 encoded dorm name.
+                // We're doing this BASE64 encoding to handle issues caused by single quotes that could
+                // appear in the name.
                 String paramName = params.nextElement();
-                logger.info("Checking (" + paramName + ")");
                 if (request.getParameter(paramName).equals("Sell")) {
-                    String dormName = Base64.getDecoder().decode(paramName.getBytes()).toString();
-                    logger.info("Sell dorm: " + dormName + " Encoded name: " + paramName);
+                    Base64.Decoder decoder = Base64.getDecoder();
+                    String dormName = new String(decoder.decode(paramName));
+                    logger.info("Selling dorm: " + dormName + " Encoded name: " + paramName);
 
                     sellDorm(request, response);
                 }
@@ -44,7 +47,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         String dormName=request.getParameter("dormName");
         String dormType=request.getParameter("dormType");
 
-        logger.info("In ViewDormServlet.doPost()");
+        logger.info("In ViewDormServlet.sellDorm()");
         logRequestParameters(request);
 
         // Need to do the work here.
