@@ -180,7 +180,7 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() != NewsType.GENERAL_NOTE && news[i].getNoteType() != NewsType.FINANCIAL_NOTE) {
+                                    if (news[i].getNoteType() == NewsType.SPORTS_NEWS) {
                             %>
                             <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
