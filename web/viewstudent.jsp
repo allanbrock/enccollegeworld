@@ -144,6 +144,7 @@
                                 <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                                 <div id="<%=i%>" class="collapse">
                                     Dorm: <%=students[i].getDorm()%>
+                                    Sickness: <%=students[i].getNumberHoursLeftBeingSick()%>
                                     <!-- The above is just a placeholder. Fix it up. -->
                                 </div>
                             </td>
