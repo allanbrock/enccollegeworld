@@ -22,6 +22,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
       integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
@@ -111,34 +114,44 @@
         </div>
         <% } else if (college.getStudentBodyHappiness() < 50){
         %>
+        <div class="col-sm-8">
         <div class="progress">
             <div class="progress-bar progress-bar-danger" role="progressbar"
                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
                 <%=college.getStudentBodyHappiness()%>%
             </div>
         </div>
+        </div>
         <% } %>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <input type="hidden" name="server" value="<%=server%>">
         <p></p>
-        <div class="well well-sm">
-            <h4>Students</h4>
-            <div class="pre-scrollable">
-                <table class="table table-condensed">
-                    <tbody>
-                    <%
-                      for (int i = 0; i < students.length; i++) {
-                    %>
-                    <tr>
-                        <li class="list-group-item"> <%=students[i].getName()%>
-                        </li>
-                        <%--<td ><%=students[i].getIdNumber()%>--%>
-                        <%--</td>--%>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
+        <div class="col-sm-8">
+            <div class="well well-sm">
+                <h4>Students</h4>
+                <div class="pre-scrollable">
+                    <table class="table table-condensed">
+                        <tbody>
+                        <%
+                            for (int i = 0; i < students.length; i++) {
+                        %>
+                        <tr>
+                            <td>
+                                <li class="list-group-item"><%=students[i].getName()%></li>
+                            </td>
+                            <td>
+                                <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                                <div id="<%=i%>" class="collapse">
+                                    Dorm: <%=students[i].getDorm()%>
+                                    <!-- The above is just a placeholder. Fix it up. -->
+                                </div>
+                            </td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
