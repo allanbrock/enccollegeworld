@@ -6,7 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.*" %><%--
+<%@ page import="com.endicott.edu.models.models.*" %>
+<%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -55,6 +56,11 @@
     //need to change this later if col has all sports
     if (availableSports == null){
         msg.setMessage(msg.getMessage() + " Issue with getting available sports.");
+    }
+    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+    if (news == null) {
+        news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
 
 %>
@@ -165,6 +171,25 @@
                 <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="well well-sm">
+                    <h3><p style="color: purple"><%=college.getRunId()%> Sport News</h3>
+                    <div class="pre-scrollable">
+                        <ul class="list-group">
+                            <%
+                                for (int i = news.length - 1; i >= 0; i--) {
+                                    if (news[i].getNoteType() != NewsType.GENERAL_NOTE && news[i].getNoteType() != NewsType.FINANCIAL_NOTE) {
+                            %>
+                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }
+                            } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
     </div>
 </form>
