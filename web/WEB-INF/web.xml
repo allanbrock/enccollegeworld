@@ -5,7 +5,7 @@
          version="3.1">
     <servlet>
         <servlet-name>viewCollegeServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewCollegeServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewCollegeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewCollegeServlet</servlet-name>
@@ -13,7 +13,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>welcomeServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.WelcomeServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.WelcomeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>welcomeServlet</servlet-name>
@@ -21,7 +21,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>viewDormServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewDormServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewDormServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewDormServlet</servlet-name>
@@ -29,7 +29,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>viewStudentServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewStudentServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewStudentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewStudentServlet</servlet-name>
@@ -37,7 +37,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>viewSportsServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewSportsServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewSportsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewSportsServlet</servlet-name>
@@ -45,7 +45,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>viewFacultyServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewFacultyServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewFacultyServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewFacultyServlet</servlet-name>
@@ -53,7 +53,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>viewAdminServlet</servlet-name>
-        <servlet-class>com.endicott.edu.models.ui.ViewAdminServlet</servlet-class>
+        <servlet-class>com.endicott.edu.ui.ViewAdminServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>viewAdminServlet</servlet-name>

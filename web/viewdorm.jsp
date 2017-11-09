@@ -5,11 +5,11 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %>
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.CollegeModel" %>
+<%@ page import="com.endicott.edu.models.DormitoriesModel" %>
+<%@ page import="com.endicott.edu.models.DormitoryModel" %>
+<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page import="java.util.Base64" %><%--
   Created by IntelliJ IDEA.
   User: abrocken

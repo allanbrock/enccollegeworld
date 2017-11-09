@@ -5,8 +5,9 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.*" %><%--
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.*" %>
+<%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
