@@ -1,4 +1,4 @@
-package com.endicott.edu.models.ui;
+package com.endicott.edu.ui;
 
 public class ServiceUtils {
     public final static String LOCAL_SERVICE_URL = "http://localhost:8080/enccollegesim/";

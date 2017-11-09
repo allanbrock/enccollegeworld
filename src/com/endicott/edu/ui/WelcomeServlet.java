@@ -1,19 +1,12 @@
-package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.datalayer.*;
-import com.endicott.edu.models.models.CollegeModel;
-import com.endicott.edu.models.models.DormitoryModel;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.glassfish.jersey.client.ClientConfig;
+import com.endicott.edu.datalayer.CollegeSimTalker;
+import com.endicott.edu.datalayer.SimTalker;
+import com.endicott.edu.datalayer.*;
+import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.DormitoryModel;
 
 import javax.servlet.RequestDispatcher;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.logging.Logger;
 

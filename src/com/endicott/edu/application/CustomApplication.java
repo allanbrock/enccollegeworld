@@ -1,11 +1,9 @@
-package com.endicott.edu.models.application;
+package com.endicott.edu.application;
 // Created by abrocken on 8/28/2017.
 
 import java.util.Set;
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
-import java.util.Set;
 
 public class CustomApplication extends Application
     {

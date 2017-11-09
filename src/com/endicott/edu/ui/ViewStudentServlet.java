@@ -1,12 +1,12 @@
-package com.endicott.edu.models.ui;
+package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.datalayer.SimTalker;
-import com.endicott.edu.models.datalayer.CollegeSimTalker;
+import com.endicott.edu.datalayer.SimTalker;
+import com.endicott.edu.datalayer.CollegeSimTalker;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 
-public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
+public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
     }
@@ -24,7 +24,7 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
         // request attributes to pass to the jsp page.
         SimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewadmin.jsp");
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewstudent.jsp");
         dispatcher.forward(request, response);
     }
 }

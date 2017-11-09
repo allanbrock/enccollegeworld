@@ -1,4 +1,4 @@
-package com.endicott.edu.models.models;
+package com.endicott.edu.models;
 
 
 import java.io.Serializable;

@@ -1,13 +1,11 @@
-package com.endicott.edu.models.datalayer;
+package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.models.CollegeModel;
-import com.endicott.edu.models.ui.ServiceUtils;
-import com.endicott.edu.models.ui.UiMessage;
+
+import com.endicott.edu.models.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

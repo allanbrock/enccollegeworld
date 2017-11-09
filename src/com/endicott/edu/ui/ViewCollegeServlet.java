@@ -1,7 +1,7 @@
-package com.endicott.edu.models.ui;// Created by abrocken on 8/25/2017.
+package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.models.datalayer.CollegeSimTalker;
-import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.datalayer.SimTalker;
+import com.endicott.edu.datalayer.CollegeSimTalker;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
