@@ -119,5 +119,6 @@ public class StudentModel implements Serializable {
     public void setHourLastUpdated(int hourLastUpdated) { this.hourLastUpdated = hourLastUpdated; }
 
 
+
 }
 
