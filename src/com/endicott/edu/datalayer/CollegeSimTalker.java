@@ -65,10 +65,10 @@ public class CollegeSimTalker {
     }
     static public void deleteCollege(String server, String runId){
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "college/" + runId + "/delete");
+        WebTarget webTarget = client.target(server + "college/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.TEXT_PLAIN);
 
-        Response response = invocationBuilder.get();
+        Response response = invocationBuilder.delete();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
 
