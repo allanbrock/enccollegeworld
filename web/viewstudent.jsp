@@ -144,6 +144,7 @@
                             <td>
                                 <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                                 <div id="<%=i%>" class="collapse">
+                                    <div class="well well-sm">
                                     ID Number: <%=students[i].getIdNumber()%><br>
                                     Dorm: <%=students[i].getDorm()%><br>
                                     Happiness: <%=students[i].getHappinessLevel()%><br>
@@ -153,6 +154,7 @@
                                         Team: <%= students[i].getTeam()%> <br>
                                         Athletic Ability <%=students[i].getAthleticAbility()%> <br>
                                     <% } %>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
