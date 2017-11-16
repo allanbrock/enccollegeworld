@@ -1,3 +1,4 @@
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
@@ -12,6 +13,9 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
@@ -45,6 +49,8 @@
         students = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 %>
 
 
@@ -83,7 +89,7 @@
 
         <!-- jumbotron -->
         <div class="jumbotron">
-            <h2>Balance $<%=college.getAvailableCash()%>
+            <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>
 
             <p>Day <%=college.getCurrentDay()%>
@@ -98,7 +104,7 @@
 
         <div class="row">
             <!-- Happiness -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
                     <h2>&#9786;
                         <small>Student Body Happiness</small>
@@ -135,7 +141,7 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -146,12 +152,23 @@
             </div>
 
             <!-- Retention Rate -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>100%
                         </h1>
                         <h3>Retention Rate</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ranking -->
+            <div class="col-sm-3">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1>#33
+                        </h1>
+                        <h3>Ranking</h3>
                     </div>
                 </div>
             </div>
