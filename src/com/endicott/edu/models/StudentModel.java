@@ -1,4 +1,4 @@
-package com.endicott.edu.models.models;
+package com.endicott.edu.models;
 
 import java.io.Serializable;
 
@@ -117,6 +117,7 @@ public class StudentModel implements Serializable {
     public int getHourLastUpdated() { return hourLastUpdated; }
 
     public void setHourLastUpdated(int hourLastUpdated) { this.hourLastUpdated = hourLastUpdated; }
+
 
 
 }

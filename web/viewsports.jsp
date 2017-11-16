@@ -5,8 +5,9 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.*" %>
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.*" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: abrocken
@@ -180,7 +181,7 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() != NewsType.GENERAL_NOTE && news[i].getNoteType() != NewsType.FINANCIAL_NOTE) {
+                                    if (news[i].getNoteType() == NewsType.SPORTS_NEWS) {
                             %>
                             <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
@@ -191,6 +192,7 @@
                 </div>
             </div>
 
+    </div>
     </div>
 </form>
 <div class="container">

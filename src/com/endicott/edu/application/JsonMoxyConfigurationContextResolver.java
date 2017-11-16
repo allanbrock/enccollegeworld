@@ -1,4 +1,4 @@
-package com.endicott.edu.models.application;
+package com.endicott.edu.application;
 
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;

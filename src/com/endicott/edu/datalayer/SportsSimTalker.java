@@ -1,7 +1,8 @@
-package com.endicott.edu.models.datalayer;
+package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.models.SportModel;
-import com.endicott.edu.models.ui.UiMessage;
+import com.endicott.edu.models.SportModel;
+import com.endicott.edu.models.SportModel;
+import com.endicott.edu.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;

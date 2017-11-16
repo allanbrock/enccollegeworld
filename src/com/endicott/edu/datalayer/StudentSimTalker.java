@@ -1,7 +1,8 @@
-package com.endicott.edu.models.datalayer; // Created by Connor Frazier on 11/6/2017.
+package com.endicott.edu.datalayer; // Created by Connor Frazier on 11/6/2017.
 
-import com.endicott.edu.models.models.StudentModel;
-import com.endicott.edu.models.ui.UiMessage;
+import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;

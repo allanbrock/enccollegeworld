@@ -1,13 +1,11 @@
-package com.endicott.edu.models.datalayer;
+package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.models.CollegeModel;
-import com.endicott.edu.models.ui.ServiceUtils;
-import com.endicott.edu.models.ui.UiMessage;
+
+import com.endicott.edu.models.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -67,10 +65,10 @@ public class CollegeSimTalker {
     }
     static public void deleteCollege(String server, String runId){
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "college/" + runId + "/delete");
+        WebTarget webTarget = client.target(server + "college/" + runId);
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.TEXT_PLAIN);
 
-        Response response = invocationBuilder.get();
+        Response response = invocationBuilder.delete();
         String responseAsString = response.readEntity(String.class);
         Gson gson = new GsonBuilder().create();
 

@@ -5,8 +5,9 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.*" %><%--
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.*" %>
+<%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -143,9 +144,17 @@
                             <td>
                                 <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                                 <div id="<%=i%>" class="collapse">
-                                    Dorm: <%=students[i].getDorm()%>
-                                    Sickness: <%=students[i].getNumberHoursLeftBeingSick()%>
-                                    <!-- The above is just a placeholder. Fix it up. -->
+                                    <div class="well well-sm">
+                                    ID Number: <%=students[i].getIdNumber()%><br>
+                                    Dorm: <%=students[i].getDorm()%><br>
+                                    Happiness: <%=students[i].getHappinessLevel()%><br>
+                                    Gender: <%=students[i].getGender()%> <br>
+                                    Hours Sick: <%=students[i].getNumberHoursLeftBeingSick()%><br>
+                                    <% if(students[i].isAthlete()){ %>
+                                        Team: <%= students[i].getTeam()%> <br>
+                                        Athletic Ability <%=students[i].getAthleticAbility()%> <br>
+                                    <% } %>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

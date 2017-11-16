@@ -1,9 +1,8 @@
-package com.endicott.edu.models.datalayer; // Created by abrocken on 8/25/2017.
+package com.endicott.edu.datalayer; // Created by abrocken on 8/25/2017.
 
 
-import com.endicott.edu.models.models.*;
-import com.endicott.edu.models.ui.ServiceUtils;
-import com.endicott.edu.models.ui.UiMessage;
+import com.endicott.edu.models.*;
+import com.endicott.edu.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.glassfish.jersey.client.ClientConfig;

@@ -1,6 +1,6 @@
-package com.endicott.edu.models.models;
+package com.endicott.edu.models;
 
-import com.endicott.edu.models.models.NewsType;
+import com.endicott.edu.models.NewsType;
 
 import java.io.Serializable;
 

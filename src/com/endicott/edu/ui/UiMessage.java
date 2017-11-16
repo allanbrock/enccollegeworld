@@ -1,4 +1,4 @@
-package com.endicott.edu.models.ui;
+package com.endicott.edu.ui;
 // Created by abrocken on 8/25/2017.
 
 import java.io.Serializable;

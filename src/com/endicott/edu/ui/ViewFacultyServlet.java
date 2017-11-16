@@ -1,7 +1,7 @@
-package com.endicott.edu.models.ui;
+package com.endicott.edu.ui;
 
-import com.endicott.edu.models.datalayer.CollegeSimTalker;
-import com.endicott.edu.models.datalayer.SimTalker;
+import com.endicott.edu.datalayer.CollegeSimTalker;
+import com.endicott.edu.datalayer.SimTalker;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;

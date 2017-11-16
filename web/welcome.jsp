@@ -1,5 +1,5 @@
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %><%--
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.CollegeModel" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017

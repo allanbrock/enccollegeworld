@@ -6,10 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.endicott.edu.models.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.models.FacultyModel" %>
-<%@ page import="com.endicott.edu.models.models.NewsFeedItemModel" %>
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.CollegeModel" %>
+<%@ page import="com.endicott.edu.models.FacultyModel" %>
+<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <html>
 <head>
     <title>College World Faculty</title>
