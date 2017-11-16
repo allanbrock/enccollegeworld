@@ -107,7 +107,7 @@
             <div class="col-sm-3">
                 <div class="well well-sm">
                     <h2>&#9786;
-                        <small>Student Body Happiness</small>
+                        <small>Student Happiness</small>
                     </h2>
                     <% if (college.getStudentBodyHappiness() >= 80) { %>
                     <div class="progress">
@@ -137,6 +137,11 @@
                         </div>
                     </div>
                     <% } %>
+                    <br>
+                    <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="happinessDetails" class="collapse">
+                        Details coming soon!
+                    </div>
                 </div>
             </div>
 
@@ -169,6 +174,11 @@
                         <h1>#33
                         </h1>
                         <h3>Ranking</h3>
+                    </div>
+                    <br>
+                    <a href="#rankingDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="rankingDetails" class="collapse">
+                        Details coming soon!
                     </div>
                 </div>
             </div>
