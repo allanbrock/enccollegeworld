@@ -100,7 +100,7 @@ public class DormitoryModel implements Serializable {
         return  costPerHour;
     }
     public int setMaintenanceCostPerHour(int numRooms){
-        this.costPerHour = (int)(((numRooms * 250))/(365*24)*0.10);
+        this.costPerHour = (int)(((numRooms * 250))/(365*24));
         return (int)(costPerHour + 0.5);
     }
 
