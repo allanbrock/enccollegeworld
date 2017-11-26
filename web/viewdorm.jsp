@@ -6,11 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.DormitoriesModel" %>
-<%@ page import="com.endicott.edu.models.DormitoryModel" %>
-<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
-<%@ page import="java.util.Base64" %><%--
+<%@ page import="java.util.Base64" %>
+<%@ page import="com.endicott.edu.models.*" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -51,6 +48,11 @@
     if (dorms == null) {
         dorms = new DormitoryModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
+    }
+    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+    if (news == null) {
+        news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
 %>
 
@@ -166,6 +168,26 @@
             </div>
         </div>
 
+        <!-- DORM NEWS -->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="well well-sm">
+                    <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
+                    <div class="pre-scrollable">
+                        <ul class="list-group">
+                            <%
+                                for (int i = news.length - 1; i >= 0; i--) {
+                                    if (news[i].getNoteType() == NewsType.RES_LIFE_NEWS) {
+                            %>
+                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }
+                            } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 <div class="container">

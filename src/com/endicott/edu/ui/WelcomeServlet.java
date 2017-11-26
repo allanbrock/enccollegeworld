@@ -28,7 +28,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Maybe the user wants to create the college...
         if (buttonValue != null && buttonValue.equals("Create College")) {
-            if (!SimTalker.createCollege(server, runId)) {
+            if (!CollegeSimTalker.createCollege(server, runId)) {
                 UiMessage msg = new UiMessage();
                 msg.setMessage("Unable to create the college.  See glassfish server log for details.");
                 request.setAttribute("message", msg);
@@ -42,7 +42,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         if (request.getAttribute("college") == null) {
             UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");

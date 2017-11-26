@@ -22,7 +22,7 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewadmin.jsp");
         dispatcher.forward(request, response);
