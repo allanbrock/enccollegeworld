@@ -218,15 +218,23 @@
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
                                     if (news[i].getNoteType() != NewsType.COLLEGE_NEWS) {
-                                        if(news[i].getAmount() > 0 ){
+                                        if (news[i].getAmount() > 0) {
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
                                 <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
-                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:green"> $<%=news[i].getAmount()%></span>
+                            </li>
+                            <% } else if (news[i].getAmount() < 0) {
+                            %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:red"> $<%=-news[i].getAmount()%></span>
                             </li>
                             <% } else {
-                              %>
+                            %>
 
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
@@ -235,9 +243,7 @@
                             </li>
 
 
-
-                            <%
-                            }
+                            <% }
                             }
                             } %>
                         </ul>
