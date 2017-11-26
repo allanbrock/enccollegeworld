@@ -217,7 +217,7 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() != NewsType.COLLEGE_NEWS) {
+                                    if (news[i].getNoteType() == NewsType.FINANCIAL_NEWS) {
                                         if (news[i].getAmount() > 0) {
                             %>
                             <li class="list-group-item">
