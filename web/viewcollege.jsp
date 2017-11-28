@@ -1,4 +1,3 @@
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
@@ -146,7 +145,7 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -157,7 +156,7 @@
             </div>
 
             <!-- Retention Rate -->
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>100%
@@ -217,24 +216,16 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() == NewsType.FINANCIAL_NEWS) {
-                                        if (news[i].getAmount() > 0) {
+                                    if (news[i].getNoteType() != NewsType.COLLEGE_NEWS) {
+                                        if(news[i].getAmount() > 0 ){
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
                                 <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
-                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:green"> $<%=news[i].getAmount()%></span>
-                            </li>
-                            <% } else if (news[i].getAmount() < 0) {
-                            %>
-
-                            <li class="list-group-item">
-                                <!-- change this to user up or down arrow depending on money -->
-                                <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
-                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:red"> $<%=-news[i].getAmount()%></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% } else {
-                            %>
+                              %>
 
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
@@ -243,9 +234,30 @@
                             </li>
 
 
-                            <% }
+
+                            <%
                             }
-                            } %>
+                            %>
+                            <% if(news[i].getNoteLevel() == NewsLevel.GOOD_NEWS){
+                            %>
+                            <li class="list-group-item">
+                                <!-- change this to user thumbs up or down depending on GOOD or BAD NEWS -->
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% } else {
+                            %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user thumbs up or down depending on GOOD or BAD NEWS -->
+                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <%
+                            }
+                            }
+                                }
+                            %>
                         </ul>
                     </div>
                 </div>
