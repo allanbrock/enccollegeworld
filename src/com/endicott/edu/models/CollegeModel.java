@@ -14,6 +14,7 @@ public class CollegeModel implements Serializable {
     private String runId = "unknown";
     private String note = "empty";
     private int studentBodyHappiness;
+    private int studentFacultyRatio = 1;
 
     public int getReputation() {
         return reputation;
@@ -73,5 +74,7 @@ public class CollegeModel implements Serializable {
 
     public void setStudentBodyHappiness(int studentBodyHappiness) { this.studentBodyHappiness = studentBodyHappiness; }
 
+    public int getStudentFacultyRatio() { return studentFacultyRatio; }
 
+    public void setStudentFacultyRatio(int studentFacultyRatio) { this.studentFacultyRatio = studentFacultyRatio; }
 }
