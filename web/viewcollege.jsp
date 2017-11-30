@@ -5,6 +5,7 @@
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.StudentModel" %>
 <%@ page import="com.endicott.edu.models.NewsType" %>
+<%@ page import="com.endicott.edu.models.NewsLevel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -245,7 +246,24 @@
 
                             <% }
                             }
-                            } %>
+                                if (news[i].getNoteLevel() == NewsLevel.GOOD_NEWS) {
+
+                            %>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% } else if (news[i].getNoteLevel() == NewsLevel.BAD_NEWS) {
+                            %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }
+                            }%>
                         </ul>
                     </div>
                 </div>
@@ -268,12 +286,12 @@
                                 these are called spin boxes. If this causes problems
                                 just remove the coode in the <style> tag!-->
                             <style>
-                            input::-webkit-outer-spin-button,
-                            input::-webkit-inner-spin-button {
-                            /* display: none; <- Crashes Chrome on hover */
-                            -webkit-appearance: none;
-                            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-                            }
+                                input::-webkit-outer-spin-button,
+                                input::-webkit-inner-spin-button {
+                                    /* display: none; <- Crashes Chrome on hover */
+                                    -webkit-appearance: none;
+                                    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                                }
                             </style>
 
                             <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">

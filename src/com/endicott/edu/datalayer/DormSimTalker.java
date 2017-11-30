@@ -57,4 +57,13 @@ public class DormSimTalker {
         }
         return dorms;
     }
+
+    static public void sellDorm(String server, String runId, String dormName) {
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "dorms/" + runId + dormName);
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.delete();
+
+    }
 }

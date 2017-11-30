@@ -51,6 +51,9 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         logRequestParameters(request);
 
         // Need to do the work here.
+        DormSimTalker.sellDorm(server,runId, dormName);
+
+
 
         //load the request with attributes for the dorm
         request.setAttribute("server", server);
