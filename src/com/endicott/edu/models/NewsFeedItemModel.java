@@ -1,7 +1,5 @@
 package com.endicott.edu.models;
 
-import com.endicott.edu.models.NewsType;
-
 import java.io.Serializable;
 
 /**
@@ -14,15 +12,17 @@ public class NewsFeedItemModel implements Serializable {
     NewsType noteType = NewsType.UNKNOWN_NOTE;
     String runId = "unknown";
     int amount;
+    NewsLevel noteLevel = NewsLevel.UNKNOWN_NEWS;
 
     public NewsFeedItemModel() {
     }
 
-    public NewsFeedItemModel(int dayNumber, String message, NewsType message_type, String runId) {
+    public NewsFeedItemModel(int dayNumber, String message, NewsType message_type, String runId, NewsLevel message_level) {
         this.hour = dayNumber;
         this.message = message;
         this.noteType = message_type;
         this.runId = runId;
+        this.noteLevel = message_level;
     }
 
     public int getAmount() {
@@ -37,9 +37,15 @@ public class NewsFeedItemModel implements Serializable {
         return noteType;
     }
 
+    public NewsLevel getNoteLevel() {
+        return noteLevel;
+    }
+
     public void setNoteType(NewsType noteType) {
         this.noteType = noteType;
     }
+
+    public void setNoteLevel(NewsLevel noteLevel) {this.noteLevel = noteLevel;}
 
     public String getMessage() {
         return message;
