@@ -141,7 +141,30 @@
                     <br>
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
-                        Details coming soon!
+                        Reputation
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=college.getReputation()%>%">
+                                <%=college.getReputation()%>%
+                            </div>
+                        </div>
+                        Student/faculty Ratio
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=college.getStudentFacultyRatio()%>%">
+                                <%=college.getStudentFacultyRatio()%>
+                            </div>
+                        </div>
+                        Tuition
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=college.getYearlyTuitionCost()/1000%>%">
+                                $<%=college.getYearlyTuitionCost()%>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
