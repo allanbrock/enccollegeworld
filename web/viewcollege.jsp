@@ -107,9 +107,15 @@
             <!-- Happiness -->
             <div class="col-sm-3">
                 <div class="well well-sm">
+                    <% if(college.getStudentBodyHappiness() > 50) { %>
                     <h2>&#9786;
                         <small>Student Happiness</small>
                     </h2>
+                    <% } else { %>
+                    <h2>&#9785;
+                        <small>Student Happiness</small>
+                    </h2>
+                    <% } %>
                     <% if (college.getStudentBodyHappiness() >= 80) { %>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar"
