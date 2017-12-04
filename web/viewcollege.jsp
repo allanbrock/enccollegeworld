@@ -296,7 +296,16 @@
                         </ul>
                     </div>
                 </div>
-                <!--Form menu to change the college tuition cost!-->
+
+
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <!-- Tuition -->
+            <div class="col-sm-6">
                 <form id = "tuitionForm">
                     <div class="well well-sm">
                         <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
@@ -327,7 +336,17 @@
                         </form>
                     </div>
                 </form>
+            </div>
 
+            <!-- Student Faculty Ratio -->
+            <div class="col-sm-3">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1><%=college.getStudentFacultyRatio()%>
+                        </h1>
+                        <h3>Student Faculty Ratio</h3>
+                    </div>
+                </div>
             </div>
         </div>
 
