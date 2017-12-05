@@ -63,6 +63,11 @@
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+    }
 
 %>
 
@@ -142,7 +147,12 @@
                         <td>
                             <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                             <div id="<%=i%>" class="collapse">
-                                Add some details here.
+                                <% for(int j = 0; j < students.length; j++){
+                                    if(students[j].getTeam().equals(sport[i].getName())){ %>
+                                        <%=students[j].getName()%>
+                                <%    }
+                                }
+                                    %>
                             </div>
                         </td>
                         <td><%=sport[i].getGamesWon()%> </td>
