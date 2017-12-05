@@ -153,6 +153,13 @@
                                 <%    }
                                 }
                                     %>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                         style="width:<%=sport[i].getReputation()%>%">
+                                        <%=sport[i].getReputation()%>%
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td><%=sport[i].getGamesWon()%> </td>
