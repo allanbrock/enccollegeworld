@@ -10,7 +10,7 @@
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.FacultyModel" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
-<%@ page import="com.endicott.edu.models.FacultyMembersModel" %>
+<!-- %@ page import="com.endicott.edu.models.FacultyMembersModel" % -->
 <html>
 <head>
     <title>College World Faculty</title>
@@ -18,6 +18,9 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
@@ -28,6 +31,7 @@
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
 
+</head>
     <%--<style>--%>
         <%--body {--%>
             <%--min-height: 75rem; /* Can be removed; just added for demo purposes */--%>
@@ -103,7 +107,8 @@
     }
     FacultyModel faculty[] = (FacultyModel[]) request.getAttribute("faculty");
     if (faculty == null) {
-        faculty = new FacultyModel[0];  // This is really bad
+        faculty = new FacultyModel[0];
+        faculty[0] = new FacultyModel("Professor Sam Smith", "Dean", "Biology", 110000, "LSB311", "unknown");
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
 %>
@@ -180,22 +185,43 @@
                     <h3><%=faculty.length%> faculty members</h3>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="well well-sm">
+        </div>
+
+        <div class="well well-sm">
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.length; i++) {
+                %>
+                <tr>
+                    <td><%=faculty[i].getFacultyName()%>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
                     <div class="form-group">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="facultyName" name="facultyName"
-                                   placeholder="Enter faculty name.">
-                        </div>
-                        <input type="submit" class="btn btn-info" name="saveNewFaculty" value="Add Faculty">
+                        <input type="text" class="form-control" id="facultyName" name="facultyName"
+                               placeholder="Enter faculty name.">
                     </div>
+                    <input type="submit" class="btn btn-info" name="saveNewFaculty" value="Add Faculty">
+                </div>
+                <div class="form-group">
                     <div class="form-group">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="facultyNameToDelete" name="facultyNameToDelete"
-                                   placeholder="Enter faculty name.">
-                        </div>
-                        <input type="submit" class="btn btn-danger" name="removeSingleFaculty" value="Delete Faculty">
+                        <input type="text" class="form-control" id="facultyNameToDelete" name="facultyNameToDelete"
+                               placeholder="Enter faculty name.">
                     </div>
+                    <input type="submit" class="btn btn-danger" name="removeSingleFaculty" value="Delete Faculty">
                 </div>
             </div>
         </div>
@@ -245,26 +271,27 @@
 
         <!-- TO-DO -->
         <!-- Populate 'album' indexes properly -->
-        <div class="album text-muted">
-            <div class="container">
-                <div class="row">
+
+        <%--<div class="album text-muted">--%>
+            <%--<div class="container">--%>
+                <%--<div class="row">--%>
+                    <%--&lt;%&ndash;<div class="card">&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<img src="resources/images/student.png" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<p class="card-text">A Name</p>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                    <%--<%--%>
+                        <%--for(int i = 0; i < faculty.length; i++) {--%>
+                    <%--%>--%>
                     <%--<div class="card">--%>
                         <%--<img src="resources/images/student.png" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->--%>
-                        <%--<p class="card-text">A Name</p>--%>
+                        <%--<p class="card-text"><%faculty[i].getName();%></p>--%>
                     <%--</div>--%>
-                    <%
-                        for(int i = 0; i < faculty.length; i++) {
-                    %>
-                    <div class="card">
-                        <img src="resources/images/student.png" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->
-                        <p class="card-text"><%faculty[i].getName();%></p>
-                    </div>
-                    <%
-                        }
-                    %>
-                </div>
-            </div>
-        </div>
+                    <%--<%--%>
+                        <%--}--%>
+                    <%--%>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
 </form>
 
 </body>

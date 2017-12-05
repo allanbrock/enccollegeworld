@@ -1,54 +1,87 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
+/**
+ * Implemented 9-28-17 by Mazlin Higbee
+ * mhigb411@mail.endicott.edu
+ */
+public class FacultyModel implements Serializable {
 
-public class FacultyModel implements Serializable{
-
-    private String name;
-    private int payrate;
-    private int idNumber = 0;
-
-    public FacultyModel() {
-
+    private long facultyID = -2; // a unique id for that member of the faculty.
+    private String facultyName; //simply the name
+    private String title; //EX: Assoicate prof, Dean, VP...
+    private String department; //department of the faculty member EX: Math, Computer Science, Biology
+    private int salary = 115000; //yearly salary
+    private String officeLocation; //office building and number
+    private String runId;
+    public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String runId) {
+        this.facultyName = facultyName;
+        this.title = title;
+        this.department = department;
+        this.salary = salary;
+        this.officeLocation = officeLocation;
+        this.runId = runId;
+        this.facultyID = facultyID;
     }
 
-    public FacultyModel(String name, int payrate, int idNumber) {
-        this.name = name;
-        this.payrate = payrate;
-        this.idNumber = idNumber;
+    public FacultyModel(String facultyName, String title, String department, String officeLocation, String runId) {
+        this.facultyName = facultyName;
+        this.title = title;
+        this.department = department;
+        this.officeLocation = officeLocation;
+        this.runId = runId;
+        this.facultyID = facultyID;
+        this.salary = salary;
     }
 
-    public FacultyModel(String name) {
-        this.name = name;
+    public String getFacultyName() {
+        return facultyName;
     }
 
-    public String getName() {
-        return name;
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
     }
 
-    public int getIdNumber() {
-        return idNumber;
+    public String getTitle() {
+        return title;
     }
 
-    public int getPayrate() {
-        return payrate;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setPayrate(int payrate) {
-        this.payrate = payrate;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public void setRandomPayrate() {
-        //TO-DO
-        //Select random pay rate
+    public int getSalary() {
+        return salary;
     }
 
-    public void setIdNumber(int idNumber) {
-        this.idNumber = idNumber;
+    public void setSalary(int salary) {
+        this.salary = salary;
     }
+
+    public String getOfficeLocation() {
+        return officeLocation;
+    }
+
+    public void setOfficeLocation(String officeLocation) {
+        this.officeLocation = officeLocation;
+    }
+
+    public String getRunId() {
+        return runId;
+    }
+
+    public void setRunId(String runId) {
+        this.runId = runId;
+    }
+    public long getFacultyID() { return facultyID; }
+    public void setFacultyID(long facultyID) { this.facultyID = facultyID;}
 
 }
