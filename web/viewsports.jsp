@@ -18,7 +18,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>College World Dorm</title>
+    <title>College World Sport</title>
     <link rel="stylesheet" href="resources/style.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -62,6 +62,11 @@
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    }
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
 
 %>
@@ -142,7 +147,19 @@
                         <td>
                             <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                             <div id="<%=i%>" class="collapse">
-                                Add some details here.
+                                <% for(int j = 0; j < students.length; j++){
+                                    if(students[j].getTeam().equals(sport[i].getName())){ %>
+                                        <%=students[j].getName()%>
+                                <%    }
+                                }
+                                    %>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                         style="width:<%=sport[i].getReputation()%>%">
+                                        <%=sport[i].getReputation()%>%
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td><%=sport[i].getGamesWon()%> </td>

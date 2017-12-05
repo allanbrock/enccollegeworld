@@ -95,14 +95,20 @@
                 <div class="col-md-10">
                     <h2><%
                         int openBeds = 0;
+                        int filledBeds = 0;
                         for (DormitoryModel d : dorms){
-                            int numStudents = d.getNumStudents();
-                            int capacity = d.getCapacity();
-                            openBeds += capacity - numStudents;
+                            if(d.getHoursToComplete() == 0){
+                                int numStudents = d.getNumStudents();
+                                int capacity = d.getCapacity();
+                                openBeds += capacity - numStudents;
+                                filledBeds += d.getNumStudents();
+                            }
+
                         }
 
                     %>
-                        <%=openBeds%><br>Open Beds</h2>
+                        <%=openBeds%> Open Beds</h2>
+                        <%=filledBeds%> Filled Beds</h2>
                 </div>
             </div>
         </div>
@@ -115,8 +121,8 @@
                 <thread>
                     <tr>
                         <th>Dorm Name</th>
-                        <th>Total Capacity</th>
-                        <th>Current Capacity</th>
+                        <th>Total Beds</th>
+                        <th>Taken Beds</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>
