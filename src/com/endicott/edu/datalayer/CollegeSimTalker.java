@@ -84,7 +84,7 @@ public class CollegeSimTalker {
      * @param server what endpoint does our request need to go to
      * @param runId simulation ID
      * @param amount how much does tuition cost now
-     * @return true if 200 ok false if 400 or something bad. 
+     * @return true if 200 ok false if 400 or something bad.
      */
     public static boolean updateTuition(String server, String runId, String amount) {
 
