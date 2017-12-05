@@ -171,6 +171,21 @@
                                 $<%=college.getYearlyTuitionCost()%>
                             </div>
                         </div>
+                        Students sick
+                        <% int counter = 0;
+                            for(int i = 0; i < students.length; i++){
+                                if(students[i].getNumberHoursLeftBeingSick() > 0) {
+                                    counter += 1;
+                                }
+                            }
+                        %>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=counter%>%">
+                                <%=counter%>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
