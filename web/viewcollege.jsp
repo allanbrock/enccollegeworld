@@ -230,11 +230,6 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() == NewsType.COLLEGE_NEWS) {
-                            %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-                            </li>
-                            <% }
                                 if (news[i].getNoteLevel() == NewsLevel.GOOD_NEWS) {
 
                             %>
