@@ -173,6 +173,23 @@
             </div>
         </div>
 
+        <!-- Sell sport -->
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label for="sportName">Select Sport to sell</label>
+                    <select class="form-control" id="sellSportName" name="sellSportName">
+                        <% for(int i = 0; i < sport.length; i++) { %>
+                        <tr>
+                            <option><%= sport[i].getName()%></option>
+                        </tr>
+                        <% } %>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-info" name="sellSportBtn" value="Sell Sport">
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-6">
                 <div class="well well-sm">
