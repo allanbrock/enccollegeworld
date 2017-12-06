@@ -149,7 +149,7 @@
                             <div id="<%=i%>" class="collapse">
                                 <% for(int j = 0; j < students.length; j++){
                                     if(students[j].getTeam().equals(sport[i].getName())){ %>
-                                        <%=students[j].getName()%>
+                                        <%=students[j].getName()%><br/>
                                 <%    }
                                 }
                                     %>
