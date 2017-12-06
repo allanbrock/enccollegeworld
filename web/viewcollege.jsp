@@ -250,7 +250,7 @@
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
-                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                <span class="glyphicon glyphicon-thumbs-up" style="color:lawngreen"></span>
                                 Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% } else if (news[i].getNoteLevel() == NewsLevel.BAD_NEWS) {
@@ -258,7 +258,7 @@
 
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
-                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                                <span class="glyphicon glyphicon-thumbs-down"style="color:red"></span>
                                 Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% }
