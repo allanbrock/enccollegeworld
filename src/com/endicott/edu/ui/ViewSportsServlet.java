@@ -16,6 +16,9 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         if (request.getParameter("addSport") != null) {  // addSport is present if addSport button was pressed
             addSport(request, response);
+        }else if (request.getParameter("sellSportBtn") !=null && request.getParameter("sellSportBtn").equals("Sell Sport") ){
+            doDelete(request,response);
+            return;
         }
     }
 
@@ -59,5 +62,28 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request,response);
     }
 
+    protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String runId = request.getParameter("runid"); //college ID
+        String server = request.getParameter("server");
+        String name = request.getParameter("sellSportName");
+        request.setAttribute("server", server);
+
+        String buttonValue = request.getParameter("sellSportBtn");
+
+        if(name != null && buttonValue.equals("Sell Sport")){
+
+            SportsSimTalker.deleteSport(server,runId, name);
+        }else {
+            logger.info("Sell sport button was pressed: " + name + " -----------------------");
+        }
+
+        request.setAttribute("server", server);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
+        dispatcher.forward(request,response);
+
+
+    }
 
 }

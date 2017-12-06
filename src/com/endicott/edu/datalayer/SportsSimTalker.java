@@ -37,6 +37,20 @@ public class SportsSimTalker {
             return true;
         }
     }
+    public static void deleteSport(String server, String runId, String sportName){
+        logger.info("attempting to delete sport.");
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "sports/" + runId + "/" + sportName);
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.TEXT_PLAIN);
+
+        Response response = invocationBuilder.delete();
+        String responseAsString = response.readEntity(String.class);
+
+        return;
+
+
+
+    }
     static public  SportModel[] getSports(String server, String runId, UiMessage msg){
         SportModel[] sport;
         Client client = ClientBuilder.newClient(new ClientConfig());
@@ -57,6 +71,7 @@ public class SportsSimTalker {
         return sport;
     }
     static public SportModel[] getAvailableSports(String server, String runId, UiMessage msg){
+        logger.info("Inside availableSports ");
         SportModel[] sport;
         Client client = ClientBuilder.newClient(new ClientConfig());
         WebTarget webTarget = client.target(server + "sports/" + runId + "/available");

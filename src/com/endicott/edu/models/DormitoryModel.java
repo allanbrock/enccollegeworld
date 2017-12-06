@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class DormitoryModel implements Serializable {
     private int capacity = 0;
-    private int costPerHour = 0;
+    private int costPerDay = 0;
     private int hourLastUpdated = 0;
     private String name = "unknown";
     private String runId = "unknown";
@@ -25,9 +25,9 @@ public class DormitoryModel implements Serializable {
     public DormitoryModel() {
     }
 
-    public DormitoryModel(int capacity, int costPerHour, int hourLastUpdated, String name, String runId) {
+    public DormitoryModel(int capacity, int costPerDay, int hourLastUpdated, String name, String runId) {
         this.capacity = capacity;
-        this.costPerHour = costPerHour;
+        this.costPerDay = costPerDay;
         this.hourLastUpdated = hourLastUpdated;
         this.name = name;
         this.runId = runId;
@@ -61,8 +61,8 @@ public class DormitoryModel implements Serializable {
         this.capacity = capacity;
     }
 
-    public int getCostPerHour() {
-        return costPerHour;
+    public int getCostPerDay() {
+        return costPerDay;
     }
 
     public int getHourLastUpdated() {
@@ -97,11 +97,11 @@ public class DormitoryModel implements Serializable {
         this.note = note;
     }
 
-    public int getMaintenanceCostPerHour() {
-        return  costPerHour;
+    public int getMaintenanceCostPerDay() {
+        return costPerDay;
     }
-    public void setMaintenanceCostPerHour(int numRooms){
-        this.costPerHour = (((numRooms * 100))/(365*24));
+    public void setMaintenanceCostPerDay(int numRooms){
+        this.costPerDay = (((numRooms * 150))/(365*24));
 
     }
     public void setHoursToComplete(int decrementHours){

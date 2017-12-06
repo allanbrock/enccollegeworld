@@ -147,7 +147,7 @@
                     <br>
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
-                        Reputation
+                        College Reputation
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
@@ -159,7 +159,7 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=college.getStudentFacultyRatio()%>%">
+                                 style="width:<%=100 - college.getStudentFacultyRatio()%>%">
                                 <%=college.getStudentFacultyRatio()%>
                             </div>
                         </div>
@@ -167,8 +167,23 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=college.getYearlyTuitionCost()/1000%>%">
+                                 style="width:<%=100 - college.getYearlyTuitionCost()/1000%>%">
                                 $<%=college.getYearlyTuitionCost()%>
+                            </div>
+                        </div>
+                        Students sick
+                        <% int counter = 0;
+                            for(int i = 0; i < students.length; i++){
+                                if(students[i].getNumberHoursLeftBeingSick() > 0) {
+                                    counter += 1;
+                                }
+                            }
+                        %>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=counter%>%">
+                                <%=counter%>
                             </div>
                         </div>
                     </div>
@@ -230,11 +245,6 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() == NewsType.COLLEGE_NEWS) {
-                            %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-                            </li>
-                            <% }
                                 if (news[i].getNoteLevel() == NewsLevel.GOOD_NEWS) {
 
                             %>
