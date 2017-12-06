@@ -216,10 +216,24 @@
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
                                     if (news[i].getNoteType() == NewsType.SPORTS_NEWS) {
+                                        if(news[i].getNoteLevel() == NewsLevel.GOOD_NEWS){
+
                             %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-up" style="color:lawngreen"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
-                            <% }
+                            <%}
+                            else if(news[i].getNoteLevel() == NewsLevel.BAD_NEWS){
+
+                            %>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-down"style="color:red"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }}
                             } %>
                         </ul>
                     </div>
