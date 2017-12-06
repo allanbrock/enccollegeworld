@@ -51,17 +51,20 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         logRequestParameters(request);
 
         // Need to do the work here.
+        DormSimTalker.sellDorm(server,runId, dormName);
+
+
 
         //load the request with attributes for the dorm
         request.setAttribute("server", server);
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -75,7 +78,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
@@ -104,14 +107,14 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
 
         //load the request with attributes for the dorm
         request.setAttribute("server", server);
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
     }
 
     private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {

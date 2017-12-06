@@ -15,7 +15,8 @@ public class DormitoryModel implements Serializable {
     private int reputation = 0;
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
-
+    private int hoursToComplete = 300;
+    private int totalBuildCost = 0;
 
 
 
@@ -99,15 +100,25 @@ public class DormitoryModel implements Serializable {
     public int getMaintenanceCostPerHour() {
         return  costPerHour;
     }
-    public int setMaintenanceCostPerHour(int numRooms){
-        this.costPerHour = (int)(((numRooms * 250))/(365*24)*0.10);
-        return (int)(costPerHour + 0.5);
+    public void setMaintenanceCostPerHour(int numRooms){
+        this.costPerHour = (((numRooms * 100))/(365*24));
+
+    }
+    public void setHoursToComplete(int decrementHours){
+        this.hoursToComplete -= decrementHours;
+        if(this.hoursToComplete < 0){
+            hoursToComplete = 0;
+        }
     }
 
     public int getHoursToComplete() {
-        float squareFeet = 250 * numRooms;
-        float hoursToComplete = squareFeet * 2;
-        return (int) (hoursToComplete + 0.5);
+        return this.hoursToComplete;
+    }
+    public void setTotalBuildCost(int numRooms){
+        this.totalBuildCost = numRooms * 200;
+    }
+    public int getTotalBuildCost(){
+        return this.totalBuildCost;
     }
 
     public int getNumStudents() {
@@ -149,9 +160,10 @@ public class DormitoryModel implements Serializable {
     public void setLengthOfDisaster(int lengthOfDisaster) {
         this.lengthOfDisaster = lengthOfDisaster;
     }
+
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
-            return "Under Construction";
+            return Integer.toString(this.getHoursToComplete()) + " hours remaining";
         }
         else
             return "Built";

@@ -15,41 +15,6 @@ import java.util.logging.Logger;
 
 public class SimTalker {
     private static Logger logger = Logger.getLogger("SimTalker");
-
-    public static void openCollegeAndStoreInRequest(String server, String runId, HttpServletRequest request) {
-        CollegeModel college;
-        UiMessage msg = new UiMessage();
-
-        college = CollegeSimTalker.getCollege(server, runId);
-        if (college == null) {
-            msg.setMessage("Failed to find college.");
-            logger.info(msg.getMessage());
-        } else {
-            msg.setMessage("Found college: " + college.getRunId());
-            logger.info("Found college: " + runId);
-        }
-
-        DormitoryModel[] dorms = DormSimTalker.getDormitories(server, runId, msg);
-        NewsFeedItemModel[] news = NewsSimTalker.getNews(server, runId, msg);
-        SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
-        SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
-        StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
-
-        logger.info("Setting attribute college: " + college);
-        request.setAttribute("message",msg);
-        request.setAttribute("college",college);
-        request.setAttribute("dorms",dorms);
-        request.setAttribute("news",news);
-        request.setAttribute("sports", sport);
-        request.setAttribute("availableSports",availableSports);
-        request.setAttribute("students",students);
-    }
-
-
-
-
-
-
     static public  DormitoryModel[] getDormitories(String server, String runId, UiMessage msg){
         DormitoryModel[] dorms;
         Client client = ClientBuilder.newClient(new ClientConfig());
@@ -91,30 +56,5 @@ public class SimTalker {
 
 
 
-    public static boolean createCollege(String server, String runId) {
-        CollegeModel college = new CollegeModel();
-        college.setRunId(runId);
 
-        logger.info("Creating the college " + runId);
-
-        Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "college/" + runId);
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-
-        // In the post we have a minimal JSON for the college just having the runID.
-        // The other college attributes are set by the server.
-        Response response = invocationBuilder.post(Entity.entity("{" +
-                "   \"runId\" : \"" + runId + "\"" +
-                "}", MediaType.APPLICATION_JSON_TYPE));
-        String responseAsString = response.readEntity(String.class);
-
-        if(response.getStatus() != 200) {
-            logger.severe("Got bad college response:" + response.getStatus());
-            return false;
-        } else {
-            logger.info("Got an ok response creating college: "  + runId);
-            return true;
-
-        }
-    }
 }

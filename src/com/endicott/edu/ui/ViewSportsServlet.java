@@ -33,7 +33,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request, response);
@@ -56,7 +56,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         }
 
         request.setAttribute("server", server);
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request,response);

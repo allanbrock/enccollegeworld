@@ -1,9 +1,11 @@
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.StudentModel" %>
 <%@ page import="com.endicott.edu.models.NewsType" %>
+<%@ page import="com.endicott.edu.models.NewsLevel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -12,6 +14,9 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
@@ -45,6 +50,8 @@
         students = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 %>
 
 
@@ -83,7 +90,7 @@
 
         <!-- jumbotron -->
         <div class="jumbotron">
-            <h2>Balance $<%=college.getAvailableCash()%>
+            <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>
 
             <p>Day <%=college.getCurrentDay()%>
@@ -98,11 +105,17 @@
 
         <div class="row">
             <!-- Happiness -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
+                    <% if(college.getStudentBodyHappiness() > 50) { %>
                     <h2>&#9786;
-                        <small>Student Body Happiness</small>
+                        <small>Student Happiness</small>
                     </h2>
+                    <% } else { %>
+                    <h2>&#9785;
+                        <small>Student Happiness</small>
+                    </h2>
+                    <% } %>
                     <% if (college.getStudentBodyHappiness() >= 80) { %>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar"
@@ -131,11 +144,54 @@
                         </div>
                     </div>
                     <% } %>
+                    <br>
+                    <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="happinessDetails" class="collapse">
+                        College Reputation
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=college.getReputation()%>%">
+                                <%=college.getReputation()%>%
+                            </div>
+                        </div>
+                        Student/faculty Ratio
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=100 - college.getStudentFacultyRatio()%>%">
+                                <%=college.getStudentFacultyRatio()%>
+                            </div>
+                        </div>
+                        Tuition
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=100 - college.getYearlyTuitionCost()/1000%>%">
+                                $<%=college.getYearlyTuitionCost()%>
+                            </div>
+                        </div>
+                        Students sick
+                        <% int counter = 0;
+                            for(int i = 0; i < students.length; i++){
+                                if(students[i].getNumberHoursLeftBeingSick() > 0) {
+                                    counter += 1;
+                                }
+                            }
+                        %>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=counter%>%">
+                                <%=counter%>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -146,12 +202,28 @@
             </div>
 
             <!-- Retention Rate -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>100%
                         </h1>
                         <h3>Retention Rate</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ranking -->
+            <div class="col-sm-3">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1>#33
+                        </h1>
+                        <h3>Ranking</h3>
+                    </div>
+                    <br>
+                    <a href="#rankingDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="rankingDetails" class="collapse">
+                        Details coming soon!
                     </div>
                 </div>
             </div>
@@ -173,9 +245,21 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() == NewsType.GENERAL_NOTE) {
+                                if (news[i].getNoteLevel() == NewsLevel.GOOD_NEWS) {
+
                             %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% } else if (news[i].getNoteLevel() == NewsLevel.BAD_NEWS) {
+                            %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% }
                             } %>
@@ -190,16 +274,24 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() != NewsType.GENERAL_NOTE) {
-                                        if(news[i].getAmount() > 0 ){
+                                    if (news[i].getNoteType() == NewsType.FINANCIAL_NEWS) {
+                                        if (news[i].getAmount() > 0) {
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
                                 <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
-                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:green"> $<%=news[i].getAmount()%></span>
+                            </li>
+                            <% } else if (news[i].getAmount() < 0) {
+                            %>
+
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:red"> $<%=-news[i].getAmount()%></span>
                             </li>
                             <% } else {
-                              %>
+                            %>
 
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
@@ -208,15 +300,22 @@
                             </li>
 
 
-
-                            <%
+                            <% }
                             }
-                            }
-                            } %>
+                            }%>
                         </ul>
                     </div>
                 </div>
-                <!--Form menu to change the college tuition cost!-->
+
+
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <!-- Tuition -->
+            <div class="col-sm-6">
                 <form id = "tuitionForm">
                     <div class="well well-sm">
                         <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
@@ -235,19 +334,29 @@
                                 these are called spin boxes. If this causes problems
                                 just remove the coode in the <style> tag!-->
                             <style>
-                            input::-webkit-outer-spin-button,
-                            input::-webkit-inner-spin-button {
-                            /* display: none; <- Crashes Chrome on hover */
-                            -webkit-appearance: none;
-                            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-                            }
+                                input::-webkit-outer-spin-button,
+                                input::-webkit-inner-spin-button {
+                                    /* display: none; <- Crashes Chrome on hover */
+                                    -webkit-appearance: none;
+                                    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                                }
                             </style>
 
                             <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
                         </form>
                     </div>
                 </form>
+            </div>
 
+            <!-- Student Faculty Ratio -->
+            <div class="col-sm-3">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1><%=college.getStudentFacultyRatio()%>
+                        </h1>
+                        <h3>Student Faculty Ratio</h3>
+                    </div>
+                </div>
             </div>
         </div>
 
