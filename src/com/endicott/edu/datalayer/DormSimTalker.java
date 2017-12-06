@@ -4,6 +4,7 @@ import com.endicott.edu.models.DormitoryModel;
 import com.endicott.edu.ui.UiMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.jndi.toolkit.url.Uri;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.ws.rs.client.*;
@@ -59,11 +60,27 @@ public class DormSimTalker {
     }
 
     static public void sellDorm(String server, String runId, String dormName) {
+
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "dorms/" + runId + dormName);
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+        String uri = server + "dorms/" + runId + "/" + dormName;
+        WebTarget webTarget = client.target(uri);
+        logger.info("URI: " + uri);
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.TEXT_PLAIN);
+        String json = "{    \"runId\" : \"" + runId + "\"," +
+                "   \"dormName\" : \"" + dormName + "\"," ;
+        logger.info("deleting a dorm " + json);
 
         Response response = invocationBuilder.delete();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+
+        try {
+            String message = gson.fromJson(responseAsString, String.class);
+        }catch (Exception e){
+            logger.severe("Exception deleting dorm: " + server + "dorms/" + runId + " " + e.getMessage() + " Dorm: " + responseAsString);
+        }
+
+
 
     }
 }
