@@ -78,7 +78,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         }
 
         request.setAttribute("server", server);
-        SimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request,response);
