@@ -10,6 +10,10 @@
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%--<%@ page import="AdminModel" %>--%>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.endicott.edu.ui.ViewAdminServlet" %>
+<%@ page import="com.endicott.edu.datalayer.CollegeSimTalker" %>
+<%@ page import="java.util.List" %>
 <html>
 <head>
     <title>College World Admin</title>
@@ -90,7 +94,7 @@
     </style>
 
 </head>
-
+<body>
 <%
     String server = (String) request.getAttribute("server");
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -102,8 +106,18 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
+    CollegeModel colleges[] = (CollegeModel[])request.getAttribute("colleges");
+    if(colleges == null){
+        colleges = new CollegeModel[0];
+        msg.setMessage(msg.getMessage() + "No colleges found!");
+    }
+
+
+//    List<CollegeModel> colleges = CollegeSimTalker.getAllColleges(server,college.getRunId());
+
 %>
-<body>
+
+
 
 <form action="updateCollege" method="post">
     <header>
@@ -139,164 +153,32 @@
 
     <div class="container-fluid">
         <div class="row">
-            <%--<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">--%>
-                <%--<ul class="nav nav-pills flex-column">--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link active" href="#">Overview <span class="sr-only">(current)</span></a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Reports</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Analytics</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Export</a>--%>
-                    <%--</li>--%>
-                <%--</ul>--%>
 
-                <%--<ul class="nav nav-pills flex-column">--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Nav item</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Nav item again</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">One more nav</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Another nav item</a>--%>
-                    <%--</li>--%>
-                <%--</ul>--%>
-
-                <%--<ul class="nav nav-pills flex-column">--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Nav item again</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">One more nav</a>--%>
-                    <%--</li>--%>
-                    <%--<li class="nav-item">--%>
-                        <%--<a class="nav-link" href="#">Another nav item</a>--%>
-                    <%--</li>--%>
-                <%--</ul>--%>
-            <%--</nav>--%>
 
             <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
 
-                <h2>Colleges (will be populated in next push)</h2>
+                <h2>College Ranking</h2>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>College Name</th>
                             <th>Students</th>
-                            <th>Dorms</th>
+                            <th>Cash on Hand</th>
                             <th>Age</th>
-                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
+
+                       <%for(CollegeModel tmp : colleges){ %>
                         <tr>
-                            <td>Lorem</td>
-                            <td>ipsum</td>
-                            <td>dolor</td>
-                            <td>sit</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
+                            <td><%=tmp.getRunId()%></td>
+                            <td><%=tmp.getNumberStudentsAdmitted()%></td>
+                            <td><%=tmp.getAvailableCash()%></td>
+                            <td><%=tmp.getCurrentDay()%></td>
+
                         </tr>
-                        <tr>
-                            <td>amet</td>
-                            <td>consectetur</td>
-                            <td>adipiscing</td>
-                            <td>elit</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>Integer</td>
-                            <td>nec</td>
-                            <td>odio</td>
-                            <td>Praesent</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>libero</td>
-                            <td>Sed</td>
-                            <td>cursus</td>
-                            <td>ante</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>dapibus</td>
-                            <td>diam</td>
-                            <td>Sed</td>
-                            <td>nisi</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>Nulla</td>
-                            <td>quis</td>
-                            <td>sem</td>
-                            <td>at</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>nibh</td>
-                            <td>elementum</td>
-                            <td>imperdiet</td>
-                            <td>Duis</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>sagittis</td>
-                            <td>ipsum</td>
-                            <td>Praesent</td>
-                            <td>mauris</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>Fusce</td>
-                            <td>nec</td>
-                            <td>tellus</td>
-                            <td>sed</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>augue</td>
-                            <td>semper</td>
-                            <td>porta</td>
-                            <td>Mauris</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td>massa</td>
-                            <td>Vestibulum</td>
-                            <td>lacinia</td>
-                            <td>arcu</td>
-                            <td><button type="button" class="btn btn-danger">
-                                Delete
-                            </button></td>
-                        </tr>
+                        <%}%>
                         </tbody>
                     </table>
                 </div>
