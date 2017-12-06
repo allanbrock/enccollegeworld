@@ -165,7 +165,7 @@
                             <th>College Name</th>
                             <th>Students</th>
                             <th>Cash on Hand</th>
-                            <th>Age</th>
+                            <th>Days Old</th>
                         </tr>
                         </thead>
                         <tbody>
