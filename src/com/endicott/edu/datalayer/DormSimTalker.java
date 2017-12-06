@@ -10,6 +10,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class DormSimTalker {
@@ -81,6 +82,15 @@ public class DormSimTalker {
         }
 
 
+
+    }
+
+    static public void getAvaliableDorms(String server, String runId){
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "dorms/" + runId + "/available");
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
 
     }
 }

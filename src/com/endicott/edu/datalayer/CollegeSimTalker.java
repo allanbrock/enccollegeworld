@@ -41,6 +41,7 @@ public class CollegeSimTalker {
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
         StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
+        FacultyModel[] faculty = FacultySimTalker.getFaculty(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
@@ -50,6 +51,7 @@ public class CollegeSimTalker {
         request.setAttribute("sports", sport);
         request.setAttribute("availableSports",availableSports);
         request.setAttribute("students",students);
+        request.setAttribute("faculty",faculty);
     }
     public static boolean createCollege(String server, String runId) {
         CollegeModel college = new CollegeModel();
@@ -84,7 +86,7 @@ public class CollegeSimTalker {
      * @param server what endpoint does our request need to go to
      * @param runId simulation ID
      * @param amount how much does tuition cost now
-     * @return true if 200 ok false if 400 or something bad. 
+     * @return true if 200 ok false if 400 or something bad.
      */
     public static boolean updateTuition(String server, String runId, String amount) {
 

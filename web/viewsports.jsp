@@ -63,6 +63,11 @@
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
+    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+    if (students == null) {
+        students  = new StudentModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+    }
 
 %>
 
@@ -142,7 +147,19 @@
                         <td>
                             <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                             <div id="<%=i%>" class="collapse">
-                                Add some details here.
+                                <% for(int j = 0; j < students.length; j++){
+                                    if(students[j].getTeam().equals(sport[i].getName())){ %>
+                                        <%=students[j].getName()%><br/>
+                                <%    }
+                                }
+                                    %>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                         style="width:<%=sport[i].getReputation()%>%">
+                                        <%=sport[i].getReputation()%>%
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td><%=sport[i].getGamesWon()%> </td>
@@ -170,6 +187,23 @@
                     </select>
                 </div>
                 <input type="submit" class="btn btn-info" name="addSport" value="Add Sport">
+            </div>
+        </div>
+
+        <!-- Sell sport -->
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label for="sportName">Select Sport to sell</label>
+                    <select class="form-control" id="sellSportName" name="sellSportName">
+                        <% for(int i = 0; i < sport.length; i++) { %>
+                        <tr>
+                            <option><%= sport[i].getName()%></option>
+                        </tr>
+                        <% } %>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-info" name="sellSportBtn" value="Sell Sport">
             </div>
         </div>
 
