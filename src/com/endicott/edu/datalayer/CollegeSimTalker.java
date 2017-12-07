@@ -42,6 +42,9 @@ public class CollegeSimTalker {
         SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
         StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
         FacultyModel[] faculty = FacultySimTalker.getFaculty(server, runId, msg);
+        FloodModel[] flood = FloodSimTalker.getFloods(server, runId, msg);
+
+
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
@@ -52,6 +55,7 @@ public class CollegeSimTalker {
         request.setAttribute("availableSports",availableSports);
         request.setAttribute("students",students);
         request.setAttribute("faculty",faculty);
+        request.setAttribute("floods",flood);
     }
     public static boolean createCollege(String server, String runId) {
         CollegeModel college = new CollegeModel();
