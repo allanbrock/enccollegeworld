@@ -113,7 +113,10 @@
     }
 %>
 
-<form action="updateCollege" method="post">
+<form action="viewFaculty" method="post">
+
+    <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+    <input type="hidden" name="server" value="<%=server%>">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -214,7 +217,7 @@
                         <input type="text" class="form-control" id="facultyName" name="facultyName"
                                placeholder="Enter faculty name.">
                     </div>
-                    <input type="submit" class="btn btn-info" name="saveNewFaculty" value="Add Faculty">
+                    <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
                 </div>
                 <div class="form-group">
                     <div class="form-group">
