@@ -41,11 +41,13 @@ public class CollegeSimTalker {
         SportModel[] sport = SportsSimTalker.getSports(server, runId, msg);
         SportModel[] availableSports = SportsSimTalker.getAvailableSports(server,runId,msg);
         StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
+        CollegeModel[] colleges = CollegeSimTalker.getAllColleges(server,runId,msg);
         FacultyModel[] faculty = FacultySimTalker.getFaculty(server, runId, msg);
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
+        request.setAttribute("colleges",colleges);
         request.setAttribute("dorms",dorms);
         request.setAttribute("news",news);
         request.setAttribute("sports", sport);
@@ -164,5 +166,26 @@ public class CollegeSimTalker {
             return null;
         }
         return college;
+    }
+
+    static public CollegeModel[] getAllColleges(String server, String runId,UiMessage msg){
+        CollegeModel[] colleges;
+        Client client = ClientBuilder.newClient(new ClientConfig());
+        WebTarget webTarget = client.target(server + "admin/getColleges" );
+        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+
+        Response response = invocationBuilder.get();
+        String responseAsString = response.readEntity(String.class);
+        Gson gson = new GsonBuilder().create();
+
+        try{
+//            Type collectionType = new TypeToken<Collection<CollegeModel[]>>(){}.getType();
+            colleges = gson.fromJson(responseAsString,CollegeModel[].class);
+        } catch (Exception e){
+            msg.setMessage("College failure" + e.getMessage());
+            return null;
+        }
+
+        return colleges;
     }
 }

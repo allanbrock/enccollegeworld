@@ -110,9 +110,7 @@
                                 openBeds += capacity - numStudents;
                                 filledBeds += d.getNumStudents();
                             }
-
                         }
-
                     %>
                         <%=openBeds%> Open Beds</h2>
                         <%=filledBeds%> Filled Beds</h2>
@@ -129,7 +127,7 @@
                     <tr>
                         <th>Dorm Name</th>
                         <th>Total Beds</th>
-                        <th>Taken Beds</th>
+                        <th>Filled Beds</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>

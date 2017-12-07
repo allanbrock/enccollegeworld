@@ -23,36 +23,45 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         else {
             // Might be selling a dorm.
             Enumeration<String> params = request.getParameterNames();
+
             while(params.hasMoreElements()) {
                 // We're looking for a parameter whose value is "Sell" and whose name is BASE64 encoded dorm name.
                 // We're doing this BASE64 encoding to handle issues caused by single quotes that could
                 // appear in the name.
                 String paramName = params.nextElement();
+                String paramValue = request.getParameter(paramName);
+                logger.info("Parameter Name - "+paramName+", Value - "+paramValue);
                 if (request.getParameter(paramName).equals("Sell")) {
                     Base64.Decoder decoder = Base64.getDecoder();
                     String dormName = new String(decoder.decode(paramName));
                     logger.info("Selling dorm: " + dormName + " Encoded name: " + paramName);
 
-                    sellDorm(request, response);
+                    sellDorm(request, response, dormName);
                 }
             }
             String i = request.getParameter("sellDorm");
         }
     }
 
-    private void sellDorm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
         String runId=request.getParameter("runid");
         String server=request.getParameter("server");
         request.setAttribute("server", server);
-        String dormName=request.getParameter("dormName");
-        String dormType=request.getParameter("dormType");
 
         logger.info("In ViewDormServlet.sellDorm()");
         logRequestParameters(request);
 
-        // Need to do the work here.
-        DormSimTalker.sellDorm(server,runId, dormName);
-
+        logger.info("Attempting to delete dorm: " + dormName+ " from " + runId + " at server " + server);
+        if(runId == null || server == null || dormName == null){
+            UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
+            request.setAttribute("message", message);
+            logger.info("Bad parameters for deleting a dorm");
+        }
+        else {
+            // Need to do the work here.
+            DormSimTalker.sellDorm(server, runId, dormName);
+            logger.info("Returned from attempt to delete dorm: " + dormName + " to " + runId + " at server " + server);
+        }
 
 
         //load the request with attributes for the dorm
