@@ -18,9 +18,7 @@ public class DormitoryModel implements Serializable {
     private int hoursToComplete = 300;
     private int totalBuildCost = 0;
 
-
-
-    private int dormType = 1;
+    private int dormType;
 
     public DormitoryModel() {
     }
@@ -164,7 +162,6 @@ public class DormitoryModel implements Serializable {
     public void incrementNumStudents(int increment){
         this.numStudents += increment;
     }
-    
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
             return Integer.toString(this.getHoursToComplete()) + " hours remaining";
