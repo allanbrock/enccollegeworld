@@ -161,6 +161,10 @@ public class DormitoryModel implements Serializable {
         this.lengthOfDisaster = lengthOfDisaster;
     }
 
+    public void incrementNumStudents(int increment){
+        this.numStudents += increment;
+    }
+    
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
             return Integer.toString(this.getHoursToComplete()) + " hours remaining";
@@ -168,7 +172,5 @@ public class DormitoryModel implements Serializable {
         else
             return "Built";
     }
-    public void incrementNumStudents(int increment){
-        this.numStudents += increment;
-    }
+
 }
