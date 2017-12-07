@@ -165,7 +165,7 @@
                         <td><%=sport[i].getGamesWon()%> </td>
                         <td><%=sport[i].getGamesLost()%> </td>
                         <td><%=sport[i].getGamesWon() + sport[i].getGamesLost() + sport[i].getGamesTied()%> </td>
-                        <td> </td>
+                        <td><%=sport[i].getActive()%></td>
                     </tr>
                     <% } %>
                 </tbody>
