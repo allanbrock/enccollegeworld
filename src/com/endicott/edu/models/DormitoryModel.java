@@ -168,4 +168,7 @@ public class DormitoryModel implements Serializable {
         else
             return "Built";
     }
+    public void incrementNumStudents(int increment){
+        this.numStudents += increment;
+    }
 }
