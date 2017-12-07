@@ -113,7 +113,7 @@ public class DormitoryModel implements Serializable {
         return this.hoursToComplete;
     }
     public void setTotalBuildCost(int numRooms){
-        this.totalBuildCost = numRooms * 200;
+        this.totalBuildCost = numRooms * 1000;
     }
     public int getTotalBuildCost(){
         return this.totalBuildCost;
