@@ -149,7 +149,7 @@
                             <div id="<%=i%>" class="collapse">
                                 <% for(int j = 0; j < students.length; j++){
                                     if(students[j].getTeam().equals(sport[i].getName())){ %>
-                                        <%=students[j].getName()%>
+                                        <%=students[j].getName()%><br/>
                                 <%    }
                                 }
                                     %>
@@ -165,7 +165,7 @@
                         <td><%=sport[i].getGamesWon()%> </td>
                         <td><%=sport[i].getGamesLost()%> </td>
                         <td><%=sport[i].getGamesWon() + sport[i].getGamesLost() + sport[i].getGamesTied()%> </td>
-                        <td> </td>
+                        <td><%=sport[i].getActive()%></td>
                     </tr>
                     <% } %>
                 </tbody>
@@ -190,6 +190,23 @@
             </div>
         </div>
 
+        <!-- Sell sport -->
+        <div class="col-sm-4">
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label for="sportName">Select Sport to sell</label>
+                    <select class="form-control" id="sellSportName" name="sellSportName">
+                        <% for(int i = 0; i < sport.length; i++) { %>
+                        <tr>
+                            <option><%= sport[i].getName()%></option>
+                        </tr>
+                        <% } %>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-info" name="sellSportBtn" value="Sell Sport">
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-6">
                 <div class="well well-sm">
@@ -199,10 +216,24 @@
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
                                     if (news[i].getNoteType() == NewsType.SPORTS_NEWS) {
+                                        if(news[i].getNoteLevel() == NewsLevel.GOOD_NEWS){
+
                             %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-up" style="color:lawngreen"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
-                            <% }
+                            <%}
+                            else if(news[i].getNoteLevel() == NewsLevel.BAD_NEWS){
+
+                            %>
+                            <li class="list-group-item">
+                                <!-- change this to user up or down arrow depending on money -->
+                                <span class="glyphicon glyphicon-thumbs-down"style="color:red"></span>
+                                Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                            </li>
+                            <% }}
                             } %>
                         </ul>
                     </div>

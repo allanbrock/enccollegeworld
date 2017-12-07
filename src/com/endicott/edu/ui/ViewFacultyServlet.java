@@ -5,6 +5,7 @@ import com.endicott.edu.datalayer.FacultySimTalker;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.logging.Logger;
 
 public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
@@ -41,7 +42,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         logger.info("Attempting to add faculty: " + facultyName + " to " + runId + " at server " + server);
         if (runId == null || server == null || facultyName == null) {
-            UiMessage message = new UiMessage("Can't add a team because missing information");
+            UiMessage message = new UiMessage("Can't add a faculty member because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding faculty.");
         }
@@ -55,6 +56,14 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request,response);
+    }
+
+    private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
+        Enumeration<String> params = request.getParameterNames();
+        while(params.hasMoreElements()){
+            String paramName = params.nextElement();
+            logger.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
+        }
     }
 
 }
