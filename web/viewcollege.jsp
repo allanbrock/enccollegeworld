@@ -50,6 +50,11 @@
         students = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+    FloodModel floods[] = (FloodModel[]) request.getAttribute("floods");
+    if (floods == null) {
+        floods = new FloodModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
+    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -101,6 +106,17 @@
             <%} else {%>
             <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
             <%}%>
+            <br>
+            <!-- Flood -->
+            <%
+                for(int i = 0; i < floods.length; i++ ){
+                    FloodModel f = floods[i];
+                    String dormName = f.getDormName(); %>
+                <h4> Dorm <%=dormName%> is flooded.</h4>
+            <%
+                }
+            %>
+
         </div> <!-- jumbotron -->
 
         <div class="row">
