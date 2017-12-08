@@ -163,8 +163,8 @@
                                     Dorm: <%=students[i].getDorm()%><br>
                                     Happiness: <%=students[i].getHappinessLevel()%><br>
                                     Gender: <%=students[i].getGender()%> <br>
-                                    Hours Sick: <%=students[i].getNumberHoursLeftBeingSick()%><br>
-                                    <% if(students[i].isAthlete()){ %>
+                                    Hours Left Sick: <%=students[i].getNumberHoursLeftBeingSick()%><br>
+                                    <% if(!students[i].getTeam().equals("")){ %>
                                         Team: <%= students[i].getTeam()%> <br>
                                         Athletic Ability <%=students[i].getAthleticAbility()%> <br>
                                     <% } %>

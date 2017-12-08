@@ -50,6 +50,11 @@
         students = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+    FloodModel floods[] = (FloodModel[]) request.getAttribute("floods");
+    if (floods == null) {
+        floods = new FloodModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
+    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -101,6 +106,17 @@
             <%} else {%>
             <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
             <%}%>
+            <br>
+            <!-- Flood -->
+            <%
+                for(int i = 0; i < floods.length; i++ ){
+                    FloodModel f = floods[i];
+                    String dormName = f.getDormName(); %>
+                <h4> Dorm <%=dormName%> is flooded.</h4>
+            <%
+                }
+            %>
+
         </div> <!-- jumbotron -->
 
         <div class="row">
@@ -147,7 +163,7 @@
                     <br>
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
-                        Reputation
+                        College Reputation
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
@@ -159,7 +175,7 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=college.getStudentFacultyRatio()%>%">
+                                 style="width:<%=100 - college.getStudentFacultyRatio()%>%">
                                 <%=college.getStudentFacultyRatio()%>
                             </div>
                         </div>
@@ -167,8 +183,23 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=college.getYearlyTuitionCost()/1000%>%">
+                                 style="width:<%=100 - college.getYearlyTuitionCost()/1000%>%">
                                 $<%=college.getYearlyTuitionCost()%>
+                            </div>
+                        </div>
+                        Students sick
+                        <% int counter = 0;
+                            for(int i = 0; i < students.length; i++){
+                                if(students[i].getNumberHoursLeftBeingSick() > 0) {
+                                    counter += 1;
+                                }
+                            }
+                        %>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=counter%>%">
+                                <%=counter%>
                             </div>
                         </div>
                     </div>
@@ -190,7 +221,7 @@
             <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
-                        <h1>100%
+                        <h1><%=college.getStudentRetentionRate()%>%
                         </h1>
                         <h3>Retention Rate</h3>
                     </div>
@@ -230,17 +261,12 @@
                         <ul class="list-group">
                             <%
                                 for (int i = news.length - 1; i >= 0; i--) {
-                                    if (news[i].getNoteType() == NewsType.COLLEGE_NEWS) {
-                            %>
-                            <li class="list-group-item"> Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
-                            </li>
-                            <% }
                                 if (news[i].getNoteLevel() == NewsLevel.GOOD_NEWS) {
 
                             %>
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
-                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                <span class="glyphicon glyphicon-thumbs-up" style="color:lawngreen"></span>
                                 Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% } else if (news[i].getNoteLevel() == NewsLevel.BAD_NEWS) {
@@ -248,7 +274,7 @@
 
                             <li class="list-group-item">
                                 <!-- change this to user up or down arrow depending on money -->
-                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                                <span class="glyphicon glyphicon-thumbs-down"style="color:red"></span>
                                 Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
                             </li>
                             <% }

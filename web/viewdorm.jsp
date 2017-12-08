@@ -7,7 +7,8 @@
 --%>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="java.util.Base64" %>
-<%@ page import="com.endicott.edu.models.*" %><%--
+<%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.datalayer.DormSimTalker" %><%--
   Created by IntelliJ IDEA.
   User: abrocken
   Date: 8/25/2017
@@ -52,6 +53,12 @@
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    }
+
+    DormitoryModel availableDorms[] = (DormitoryModel[]) request.getAttribute("availableDorms");
+    if (availableDorms == null) {
+        availableDorms = new DormitoryModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
 %>
@@ -103,9 +110,7 @@
                                 openBeds += capacity - numStudents;
                                 filledBeds += d.getNumStudents();
                             }
-
                         }
-
                     %>
                         <%=openBeds%> Open Beds</h2>
                         <%=filledBeds%> Filled Beds</h2>
@@ -122,7 +127,7 @@
                     <tr>
                         <th>Dorm Name</th>
                         <th>Total Beds</th>
-                        <th>Taken Beds</th>
+                        <th>Filled Beds</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>

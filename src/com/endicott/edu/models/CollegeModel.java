@@ -20,6 +20,7 @@ public class CollegeModel implements Serializable {
     private int numberStudentsWithdrew = 0;
     private int numberStudentsGraduated = 0;
     private float retentionRate = 0f;
+    private int studentRetentionRate;
 
     public int getReputation() { return reputation; }
 
@@ -98,4 +99,12 @@ public class CollegeModel implements Serializable {
     public float getCollegeScore() { return collegeScore; }
 
     public void setCollegeScore(float collegeScore) { this.collegeScore = collegeScore; }
+
+    public int getStudentRetentionRate() {
+        return studentRetentionRate;
+    }
+
+    public void setStudentRetentionRate(int studentRetentionRate) {
+        this.studentRetentionRate = studentRetentionRate;
+    }
 }

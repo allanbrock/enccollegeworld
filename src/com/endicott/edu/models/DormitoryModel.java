@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class DormitoryModel implements Serializable {
     private int capacity = 0;
-    private int costPerHour = 0;
+    private int costPerDay = 0;
     private int hourLastUpdated = 0;
     private String name = "unknown";
     private String runId = "unknown";
@@ -18,16 +18,14 @@ public class DormitoryModel implements Serializable {
     private int hoursToComplete = 300;
     private int totalBuildCost = 0;
 
-
-
-    private int dormType = 1;
+    private int dormType;
 
     public DormitoryModel() {
     }
 
-    public DormitoryModel(int capacity, int costPerHour, int hourLastUpdated, String name, String runId) {
+    public DormitoryModel(int capacity, int costPerDay, int hourLastUpdated, String name, String runId) {
         this.capacity = capacity;
-        this.costPerHour = costPerHour;
+        this.costPerDay = costPerDay;
         this.hourLastUpdated = hourLastUpdated;
         this.name = name;
         this.runId = runId;
@@ -61,8 +59,8 @@ public class DormitoryModel implements Serializable {
         this.capacity = capacity;
     }
 
-    public int getCostPerHour() {
-        return costPerHour;
+    public int getCostPerDay() {
+        return costPerDay;
     }
 
     public int getHourLastUpdated() {
@@ -97,11 +95,11 @@ public class DormitoryModel implements Serializable {
         this.note = note;
     }
 
-    public int getMaintenanceCostPerHour() {
-        return  costPerHour;
+    public int getMaintenanceCostPerDay() {
+        return costPerDay;
     }
-    public void setMaintenanceCostPerHour(int numRooms){
-        this.costPerHour = (((numRooms * 100))/(365*24));
+    public void setMaintenanceCostPerDay(int numRooms){
+        this.costPerDay = (((numRooms * 150))/(365*24));
 
     }
     public void setHoursToComplete(int decrementHours){
@@ -115,7 +113,7 @@ public class DormitoryModel implements Serializable {
         return this.hoursToComplete;
     }
     public void setTotalBuildCost(int numRooms){
-        this.totalBuildCost = numRooms * 200;
+        this.totalBuildCost = numRooms * 1000;
     }
     public int getTotalBuildCost(){
         return this.totalBuildCost;
@@ -161,6 +159,9 @@ public class DormitoryModel implements Serializable {
         this.lengthOfDisaster = lengthOfDisaster;
     }
 
+    public void incrementNumStudents(int increment){
+        this.numStudents += increment;
+    }
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
             return Integer.toString(this.getHoursToComplete()) + " hours remaining";
@@ -168,4 +169,5 @@ public class DormitoryModel implements Serializable {
         else
             return "Built";
     }
+
 }
