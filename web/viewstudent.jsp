@@ -93,6 +93,20 @@
                 </div>
                 <div class="col-md-10">
                     <h2><%=students.length%> Students</h2>
+                    <br/>
+                    <%
+                        int nSick = 0;
+                        int studentGoodCount = 0;
+                        // loop thru students and count sick ones.
+                        for (int i = 0; i < students.length; i++) {
+                            if(students[i].getNumberHoursLeftBeingSick() == 0){
+                                studentGoodCount++;
+                            } else {
+                                nSick++;
+                            }
+                        }
+                    %>
+                    <%=nSick%> Students Sick
                 </div>
             </div>
         </div>
