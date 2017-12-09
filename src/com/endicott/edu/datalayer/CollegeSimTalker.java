@@ -43,9 +43,8 @@ public class CollegeSimTalker {
         StudentModel[] students = StudentSimTalker.getStudents(server, runId, msg);
         CollegeModel[] colleges = CollegeSimTalker.getAllColleges(server,runId,msg);
         FacultyModel[] faculty = FacultySimTalker.getFaculty(server, runId, msg);
-        FloodModel[] flood = FloodSimTalker.getFloods(server, runId, msg);
-
-
+        //FloodModel[] flood = FloodSimTalker.getFloods(server, runId, msg);
+        FloodModel[] flood = new FloodModel[0];
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);

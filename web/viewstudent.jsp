@@ -93,7 +93,6 @@
                 </div>
                 <div class="col-md-10">
                     <h2><%=students.length%> Students</h2>
-                    <br/>
                     <%
                         int nSick = 0;
                         int studentGoodCount = 0;
@@ -106,7 +105,7 @@
                             }
                         }
                     %>
-                    <%=nSick%> Students Sick
+                    <h3><%=nSick%> Students Sick</h3>
                 </div>
             </div>
         </div>
@@ -163,7 +162,9 @@
                                     Dorm: <%=students[i].getDorm()%><br>
                                     Happiness: <%=students[i].getHappinessLevel()%><br>
                                     Gender: <%=students[i].getGender()%> <br>
-                                    Hours Left Sick: <%=students[i].getNumberHoursLeftBeingSick()%><br>
+                                        <% if (students[i].getNumberHoursLeftBeingSick() > 0) { %>
+                                    Is Sick (<%=students[i].getNumberHoursLeftBeingSick()%> hours til better)<br>
+                                        <% } %>
                                     <% if(!students[i].getTeam().equals("")){ %>
                                         Team: <%= students[i].getTeam()%> <br>
                                         Athletic Ability <%=students[i].getAthleticAbility()%> <br>

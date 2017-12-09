@@ -232,14 +232,14 @@
             <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
-                        <h1>#33
+                        <h1>?
                         </h1>
                         <h3>Ranking</h3>
                     </div>
                     <br>
                     <a href="#rankingDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="rankingDetails" class="collapse">
-                        Details coming soon!
+                        Coming in FA 2018!
                     </div>
                 </div>
             </div>
