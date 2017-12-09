@@ -165,7 +165,10 @@
                         <td><%=sport[i].getGamesWon()%> </td>
                         <td><%=sport[i].getGamesLost()%> </td>
                         <td><%=sport[i].getGamesWon() + sport[i].getGamesLost() + sport[i].getGamesTied()%> </td>
-                        <td><%=sport[i].getActive()%></td>
+                        <td><% String isActive = "Yes";
+                               if (sport[i].getIsActive() <= 0) isActive = "No"; %>
+                            <%=isActive%>
+                        </td>
                     </tr>
                     <% } %>
                 </tbody>

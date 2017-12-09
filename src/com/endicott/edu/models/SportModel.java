@@ -22,14 +22,14 @@ public class SportModel implements Serializable {
     private String runId = "unknown";
     private String sportName = "unknown";
     private String note = "no note";
-    private boolean isActive = false;
+    private int isActive = 0;
     private int hoursUntilNextGame = 0;
 
     public SportModel() {
 
     }
 
-    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, Boolean isActive, int hoursUntilNextGame, String gender) {
+    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, int isActive, int hoursUntilNextGame, String gender) {
         this.minPlayers = minPlayers;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
@@ -190,10 +190,22 @@ public class SportModel implements Serializable {
     public void setCurrentPlayers(int currentPlayers) { this.currentPlayers = currentPlayers; }
 
 
-    public boolean getActive() { return isActive;
+    public int getActive() { return isActive;
     }
 
-    public void setActive(boolean active) { isActive = active; }
+    public void setActive(int active) { isActive = active; }
+
+    public int isActive() {
+        return isActive;
+    }
+
+    public int getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
 
     public String getGender() { return gender; }
 
