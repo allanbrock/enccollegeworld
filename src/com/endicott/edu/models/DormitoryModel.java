@@ -102,11 +102,13 @@ public class DormitoryModel implements Serializable {
         this.costPerDay = (((numRooms * 150))/(365*24));
 
     }
-    public void setHoursToComplete(int decrementHours){
-        this.hoursToComplete -= decrementHours;
-        if(this.hoursToComplete < 0){
-            hoursToComplete = 0;
-        }
+
+    public void setCostPerDay(int costPerDay) {
+        this.costPerDay = costPerDay;
+    }
+
+    public void setHoursToComplete(int hoursToComplete) {
+        this.hoursToComplete = hoursToComplete;
     }
 
     public int getHoursToComplete() {
