@@ -221,7 +221,7 @@
             <div class="col-sm-3">
                 <div class="well well-sm">
                     <div class="text-center">
-                        <h1><%=college.getStudentRetentionRate()%>%
+                        <h1><%=college.getRetentionRate()%>%
                         </h1>
                         <h3>Retention Rate</h3>
                     </div>
