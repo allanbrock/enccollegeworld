@@ -58,7 +58,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        request.setAttribute("host", "http://" + request.getServerName() + ":" + request.getServerPort() + "/enccollegesim/" ); 
+        request.setAttribute("host", "http://" + request.getServerName() + ":" + request.getServerPort() + "/enccollegesim/" );
         RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");
         dispatcher.forward(request, response);
     }
