@@ -162,10 +162,13 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>College Name</th>
-                            <th>Students</th>
-                            <th>Cash on Hand</th>
+                            <th>College</th>
                             <th>Days Old</th>
+                            <th>Balance</th>
+                            <th>Admitted</th>
+                            <th>Withdrawn</th>
+                            <th>Retention</th>
+                            <th>Happiness</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -173,9 +176,12 @@
                        <%for(CollegeModel tmp : colleges){ %>
                         <tr>
                             <td><%=tmp.getRunId()%></td>
-                            <td><%=tmp.getNumberStudentsAdmitted()%></td>
-                            <td><%=tmp.getAvailableCash()%></td>
                             <td><%=tmp.getCurrentDay()%></td>
+                            <td>$<%=tmp.getAvailableCash()%></td>
+                            <td><%=tmp.getNumberStudentsAdmitted()%></td>
+                            <td><%=tmp.getNumberStudentsWithdrew()%></td>
+                            <td><%=tmp.getRetentionRate()%>%</td>
+                            <td><%=tmp.getStudentBodyHappiness()%>%</td>
 
                         </tr>
                         <%}%>
