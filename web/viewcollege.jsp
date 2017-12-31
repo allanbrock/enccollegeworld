@@ -124,6 +124,9 @@
             <!-- Happiness -->
             <div class="col-sm-3">
                 <div class="well well-sm">
+                    <%
+                        String barType = "progress-bar-success";
+                    %>
                     <% if(college.getStudentBodyHappiness() > 50) { %>
                     <h2>&#9786;
                         <small>Student Happiness</small>
@@ -133,7 +136,7 @@
                         <small>Student Happiness</small>
                     </h2>
                     <% } %>
-                    <% if (college.getStudentBodyHappiness() >= 80) { %>
+                    <% if (college.getStudentBodyHappiness() >= 60) { %>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar"
                              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
@@ -142,21 +145,21 @@
                         </div>
                     </div>
                     <%
-                    } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80) {
+                    } else if (college.getStudentBodyHappiness() >= 30) {
                     %>
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning" role="progressbar"
                              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                             style="width:<%=college.getStudentBodyHappiness()%>%">
+                             style="width:<%=Math.max(college.getStudentBodyHappiness(),20)%>%">
                             <%=college.getStudentBodyHappiness()%>%
                         </div>
                     </div>
-                    <% } else if (college.getStudentBodyHappiness() < 50) {
+                    <% } else {
                     %>
                     <div class="progress">
                         <div class="progress-bar progress-bar-danger" role="progressbar"
                              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                             style="width:<%=college.getStudentBodyHappiness()%>%">
+                             style="width:<%=Math.max(college.getStudentBodyHappiness(),20)%>%">
                             <%=college.getStudentBodyHappiness()%>%
                         </div>
                     </div>
@@ -165,42 +168,67 @@
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
                         College Reputation
+                        <%  if (college.getReputation() < 30) {
+                            barType = "progress-bar-danger";
+                        } else if (college.getReputation() < 60) {
+                            barType = "progress-bar-warning";
+                        } else {
+                            barType = "progress-bar-success";
+                        }
+                        %>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
+                            <div class="progress-bar <%=barType%>" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=college.getReputation()%>%">
+                                 style="width:<%=Math.max(college.getReputation(),20)%>%">
                                 <%=college.getReputation()%>%
                             </div>
                         </div>
-                        Student/faculty Ratio
+                        Student/Faculty Ratio
+                        <%  if (college.getStudentFacultyRatioRating() < 30) {
+                            barType = "progress-bar-danger";
+                        } else if (college.getStudentFacultyRatioRating() < 60) {
+                            barType = "progress-bar-warning";
+                        } else {
+                            barType = "progress-bar-success";
+                        }
+                        %>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
+                            <div class="progress-bar <%=barType%>" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=100 - college.getStudentFacultyRatio()%>%">
-                                <%=college.getStudentFacultyRatio()%>
+                                 style="width:<%=Math.max(college.getStudentFacultyRatioRating(),20)%>%">
+                                <%=college.getStudentFacultyRatioRating()%>%
                             </div>
                         </div>
                         Tuition
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=100 - college.getYearlyTuitionCost()/1000%>%">
-                                $<%=college.getYearlyTuitionCost()%>
-                            </div>
-                        </div>
-                        Students sick
-                        <% int counter = 0;
-                            for(int i = 0; i < students.length; i++){
-                                if(students[i].getNumberHoursLeftBeingSick() > 0) {
-                                    counter += 1;
-                                }
-                            }
+                        <%  if (college.getYearlyTuitionRating() < 30) {
+                                barType = "progress-bar-danger";
+                            } else if (college.getYearlyTuitionRating() < 60) {
+                                barType = "progress-bar-warning";
+                            }  else {
+                            barType = "progress-bar-success";
+                        }
                         %>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
+                            <div class="progress-bar <%=barType%>" role="progressbar"
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=counter%>%">
-                                <%=counter%>
+                                 style="width:<%=Math.max(college.getYearlyTuitionRating(),20)%>%">
+                                <%=college.getYearlyTuitionRating()%>%
+                            </div>
+                        </div>
+                        Student Health
+                        <%  if (college.getStudentHealthRating() < 30) {
+                            barType = "progress-bar-danger";
+                        } else if (college.getStudentHealthRating() < 60) {
+                            barType = "progress-bar-warning";
+                        }  else {
+                            barType = "progress-bar-success";
+                        }
+                        %>
+                        <div class="progress">
+                            <div class="progress-bar <%=barType%>" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:<%=Math.max(college.getStudentHealthRating(),20)%>%">
+                                <%=college.getStudentHealthRating()%>%
                             </div>
                         </div>
                     </div>
