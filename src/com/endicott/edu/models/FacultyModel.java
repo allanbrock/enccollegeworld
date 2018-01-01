@@ -14,6 +14,10 @@ public class FacultyModel implements Serializable {
     private int salary = 115000; //yearly salary
     private String officeLocation; //office building and number
     private String runId;
+
+    public FacultyModel() {
+    }
+
     public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String runId) {
         this.facultyName = facultyName;
         this.title = title;

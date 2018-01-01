@@ -10,7 +10,6 @@
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.FacultyModel" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
-<!-- %@ page import="com.endicott.edu.models.FacultyMembersModel" % -->
 <html>
 <head>
     <title>College World Faculty</title>
@@ -32,67 +31,7 @@
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
 
-</head>
-    <%--<style>--%>
-        <%--body {--%>
-            <%--min-height: 75rem; /* Can be removed; just added for demo purposes */--%>
-        <%--}--%>
 
-        <%--.navbar {--%>
-            <%--margin-bottom: 0;--%>
-        <%--}--%>
-
-        <%--.jumbotron {--%>
-            <%--padding-top: 6rem;--%>
-            <%--padding-bottom: 6rem;--%>
-            <%--margin-bottom: 0;--%>
-            <%--background-color: #fff;--%>
-        <%--}--%>
-
-        <%--.jumbotron p:last-child {--%>
-            <%--margin-bottom: 0;--%>
-        <%--}--%>
-
-        <%--.jumbotron-heading {--%>
-            <%--font-weight: 300;--%>
-        <%--}--%>
-
-        <%--.jumbotron .container {--%>
-            <%--max-width: 40rem;--%>
-        <%--}--%>
-
-        <%--.album {--%>
-            <%--min-height: 50rem; /* Can be removed; just added for demo purposes */--%>
-            <%--padding-top: 3rem;--%>
-            <%--padding-bottom: 3rem;--%>
-            <%--background-color: #f7f7f7;--%>
-        <%--}--%>
-
-        <%--.card {--%>
-            <%--float: left;--%>
-            <%--width: 33.333%;--%>
-            <%--padding: .75rem;--%>
-            <%--margin-bottom: 2rem;--%>
-            <%--border: 0;--%>
-        <%--}--%>
-
-        <%--.card > img {--%>
-            <%--margin-bottom: .75rem;--%>
-        <%--}--%>
-
-        <%--.card-text {--%>
-            <%--font-size: 85%;--%>
-        <%--}--%>
-
-        <%--footer {--%>
-            <%--padding-top: 3rem;--%>
-            <%--padding-bottom: 3rem;--%>
-        <%--}--%>
-
-        <%--footer p {--%>
-            <%--margin-bottom: .25rem;--%>
-        <%--}--%>
-    <%--</style>--%>
 </head>
 <body>
 <%
@@ -146,37 +85,6 @@
     </nav>
 
 
-
-    <%--<div class="container">--%>
-        <%--<div class="jumbotron">--%>
-            <%--<h2>Students</h2>--%>
-            <%--<p></p>--%>
-            <%--<h3><%=faculty.length%> faculty</h3>--%>
-        <%--</div>--%>
-        <%--<!-- Display a message if defined -->--%>
-        <%--<input type="hidden" name="runid" value="<%=college.getRunId()%>">--%>
-        <%--<input type="hidden" name="server" value="<%=server%>">--%>
-        <%--<p></p>--%>
-        <%--<div class="well well-sm">--%>
-            <%--<table class="table table-condensed">--%>
-                <%--<tbody>--%>
-                <%--<h4>Faculty</h4>--%>
-                <%--<%--%>
-                    <%--for (int i = 0; i < faculty.length; i++) {--%>
-                <%--%>--%>
-                <%--<tr>--%>
-                    <%--<li class="list-group-item"> <%=faculty[i].getIdNumber()%>--%>
-                    <%--</li>--%>
-                <%--</tr>--%>
-                <%--<% } %>--%>
-                <%--</tbody>--%>
-            <%--</table>--%>
-
-        <%--</div>--%>
-    <%--</div>--%>
-
-
-
     <div class="container">
         <div class="jumbotron">
             <div class="row">
@@ -214,10 +122,6 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="facultyName" name="facultyName"
-                               placeholder="Enter faculty name.">
-                    </div>
                     <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
                 </div>
                 <div class="form-group">
@@ -232,70 +136,6 @@
 
     </div>
 
-    <%--<section class="jumbotron text-center">--%>
-
-
-        <%--<div class="container">--%>
-            <%--<h1 class="jumbotron-heading">Faculty</h1>--%>
-            <%--<p class="lead text-muted">This is a list of all the faculty currently employed at <%=college.getRunId()%></p>--%>
-            <%--<p class="lead text-muted">There are currently <%=faculty.length%> faculty members employed</p>--%>
-            <%--<p>--%>
-                <%--<!-- TO-DO -->--%>
-                <%--<!-- Add functionality to add faculty button -->--%>
-                <%--<!-- Button trigger modal -->--%>
-                <%--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">--%>
-                    <%--Add Faculty Member--%>
-                <%--</button>--%>
-            <%--</p>--%>
-
-            <%--<!-- Modal -->--%>
-            <%--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">--%>
-                <%--<div class="modal-dialog" role="document">--%>
-                    <%--<div class="modal-content">--%>
-                        <%--<div class="modal-header">--%>
-                            <%--<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>--%>
-                            <%--<button type="button" class="close" data-dismiss="modal" aria-label="Close">--%>
-                                <%--<span aria-hidden="true">&times;</span>--%>
-                            <%--</button>--%>
-                        <%--</div>--%>
-                        <%--<div class="modal-body">--%>
-                            <%--...--%>
-                        <%--</div>--%>
-                        <%--<div class="modal-footer">--%>
-                            <%--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--%>
-                            <%--<button type="button" class="btn btn-primary">Save changes</button>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-    <%--</section>--%>
-
-
-        <!-- TO-DO -->
-        <!-- Populate 'album' indexes properly -->
-
-        <%--<div class="album text-muted">--%>
-            <%--<div class="container">--%>
-                <%--<div class="row">--%>
-                    <%--&lt;%&ndash;<div class="card">&ndash;%&gt;--%>
-                        <%--&lt;%&ndash;<img src="resources/images/student.png" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->&ndash;%&gt;--%>
-                        <%--&lt;%&ndash;<p class="card-text">A Name</p>&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
-                    <%--<%--%>
-                        <%--for(int i = 0; i < faculty.length; i++) {--%>
-                    <%--%>--%>
-                    <%--<div class="card">--%>
-                        <%--<img src="resources/images/student.png" alt="Card image cap"> <!-- Possible image of faculty member could go here? -->--%>
-                        <%--<p class="card-text"><%faculty[i].getName();%></p>--%>
-                    <%--</div>--%>
-                    <%--<%--%>
-                        <%--}--%>
-                    <%--%>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
 </form>
 
 </body>

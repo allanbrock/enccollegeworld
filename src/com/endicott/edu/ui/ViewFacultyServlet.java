@@ -13,6 +13,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     static private Logger logger = Logger.getLogger("ViewFacultyServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        logRequestParameters(request);
         if (request.getParameter("addFaculty") != null) {  // addFaculty is present if addFaculty button was pressed
             addFaculty(request, response);
         }
@@ -38,17 +39,15 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
-        String facultyName=request.getParameter("facultyName");
 
-        logger.info("Attempting to add faculty: " + facultyName + " to " + runId + " at server " + server);
-        if (runId == null || server == null || facultyName == null) {
+        logger.info("Attempting to add faculty to " + runId + " at server " + server);
+        if (runId == null || server == null ) {
             UiMessage message = new UiMessage("Can't add a faculty member because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding faculty.");
         }
         else {
-            FacultySimTalker.addFaculty(runId, server, facultyName);
-            logger.info("Added faculty: " + facultyName + " to " + runId + " at server " + server);
+            FacultySimTalker.addFaculty(runId, server);
         }
 
         request.setAttribute("server", server);

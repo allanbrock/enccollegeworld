@@ -38,15 +38,14 @@ public class FacultySimTalker {
         return faculty;
     }
 
-    public static boolean addFaculty(String runId, String server, String facultyName) {
+    public static boolean addFaculty(String runId, String server) {
         Client client = ClientBuilder.newClient(new ClientConfig());
-        WebTarget webTarget = client.target(server + "faculty/" + runId + "/" + facultyName);
+        WebTarget webTarget = client.target(server + "faculty/" + runId);
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
 
-        String json = "{  \"runID\" : \"" + runId + "\"," +
-                "    \"facultyName\" : \"" + facultyName + "\"" + "}";
+        String json = "{  \"runID\" : \"" + runId + "\""  + "}";
 
-        logger.info("Adding faculty: " + json);
+        logger.info("Adding faculty.");
 
         Response response = invocationBuilder.post(Entity.entity(json, MediaType.APPLICATION_JSON_TYPE));
         String responseAsString = response.readEntity(String.class);
