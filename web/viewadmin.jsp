@@ -12,7 +12,6 @@
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.endicott.edu.ui.ViewAdminServlet" %>
-<%@ page import="com.endicott.edu.datalayer.CollegeSimTalker" %>
 <%@ page import="java.util.List" %>
 <html>
 <head>

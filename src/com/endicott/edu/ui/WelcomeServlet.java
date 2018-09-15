@@ -1,10 +1,7 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.datalayer.CollegeSimTalker;
-import com.endicott.edu.datalayer.SimTalker;
-import com.endicott.edu.datalayer.*;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.DormitoryModel;
+
+import com.endicott.edu.simulators.CollegeManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -28,7 +25,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Maybe the user wants to create the college...
         if (buttonValue != null && buttonValue.equals("Create College")) {
-            if (!CollegeSimTalker.createCollege(server, runId)) {
+            if (CollegeManager.establishCollege(runId) == null) {
                 UiMessage msg = new UiMessage();
                 msg.setMessage("Unable to create the college.  See glassfish server log for details.");
                 request.setAttribute("message", msg);
@@ -42,7 +39,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
 
         if (request.getAttribute("college") == null) {
             UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");
@@ -72,9 +69,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         String buttonValue = request.getParameter("button");
 
         if (buttonValue != null && buttonValue.equals("Delete College")) {
-
-            CollegeSimTalker.deleteCollege(server, runId);
-
+            CollegeManager.sellCollege(runId);
             UiMessage msg = new UiMessage("College deleted");
             request.setAttribute("message", msg);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");

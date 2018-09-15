@@ -1,7 +1,8 @@
 package com.endicott.edu.ui;
 
-import com.endicott.edu.datalayer.CollegeSimTalker;
-import com.endicott.edu.datalayer.FacultySimTalker;
+
+import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.FacultyManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -20,38 +21,38 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String collegeId=request.getParameter("collegeId");
         String server=request.getParameter("server");
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeSimTalker.nextDayAtCollege(server, runId);
+            CollegeManager.nextDay(collegeId);
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request, response);
     }
 
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid"); //college ID
+        String collegeId=request.getParameter("collegeId"); //college ID
         String server=request.getParameter("server");
 
-        logger.info("Attempting to add faculty to " + runId + " at server " + server);
-        if (runId == null || server == null ) {
+        logger.info("Attempting to add faculty to " + collegeId + " at server " + server);
+        if (collegeId == null || server == null ) {
             UiMessage message = new UiMessage("Can't add a faculty member because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding faculty.");
         }
         else {
-            FacultySimTalker.addFaculty(runId, server);
+            FacultyManager.addFaculty(collegeId);
         }
 
         request.setAttribute("server", server);
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request,response);

@@ -1,8 +1,8 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.datalayer.DormSimTalker;
-import com.endicott.edu.datalayer.CollegeSimTalker;
-import com.endicott.edu.datalayer.SimTalker;
+
+import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.DormManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -59,21 +59,21 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         }
         else {
             // Need to do the work here.
-            DormSimTalker.sellDorm(server, runId, dormName);
+            DormManager.sellDorm(runId, dormName);
             logger.info("Returned from attempt to delete dorm: " + dormName + " to " + runId + " at server " + server);
         }
 
 
         //load the request with attributes for the dorm
         request.setAttribute("server", server);
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -82,12 +82,12 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeSimTalker.nextDayAtCollege(server, runId);
+            CollegeManager.nextDay(runId);
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
@@ -110,20 +110,20 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding a dorm.");
         }
         else{
-            DormSimTalker.addDorm(server, runId, dormName, dormType);
+            DormManager.addDorm(runId, dormName, dormType);
             logger.info("Returned from attempt to add dorm: " + dormName + " to " + runId + " at server " + server);
         }
 
         //load the request with attributes for the dorm
         request.setAttribute("server", server);
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        CollegeSimTalker.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
     }
 
     private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
