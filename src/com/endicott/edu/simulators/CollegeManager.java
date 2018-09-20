@@ -42,6 +42,9 @@ public class CollegeManager {
         college.setAvailableCash(STARTUP_FUNDING);
         collegeDao.saveCollege(college);
 
+        // Each functional area/simulator in the college gets called to
+        // take care of its start-the-college needs.
+        // The order of this matters (example: a dorm is established, before students enter).
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         DormManager.establishCollege(collegeId, college);
@@ -77,6 +80,8 @@ public class CollegeManager {
 
     /**
      * Advance the clock one day.  Simulate all changes occurring during that day.
+     * Time at the college is counted in hours.
+     * All calculations are done in terms of hours.
      *
      * @param collegeId college name
      */
@@ -85,12 +90,15 @@ public class CollegeManager {
 
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + 24);
-        collegeDao.saveCollege(college);
+        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing one day.
+        collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
+        // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
 
         // Tell all the simulators about the time change.
+        // Each one takes care of what happened since they were
+        // last called.  They are given the current time.
 
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive);
@@ -109,6 +117,8 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
 
+        // After all the simulators are run, there is a final
+        // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
 
         return college;

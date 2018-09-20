@@ -27,14 +27,17 @@ public class DormManager {
      * @param hoursAlive number of hours college has been alive
      */
     public void handleTimeChange(String runId, int hoursAlive) {
+        // Read in all the dorms
         List<DormitoryModel> dorms = dao.getDorms(runId);
 
+        // Go through the dorms making changes based on elasped time.
         for (DormitoryModel dorm : dorms) {
             billRunningCostOfDorm(runId, hoursAlive, dorm);
             workOnDorm(dorm, 24, runId);
             dorm.setHourLastUpdated(hoursAlive);
         }
 
+        // Really important the we save the changes to disk.
         dao.saveAllDorms(runId, dorms);
     }
 
@@ -46,7 +49,7 @@ public class DormManager {
      * @param runId
      */
     public void workOnDorm(DormitoryModel dorm, int hoursWorkingOnDorm, String runId){
-        if (dorm.getHourLastUpdated() > 0) {
+        if (dorm.getHourLastUpdated() > 0) {  // Not sure what this if is about.
             int left = dorm.getHoursToComplete() - hoursWorkingOnDorm;
             left = Math.max(0, left);
             dorm.setHoursToComplete(left);
@@ -152,8 +155,13 @@ public class DormManager {
      * @param dorm the dorm that's causing the cost
      */
     private void billRunningCostOfDorm(String collegeId, int hoursAlive, DormitoryModel dorm) {
+        // A dorm stores the last time it was updated.
+        // Figure out how many hours have past since last updated.
+        // Multiple by cost per hour.
         int newCharge = (hoursAlive - dorm.getHourLastUpdated()) * dorm.getMaintenanceCostPerDay();
         Accountant.payBill(collegeId, "Maintenance of dorm " + dorm.getName(), (int) (newCharge));
+
+        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
     }
 
     /**
@@ -343,6 +351,9 @@ public class DormManager {
     public void surpriseEventDuringConstruction(String collegeId, int hoursWorkingOnDorm) {
         String dormName = "";
         double chance = Math.random();
+
+        // There can be surprise donations to help pay for dorm costs.
+        // TODO: this change calculation is questionable. Seems like should be hours/24.
         if (chance < 0.25 * 24f/hoursWorkingOnDorm) {
             //25% chance of gaining $1000 dollars every 24 hours working on dorm.
             Accountant.receiveIncome(collegeId, "Donation received for building " + dormName, 1000);
