@@ -31,12 +31,6 @@
   if (college == null) {
       college = new CollegeModel();
   }
-  String hostOfSim = (String) request.getAttribute("host");
-  if (hostOfSim == null) {
-    hostOfSim = "http://localhost:8080/enccollegesim/";
-  } else {
-    hostOfSim = hostOfSim;
-  }
 %>
 <p></p>
 <p></p>
@@ -63,12 +57,6 @@
     <strong>Info</strong> <%=msg.getMessage()%>
   </div>
   <% } %>
-
-
-  <div class="form-group">
-    <label for="server">Server:</label>
-    <input type="text" class="form-control" id="server" name="server" value="<%=hostOfSim%>">
-  </div>
 
 </form>
 </div>

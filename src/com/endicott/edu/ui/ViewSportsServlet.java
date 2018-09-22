@@ -22,8 +22,6 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId=request.getParameter("runid"); //college ID
-        String server=request.getParameter("server");
-        request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(collegeId);
@@ -31,7 +29,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request, response);
@@ -39,22 +37,18 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
     private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId=request.getParameter("runid"); //college ID
-        String server=request.getParameter("server");
         String sportName=request.getParameter("sportName");
 
-        logger.info("Attempting to add sport: " + sportName + " to " + collegeId + " at server " + server);
-        if (collegeId == null || server == null || sportName == null) {
+        if (collegeId == null || sportName == null) {
             UiMessage message = new UiMessage("Can't add a team because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding sport.");
         }
         else {
             SportManager.addNewTeam(sportName,collegeId);
-            logger.info("Added sport: " + sportName + " to " + collegeId + " at server " + server);
         }
 
-        request.setAttribute("server", server);
-        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request,response);
@@ -62,9 +56,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = request.getParameter("runid"); //college ID
-        String server = request.getParameter("server");
         String name = request.getParameter("sellSportName");
-        request.setAttribute("server", server);
 
         String buttonValue = request.getParameter("sellSportBtn");
 
@@ -74,8 +66,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
             logger.info("Sell sport button was pressed: " + name + " -----------------------");
         }
 
-        request.setAttribute("server", server);
-        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request,response);

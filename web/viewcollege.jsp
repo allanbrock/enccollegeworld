@@ -31,7 +31,6 @@
 </head>
 <body>
 <%
-    String server = (String) request.getAttribute("server");
     UiMessage msg = (UiMessage) request.getAttribute("message");
     if (msg == null) {
         msg = new UiMessage();
@@ -76,15 +75,15 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a
-                            href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%>
+                            href="viewCollege?runid=<%=college.getRunId()%>"><%=college.getRunId()%>
                     </a></li>
-                    <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
-                    <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
-                    <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
-                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>&server=<%=server%>">Faculty</a></li>
+                    <li><a href="viewStudent?runid=<%=college.getRunId()%>">Students</a></li>
+                    <li><a href="viewDorm?runid=<%=college.getRunId()%>">Dorms</a></li>
+                    <li><a href="viewSports?runid=<%=college.getRunId()%>">Sports</a></li>
+                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
+                    <li><a href="viewAdmin?runid=<%=college.getRunId()%>">Admin</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
@@ -276,9 +275,6 @@
 
         <!-- Hidden Parameters That Will Be Passed in Request! -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
-        <input type="hidden" name="server" value="<%=server%>">
-
-
 
         <!-- Newsfeed -->
         <p></p>
@@ -407,12 +403,6 @@
 
         <!-- Server -->
         <div class="row">
-            <div class="col-sm-6">
-                <div class="well well-sm">
-                    Server: <%=server%>
-                </div>
-            </div>
-
             <div class="col-sm-6">
                 <div class="well well-sm">
                     <strong>Info</strong> <%=msg.getMessage()%>

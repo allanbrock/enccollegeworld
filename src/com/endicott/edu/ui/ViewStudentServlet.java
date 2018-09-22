@@ -12,8 +12,6 @@ public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId=request.getParameter("runid");
-        String server=request.getParameter("server");
-        request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(runId);
@@ -21,7 +19,7 @@ public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(server, runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewstudent.jsp");
         dispatcher.forward(request, response);

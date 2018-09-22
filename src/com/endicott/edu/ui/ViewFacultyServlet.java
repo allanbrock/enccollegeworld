@@ -22,8 +22,6 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId=request.getParameter("runid");
-        String server=request.getParameter("server");
-        request.setAttribute("server", server);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(collegeId);
@@ -31,7 +29,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request, response);
@@ -39,10 +37,8 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId=request.getParameter("runid"); //college ID
-        String server=request.getParameter("server");
 
-        logger.info("Attempting to add faculty to " + collegeId + " at server " + server);
-        if (collegeId == null || server == null ) {
+       if (collegeId == null) {
             UiMessage message = new UiMessage("Can't add a faculty member because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding faculty.");
@@ -51,8 +47,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             FacultyManager.addFaculty(collegeId);
         }
 
-        request.setAttribute("server", server);
-        InterfaceUtils.openCollegeAndStoreInRequest(server, collegeId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request,response);

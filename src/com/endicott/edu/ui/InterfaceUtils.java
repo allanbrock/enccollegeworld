@@ -5,12 +5,13 @@ import com.endicott.edu.models.*;
 import com.endicott.edu.simulators.SportManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.logging.Logger;
 
 public class InterfaceUtils {
     private  static Logger logger = Logger.getLogger("CollegeSimTalker");
 
-    public static void openCollegeAndStoreInRequest(String server, String collegeId, HttpServletRequest request) {
+    public static void openCollegeAndStoreInRequest(String collegeId, HttpServletRequest request) {
         CollegeModel college;
         UiMessage msg = new UiMessage();
         CollegeDao collegeDao = new CollegeDao();
@@ -46,4 +47,9 @@ public class InterfaceUtils {
         request.setAttribute("floods",flood);
     }
 
+    public static void setSessionData(String collegeId, HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("runid",collegeId);
+    }
 }
