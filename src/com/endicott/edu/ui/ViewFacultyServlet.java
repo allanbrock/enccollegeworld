@@ -21,7 +21,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("collegeId");
+        String collegeId=request.getParameter("runid");
         String server=request.getParameter("server");
         request.setAttribute("server", server);
 
@@ -38,7 +38,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("collegeId"); //college ID
+        String collegeId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
 
         logger.info("Attempting to add faculty to " + collegeId + " at server " + server);

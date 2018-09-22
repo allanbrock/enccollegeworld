@@ -1,6 +1,5 @@
 package com.endicott.edu.ui;
 
-
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.SportManager;
 
@@ -22,7 +21,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("collegeId"); //college ID
+        String collegeId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
         request.setAttribute("server", server);
 
@@ -39,7 +38,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("collegeId"); //college ID
+        String collegeId=request.getParameter("runid"); //college ID
         String server=request.getParameter("server");
         String sportName=request.getParameter("sportName");
 
@@ -62,7 +61,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId = request.getParameter("collegeId"); //college ID
+        String collegeId = request.getParameter("runid"); //college ID
         String server = request.getParameter("server");
         String name = request.getParameter("sellSportName");
         request.setAttribute("server", server);
