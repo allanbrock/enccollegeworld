@@ -36,7 +36,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         }
 
         // Attempt to fetch the college and load into
-        // request attributes to pass to the jsp page.
+        // request attributes to pass to jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
         InterfaceUtils.setCollegeIdInSession(runId, request);
 
