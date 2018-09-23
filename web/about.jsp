@@ -24,8 +24,6 @@
 <%
     String collegeId = (String) request.getSession().getAttribute("runid");
 %>
-
-
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -38,16 +36,15 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="viewCollege?runid=<%=collegeId%>"><%=collegeId%>
-                    </a></li>
-                    <li><a href="viewStudent?runid=<%=collegeId%>">Students</a></li>
-                    <li><a href="viewDorm?runid=<%=collegeId%>">Dorms</a></li>
-                    <li><a href="viewSports?runid=<%=collegeId%>">Sports</a></li>
-                    <li><a href="viewFaculty?runid=<%=collegeId%>">Faculty</a></li>
+                    <li><a href="viewCollege"><%=collegeId%></a></li>
+                    <li><a href="viewStudent">Students</a></li>
+                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewSports">Sports</a></li>
+                    <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="viewAdmin?runid=<%=collegeId%>">Admin</a></li>
-                    <li class="active"><a href="about.jsp?runid=<%=collegeId%>">About</a></li>
+                    <li><a href="viewAdmin">Admin</a></li>
+                    <li class="active"><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
