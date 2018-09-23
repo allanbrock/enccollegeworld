@@ -14,7 +14,7 @@ public class CollegeDao {
         return DaoUtils.getFilePathPrefix(collegeId) +  "college.dat";
     }
 
-    public CollegeModel getCollege(String collegeId) {
+    public static CollegeModel getCollege(String collegeId) {
         CollegeModel college = null;
         try {
             college = new CollegeModel();
@@ -23,19 +23,24 @@ public class CollegeDao {
             File file = new File(getFilePath(collegeId));
 
             if (!file.exists()) {
-                throw new WebApplicationException(Response.Status.NOT_FOUND);
+                return null;
             }
-            else{
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                college = (CollegeModel) ois.readObject();
-                ois.close();
-            }
+
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            college = (CollegeModel) ois.readObject();
+            ois.close();
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         return college;
+    }
+
+    public static boolean doesCollegeExist(String collegeId) {
+        CollegeModel collegeModel = getCollege(collegeId);
+        return collegeModel != null;
     }
 
     public static void deleteCollege(String collegeId) {

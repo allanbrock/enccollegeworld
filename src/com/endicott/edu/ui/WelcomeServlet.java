@@ -1,6 +1,7 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
+import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.simulators.CollegeManager;
 
 import javax.servlet.RequestDispatcher;
@@ -35,18 +36,19 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
             logger.info("Open College button was pressed: " + buttonValue);
         }
 
-        // Attempt to fetch the college and load into
-        // request attributes to pass to jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-        InterfaceUtils.setCollegeIdInSession(collegeId, request);
-
-        if (request.getAttribute("college") == null) {
-            UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");
+        // Maybe the college doesn't exist.
+        if (!CollegeDao.doesCollegeExist(collegeId)) {
+            UiMessage msg = new UiMessage("Can't open college " + collegeId);
             request.setAttribute("message", msg);
             RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
             dispatcher.forward(request, response);
             return;
         }
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to jsp page.
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+        InterfaceUtils.setCollegeIdInSession(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
