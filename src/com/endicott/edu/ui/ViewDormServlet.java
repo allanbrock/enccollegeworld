@@ -44,7 +44,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
 
         logger.info("In ViewDormServlet.sellDorm()");
         logRequestParameters(request);
@@ -72,7 +72,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(runId);
@@ -87,7 +87,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void addDorm(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String dormName=request.getParameter("dormName");
         String dormType=request.getParameter("dormType");
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(runId);

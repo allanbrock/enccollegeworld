@@ -21,7 +21,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid");
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(collegeId);
@@ -36,7 +36,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid"); //college ID
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
        if (collegeId == null) {
             UiMessage message = new UiMessage("Can't add a faculty member because missing information");

@@ -47,9 +47,15 @@ public class InterfaceUtils {
         request.setAttribute("floods",flood);
     }
 
-    public static void setSessionData(String collegeId, HttpServletRequest request)
+    public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         session.setAttribute("runid",collegeId);
+    }
+
+    public static String getCollegeIdFromSession(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        return (String) session.getAttribute("runid");
     }
 }

@@ -21,7 +21,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid"); //college ID
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.nextDay(collegeId);
@@ -36,7 +36,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid"); //college ID
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String sportName=request.getParameter("sportName");
 
         if (collegeId == null || sportName == null) {
@@ -55,7 +55,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId = request.getParameter("runid"); //college ID
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String name = request.getParameter("sellSportName");
 
         String buttonValue = request.getParameter("sellSportBtn");

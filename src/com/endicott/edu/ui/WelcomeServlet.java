@@ -32,12 +32,13 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
                 return;
             }
         } else {
-            logger.info("Open College button was pressed: " + buttonValue + " -----------------------");
+            logger.info("Open College button was pressed: " + buttonValue);
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        InterfaceUtils.setCollegeIdInSession(runId, request);
 
         if (request.getAttribute("college") == null) {
             UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");
@@ -50,7 +51,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
 
-        }
+    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setAttribute("host", "http://" + request.getServerName() + ":" + request.getServerPort() + "/enccollegesim/" );
