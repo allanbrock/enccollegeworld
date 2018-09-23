@@ -84,6 +84,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="viewAdmin?runid=<%=college.getRunId()%>">Admin</a></li>
+                    <li><a href="about.jsp?runid=<%=college.getRunId()%>">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
