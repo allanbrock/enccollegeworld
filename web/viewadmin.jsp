@@ -133,15 +133,15 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="viewCollege?runid=<%=college.getRunId()%>&server=<%=server%>"><%=college.getRunId()%></a></li>
-                    <li><a href="viewStudent?runid=<%=college.getRunId()%>&server=<%=server%>">Students</a></li>
-                    <li><a href="viewDorm?runid=<%=college.getRunId()%>&server=<%=server%>">Dorms</a></li>
-                    <li><a href="viewSports?runid=<%=college.getRunId()%>&server=<%=server%>">Sports</a></li>
-                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>&server=<%=server%>">Faculty</a></li>
+                    <li><a href="viewCollege"><%=college.getRunId()%></a></li>
+                    <li><a href="viewStudent">Students</a></li>
+                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewSports">Sports</a></li>
+                    <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="viewAdmin?runid=<%=college.getRunId()%>&server=<%=server%>">Admin</a></li>
-                    <li><a href="about.jsp?runid=<%=college.getRunId()%>">About</a></li>
+                    <li class="active"><a href="viewAdmin">Admin</a></li>
+                    <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>

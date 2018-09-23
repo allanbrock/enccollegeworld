@@ -70,16 +70,15 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="viewCollege?runid=<%=college.getRunId()%>"><%=college.getRunId()%>
-                    </a></li>
-                    <li class="active"><a href="viewStudent?runid=<%=college.getRunId()%>">Students</a></li>
-                    <li><a href="viewDorm?runid=<%=college.getRunId()%>">Dorms</a></li>
-                    <li><a href="viewSports?runid=<%=college.getRunId()%>">Sports</a></li>
-                    <li><a href="viewFaculty?runid=<%=college.getRunId()%>">Faculty</a></li>
+                    <li><a href="viewCollege"><%=college.getRunId()%></a></li>
+                    <li class="active"><a href="viewStudent">Students</a></li>
+                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewSports">Sports</a></li>
+                    <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="viewAdmin?runid=<%=college.getRunId()%>">Admin</a></li>
-                    <li><a href="about.jsp?runid=<%=college.getRunId()%>">About</a></li>
+                    <li><a href="viewAdmin">Admin</a></li>
+                    <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>

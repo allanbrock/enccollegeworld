@@ -6,6 +6,7 @@ import com.endicott.edu.simulators.SportManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 import java.util.logging.Logger;
 
 public class InterfaceUtils {
@@ -57,5 +58,13 @@ public class InterfaceUtils {
     {
         HttpSession session = request.getSession();
         return (String) session.getAttribute("runid");
+    }
+
+    public static void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
+        Enumeration<String> params = request.getParameterNames();
+        while(params.hasMoreElements()){
+            String paramName = params.nextElement();
+            logger.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
+        }
     }
 }

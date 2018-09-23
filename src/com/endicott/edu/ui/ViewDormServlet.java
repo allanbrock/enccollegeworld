@@ -44,31 +44,31 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
-        String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         logger.info("In ViewDormServlet.sellDorm()");
-        logRequestParameters(request);
+        InterfaceUtils.logRequestParameters(request);
 
-        if(runId == null || dormName == null){
+        if(collegeId == null || dormName == null){
             UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
             request.setAttribute("message", message);
             logger.info("Bad parameters for deleting a dorm");
         }
         else {
             // Need to do the work here.
-            DormManager.sellDorm(runId, dormName);
+            DormManager.sellDorm(collegeId, dormName);
          }
 
 
         //load the request with attributes for the dorm
-        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -92,7 +92,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         String dormType=request.getParameter("dormType");
 
         logger.info("In ViewDormServlet.doPost()");
-        logRequestParameters(request);
+        InterfaceUtils.logRequestParameters(request);
 
         if(runId == null || dormName ==null || dormType == null){
             UiMessage message = new UiMessage("Cannot add dorm, information is missing");
@@ -114,13 +114,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
     }
 
-    private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
-        Enumeration<String> params = request.getParameterNames();
-        while(params.hasMoreElements()){
-            String paramName = params.nextElement();
-            logger.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
-        }
-    }
+
 
 
 }

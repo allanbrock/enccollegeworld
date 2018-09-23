@@ -11,7 +11,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String collegeId=request.getParameter("runid");
 
         //struggled with two forms problem, this is a temporary solution
         //post recieves and sends to delete if the delete button was hit
@@ -23,7 +23,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Maybe the user wants to create the college...
         if (buttonValue != null && buttonValue.equals("Create College")) {
-            if (CollegeManager.establishCollege(runId) == null) {
+            if (CollegeManager.establishCollege(collegeId) == null) {
                 UiMessage msg = new UiMessage();
                 msg.setMessage("Unable to create the college.  See glassfish server log for details.");
                 request.setAttribute("message", msg);
@@ -37,8 +37,8 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
         // Attempt to fetch the college and load into
         // request attributes to pass to jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
-        InterfaceUtils.setCollegeIdInSession(runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+        InterfaceUtils.setCollegeIdInSession(collegeId, request);
 
         if (request.getAttribute("college") == null) {
             UiMessage msg = new UiMessage("Unable to open the college.  See log for details.");
@@ -61,12 +61,12 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
 
     protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId=request.getParameter("runid");
+        String collegeId=request.getParameter("runid");
 
         String buttonValue = request.getParameter("button");
 
         if (buttonValue != null && buttonValue.equals("Delete College")) {
-            CollegeManager.sellCollege(runId);
+            CollegeManager.sellCollege(collegeId);
             UiMessage msg = new UiMessage("College deleted");
             request.setAttribute("message", msg);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");

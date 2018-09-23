@@ -12,15 +12,15 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.nextDay(runId);
+            CollegeManager.nextDay(collegeId);
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewadmin.jsp");
         dispatcher.forward(request, response);
