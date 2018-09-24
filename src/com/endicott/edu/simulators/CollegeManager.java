@@ -26,17 +26,21 @@ public class CollegeManager {
         CollegeDao collegeDao = new CollegeDao();
         Logger logger = Logger.getLogger("CollegeManager");
         logger.info("Establishing the college");
+        CollegeModel college = null;
 
         // See if there already is a college for this run.
         // We don't expect this, but if so, just return it.
         try {
-            logger.info("College exists.");
-            return collegeDao.getCollege(collegeId);
+            college = collegeDao.getCollege(collegeId);
         } catch (Exception ignored) {
+            return null;
+        }
+        if (college != null) {
+            return college;
         }
 
         // Create the college.
-        CollegeModel college = new CollegeModel();
+        college = new CollegeModel();
         college.setRunId(collegeId);
         college.setHoursAlive(1);
         college.setAvailableCash(STARTUP_FUNDING);
