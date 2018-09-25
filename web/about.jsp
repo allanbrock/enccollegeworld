@@ -55,7 +55,7 @@
         <div class="container">
             <h2>Fall 2018</h2>
             <ul class="list-group">
-                <li class="list-group-item">Anonymous</li>
+                <li class="list-group-item">Tyler Ouellette</li>
             </ul>
 
             <h2>Fall 2017</h2>
