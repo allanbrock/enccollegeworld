@@ -55,7 +55,11 @@
         <div class="container">
             <h2>Fall 2018</h2>
             <ul class="list-group">
-                <li class="list-group-item">Anonymous</li>
+                <li class="list-group-item">Alex Groenewold</li>
+                <li class="list-group-item">Tyler Ouellette</li>
+                <li class="list-group-item">Marie Urmson</li>
+                <li class="list-group-item">Jeremy Barr</li>
+                <li class="list-group-item">CJ Mustone</li>
             </ul>
 
             <h2>Fall 2017</h2>
@@ -64,6 +68,7 @@
                 <li class="list-group-item">Nick Dos Santo</li>
                 <li class="list-group-item">Jeremy Doski</li>
                 <li class="list-group-item">Cam Bleck</li>
+                <li class="list-group-item">Stephen Hoadley</li>
                 <li class="list-group-item">Connor Frazier</li>
                 <li class="list-group-item">Allison Flood</li>
                 <li class="list-group-item">Karen Litwinczyk</li>
