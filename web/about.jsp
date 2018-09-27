@@ -55,6 +55,7 @@
         <div class="container">
             <h2>Fall 2018</h2>
             <ul class="list-group">
+                <li class="list-group-item">Alex Groenewold</li>
                 <li class="list-group-item">Tyler Ouellette</li>
                 <li class="list-group-item">Marie Urmson</li>
                 <li class="list-group-item">Jeremy Barr</li>
