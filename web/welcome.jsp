@@ -39,7 +39,7 @@
   <form action="welcome" method="post">
   <div class="jumbotron">
     <h1>Endicott College World</h1>
-    <p>A simulation of college life: students, dorms, sporting events, financials, unexpected events and more.</p>
+    <p>A simulation of college life: students, buildings, sporting events, financials, unexpected events and more.</p>
     <div class="form-group">
       <input type="text" name="runid" class="form-control" id="runid" placeholder="Enter college ID">
     </div>
