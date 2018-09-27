@@ -38,7 +38,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=collegeId%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewDorm">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
@@ -55,9 +55,11 @@
         <div class="container">
             <h2>Fall 2018</h2>
             <ul class="list-group">
+                <li class="list-group-item">Alex Groenewold</li>
                 <li class="list-group-item">Tyler Ouellette</li>
                 <li class="list-group-item">Marie Urmson</li>
                 <li class="list-group-item">Jeremy Barr</li>
+                <li class="list-group-item">CJ Mustone</li>
             </ul>
 
             <h2>Fall 2017</h2>

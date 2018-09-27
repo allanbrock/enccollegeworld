@@ -10,7 +10,7 @@
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<title>College World Dorm</title>
+<title>College World Building</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
@@ -73,7 +73,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li class="active"><a href="viewDorm">Dorms</a></li>
+                    <li class="active"><a href="viewDorm">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
@@ -117,9 +117,9 @@
             <table class="table table-condensed">
                 <thread>
                     <tr>
-                        <th>Dorm Name</th>
-                        <th>Total Beds</th>
-                        <th>Filled Beds</th>
+                        <th>Building Name</th>
+                        <th>Size</th>
+                        <th>Open Spots</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>
@@ -134,7 +134,7 @@
                     </td>
                     <td><%=dorms[i].getCapacity()%>
                     </td>
-                    <td><%=dorms[i].getNumStudents()%>
+                    <td><%=dorms[i].getCapacity() - dorms[i].getNumStudents()%>
                     </td>
                     <td><%=dorms[i].getCurDisaster()%>
                     </td>
@@ -155,11 +155,10 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <label for="dormType">Select a dorm type to add</label>
+                    <label for="dormType">Select a building size</label>
                     <select class="form-control" id="dormType" name="dormType">
                         <option>Small</option>
                         <option>Medium</option>
-                        <option>Large</option>
                     </select>
                     <div class="form-group">
                         <input type="text" class="form-control" id="dormName" name="dormName"
