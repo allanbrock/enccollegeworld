@@ -57,6 +57,7 @@
             <ul class="list-group">
                 <li class="list-group-item">Tyler Ouellette</li>
                 <li class="list-group-item">Marie Urmson</li>
+                <li class="list-group-item">Jeremy Barr</li>
             </ul>
 
             <h2>Fall 2017</h2>
