@@ -74,7 +74,6 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");
             dispatcher.forward(request, response);
             return;
-
         }
 
     }
