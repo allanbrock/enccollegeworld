@@ -58,6 +58,8 @@
                 <li class="list-group-item">Tyler Ouellette</li>
                 <li class="list-group-item">Marie Urmson</li>
                 <li class="list-group-item">Joe Moss</li>
+                <li class="list-group-item">Jeremy Barr</li>
+                <li class="list-group-item">CJ Mustone</li>
             </ul>
 
             <h2>Fall 2017</h2>
