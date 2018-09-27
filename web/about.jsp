@@ -65,6 +65,7 @@
                 <li class="list-group-item">Nick Dos Santo</li>
                 <li class="list-group-item">Jeremy Doski</li>
                 <li class="list-group-item">Cam Bleck</li>
+                <li class="list-group-item">Stephen Hoadley</li>
                 <li class="list-group-item">Connor Frazier</li>
                 <li class="list-group-item">Allison Flood</li>
                 <li class="list-group-item">Karen Litwinczyk</li>
