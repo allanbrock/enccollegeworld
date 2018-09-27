@@ -15,7 +15,7 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.nextDay(collegeId);
+            CollegeManager.iterateTime(collegeId, 0);
         }
 
         // Attempt to fetch the college and load into

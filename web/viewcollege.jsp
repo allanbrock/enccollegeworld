@@ -130,10 +130,14 @@
             <p>Day <%=college.getCurrentDay()%>
             </p>
             <% if (college.getAvailableCash() <= 0) { %>
-            <h2><p class="text-danger">Bankrupt</h2>
-            <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+                <h2><p class="text-danger">Bankrupt</h2>
+                <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" disabled name="nextWeekButton" value="Next Week">
+                <input type="submit" class="btn btn-info" disabled name="nextMonthButton" value="Next Month">
             <%} else {%>
-            <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" name="nextWeekButton" value="Next Week">
+                <input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month">
             <%}%>
             <br>
             <!-- Flood -->
