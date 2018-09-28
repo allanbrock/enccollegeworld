@@ -99,6 +99,7 @@
 
 
     <!-- Welcome to the college -->
+    <!-- This is an example modal for popups -->
     <%-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --%>
     <div class="modal fade" id="newCollegePopUp" role="dialog">
         <div class="modal-dialog">
@@ -110,7 +111,13 @@
                     <h4 class="modal-title">Day One at <%=college.getRunId()%>!</h4>
                 </div>
                 <div class="modal-body">
+                    <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
+                    <form action="viewCollege" method="post">
                     <p>Your college has been established.  Maybe hit the NextDay button to move things along.</p>
+                        <!-- the popup may or maynot have buttons. -->
+                        <!-- each button needs a name and value (both strings) -->
+                        <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
