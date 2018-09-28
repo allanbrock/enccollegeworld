@@ -83,7 +83,7 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewDorm">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
@@ -99,6 +99,7 @@
 
 
     <!-- Welcome to the college -->
+    <!-- This is an example modal for popups -->
     <%-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --%>
     <div class="modal fade" id="newCollegePopUp" role="dialog">
         <div class="modal-dialog">
@@ -110,7 +111,13 @@
                     <h4 class="modal-title">Day One at <%=college.getRunId()%>!</h4>
                 </div>
                 <div class="modal-body">
+                    <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
+                    <form action="viewCollege" method="post">
                     <p>Your college has been established.  Maybe hit the NextDay button to move things along.</p>
+                        <!-- the popup may or maynot have buttons. -->
+                        <!-- each button needs a name and value (both strings) -->
+                        <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -130,10 +137,14 @@
             <p>Day <%=college.getCurrentDay()%>
             </p>
             <% if (college.getAvailableCash() <= 0) { %>
-            <h2><p class="text-danger">Bankrupt</h2>
-            <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+                <h2><p class="text-danger">Bankrupt</h2>
+                <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" disabled name="nextWeekButton" value="Next Week">
+                <input type="submit" class="btn btn-info" disabled name="nextMonthButton" value="Next Month">
             <%} else {%>
-            <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                <input type="submit" class="btn btn-info" name="nextWeekButton" value="Next Week">
+                <input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month">
             <%}%>
             <br>
             <!-- Flood -->

@@ -12,7 +12,13 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.nextDay(collegeId);
+            CollegeManager.iterateTime(collegeId, 1);
+        }
+        if (request.getParameter("nextWeekButton") != null) {
+            CollegeManager.iterateTime(collegeId, 7);
+        }
+        if (request.getParameter("nextMonthButton") != null) {
+            CollegeManager.iterateTime(collegeId, 30);
         }
         if(request.getParameter("updateTuitionButton") != null){
             //call update tuition
@@ -33,7 +39,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.nextDay(collegeId);
+            CollegeManager.iterateTime(collegeId, 0);
         }
 
         // Attempt to fetch the college and load into

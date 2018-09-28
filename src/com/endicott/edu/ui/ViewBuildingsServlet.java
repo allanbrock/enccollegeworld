@@ -13,8 +13,8 @@ import java.util.Base64;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
-public class ViewDormServlet extends javax.servlet.http.HttpServlet {
-    private static Logger logger = Logger.getLogger("ViewDormServlet");
+public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
+    private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         if (request.getParameter("addDorm") != null) {  // addDorm is present if addDorm button was pressed
@@ -46,7 +46,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
     private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
-        logger.info("In ViewDormServlet.sellDorm()");
+        logger.info("In ViewBuildingsServlet.sellDorm()");
         InterfaceUtils.logRequestParameters(request);
 
         if(collegeId == null || dormName == null){
@@ -64,7 +64,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
 
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
@@ -75,14 +75,14 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.nextDay(runId);
+            CollegeManager.iterateTime(runId, 0);
         }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -91,7 +91,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         String dormName=request.getParameter("dormName");
         String dormType=request.getParameter("dormType");
 
-        logger.info("In ViewDormServlet.doPost()");
+        logger.info("In ViewBuildingsServlet.doPost()");
         InterfaceUtils.logRequestParameters(request);
 
         if(runId == null || dormName ==null || dormType == null){
@@ -107,7 +107,7 @@ public class ViewDormServlet extends javax.servlet.http.HttpServlet {
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewdorm.jsp");
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
         dispatcher.forward(request, response);
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.

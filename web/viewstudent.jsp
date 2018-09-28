@@ -72,7 +72,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li class="active"><a href="viewStudent">Students</a></li>
-                    <li><a href="viewDorm">Dorms</a></li>
+                    <li><a href="viewDorm">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>

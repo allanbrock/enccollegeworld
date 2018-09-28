@@ -98,8 +98,8 @@ public class SportsDao {
     private static void testNotes() {
         final String collegeId = "testsport001";
         SportsDao dao = new SportsDao();
-        SportModel m1 = new SportModel(18, 0, 20, 100, 0, 0, 10, 20, 200, 2, 0, "Soccer", collegeId,0 , 48, "unknown");
-        SportModel m2 = new SportModel(20, 0, 30, 500, 0, 0, 10, 30, 1500, 3, 0, "Hockey", collegeId, 0, 48, "unknown" );
+        SportModel m1 = new SportModel(18, 0, 20, 100, 0, 0, 10, 20, 200, 2, 0, "Soccer", collegeId,0 , 48, "unknown", 3);
+        SportModel m2 = new SportModel(20, 0, 30, 500, 0, 0, 10, 30, 1500, 3, 0, "Hockey", collegeId, 0, 48, "unknown", 3);
         ArrayList<SportModel> sports = new ArrayList<>();
         sports.add(m1);
         sports.add(m2);
@@ -110,7 +110,7 @@ public class SportsDao {
         assert(outMsgs.size() == 2);
         assert(outMsgs.get(1).getCapacity() == 100);
 
-        SportModel m3 = new SportModel(10,0, 20, 100, 0, 0, 10, 20, 200, 2, 0, "Test Team", collegeId,0, 48, "unknown"  );
+        SportModel m3 = new SportModel(10,0, 20, 100, 0, 0, 10, 20, 200, 2, 0, "Test Team", collegeId,0, 48, "unknown", 3);
         dao.saveNewSport(collegeId, m3);
         outMsgs = dao.getSports(collegeId);
         assert(outMsgs.size() == 3);
@@ -127,6 +127,7 @@ public class SportsDao {
         sportNames.add("Softball");
         sportNames.add("Women's Soccer");
         sportNames.add("Men's Soccer");
+        sportNames.add("Men's Football");
         return sportNames;
     }
 }

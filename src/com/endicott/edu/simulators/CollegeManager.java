@@ -83,18 +83,19 @@ public class CollegeManager {
     }
 
     /**
-     * Advance the clock one day.  Simulate all changes occurring during that day.
+     * Advance the clock x days.  Simulate all changes occurring during those days.
      * Time at the college is counted in hours.
      * All calculations are done in terms of hours.
      *
      * @param collegeId college name
+     * @param dayCount  number of days
      */
-    static public CollegeModel nextDay(String collegeId) {
+    static public CollegeModel iterateTime(String collegeId, int dayCount) {
         CollegeDao collegeDao = new CollegeDao();
 
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing one day.
+        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing one day.
         collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
