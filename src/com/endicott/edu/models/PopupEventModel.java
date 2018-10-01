@@ -21,7 +21,7 @@ public class PopupEventModel implements Serializable {
      * @param goodButtonText
      * @param badButtonText
      */
-    PopupEventModel(String type, String title, String description, String goodButtonText, String badButtonText){
+    public PopupEventModel(String type, String title, String description, String goodButtonText, String badButtonText){
         this.type = type;
         this.title = title;
         this.description = description;
