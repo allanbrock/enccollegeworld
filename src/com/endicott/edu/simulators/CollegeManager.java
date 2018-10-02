@@ -5,7 +5,9 @@ import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  * The CollegeManager is responsible for simulating all overall college functions,
@@ -95,7 +97,7 @@ public class CollegeManager {
 
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing one day.
+        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing x days.
         collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -127,6 +129,19 @@ public class CollegeManager {
         calculateStatisticsAndRatings(collegeId);
 
         return college;
+    }
+
+    static public Date getCollegeDate(String collegeId) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        int hoursAlive = college.getHoursAlive();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 9);
+        cal.set(Calendar.YEAR, 2018);
+        cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
+
+        return cal.getTime();
     }
 
     /**
