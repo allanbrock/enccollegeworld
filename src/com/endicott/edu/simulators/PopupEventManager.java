@@ -18,7 +18,7 @@ public class PopupEventManager {
         eventQueue.remove(0);
         return event;
     }
-    public void newEvent(String type, String title, String description, String goodButtonText, String badButtonText){
+    public void newPopupEvent(String type, String title, String description, String goodButtonText, String badButtonText){
         PopupEventModel newEvent = new PopupEventModel(type, title, description, goodButtonText, badButtonText);
         currentEvents.add(newEvent);
         eventQueue.add(newEvent);
