@@ -6,6 +6,8 @@
 <%@ page import="com.endicott.edu.models.StudentModel" %>
 <%@ page import="com.endicott.edu.models.NewsType" %>
 <%@ page import="com.endicott.edu.models.NewsLevel" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -89,6 +91,7 @@
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -102,7 +105,7 @@
     <!-- Welcome to the college -->
     <!-- This is an example modal for popups -->
     <%-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --%>
-    <div class="modal fade" id="newCollegePopUp" role="dialog">
+<%--    <div class="modal fade" id="newCollegePopUp" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -126,7 +129,7 @@
             </div>
 
         </div>
-    </div>
+    </div>--%>
 
 
 
