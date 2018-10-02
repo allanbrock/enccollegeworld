@@ -137,7 +137,7 @@ public class CollegeManager {
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.MONTH, 9);
+        cal.set(Calendar.MONTH, 8);
         cal.set(Calendar.YEAR, 2018);
         cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
 
