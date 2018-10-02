@@ -178,7 +178,11 @@
                        <%for(CollegeModel tmp : colleges){ %>
                         <tr>
                             <td><%=tmp.getRunId()%></td>
-                            <td><input type="submit" class="btn btn-info" name="<%=tmp.getRunId()%>" value="Delete"></td>
+                            <td><input type="submit" class="btn btn-info" name="<%=tmp.getRunId()%>" value="Delete"
+                            <% if (college.getRunId().compareTo(tmp.getRunId()) == 0) {%>
+                                    disabled
+                            <% }%>
+                            ></td>
                             <td><%=tmp.getCurrentDay()%></td>
                             <td>$<%=tmp.getAvailableCash()%></td>
                             <td><%=tmp.getNumberStudentsAdmitted()%></td>

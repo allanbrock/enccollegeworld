@@ -30,10 +30,12 @@ public class InterfaceUtils {
         SportModel[] sport = SportsDao.getSportsArray(collegeId);
         SportModel[] availableSports = SportManager.getAvailableSports(collegeId);
         StudentModel[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
-        CollegeModel[] colleges = CollegeDao.getColleges();
         FacultyModel[] faculty = FacultyDao.getFacultyArray(collegeId);
         FloodModel[] flood = FloodDao.getFloodsArray(collegeId);
         //FloodModel[] flood = new FloodModel[0];
+
+        // Load the name of all colleges.
+        CollegeModel[] colleges = CollegeDao.getColleges();
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
