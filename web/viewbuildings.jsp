@@ -120,6 +120,7 @@
                         <th>Building Name</th>
                         <th>Size</th>
                         <th>Open Spots</th>
+                        <th>Quality</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>
@@ -135,6 +136,8 @@
                     <td><%=dorms[i].getCapacity()%>
                     </td>
                     <td><%=dorms[i].getCapacity() - dorms[i].getNumStudents()%>
+                    </td>
+                    <td><%%>
                     </td>
                     <td><%=dorms[i].getCurDisaster()%>
                     </td>
