@@ -23,6 +23,9 @@ public class PopupEventManager {
         currentEvents.add(newEvent);
         eventQueue.add(newEvent);
     }
+    public int getNumberQueuedEvents(){
+        return eventQueue.size();
+    }
 
 
 }
