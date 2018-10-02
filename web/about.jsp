@@ -61,6 +61,7 @@
                 <li class="list-group-item">Jeremy Barr</li>
                 <li class="list-group-item">CJ Mustone</li>
                 <li class="list-group-item">Joseph Moss</li>
+                <li class="list-group-item">Stephen Hoadley</li>
             </ul>
 
             <h2>Fall 2017</h2>
