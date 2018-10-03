@@ -2,6 +2,7 @@ package com.endicott.edu.ui;
 
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
+import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.SportManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class InterfaceUtils {
         StudentModel[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
         FacultyModel[] faculty = FacultyDao.getFacultyArray(collegeId);
         FloodModel[] flood = FloodDao.getFloodsArray(collegeId);
+        PopupEventManager popupManager = new PopupEventManager();
         //FloodModel[] flood = new FloodModel[0];
 
         // Load the name of all colleges.
@@ -60,6 +62,16 @@ public class InterfaceUtils {
     {
         HttpSession session = request.getSession();
         return (String) session.getAttribute("runid");
+    }
+    public static void setPopupManagerInSession(PopupEventManager popupManager, HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("popupMan",popupManager);
+    }
+    public static PopupEventManager getPopupManagerFromSession(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        return (PopupEventManager) session.getAttribute("popupMan");
     }
 
     public static void logRequestParameters(javax.servlet.http.HttpServletRequest request) {

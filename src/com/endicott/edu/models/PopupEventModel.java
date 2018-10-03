@@ -12,6 +12,7 @@ public class PopupEventModel implements Serializable {
     private String description;
     private String goodButtonText;
     private String badButtonText;
+    private String acknowledgeButtonText;
 
     /**
      *
@@ -28,6 +29,12 @@ public class PopupEventModel implements Serializable {
         this.goodButtonText = goodButtonText;
         this.badButtonText = badButtonText;
         this.response = false;
+    }
+    public PopupEventModel(String type, String title, String description, String acknowledgeButtonText){
+        this.type = type;
+        this.title = title;
+        this.description = description;
+        this.acknowledgeButtonText = acknowledgeButtonText;
     }
 
 

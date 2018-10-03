@@ -8,6 +8,7 @@
 <%@ page import="com.endicott.edu.models.NewsLevel" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -35,6 +36,12 @@
         floods = new FloodModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
+    PopupEventManager popupManager = (PopupEventManager) request.getAttribute("popupMan");
+    if(popupManager == null){
+        popupManager = new PopupEventManager();
+        msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
+    }
+
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
