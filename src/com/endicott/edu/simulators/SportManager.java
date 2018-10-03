@@ -92,10 +92,11 @@ public class SportManager {
             result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Soccer", collegeId, 0, 48,"Male", 3);
             Accountant.payBill(collegeId, "Men's Soccer start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Men's Football")){
+        else if(sportName.equals("Football")){
             result  = new SportModel(33,0, 75, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Football", collegeId, 0, 48,"Male", 3);
             Accountant.payBill(collegeId, "Men's Soccer start up fee", result.getStartupCost());
-        } else {
+        }
+        else {
             logger.severe("Could not add sport: '" + sportName + "'");
         }
 

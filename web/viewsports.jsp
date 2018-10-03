@@ -136,6 +136,7 @@
                             <th>Losses</th>
                             <th>Games Played</th>
                             <th>In Season</th>
+                            <th>Division</th>
                         </tr>
                     </thread>
                     <%
@@ -170,6 +171,7 @@
                                if (sport[i].getIsActive() <= 0) isActive = "No"; %>
                             <%=isActive%>
                         </td>
+                        <td><%=sport[i].getDivision()%> </td>
                     </tr>
                     <% } %>
                 </tbody>
