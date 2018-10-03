@@ -25,6 +25,9 @@ public class PopupEventManager {
         currentEvents.add(newEvent);
 
     }
+    public PopupEventModel getNextEvent(){
+        return currentEvents.get(0);
+    }
     public int getNumberOfEvents(){
         return currentEvents.size();
     }
