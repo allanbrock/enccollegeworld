@@ -171,7 +171,7 @@
                                if (sport[i].getIsActive() <= 0) isActive = "No"; %>
                             <%=isActive%>
                         </td>
-                        <td><%=sport[i].getDivision()%> </td>
+                        <td><%=sport[i].getDivision()%> </td> 
                     </tr>
                     <% } %>
                 </tbody>
