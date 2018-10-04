@@ -139,6 +139,7 @@
                             <th>Losses</th>
                             <th>Games Played</th>
                             <th>In Season</th>
+                            <th>Division</th>
                         </tr>
                     </thread>
                     <%
@@ -173,6 +174,7 @@
                                if (sport[i].getIsActive() <= 0) isActive = "No"; %>
                             <%=isActive%>
                         </td>
+                        <td><%=sport[i].getDivision()%></td>
                     </tr>
                     <% } %>
                 </tbody>
@@ -188,7 +190,7 @@
                     <select class="form-control" id="sportName" name="sportName">
                         <% for(int i = 0; i < availableSports.length; i++) { %>
                         <tr>
-                            <option><%= availableSports[i].getName()%></option>
+                            <option>$50,000 - <%= availableSports[i].getName()%></option>
                         </tr>
                         <% } %>
                     </select>

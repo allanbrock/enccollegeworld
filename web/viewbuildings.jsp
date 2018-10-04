@@ -188,7 +188,7 @@
                     </td>
                     <td><%=buildings[i].getKindOfBuilding()%>
                     </td>
-                    <td><%=buildings[i].getSize()+ " " +buildings[i].getCapacity()%>
+                    <td><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
                     </td>
                     <td><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
                     </td>
