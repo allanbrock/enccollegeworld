@@ -5,6 +5,7 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="java.util.Base64" %>
 <%@ page import="com.endicott.edu.models.*" %>
@@ -58,6 +59,8 @@
         availableDorms = new DormitoryModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 %>
 
 
@@ -80,6 +83,7 @@
                     <li class="active"><a href="viewDorm">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="#">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="viewAdmin">Admin</a></li>

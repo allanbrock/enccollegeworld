@@ -5,6 +5,7 @@
   Time: 3:58 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
@@ -111,7 +112,8 @@
         colleges = new CollegeModel[0];
         msg.setMessage(msg.getMessage() + "No colleges found!");
     }
-
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 
 //    List<CollegeModel> colleges = CollegeSimTalker.getAllColleges(server,college.getRunId());
 
@@ -138,6 +140,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="#">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="viewAdmin">Admin</a></li>
