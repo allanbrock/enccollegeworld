@@ -81,7 +81,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li class="active"><a href="viewFaculty">Faculty</a></li>
-                    <li><a href="#">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
+                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="viewAdmin">Admin</a></li>
