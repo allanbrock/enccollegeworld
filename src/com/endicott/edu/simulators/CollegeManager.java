@@ -53,7 +53,7 @@ public class CollegeManager {
         // The order of this matters (example: a dorm is established, before students enter).
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
-        DormManager.establishCollege(collegeId, college);
+        BuildingManager.establishCollege(collegeId, college);
         FacultyManager.establishCollege(collegeId);
 
         StudentManager studentManager = new StudentManager();
@@ -74,7 +74,7 @@ public class CollegeManager {
      */
     static public void sellCollege(String collegeId) {
         CollegeDao.deleteCollege(collegeId);
-        DormitoryDao.deleteDorm(collegeId);
+        BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
         FloodDao.deleteFloods(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
@@ -110,8 +110,8 @@ public class CollegeManager {
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive);
 
-        DormManager dormManager = new DormManager();
-        dormManager.handleTimeChange(collegeId, hoursAlive);
+        BuildingManager buildingManager = new BuildingManager();
+        buildingManager.handleTimeChange(collegeId, hoursAlive);
 
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive);

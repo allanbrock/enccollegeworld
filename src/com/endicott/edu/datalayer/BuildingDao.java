@@ -1,7 +1,10 @@
 package com.endicott.edu.datalayer;
 
+import com.endicott.edu.models.AdministrativeBldgModel;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.DormModel;
+import com.endicott.edu.models.DiningHallModel;
+import com.endicott.edu.models.AcademicCenterModel;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -119,8 +122,8 @@ public class BuildingDao {
         final String collegeId = "testbuilding001";
         BuildingDao dao = new BuildingDao();
 
-        DormModel m1 = new DormModel("Small", 200, 95, 100, "Dorm" );
-        BuildingModel m2 = new BuildingModel(100, "Administrative Building");
+        DormModel m1 = new DormModel("Dormitory", 0, 20, "Dorm" , "Medium");
+        AdministrativeBldgModel m2 = new AdministrativeBldgModel("Admin", 20, "Administrative");
         ArrayList<BuildingModel> buildings = new ArrayList<>();
         buildings.add(m1);
         buildings.add(m2);
@@ -131,7 +134,8 @@ public class BuildingDao {
         assert(outMsgs.size() == 2);
         assert(outMsgs.get(1).getCapacity() == 100);
 
-        BuildingModel m3 = new BuildingModel("Health Center");
+        DiningHallModel m3 = new DiningHallModel( "Dining", 200, 100, "Dining", "Medium" );
+        AcademicCenterModel m4 = new AcademicCenterModel("Academic", 200, 100, "Academic", "Medium");
         dao.saveNewBuilding(collegeId, m3);
         outMsgs = dao.getBuildings(collegeId);
         assert(outMsgs.size() == 3);
@@ -139,6 +143,7 @@ public class BuildingDao {
         System.out.println("First building: a(n) " + m1.getSize() + " " + m1.getKindOfBuilding() + " with a capacity of "
                             + m1.getCapacity());
         System.out.println("Second building: a(n) " + m2.getKindOfBuilding() + " with a reputation of " + m2.getReputation());
-        System.out.println("Third building: a(n) " + m3.getKindOfBuilding());
+        System.out.println("Third building: a(n) " + m3.getSize() + " " + m3.getKindOfBuilding());
+        System.out.println("Fourth building: a(n) " + m4.getKindOfBuilding() + " with a capacity of " + m4.getCapacity());
     }
 }

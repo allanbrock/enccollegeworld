@@ -22,9 +22,10 @@ public class BuildingModel implements Serializable { //removing "abstract"?
     private String kindOfBuilding;
 
     //some classes use this constructor
-    public BuildingModel(int capacity, int hourLastUpdated, String name, int numStudents,
-                         String curDisaster, int reputation, String runId, int numRooms){
-        this.capacity=capacity;
+    public BuildingModel(int hourLastUpdated, String name, int numStudents,
+                         String curDisaster, int reputation, String runId, int numRooms,
+                         String kindOfBuilding, String size){
+        this.capacity=setCapacityBasedOnSize(size);
         this.hourLastUpdated=hourLastUpdated;
         this.name=name;
         this.numStudents=numStudents;
@@ -32,18 +33,22 @@ public class BuildingModel implements Serializable { //removing "abstract"?
         this.reputation=reputation;
         this.runId=runId;
         this.numRooms=numRooms;
+        this.kindOfBuilding = kindOfBuilding;
+        this.size = size;
     }
 
     //for DormModel, DiningHallModel and AcademicCenterModel
-    public BuildingModel(String size, int capacity, int numStudents, int reputation, String kindOfBuilding){
-    this.size = size;
-    this.capacity = capacity;
-    this.numStudents = numStudents;
-    this.reputation = reputation;
-    this.kindOfBuilding = kindOfBuilding;
+    public BuildingModel(String name, int numStudents, int reputation, String kindOfBuilding, String size){
+        this.name = name;
+        this.size = size;
+        this.capacity = setCapacityBasedOnSize(size);
+        this.numStudents = numStudents;
+        this.reputation = reputation;
+        this.kindOfBuilding = kindOfBuilding;
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
-    public BuildingModel(int reputation, String kindOfBuilding){
+    public BuildingModel(String name, int reputation, String kindOfBuilding){
+        this.name = name;
         this.reputation = reputation;
         this.kindOfBuilding = kindOfBuilding;
     }
@@ -52,7 +57,15 @@ public class BuildingModel implements Serializable { //removing "abstract"?
         this.kindOfBuilding = kindOfBuilding;
     }
 
-    public BuildingModel(){
+    public BuildingModel() {
+    }
+
+    private int setCapacityBasedOnSize(String size){
+        if(size.equals("Small")){return 50;}
+        else if(size.equals("Medium")){return 200;}
+        else if(size.equals("Large")){return 500;}
+        else if(size.equals("Extra Large")){return 1000;}
+        else{return 0;}
     }
 
     public int getBuildingType() {
