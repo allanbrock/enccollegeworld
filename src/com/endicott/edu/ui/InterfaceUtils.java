@@ -50,6 +50,7 @@ public class InterfaceUtils {
         request.setAttribute("students",students);
         request.setAttribute("faculty",faculty);
         request.setAttribute("floods",flood);
+        //request.setAttribute("popupMan", popupManager);
     }
 
     public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)

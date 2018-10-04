@@ -73,13 +73,13 @@
 </script>
 <% } %>
 
-<% if (popupManager.getNumberOfEvents() <= 1) { %>
+<!-- displays modal for events if there are any -->
+<% if (popupManager.getNumberOfEvents() >= 1) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
     });
 </script>
-
 
 </head>
 <% } %>
@@ -145,6 +145,31 @@
         </div>
     </div>
 
+    <div class="modal fade" id="eventPopUp" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
+                    <h4 class="modal-title">TEST EVENT!</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
+                        <!-- Commented out line 159 becuase of out of bounds exceptions
+                    <!--<p><popupManager.getNextEvent().getDescription()%></p>
+                    <!-- the popup may or maynot have buttons. -->
+                    <!-- each button needs a name and value (both strings) -->
+                    <input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
 
     <div class="container">
@@ -167,6 +192,10 @@
                 <input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month">
             <%}%>
             <br>
+            <br>
+            <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
+
             <!-- Flood -->
             <%
                 for(int i = 0; i < floods.length; i++ ){

@@ -124,7 +124,6 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
 
-        // POP UP SHIT NEEDS TO HAPPEN HERE **************************************************************
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.

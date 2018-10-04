@@ -64,4 +64,8 @@ public class PopupEventModel implements Serializable {
     public String getBadButtonText() {
         return badButtonText;
     }
+
+    public String getAcknowledgeButtonText() {
+        return acknowledgeButtonText;
+    }
 }
