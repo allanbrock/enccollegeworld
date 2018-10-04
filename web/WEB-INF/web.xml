@@ -62,4 +62,12 @@
         <servlet-name>viewAdminServlet</servlet-name>
         <url-pattern>/viewAdmin</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewBalanceServlet</servlet-name>
+        <servlet-class>com.endicott.edu.ui.ViewBalanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewBalanceServlet</servlet-name>
+        <url-pattern>/viewBalance</url-pattern>
+    </servlet-mapping>
 </web-app>

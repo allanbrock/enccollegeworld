@@ -5,8 +5,11 @@
   Time: 7:54 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -68,7 +71,8 @@
         students  = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
-
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 %>
 
 
@@ -92,8 +96,10 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li class="active"><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -171,7 +177,7 @@
                                if (sport[i].getIsActive() <= 0) isActive = "No"; %>
                             <%=isActive%>
                         </td>
-                        <td><%=sport[i].getDivision()%> </td>
+                        <td><%=sport[i].getDivision()%></td>
                     </tr>
                     <% } %>
                 </tbody>
@@ -187,7 +193,7 @@
                     <select class="form-control" id="sportName" name="sportName">
                         <% for(int i = 0; i < availableSports.length; i++) { %>
                         <tr>
-                            <option><%= availableSports[i].getName()%></option>
+                            <option>$50,000 - <%= availableSports[i].getName()%></option>
                         </tr>
                         <% } %>
                     </select>
