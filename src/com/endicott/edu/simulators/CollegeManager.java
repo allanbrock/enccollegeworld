@@ -5,7 +5,9 @@ import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  * The CollegeManager is responsible for simulating all overall college functions,
@@ -51,7 +53,7 @@ public class CollegeManager {
         // The order of this matters (example: a dorm is established, before students enter).
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
-        DormManager.establishCollege(collegeId, college);
+        BuildingManager.establishCollege(collegeId, college);
         FacultyManager.establishCollege(collegeId);
 
         StudentManager studentManager = new StudentManager();
@@ -72,7 +74,7 @@ public class CollegeManager {
      */
     static public void sellCollege(String collegeId) {
         CollegeDao.deleteCollege(collegeId);
-        DormitoryDao.deleteDorm(collegeId);
+        BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
         FloodDao.deleteFloods(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
@@ -95,7 +97,7 @@ public class CollegeManager {
 
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing one day.
+        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing x days.
         collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -108,8 +110,8 @@ public class CollegeManager {
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive);
 
-        DormManager dormManager = new DormManager();
-        dormManager.handleTimeChange(collegeId, hoursAlive);
+        BuildingManager buildingManager = new BuildingManager();
+        buildingManager.handleTimeChange(collegeId, hoursAlive);
 
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive);
@@ -122,11 +124,25 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
 
+
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
 
         return college;
+    }
+
+    static public Date getCollegeDate(String collegeId) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        int hoursAlive = college.getHoursAlive();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 8);
+        cal.set(Calendar.YEAR, 2018);
+        cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
+
+        return cal.getTime();
     }
 
     /**

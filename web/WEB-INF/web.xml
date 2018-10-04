@@ -23,12 +23,12 @@
         <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>viewDormServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewDormServlet</servlet-class>
+        <servlet-name>viewBuildingsServlet</servlet-name>
+        <servlet-class>com.endicott.edu.ui.ViewBuildingsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>viewDormServlet</servlet-name>
-        <url-pattern>/viewDorm</url-pattern>
+        <servlet-name>viewBuildingsServlet</servlet-name>
+        <url-pattern>/viewBuilding</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>viewStudentServlet</servlet-name>

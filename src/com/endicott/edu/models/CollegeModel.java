@@ -18,6 +18,7 @@ public class CollegeModel implements Serializable {
     private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
     private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
+    //public PopupEventModel;
 
     public int getStudentHealthRating() {
         return studentHealthRating;

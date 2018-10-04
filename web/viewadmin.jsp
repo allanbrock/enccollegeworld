@@ -119,7 +119,7 @@
 
 
 
-<form action="updateCollege" method="post">
+<form action="viewAdmin" method="post">
     <header>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -135,7 +135,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li><a href="viewDorm">Buildings</a></li>
+                    <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
@@ -164,6 +164,7 @@
                         <thead>
                         <tr>
                             <th>College</th>
+                            <th>College</th>
                             <th>Days Old</th>
                             <th>Balance</th>
                             <th>Admitted</th>
@@ -177,6 +178,11 @@
                        <%for(CollegeModel tmp : colleges){ %>
                         <tr>
                             <td><%=tmp.getRunId()%></td>
+                            <td><input type="submit" class="btn btn-info" name="<%=tmp.getRunId()%>" value="Delete"
+                            <% if (college.getRunId().compareTo(tmp.getRunId()) == 0) {%>
+                                    disabled
+                            <% }%>
+                            ></td>
                             <td><%=tmp.getCurrentDay()%></td>
                             <td>$<%=tmp.getAvailableCash()%></td>
                             <td><%=tmp.getNumberStudentsAdmitted()%></td>

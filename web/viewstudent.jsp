@@ -72,7 +72,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li class="active"><a href="viewStudent">Students</a></li>
-                    <li><a href="viewDorm">Buildings</a></li>
+                    <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                 </ul>
@@ -91,7 +91,7 @@
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/student.png">
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-5">
                     <h2><%=students.length%> Students</h2>
                     <%
                         int nSick = 0;
@@ -107,8 +107,20 @@
                     %>
                     <h3><%=nSick%> Students Sick</h3>
                 </div>
+                <div class="col-md-5">
+                        <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
+                        <div class="well well-lg">
+                            The more students that you have the more admission money you receive.
+                        </div>
+                        <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                        <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
             </div>
         </div>
+
+
+
+
         <h4>Student Body Happiness</h4>
         <% if (college.getStudentBodyHappiness() >= 80) { %>
         <div class="progress">

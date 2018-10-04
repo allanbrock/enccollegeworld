@@ -5,6 +5,7 @@ import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.FacultyModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,20 +50,24 @@ public class FacultyManager {
      */
    public static void establishCollege(String collegeId){
        for (int i=0; i<10; i++) {
-           addFaculty(collegeId);
+           addFaculty(collegeId, 100000);  // Default salary value for now
        }
    }
 
     /**
      * Add new faculty to the college.
      */
-    public static FacultyModel addFaculty(String collegeId) {
+    public static FacultyModel addFaculty(String collegeID, int salary) {
+        Boolean isFemale;
         FacultyModel member;
         FacultyDao fao = new FacultyDao();
-
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(false), "Dean", "Science", "LSB", collegeId);
-        member.setFacultyID(IdNumberGenDao.getID(collegeId));
-        fao.saveNewFaculty(collegeId, member);
+        double r = Math.random();
+        if(r < 0.5)
+            isFemale = true;
+        else
+            isFemale = false;
+        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), "Dean", "Science", "LSB", collegeID, salary);
+        fao.saveNewFaculty(collegeID, member);
         return member;
     }
 }
