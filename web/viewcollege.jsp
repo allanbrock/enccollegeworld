@@ -42,7 +42,7 @@
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-    popupManager.newPopupEvent("Test Event", "Test Event", "This event is a test of the popup system! Press close to dismiss for now", "Ok!");
+    popupManager.newPopupEvent("Test Event", "Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
