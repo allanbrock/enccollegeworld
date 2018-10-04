@@ -8,6 +8,9 @@
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="java.util.Base64" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.datalayer.BuildingDao" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>College World Building</title>
@@ -38,11 +41,12 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    DormitoryModel dorms[] = (DormitoryModel[]) request.getAttribute("dorms");
-    if (dorms == null) {
-        dorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for dorms missing.");
-    }
+//    BuildingModel buildings[] = (BuildingModel[]) request.getAttribute("buildings");
+//    if (buildings == null) {
+//        buildings = new BuildingModel[0];  // This is really bad
+//        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
+//    }
+    BuildingModel buildings[] = BuildingDao.getBuildingsArray(college.getRunId());
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
@@ -57,7 +61,7 @@
 %>
 
 
-<form action="viewDorm" method="post">
+<form action="viewBuilding" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -90,23 +94,67 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-md-2">
-                    <img class="img-responsive" src="resources/images/dorm.png">
+                    <img class="img-responsive" src="resources/images/bed.png">
                 </div>
-                <div class="col-md-10">
-                    <h2><%
+                <div class="col-md-2">
+                    <h4><%
                         int openBeds = 0;
                         int filledBeds = 0;
-                        for (DormitoryModel d : dorms){
+                        for (BuildingModel d : buildings){
                             if(d.getHoursToComplete() == 0){
-                                int numStudents = d.getNumStudents();
-                                int capacity = d.getCapacity();
-                                openBeds += capacity - numStudents;
-                                filledBeds += d.getNumStudents();
+                                if(d.getKindOfBuilding().equals("Dorm")) {
+                                    int numStudents = d.getNumStudents();
+                                    int capacity = d.getCapacity();
+                                    openBeds += capacity - numStudents;
+                                    filledBeds += d.getNumStudents();
+                                }
                             }
                         }
                     %>
-                        <%=openBeds%> Open Beds</h2>
-                        <%=filledBeds%> Filled Beds</h2>
+                        <%=openBeds%> Open Beds</h4>
+                        <%=filledBeds%> Filled Beds</h4>
+                </div>
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/plate.png">
+                </div>
+                <div class="col-md-2">
+                    <h4><%
+                        int availablePlates = 0;
+                        int takenPlates = 0;
+                        for (BuildingModel d : buildings){
+                            if(d.getHoursToComplete() == 0){
+                                if(d.getKindOfBuilding().equals("Dining")) {
+                                    int numStudents = d.getNumStudents();
+                                    int capacity = d.getCapacity();
+                                    availablePlates += capacity - numStudents;
+                                    takenPlates += d.getNumStudents();
+                                }
+                            }
+                        }
+                    %>
+                        <%=availablePlates%> Available Plates</h4>
+                        <%=takenPlates%> Taken Plates</h4>
+                </div>
+                <div class="col-md-2">
+                    <img class="img-responsive" src="resources/images/desk.png">
+                </div>
+                <div class="col-md-2">
+                    <h4><%
+                        int openDesks = 0;
+                        int filledDesks = 0;
+                        for (BuildingModel d : buildings){
+                            if(d.getHoursToComplete() == 0){
+                                if(d.getKindOfBuilding().equals("Academic")) {
+                                    int numStudents = d.getNumStudents();
+                                    int capacity = d.getCapacity();
+                                    openDesks += capacity - numStudents;
+                                    filledDesks += d.getNumStudents();
+                                }
+                            }
+                        }
+                    %>
+                        <%=openDesks%> Open Desks</h4>
+                        <%=filledDesks%> Filled Desks</h2>
                 </div>
             </div>
         </div>
@@ -118,8 +166,10 @@
                 <thread>
                     <tr>
                         <th>Building Name</th>
+                        <th>Building Type</th>
                         <th>Size</th>
                         <th>Open Spots</th>
+                        <th>Quality</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
                         <th></th>
@@ -127,22 +177,22 @@
                 </thread>
                 <tbody>
                 <%
-                    for (int i = 0; i < dorms.length; i++) {
+                    for (int i = 0; i < buildings.length; i++) {
                 %>
                 <tr>
-                    <td><%=dorms[i].getName()%>
+                    <td><%=buildings[i].getName()%>
                     </td>
-                    <td><%=dorms[i].getCapacity()%>
+                    <td><%=buildings[i].getKindOfBuilding()%>
                     </td>
-                    <td><%=dorms[i].getCapacity() - dorms[i].getNumStudents()%>
+                    <td><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
                     </td>
-                    <td><%=dorms[i].getCurDisaster()%>
+                    <td><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
                     </td>
-                    <td><%=dorms[i].checkIfBeingBuilt()%>
+                    <td><%=buildings[i].getReputation()%>
                     </td>
-                    <td>
-                        <!-- the name of the button is encoding version of dorm name, value of button is "Sell" -->
-                        <input type="submit" class="btn btn-info" name=<%=Base64.getEncoder().encodeToString((dorms[i].getName()).getBytes())%> value="Sell">
+                    <td><%=buildings[i].getCurDisaster()%>
+                    </td>
+                    <td><%=buildings[i].checkIfBeingBuilt()%>
                     </td>
                 </tr>
                 <% } %>
@@ -155,17 +205,44 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <label for="dormType">Select a building size</label>
-                    <select class="form-control" id="dormType" name="dormType">
-                        <option>Small</option>
-                        <option>Medium</option>
+                    <label for="buildingType">Select a building type</label>
+                    <select class="form-control" id="buildingType" name="buildingType">
+                        <option>Academic Center</option>
+                        <option>Dining Hall</option>
+                        <option>Dormitory</option>
+                        <option>Entertainment Center</option>
+                        <option>Health Center</option>
+                        <option>Library</option>
+                        <option>Sports Center</option>
                     </select>
+
+                    <%%>
+                        <label for="buildingSize" > Select a building size</label >
+                    <%if(college.getNumberStudentsAdmitted()<700){%>
+                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                            <option > Small </option >
+                            <option > Medium </option >
+                        </select >
+                    <%}else if(college.getNumberStudentsAdmitted()<1500){%>
+                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                            <option > Small </option >
+                            <option > Medium </option >
+                            <option > Large </option >
+                        </select >
+                    <%}else{%>
+                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                            <option > Small </option >
+                            <option > Medium </option >
+                            <option > Large </option >
+                            <option > Extra Large </option >
+                        </select >
+                    <%}%>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="dormName" name="dormName"
-                               placeholder="Enter dorm name.">
+                        <input type="text" class="form-control" id="buildingName" name="buildingName"
+                               placeholder="Enter building name.">
                     </div>
                     <!-- Button -->
-                    <input type="submit" class="btn btn-info" name="addDorm" value="Add Dorm">
+                    <input type="submit" class="btn btn-info" name="purchaseBuilding" value="Purchase Building">
                 </div>
             </div>
         </div>

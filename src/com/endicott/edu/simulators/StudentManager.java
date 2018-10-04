@@ -203,7 +203,10 @@ public class StudentManager {
             happinessSum += students.get(i).getHappinessLevel();
         }
 
-        int aveHappiness = Math.max(0,happinessSum / students.size());
+        int aveHappiness = 0;
+        if (students.size() > 0) {
+            aveHappiness = Math.max(0,happinessSum / students.size());
+        }
 
         college.setStudentBodyHappiness(aveHappiness);
         collegeDao.saveCollege(college);

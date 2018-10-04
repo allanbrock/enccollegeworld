@@ -3,6 +3,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId=request.getParameter("runid");
+
 
         //struggled with two forms problem, this is a temporary solution
         //post recieves and sends to delete if the delete button was hit
@@ -40,15 +42,16 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         if (!CollegeDao.doesCollegeExist(collegeId)) {
             UiMessage msg = new UiMessage("Can't open college " + collegeId);
             request.setAttribute("message", msg);
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/welcome.jsp");
             dispatcher.forward(request, response);
             return;
         }
-
         // Attempt to fetch the college and load into
         // request attributes to pass to jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
         InterfaceUtils.setCollegeIdInSession(collegeId, request);
+        PopupEventManager popupMan = new PopupEventManager();
+//        InterfaceUtils.setPopupManagerInSession(popupMan, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
