@@ -68,31 +68,31 @@ public class SportManager {
         //SportModel sport = new SportModel();
         SportModel result = null;
 
-        if (sportName.equals("Men's Basketball")){
+        if (sportName.equals("$50,000 - Men's Basketball")){
             result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 48, "Male",3);
             Accountant.payBill(collegeId, "Men's Basketball start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Women's Basketball")){
+        else if(sportName.equals("$50,000 - Women's Basketball")){
             result  = new SportModel(12, 0, 15, 100, 0,0,0,20,50000,50,0,"Women's Basketball", collegeId, 0,48, "Female", 3);
             Accountant.payBill(collegeId, "Women's Basketball start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Baseball")){
-            result  = new SportModel(16, 0, 20, 100, 0,0,0,20,75000,50,0,"Baseball", collegeId, 0,48, "Male", 3);
+        else if(sportName.equals("$50,000 - Baseball")){
+            result  = new SportModel(16, 0, 20, 100, 0,0,0,20,50000,50,0,"Baseball", collegeId, 0,48, "Male", 3);
             Accountant.payBill(collegeId, "Baseball start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Softball")){
-            result  = new SportModel(16, 0, 20, 100, 0,0,0,20,75000,50,0,"Softball", collegeId, 0, 48,"Female", 3);
+        else if(sportName.equals("$50,000 - Softball")){
+            result  = new SportModel(16, 0, 20, 100, 0,0,0,20,50000,50,0,"Softball", collegeId, 0, 48,"Female", 3);
             Accountant.payBill(collegeId, "Softball start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Women's Soccer")){
+        else if(sportName.equals("$50,000 - Women's Soccer")){
             result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Women's Soccer", collegeId, 0,48, "Female", 3);
             Accountant.payBill(collegeId, "Women's Soccer start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Men's Soccer")){
+        else if(sportName.equals("$50,000 - Men's Soccer")){
             result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Soccer", collegeId, 0, 48,"Male", 3);
             Accountant.payBill(collegeId, "Men's Soccer start up fee", result.getStartupCost());
         }
-        else if(sportName.equals("Men's Football")){
+        else if(sportName.equals("$50,000 - Men's Football")){
             result  = new SportModel(33,0, 75, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Football", collegeId, 0, 48,"Male", 3);
             Accountant.payBill(collegeId, "Men's Soccer start up fee", result.getStartupCost());
         } else {
