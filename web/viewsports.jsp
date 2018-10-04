@@ -8,6 +8,8 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -97,6 +99,7 @@
                     <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
