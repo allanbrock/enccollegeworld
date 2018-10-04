@@ -135,7 +135,7 @@ public class BuildingDao {
         assert(outMsgs.get(1).getCapacity() == 100);
 
         DiningHallModel m3 = new DiningHallModel( "Dining", 200, 100, "Dining", "Medium" );
-        AcademicCenterModel m4 = new AcademicCenterModel("Acadmic", 200, 100, "Acadmic", "Medium");
+        AcademicCenterModel m4 = new AcademicCenterModel("Academic", 200, 100, "Academic", "Medium");
         dao.saveNewBuilding(collegeId, m3);
         outMsgs = dao.getBuildings(collegeId);
         assert(outMsgs.size() == 3);
