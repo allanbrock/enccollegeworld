@@ -37,10 +37,12 @@
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
     PopupEventManager popupManager = (PopupEventManager) request.getAttribute("popupMan");
+
     if(popupManager == null){
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
+    popupManager.newPopupEvent("Test Event", "Test Event", "This event is a test of the popup system! Press close to dismiss for now", "Ok!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -70,7 +72,7 @@
     $(document).ready(function(){
         $("#newCollegePopUp").modal('show');
     });
-</script>
+</script>x
 <% } %>
 
 <!-- displays modal for events if there are any -->
@@ -152,18 +154,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
-                    <h4 class="modal-title">TEST EVENT!</h4>
+                    <h4 class="modal-title"><%=popupManager.getNextEvent().getTitle()%></h4>
+                    <%--<h4 class="modal-title">Test event</h4>--%>
                 </div>
                 <div class="modal-body">
                     <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
-                        <!-- Commented out line 159 becuase of out of bounds exceptions
-                    <!--<p><popupManager.getNextEvent().getDescription()%></p>
+                    <p><%=popupManager.getNextEvent().getDescription()%></p>
+                    <%--<p>This event is a test of the Popup Event system</p>--%>
                     <!-- the popup may or maynot have buttons. -->
                     <!-- each button needs a name and value (both strings) -->
                     <input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getNextEvent().getAcknowledgeButtonText()%></button>
+                        <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
                 </div>
             </div>
 
@@ -194,6 +198,7 @@
             <br>
             <br>
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
+            <%--<button type="button" class="btn btn-info" onclick="<%popupManager.newPopupEvent("Test Event", "Test Event", "This event is a test of the popup system", "Ok!");%>" data-toggle="modal" data-target="#eventPopUp">test event</button>--%>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
 
             <!-- Flood -->

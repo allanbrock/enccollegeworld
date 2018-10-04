@@ -8,9 +8,14 @@ import com.endicott.edu.models.PopupEventModel;
  */
 public class PopupEventManager {
     //Keeps a list of all Popup Events for the current simulation period
-    ArrayList<PopupEventModel> currentEvents = new ArrayList<PopupEventModel>();
+    ArrayList<PopupEventModel> currentEvents;
 
-    public void addEvent(PopupEventModel event){
+    public PopupEventManager(){
+       currentEvents = new ArrayList<>();
+
+    }
+
+    private void addEvent(PopupEventModel event){
         currentEvents.add(event);
     }
 
@@ -22,7 +27,7 @@ public class PopupEventManager {
     }
     public void newPopupEvent(String type, String title, String description, String acknowledgeButtonText){
         PopupEventModel newEvent = new PopupEventModel(type, title, description, acknowledgeButtonText);
-        currentEvents.add(newEvent);
+        addEvent(newEvent);
 
     }
     public PopupEventModel getNextEvent(){
