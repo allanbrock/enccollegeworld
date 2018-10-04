@@ -364,6 +364,14 @@ public class BuildingManager {
         }
     }
 
+    private static void establishCollegeHelper(BuildingModel building, String collegeId, CollegeModel college){
+        building.setHoursToComplete(0);
+        building.setMaintenanceCostPerDay(60);
+        building.setTotalBuildCost(100);
+        BuildingDao buildingDao = new BuildingDao();
+        buildingDao.saveNewBuilding(collegeId, building);
+        NewsManager.createNews(collegeId, college.getCurrentDay(), "Building " + building.getName() + " has opened.", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
+    }
     /**
      * A new college has just been built.
      * Take care of any initial building construction.
@@ -372,14 +380,21 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        BuildingModel building = new BuildingModel(200, 10, "Hampshire Hall",
-                0, "none", 5, "none", 100);
-        building.setHoursToComplete(0);
-        building.setMaintenanceCostPerDay(60);
-        building.setTotalBuildCost(100);
-        BuildingDao buildingDao = new BuildingDao();
-        buildingDao.saveNewBuilding(collegeId, building);
-        NewsManager.createNews(collegeId, college.getCurrentDay(), "Building " + building.getName() + " has opened.", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",
+                0, 20, "Dorm", "Medium");
+        establishCollegeHelper(startingDorm, collegeId, college);
+
+        DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
+                 0, 20, "Dining", "Medium");
+        establishCollegeHelper(startingDiningHall, collegeId, college);
+
+        AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
+                0, 20, "Academic", "Medium");
+        establishCollegeHelper(startingAcademicBuilding, collegeId, college);
+
+        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative",
+                20, "Administrative");
+        establishCollegeHelper(startingAdministrative, collegeId, college);
     }
 
     /**

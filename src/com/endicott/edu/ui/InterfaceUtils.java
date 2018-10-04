@@ -26,7 +26,7 @@ public class InterfaceUtils {
             logger.info("Found college: " + collegeId);
         }
 
-        DormitoryModel[] dorms = DormitoryDao.getDormsArray(collegeId);
+        BuildingModel[] buildings = BuildingDao.getBuildingsArray(collegeId);
         NewsFeedItemModel[] news = NewsFeedDao.getNews(collegeId);
         SportModel[] sport = SportsDao.getSportsArray(collegeId);
         SportModel[] availableSports = SportManager.getAvailableSports(collegeId);
@@ -43,7 +43,7 @@ public class InterfaceUtils {
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("colleges",colleges);
-        request.setAttribute("dorms",dorms);
+        request.setAttribute("buildings",buildings);
         request.setAttribute("news",news);
         request.setAttribute("sports", sport);
         request.setAttribute("availableSports",availableSports);

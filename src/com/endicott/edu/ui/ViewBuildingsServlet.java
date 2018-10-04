@@ -17,7 +17,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        if (request.getParameter("addDorm") != null) {  // addDorm is present if addDorm button was pressed
+        if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
             addDorm(request, response);
         }
         else {
@@ -31,45 +31,45 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
                 String paramName = params.nextElement();
                 String paramValue = request.getParameter(paramName);
                 logger.info("Parameter Name - "+paramName+", Value - "+paramValue);
-                if (request.getParameter(paramName).equals("Sell")) {
-                    Base64.Decoder decoder = Base64.getDecoder();
-                    String dormName = new String(decoder.decode(paramName));
-                    logger.info("Selling dorm: " + dormName + " Encoded name: " + paramName);
-
-                    sellDorm(request, response, dormName);
-                }
+//                if (request.getParameter(paramName).equals("Sell")) {
+//                    Base64.Decoder decoder = Base64.getDecoder();
+//                    String dormName = new String(decoder.decode(paramName));
+//                    logger.info("Selling dorm: " + dormName + " Encoded name: " + paramName);
+//
+//                    sellDorm(request, response, dormName);
+//                }
             }
             String i = request.getParameter("sellDorm");
         }
     }
 
-    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
-        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-
-        logger.info("In ViewBuildingsServlet.sellDorm()");
-        InterfaceUtils.logRequestParameters(request);
-
-        if(collegeId == null || dormName == null){
-            UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
-            request.setAttribute("message", message);
-            logger.info("Bad parameters for deleting a dorm");
-        }
-        else {
-            // Need to do the work here.
-            DormManager.sellDorm(collegeId, dormName);
-         }
-
-
-        //load the request with attributes for the dorm
-        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-
-
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
-        dispatcher.forward(request, response);
-        // Attempt to fetch the college and load into
-        // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-    }
+//    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
+//        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+//
+//        logger.info("In ViewBuildingsServlet.sellDorm()");
+//        InterfaceUtils.logRequestParameters(request);
+//
+//        if(collegeId == null || dormName == null){
+//            UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
+//            request.setAttribute("message", message);
+//            logger.info("Bad parameters for deleting a dorm");
+//        }
+//        else {
+//            // Need to do the work here.
+//            DormManager.sellDorm(collegeId, dormName);
+//         }
+//
+//
+//        //load the request with attributes for the dorm
+//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+//
+//
+//        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+//        dispatcher.forward(request, response);
+//        // Attempt to fetch the college and load into
+//        // request attributes to pass to the jsp page.
+//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+//    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);

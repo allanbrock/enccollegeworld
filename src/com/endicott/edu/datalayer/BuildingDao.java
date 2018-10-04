@@ -122,8 +122,8 @@ public class BuildingDao {
         final String collegeId = "testbuilding001";
         BuildingDao dao = new BuildingDao();
 
-        DormModel m1 = new DormModel("Medium", 200, 95, 100, "Dorm" );
-        AdministrativeBldgModel m2 = new AdministrativeBldgModel(100, "Administrative Building");
+        DormModel m1 = new DormModel("Dormitory", 0, 20, "Dorm" , "Medium");
+        AdministrativeBldgModel m2 = new AdministrativeBldgModel("Admin", 20, "Administrative");
         ArrayList<BuildingModel> buildings = new ArrayList<>();
         buildings.add(m1);
         buildings.add(m2);
@@ -134,8 +134,8 @@ public class BuildingDao {
         assert(outMsgs.size() == 2);
         assert(outMsgs.get(1).getCapacity() == 100);
 
-        DiningHallModel m3 = new DiningHallModel( "Medium", 200, 100, 100, "Dining Hall");
-        AcademicCenterModel m4 = new AcademicCenterModel("Medium", 200, 100, 100, "Academic Center");
+        DiningHallModel m3 = new DiningHallModel( "Dining", 200, 100, "Dining", "Medium" );
+        AcademicCenterModel m4 = new AcademicCenterModel("Acadmic", 200, 100, "Acadmic", "Medium");
         dao.saveNewBuilding(collegeId, m3);
         outMsgs = dao.getBuildings(collegeId);
         assert(outMsgs.size() == 3);
