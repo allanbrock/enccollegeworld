@@ -88,7 +88,14 @@ public class FacultyModel implements Serializable {
     public void setHappiness(int happiness){ this.happiness = happiness; }
     public int getHappiness() { return this.happiness; }
 
+    // TODO: this needs to be moved.  The models should not have any logic in them.
+
     private void computeFacultyHappiness(int pay){
+        if (salaryOptions == null) {
+            happiness = 0;
+            return;
+        }
+
         Random r = new Random();
         int tempHappiness = r.nextInt(100 - 50) + 50;
         for(int i = 0; i < salaryOptions.size(); i++){
