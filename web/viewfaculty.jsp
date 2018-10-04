@@ -9,7 +9,10 @@
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.CollegeModel" %>
 <%@ page import="com.endicott.edu.models.FacultyModel" %>
+<%@ page import="com.endicott.edu.datalayer.FacultyDao" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -44,12 +47,14 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    FacultyModel faculty[] = (FacultyModel[]) request.getAttribute("faculty");
+    ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>)FacultyDao.getFaculty(college.getRunId());
     if (faculty == null) {
-        faculty = new FacultyModel[0];
-        faculty[0] = new FacultyModel("Professor Sam Smith", "Dean", "Biology", 110000, "LSB311", "unknown");
+        faculty = new ArrayList<FacultyModel>();
+        faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", "LSB311", college.getRunId(), 100000)); // Default salary val for now
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
+    ArrayList<Integer> salaryOptions = FacultyModel.getSalaryOptions();
+
 %>
 
 <form action="viewFaculty" method="post">
@@ -93,7 +98,7 @@
                 <div class="col-md-10">
 
                     <h2>Faculty</h2>
-                    <h3><%=faculty.length%> faculty members</h3>
+                    <h3><%=faculty.size()%> faculty members</h3>
                 </div>
             </div>
         </div>
@@ -107,34 +112,47 @@
                 </thread>
                 <tbody>
                 <%
-                    for (int i = 0; i < faculty.length; i++) {
+                    for (int i = 0; i < faculty.size(); i++) {
                 %>
                 <tr>
-                    <td><%=faculty[i].getFacultyName()%>
+                    <td><%=faculty.get(i).getFacultyName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartment()%><br>
+                                Salary: <%=String.valueOf(faculty.get(i).getSalary())%> <br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <% } %>
                 </tbody>
             </table>
         </div>
-
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
+                    <label id="salaryLabel" style="color: darkblue">Pick an annual salary if you would like to add a new faculty member</label>
                 </div>
                 <div class="form-group">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="facultyNameToDelete" name="facultyNameToDelete"
-                               placeholder="Enter faculty name.">
-                    </div>
-                    <input type="submit" class="btn btn-danger" name="removeSingleFaculty" value="Delete Faculty">
+                    <select class="form-control" id="salaryDropdown" name="salaryDropdown">
+                        <% for(int i = 0; i < salaryOptions.size(); i++) { %>
+                        <tr>
+                            <option><%= "$" + salaryOptions.get(i) %></option>
+                        </tr>
+                        <% } %>
+                    </select>
+                    <br>
+                    <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
                 </div>
             </div>
         </div>
-
     </div>
-
 </form>
 
 </body>

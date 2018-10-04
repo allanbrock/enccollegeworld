@@ -55,13 +55,13 @@ public class InterfaceUtils {
     public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)
     {
         HttpSession session = request.getSession();
-        session.setAttribute("runid",collegeId);
+        session.setAttribute("runId",collegeId);
     }
 
     public static String getCollegeIdFromSession(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
-        return (String) session.getAttribute("runid");
+        return (String) session.getAttribute("runId");
     }
     public static void setPopupManagerInSession(PopupEventManager popupManager, HttpServletRequest request)
     {

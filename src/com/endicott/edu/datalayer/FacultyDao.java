@@ -30,10 +30,8 @@ public class FacultyDao {
      */
     public static List<FacultyModel> getFaculty(String collegeId) {
         ArrayList<FacultyModel> faculty = new ArrayList<>();
-        FacultyModel facultyModel = null; //not sure why this is defined and not used.....
         try {
             File file = new File(getFilePath(collegeId));
-
             if (!file.exists()) {
                 return faculty;  // No faculty exist
             }
@@ -65,7 +63,6 @@ public class FacultyDao {
      */
     public void saveNewFaculty(String collegeId, FacultyModel member) {
         List<FacultyModel> faculty = getFaculty(collegeId);
-        member.setRunId(collegeId);
         faculty.add(member);
         saveAllFaculty(collegeId, faculty);
     }
@@ -152,10 +149,10 @@ public class FacultyDao {
 
         System.out.println("Checking id's");
 
-        FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp","LSB",collegeId);
+        FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
         FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
         FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-        f3.setFacultyID(-1);
+        f3.setFacultyID("-1");
         fao.saveNewFaculty(collegeId,f3);
         System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
         fao.saveNewFaculty(collegeId,f2);
@@ -211,10 +208,10 @@ private void testId(){
     System.out.println("Checking id's");
     System.out.println("Checking id's");
 
-    FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp","LSB",collegeId);
+    FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
     FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
     FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-    f3.setFacultyID(-1);
+    f3.setFacultyID("-1");
     fao.saveNewFaculty(collegeId,f3);
     System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
     fao.saveNewFaculty(collegeId,f2);

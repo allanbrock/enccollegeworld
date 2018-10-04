@@ -37,14 +37,17 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-
-       if (collegeId == null) {
+        String salaryString = request.getParameter("salaryDropdown");
+        StringBuilder sb = new StringBuilder(salaryString);
+        salaryString = sb.substring(1);
+        int salary = Integer.valueOf(salaryString);
+        if (collegeId == null) {
             UiMessage message = new UiMessage("Can't add a faculty member because missing information");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding faculty.");
         }
         else {
-            FacultyManager.addFaculty(collegeId);
+            FacultyManager.addFaculty(collegeId, salary);
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
