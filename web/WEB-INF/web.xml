@@ -31,6 +31,14 @@
         <url-pattern>/viewBuilding</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>viewAboutServlet</servlet-name>
+        <servlet-class>com.endicott.edu.ui.ViewAboutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewAboutServlet</servlet-name>
+        <url-pattern>/viewAbout</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>viewStudentServlet</servlet-name>
         <servlet-class>com.endicott.edu.ui.ViewStudentServlet</servlet-class>
     </servlet>

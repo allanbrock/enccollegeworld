@@ -1,6 +1,8 @@
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
-<%@ page import="java.util.Base64" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>About</title>
@@ -22,34 +24,47 @@
 </head>
 <body>
 <%
-    String collegeId = (String) request.getSession().getAttribute("runid");
+    UiMessage msg = (UiMessage) request.getAttribute("message");
+    if (msg == null) {
+        msg = new UiMessage();
+    }
+    CollegeModel college = (CollegeModel) request.getAttribute("college");
+    if (college == null) {
+        college = new CollegeModel();
+        msg.setMessage("Attribute for college missing.");
+    }
+
+    NumberFormat numberFormatter = NumberFormat.getInstance();
+    numberFormatter.setGroupingUsed(true);
 %>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="viewCollege"><%=collegeId%></a></li>
-                    <li><a href="viewStudent">Students</a></li>
-                    <li><a href="viewBuilding">Buildings</a></li>
-                    <li><a href="viewSports">Sports</a></li>
-                    <li><a href="viewFaculty">Faculty</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="viewAdmin">Admin</a></li>
-                    <li class="active"><a href="about.jsp">About</a></li>
-                    <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
-                </ul>
-            </div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-    </nav>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="viewCollege"><%=college.getRunId()%></a></li>
+                <li><a href="viewStudent">Students</a></li>
+                <li><a href="viewBuilding">Buildings</a></li>
+                <li><a href="viewSports">Sports</a></li>
+                <li><a href="viewFaculty">Faculty</a></li>
+                <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                <li><a href="viewAdmin">Admin</a></li>
+                <li  class="active"><a href="viewAbout">About</a></li>
+                <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
     <div class="container">
         <div class="container">

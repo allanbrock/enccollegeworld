@@ -112,41 +112,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
-                    <li><a href="about.jsp">About</a></li>
+                    <li><a href="viewAbout">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
-
-
-    <!-- Welcome to the college -->
-    <!-- This is an example modal for popups -->
-    <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button -->
-    <div class="modal fade" id="newCollegePopUp" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Day One at <%=college.getRunId()%>!</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
-                    <p>Your college has been established.  Maybe hit the NextDay button to move things along.</p>
-                        <!-- the popup may or maynot have buttons. -->
-                        <!-- each button needs a name and value (both strings) -->
-                        <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     <div class="modal fade" id="eventPopUp" role="dialog">
         <div class="modal-dialog">
