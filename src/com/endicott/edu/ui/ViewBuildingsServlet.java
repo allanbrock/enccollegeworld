@@ -1,8 +1,9 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
+import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
-import com.endicott.edu.simulators.DormManager;
+//import com.endicott.edu.simulators.DormManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -100,7 +101,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding a dorm.");
         }
         else{
-            DormManager.addDorm(runId, dormName, dormType);
+            BuildingManager.addBuilding(runId, dormName, dormType);
         }
 
         //load the request with attributes for the dorm

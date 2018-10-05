@@ -98,7 +98,7 @@ public class FloodManager {
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, DormitoryModel dorm) {
         float oddsOfFlood = (hoursAlive - dorm.getHourLastUpdated()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         if (Math.random() <= oddsOfFlood) {
-            DormManager dormMan = new DormManager();
+            BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;
 
@@ -109,7 +109,7 @@ public class FloodManager {
             NewsManager.createNews(collegeId, hoursAlive, "Flooding detected at " + flood.getDormName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), flood.getCostOfFlood());
 
-            dormMan.floodAlert(hoursAlive , dorm.getName(), collegeId);
+            buildingMgr.floodAlert(hoursAlive , dorm.getName(), collegeId);
             return true;
         }
 

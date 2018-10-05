@@ -194,14 +194,14 @@ public class BuildingManager {
      * @param collegeId college name
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
-    public String assignBuilding(String collegeId) {
+    public String assignDorm(String collegeId) {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         String buildingName = "";
         for (BuildingModel b : buildings) {
             int s = b.getNumStudents();
             int c = b.getCapacity();
             buildingName = b.getName();
-            if (s < c) {
+            if (b.getKindOfBuilding().equals("Dorm") && s < c) {
                 b.setNumStudents(s + 1);
                 dao.saveAllBuildings(collegeId, buildings);
                 return buildingName;
@@ -243,7 +243,7 @@ public class BuildingManager {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         int openBeds = 0;
         for (BuildingModel b : buildings) {
-            if(b.getHoursToComplete() <= 0) {
+            if(b.getKindOfBuilding().equals("Dorm") && b.getHoursToComplete() <= 0) {
                 int numStudents = b.getNumStudents();
                 int capacity = b.getCapacity();
                 openBeds += capacity - numStudents;
