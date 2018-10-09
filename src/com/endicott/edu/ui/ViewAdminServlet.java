@@ -2,6 +2,7 @@ package com.endicott.edu.ui;
 
 
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -32,9 +33,9 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-
+        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 0);
+            CollegeManager.iterateTime(collegeId, 0, popupManager);
         }
 
         // Attempt to fetch the college and load into

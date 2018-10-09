@@ -167,13 +167,10 @@
                         <thead>
                         <tr>
                             <th>College</th>
-                            <th>College</th>
+                            <th></th>
                             <th>Days Old</th>
                             <th>Balance</th>
-                            <th>Admitted</th>
-                            <th>Withdrawn</th>
-                            <th>Retention</th>
-                            <th>Happiness</th>
+                            <th>Students</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -189,9 +186,6 @@
                             <td><%=tmp.getCurrentDay()%></td>
                             <td>$<%=tmp.getAvailableCash()%></td>
                             <td><%=tmp.getNumberStudentsAdmitted()%></td>
-                            <td><%=tmp.getNumberStudentsWithdrew()%></td>
-                            <td><%=tmp.getRetentionRate()%>%</td>
-                            <td><%=tmp.getStudentBodyHappiness()%>%</td>
 
                         </tr>
                         <%}%>

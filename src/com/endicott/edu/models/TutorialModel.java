@@ -1,6 +1,8 @@
 package com.endicott.edu.models;
 
-public class TutorialModel {
+import java.io.Serializable;
+
+public class TutorialModel implements Serializable {
     private String title = "";
     private String body = "";
     private String page = "unknown";

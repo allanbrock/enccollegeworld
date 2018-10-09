@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+// TODO: we need another Dap which is TutorialBookmarkDao.  Bookmark has a page, tip number, isHidden.
+// the current tip you are on for that page.  This will be loaded in as part of InterfaceUtils.
+
 public class TutorialDao {
     private static String getFilePath() {
         return "tutorials.dat";
-    }
+    }  // TODO: follow other DAO's so using college path.
     private Logger logger = Logger.getLogger("TutorialDao");
 
+    //TODO: add in college id like other DAOs.
     public static List<TutorialModel> getTutorials() {
         ArrayList<TutorialModel> tutorials = new ArrayList<>();
         TutorialModel tutorialModel = null;
@@ -37,11 +41,21 @@ public class TutorialDao {
         return tutorials;
     }
 
+    // TODO:  add something like this for adding a tip
+//    public static void saveNewFaculty(String collegeId, FacultyModel member) {
+//        List<FacultyModel> faculty = getFaculty(collegeId);
+//        faculty.add(member);
+//        saveAllFaculty(collegeId, faculty);
+//    }
+
     public static TutorialModel[] getTutorialsArray(String collegeId) {
         List<TutorialModel> tutorials = getTutorials();
         return tutorials.toArray(new TutorialModel[tutorials.size()]);
     }
 
+    // We actually don't need to save this stuff the file.
+    // But we do need save:  TutorialBookmarks.  That has: # of last tip shown and whether tips are hidden.
+    // One bookmark per page.
     public void saveAllTutorials(List<TutorialModel> notes){
         logger.info("Saving all tutorials...");
         try {

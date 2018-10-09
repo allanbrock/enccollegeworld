@@ -45,6 +45,11 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
+    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+    if (news == null) {
+        news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
+    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -76,5 +81,45 @@
         </div>
     </nav>
 
+    <div class="col-sm-6 col-sm-offset-3" align="center">
+        <div class="well well-sm">
+            <h3><p class="text-success">Financial News</h3>
+            <div class="pre-scrollable">
+                <ul class="list-group">
+                    <%
+                        for (int i = news.length - 1; i >= 0; i--) {
+                            if (news[i].getNoteType() == NewsType.FINANCIAL_NEWS) {
+                                if (news[i].getAmount() > 0) {
+                    %>
+                    <li class="list-group-item">
+                        <!-- change this to user up or down arrow depending on money -->
+                        <span class="glyphicon glyphicon-arrow-up" style="color:lawngreen"></span>
+                        Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:green"> $<%=news[i].getAmount()%></span>
+                    </li>
+                    <% } else if (news[i].getAmount() < 0) {
+                    %>
+
+                    <li class="list-group-item">
+                        <!-- change this to user up or down arrow depending on money -->
+                        <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+                        Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%><span style="color:red"> $<%=-news[i].getAmount()%></span>
+                    </li>
+                    <% } else {
+                    %>
+
+                    <li class="list-group-item">
+                        <!-- change this to user up or down arrow depending on money -->
+                        <span class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+                        Day <%=news[i].getHour() / 24%> - <%=news[i].getMessage()%>
+                    </li>
+
+
+                    <% }
+                    }
+                    }%>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

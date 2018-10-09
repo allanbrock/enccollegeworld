@@ -12,7 +12,7 @@ public class StudentManager {
     private StudentDao dao = new StudentDao();
     private CollegeDao collegeDao = new CollegeDao();
     private FacultyDao facultyDao = new FacultyDao();
-    private DormManager dormManager = new DormManager();
+    private BuildingManager buildingMgr = new BuildingManager();
     private CollegeModel college = new CollegeModel();
     private Random rand = new Random();
 
@@ -23,6 +23,7 @@ public class StudentManager {
      * @param collegeId
      */
     public void establishCollege(String collegeId) {
+        loadTips();
         admitStudents(collegeId, college.getCurrentDay()/24, true);
         calculateStatistics(collegeId);
     }
@@ -34,7 +35,7 @@ public class StudentManager {
      * @param collegeId
      * @param hoursAlive
      */
-    public  void handleTimeChange(String collegeId, int hoursAlive) {
+    public  void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         admitStudents(collegeId, hoursAlive, false);
         receiveStudentTuition(collegeId);
         withdrawStudents(collegeId, hoursAlive);
@@ -62,7 +63,7 @@ public class StudentManager {
      * @param initial
      */
     public void admitStudents(String collegeId, int hoursAlive, boolean initial) {
-        int openBeds = dormManager.getOpenBeds(collegeId);
+        int openBeds = buildingMgr.getOpenBeds(collegeId);
         int numNewStudents;
         List<StudentModel> students = dao.getStudents(collegeId);
 
@@ -92,7 +93,7 @@ public class StudentManager {
                 student.setAthlete(false);
             }
             student.setTeam("");
-            student.setDorm(dormManager.assignDorm(collegeId));
+            student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
             students.add(student);
             dao.saveAllStudents(collegeId, students);
@@ -126,7 +127,7 @@ public class StudentManager {
             int h = students.get(i).getHappinessLevel();
             float odds = (100f - h) * scalingFactor;
             if (didItHappen(odds)) {
-                dormManager.removeStudent(collegeId, students.get(i).getDorm());
+                buildingMgr.removeStudent(collegeId, students.get(i).getDorm());
                 students.remove(i);
                 studentsWithdrawn++;
             }
@@ -277,6 +278,10 @@ public class StudentManager {
         return (Math.random() < oddsBetween0And1);
     }
 
+    private void loadTips() {
+        // TODO: need to fill this out.
+        TutorialManager.loadTip(1,"viewStudent", "This is a student tip.");
+    }
 }
 
 

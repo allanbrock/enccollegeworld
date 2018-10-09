@@ -56,6 +56,7 @@
         students  = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+    //TODO: grab the tips from the request.
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -114,6 +115,8 @@
                     %>
                     <h3><%=nSick%> Students Sick</h3>
                 </div>
+
+                <!-- Tips TODO: use tips you pulled in from session.  Just display 1st tip. -->
                 <div class="col-md-5">
                         <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
                         <div class="well well-lg">
@@ -122,6 +125,7 @@
                         <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                         <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
                 </div>
+
             </div>
         </div>
 

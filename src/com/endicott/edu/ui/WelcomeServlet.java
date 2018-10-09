@@ -50,7 +50,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
         // request attributes to pass to jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
         InterfaceUtils.setCollegeIdInSession(collegeId, request);
-        PopupEventManager popupMan = new PopupEventManager();
+//        PopupEventManager popupMan = new PopupEventManager();
 //        InterfaceUtils.setPopupManagerInSession(popupMan, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");

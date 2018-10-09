@@ -20,17 +20,24 @@ public class PopupEventManager {
     }
 
 
-    public void newPopupEvent(String type, String title, String description, String goodButtonText, String badButtonText){
-        PopupEventModel newEvent = new PopupEventModel(type, title, description, goodButtonText, badButtonText);
+    public void newPopupEvent(String title, String description, String goodButtonText, String goodButtonCallback, String badButtonText, String badButtonCallback){
+        PopupEventModel newEvent = new PopupEventModel(title, description, goodButtonText, goodButtonCallback, badButtonText, badButtonCallback);
         currentEvents.add(newEvent);
 
     }
-    public void newPopupEvent(String type, String title, String description, String acknowledgeButtonText){
-        PopupEventModel newEvent = new PopupEventModel(type, title, description, acknowledgeButtonText);
+    public void newPopupEvent(String title, String description, String acknowledgeButtonText){
+        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
         addEvent(newEvent);
 
     }
-    public PopupEventModel getNextEvent(){
+    public boolean isQueueInitiated(){
+        if(getNumberOfEvents() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public PopupEventModel getCurrentEvent(){
         return currentEvents.get(0);
     }
     public int getNumberOfEvents(){

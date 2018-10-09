@@ -23,7 +23,7 @@ public class PlagueManager {
      * @param collegeId
      * @param hoursAlive  number of hours since college was created
      */
-    public void handleTimeChange(String collegeId, int hoursAlive) {
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<PlagueModel> plagues = dao.getPlagues(collegeId);
 
         int hoursLeftInPlague = 0;
