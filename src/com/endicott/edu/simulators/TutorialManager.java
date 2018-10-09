@@ -7,6 +7,11 @@ public class TutorialManager {
     private int counter = 0;
     private String description = "";
 
+
+    public static void loadTip(int i, String page, String tip){
+        // TODO: call TutorialDao to save the tip.
+    }
+
     public void nextButtonManager(){
 
     }

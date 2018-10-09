@@ -23,6 +23,7 @@ public class StudentManager {
      * @param collegeId
      */
     public void establishCollege(String collegeId) {
+        loadTips();
         admitStudents(collegeId, college.getCurrentDay()/24, true);
         calculateStatistics(collegeId);
     }
@@ -277,6 +278,10 @@ public class StudentManager {
         return (Math.random() < oddsBetween0And1);
     }
 
+    private void loadTips() {
+        // TODO: need to fill this out.
+        TutorialManager.loadTip(1,"viewStudent", "This is a student tip.");
+    }
 }
 
 
