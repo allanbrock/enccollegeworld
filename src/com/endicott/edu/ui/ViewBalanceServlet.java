@@ -1,6 +1,7 @@
 package com.endicott.edu.ui;
 
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -16,9 +17,9 @@ public class ViewBalanceServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-
+        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0);
+            CollegeManager.iterateTime(runId, 0, popupManager);
         }
 
         // Attempt to fetch the college and load into

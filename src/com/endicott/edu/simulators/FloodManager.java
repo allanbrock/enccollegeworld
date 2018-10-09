@@ -25,7 +25,7 @@ public class FloodManager {
      * @param collegeId
      * @param hoursAlive number of hours college has been active.
      */
-    public void handleTimeChange(String collegeId, int hoursAlive) {
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<FloodModel> floods = floodDao.getFloods(collegeId);
         List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
 

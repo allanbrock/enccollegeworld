@@ -35,7 +35,7 @@ public class StudentManager {
      * @param collegeId
      * @param hoursAlive
      */
-    public  void handleTimeChange(String collegeId, int hoursAlive) {
+    public  void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         admitStudents(collegeId, hoursAlive, false);
         receiveStudentTuition(collegeId);
         withdrawStudents(collegeId, hoursAlive);

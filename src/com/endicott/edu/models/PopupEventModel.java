@@ -11,18 +11,20 @@ public class PopupEventModel implements Serializable {
     private String title;
     private String description;
     private String goodButtonText;
+    private String goodButtonCallback;
     private String badButtonText;
+    private String badButtonCallback;
     private String acknowledgeButtonText;
 
     /**
      *
-     * @param type: The type of event or update, i.e., flood, plague, building completion, etc.
+     *
      * @param title: The title of the event, i.e., "Flood destroys dorm", "Football team won the championship!"
      * @param description: The description for the event.
      * @param goodButtonText: Text for the "Handle Correctly" button.
      * @param badButtonText: Text for the "Handle Poorly" button.
      */
-    public PopupEventModel(String type, String title, String description, String goodButtonText, String badButtonText){
+    public PopupEventModel(String title, String description, String goodButtonText, String goodButtonCallback, String badButtonText, String badButtonCallback){
         this.type = type;
         this.title = title;
         this.description = description;
@@ -30,7 +32,7 @@ public class PopupEventModel implements Serializable {
         this.badButtonText = badButtonText;
         this.response = false;
     }
-    public PopupEventModel(String type, String title, String description, String acknowledgeButtonText){
+    public PopupEventModel(String title, String description, String acknowledgeButtonText){
         this.type = type;
         this.title = title;
         this.description = description;
