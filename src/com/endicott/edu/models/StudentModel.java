@@ -13,6 +13,8 @@ public class StudentModel implements Serializable {
     private int athleticAbility = 0; //0-10
     private String team = "unknown";
     private String dorm = "unknown";
+    private String diningHall = "unknown";
+    private String academicBuilding = "unknown";
     private String gender = "unknown";
     private String runId = "unknown";
     private String note = "no note";
@@ -62,6 +64,10 @@ public class StudentModel implements Serializable {
 
     public String getDorm() { return dorm; }
 
+    public String getDiningHall() { return  diningHall; }
+
+    public String getAcademicBuilding() { return  academicBuilding; }
+
     public String getNote() { return note; }
 
     public String getGender() {
@@ -96,6 +102,14 @@ public class StudentModel implements Serializable {
 
     public void setDorm(String dorm) {
         this.dorm = dorm;
+    }
+
+    public void setDiningHall(String diningHall) {
+        this.diningHall = diningHall;
+    }
+
+    public void setAcademicBuilding(String academicBuilding) {
+        this.academicBuilding = academicBuilding;
     }
 
     public void setGender(String gender) {

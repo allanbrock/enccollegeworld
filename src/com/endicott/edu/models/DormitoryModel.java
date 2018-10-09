@@ -3,8 +3,9 @@ package com.endicott.edu.models;
 
 import java.io.Serializable;
 
-public class DormitoryModel implements Serializable {
+public class DormitoryModel extends BuildingModel implements Serializable{
     private int capacity = 0;
+    private String size;
     private int costPerDay = 0;
     private int hourLastUpdated = 0;
     private String name = "unknown";
@@ -23,12 +24,18 @@ public class DormitoryModel implements Serializable {
     public DormitoryModel() {
     }
 
-    public DormitoryModel(int capacity, int costPerDay, int hourLastUpdated, String name, String runId) {
-        this.capacity = capacity;
-        this.costPerDay = costPerDay;
-        this.hourLastUpdated = hourLastUpdated;
-        this.name = name;
-        this.runId = runId;
+//    public DormitoryModel(String size, int numStudents, int reputation, int costPerDay, int hourLastUpdated, String name, String runId) {
+//        this.size = size;
+//        this.numStudents = numStudents;
+//        this.reputation = reputation;
+//        this.capacity = BuildingModel.setCapacityBasedOnSize(size);
+//        this.costPerDay = costPerDay;
+//        this.hourLastUpdated = hourLastUpdated;
+//        this.name = name;
+//        this.runId = runId;
+//    }
+    public DormitoryModel(String name, String size, int numStudents, int reputation) {
+        super(name, numStudents, reputation, BuildingModel.getDormConst(), size);
     }
 
     public DormitoryModel(int capacity, int hourLastUpdated, String name, int numStudents,

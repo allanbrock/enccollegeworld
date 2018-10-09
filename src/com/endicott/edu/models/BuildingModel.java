@@ -1,9 +1,20 @@
 package com.endicott.edu.models;
 
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.io.Serializable;
 
-public class BuildingModel implements Serializable { //removing "abstract"?
+public class BuildingModel implements Serializable { //removing "abstract"
+    private final static String academicConst = "ACADEMIC";
+    private final static String adminConst = "ADMIN";
+    private final static String diningConst = "DINING";
+    private final static String dormConst = "DORM";
+    private final static String entertainmentConst = "ENTERTAINMENT";
+    private final static String healthConst = "HEALTH";
+    private final static String libraryConst = "LIBRARY";
+    private final static String sportsConst = "SPORTS";
+
     private int capacity = 0;
     private int costPerDay = 0;
     private int hourLastUpdated = 0;
@@ -40,11 +51,11 @@ public class BuildingModel implements Serializable { //removing "abstract"?
     //for DormModel, DiningHallModel and AcademicCenterModel
     public BuildingModel(String name, int numStudents, int reputation, String kindOfBuilding, String size){
         this.name = name;
-        this.size = size;
-        this.capacity = setCapacityBasedOnSize(size);
         this.numStudents = numStudents;
         this.reputation = reputation;
         this.kindOfBuilding = kindOfBuilding;
+        this.size = size;
+        this.capacity = setCapacityBasedOnSize(size);
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
     public BuildingModel(String name, int reputation, String kindOfBuilding){
@@ -60,7 +71,7 @@ public class BuildingModel implements Serializable { //removing "abstract"?
     public BuildingModel() {
     }
 
-    private int setCapacityBasedOnSize(String size){
+    public static int setCapacityBasedOnSize(String size){
         if(size.equals("Small")){return 50;}
         else if(size.equals("Medium")){return 200;}
         else if(size.equals("Large")){return 500;}
@@ -210,5 +221,14 @@ public class BuildingModel implements Serializable { //removing "abstract"?
     public void setKindOfBuilding(String kindOfBuilding) {
         this.kindOfBuilding = kindOfBuilding;
     }
+
+    public static String getAcademicConst() {return academicConst;}
+    public static String getAdminConst() {return adminConst;}
+    public static String getDiningConst() {return diningConst;}
+    public static String getDormConst() {return dormConst;}
+    public static String getEntertainmentConst() {return entertainmentConst;}
+    public static String getHealthConst() {return healthConst;}
+    public static String getLibraryConst() {return libraryConst;}
+    public static String getSportsConst() {return sportsConst;}
 
 }

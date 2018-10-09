@@ -64,11 +64,13 @@ public class StudentManager {
      */
     public void admitStudents(String collegeId, int hoursAlive, boolean initial) {
         int openBeds = buildingMgr.getOpenBeds(collegeId);
+        int openPlates = buildingMgr.getOpenPlates(collegeId);
+        int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents;
         List<StudentModel> students = dao.getStudents(collegeId);
 
         // Are we fully booked?
-        if (openBeds <= 0) {
+        if (openBeds <= 0 || openPlates <= 0 || openDesks <= 0) {
             return;
         }
 
@@ -93,6 +95,8 @@ public class StudentManager {
                 student.setAthlete(false);
             }
             student.setTeam("");
+            student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
+            student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
             students.add(student);
@@ -127,7 +131,7 @@ public class StudentManager {
             int h = students.get(i).getHappinessLevel();
             float odds = (100f - h) * scalingFactor;
             if (didItHappen(odds)) {
-                buildingMgr.removeStudent(collegeId, students.get(i).getDorm());
+                buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
                 studentsWithdrawn++;
             }
