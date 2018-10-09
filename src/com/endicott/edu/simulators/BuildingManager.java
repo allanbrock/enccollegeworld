@@ -28,7 +28,7 @@ public class BuildingManager {
      * @param runId college name
      * @param hoursAlive number of hours college has been alive
      */
-    public void handleTimeChange(String runId, int hoursAlive) {
+    public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
         // Read in all the buildings
         List<BuildingModel> buildings = dao.getBuildings(runId);
 

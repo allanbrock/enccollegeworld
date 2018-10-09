@@ -51,8 +51,7 @@ public class InterfaceUtils {
         request.setAttribute("students",students);
         request.setAttribute("faculty",faculty);
         request.setAttribute("floods",flood);
-        //TODO: store the loaded tip array in an attribute called tips.
-        request.setAttribute("popupMan", popupManager);
+        request.getSession().setAttribute("popupMan", popupManager);
     }
 
     public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)

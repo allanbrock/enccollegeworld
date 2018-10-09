@@ -3,6 +3,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.PopupEventManager;
 //import com.endicott.edu.simulators.DormManager;
 
 import javax.servlet.RequestDispatcher;
@@ -74,9 +75,9 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-
+        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0);
+            CollegeManager.iterateTime(runId, 0,popupManager);
         }
 
         // Attempt to fetch the college and load into

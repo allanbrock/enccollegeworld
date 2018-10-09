@@ -24,7 +24,7 @@ public class SportManager {
      * @param collegeId
      * @param hoursAlive number of hours since the college started.
      */
-    public void handleTimeChange(String collegeId, int hoursAlive) {
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<SportModel> sports = dao.getSports(collegeId);
 
         for (SportModel sport : sports) {

@@ -92,7 +92,7 @@ public class CollegeManager {
      * @param collegeId college name
      * @param dayCount  number of days
      */
-    static public CollegeModel iterateTime(String collegeId, int dayCount) {
+    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 
         // Advance time college has been alive.
@@ -103,24 +103,25 @@ public class CollegeManager {
         // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
 
+
         // Tell all the simulators about the time change.
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
         PlagueManager plagueManager = new PlagueManager();
-        plagueManager.handleTimeChange(collegeId, hoursAlive);
+        plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         BuildingManager buildingManager = new BuildingManager();
-        buildingManager.handleTimeChange(collegeId, hoursAlive);
+        buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         SportManager sportManager = new SportManager();
-        sportManager.handleTimeChange(collegeId, hoursAlive);
+        sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         StudentManager studentManager = new StudentManager();
-        studentManager.handleTimeChange(collegeId, hoursAlive);
+        studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FloodManager floodManager = new FloodManager();
-        floodManager.handleTimeChange(collegeId, hoursAlive);
+        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
 
