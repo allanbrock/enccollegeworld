@@ -15,7 +15,7 @@ public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 0, popupManager);
+            CollegeManager.iterateTime(collegeId, popupManager);
         }
 
         // Attempt to fetch the college and load into

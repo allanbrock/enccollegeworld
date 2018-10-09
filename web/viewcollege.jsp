@@ -73,7 +73,7 @@
     $(document).ready(function(){
         $("#newCollegePopUp").modal('show');
     });
-</script>x
+</script>
 <% } %>
 
 <!-- displays modal for events if there are any -->

@@ -19,7 +19,7 @@ public class ViewBalanceServlet extends javax.servlet.http.HttpServlet {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0, popupManager);
+            CollegeManager.iterateTime(runId, popupManager);
         }
 
         // Attempt to fetch the college and load into

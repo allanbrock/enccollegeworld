@@ -90,14 +90,13 @@ public class CollegeManager {
      * All calculations are done in terms of hours.
      *
      * @param collegeId college name
-     * @param dayCount  number of days
      */
-    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager) {
+    static public CollegeModel iterateTime(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing x days.
+        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
         collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -133,6 +132,12 @@ public class CollegeManager {
         return college;
     }
 
+    /**
+     * Returns current Date of college.
+     *
+     * @param collegeId college name
+     * @return the Date of the college
+     */
     static public Date getCollegeDate(String collegeId) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
         int hoursAlive = college.getHoursAlive();
