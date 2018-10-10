@@ -77,7 +77,7 @@
 <% } %>
 
 <!-- displays modal for events if there are any -->
-<% if (popupManager.getNumberOfEvents() >= 1) { %>
+<% if (popupManager.isQueueInitiated()) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
@@ -126,19 +126,21 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
-                <h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>
+                <h4 class="modal-title">Current Events</h4>
                 <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
+            <% for (PopupEventModel event: popupManager.getEventsList()) {%>
+
+
             <div class="modal-body">
-                <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
-                <p><%=popupManager.getCurrentEvent().getDescription()%></p>
-                <%--<p>This event is a test of the Popup Event system</p>--%>
+                <h5><%=event.getTitle()%></h5>
+                <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
                 <!-- the popup may or maynot have buttons. -->
-                <!-- each button needs a name and value (both strings) -->
-                <input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">
             </div>
+
+                <%};%>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
                 <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
             </div>
         </div>
@@ -201,6 +203,7 @@
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
             <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
+            <button type="button" class="btn btn-info" onclick="<%popupManager.newPopupEvent("test title","test description", "add event");%>"
 
             <!-- Flood -->
             <%
