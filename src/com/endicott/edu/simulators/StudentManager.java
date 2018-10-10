@@ -2,6 +2,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -36,6 +37,7 @@ public class StudentManager {
      * @param hoursAlive
      */
     public  void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        acceptStudents(collegeId, hoursAlive);
         admitStudents(collegeId, hoursAlive, false);
         receiveStudentTuition(collegeId);
         withdrawStudents(collegeId, hoursAlive);
@@ -69,6 +71,113 @@ public class StudentManager {
         int numNewStudents;
         List<StudentModel> students = dao.getStudents(collegeId);
 
+        Date currDate = CollegeManager.getCollegeDate(collegeId);
+        String date = currDate.toString();
+
+        // Are we fully booked?
+        if (openBeds <= 0 || openPlates <= 0 || openDesks <= 0) {
+            return;
+        }
+
+        if(initial) {
+
+
+            numNewStudents = rand.nextInt(openBeds);
+            if (numNewStudents > openBeds) {
+                numNewStudents = openBeds;
+            }
+
+            createStudents(numNewStudents, collegeId, students);
+
+//            for (int i = 0; i < numNewStudents; i++) {
+//                StudentModel student = new StudentModel();
+//                if (rand.nextInt(10) + 1 > 5) {
+//                    student.setName(NameGenDao.generateName(false));
+//                    student.setGender("Male");
+//                } else {
+//                    student.setName(NameGenDao.generateName(true));
+//                    student.setGender("Female");
+//                }
+//                student.setIdNumber(IdNumberGenDao.getID(collegeId));
+//                student.setHappinessLevel(70);
+//                student.setAthleticAbility(rand.nextInt(10));
+//                if (student.getAthleticAbility() > 6) {
+//                    student.setAthlete(true);
+//                } else {
+//                    student.setAthlete(false);
+//                }
+//                student.setTeam("");
+//                student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
+//                student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
+//                student.setDorm(buildingMgr.assignDorm(collegeId));
+//                student.setRunId(collegeId);
+//                students.add(student);
+//                dao.saveAllStudents(collegeId, students);
+//            }
+
+            college = collegeDao.getCollege(collegeId);
+            college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
+
+            collegeDao.saveCollege(college);
+
+            if (numNewStudents > 0) {
+                NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            }
+        }
+        else if(date.subSequence(5,7).equals("Sep") && date.subSequence(9,10).equals("06") || date.subSequence(5,7).equals("Jan") && date.subSequence(9,10).equals("01")) {
+
+
+            numNewStudents = rand.nextInt(college.getNumberStudentsAccepted());
+            if (numNewStudents > openBeds) {
+                numNewStudents = openBeds;
+            }
+
+            createStudents(numNewStudents, collegeId, students);
+
+//            for (int i = 0; i < numNewStudents; i++) {
+//                StudentModel student = new StudentModel();
+//                if (rand.nextInt(10) + 1 > 5) {
+//                    student.setName(NameGenDao.generateName(false));
+//                    student.setGender("Male");
+//                } else {
+//                    student.setName(NameGenDao.generateName(true));
+//                    student.setGender("Female");
+//                }
+//                student.setIdNumber(IdNumberGenDao.getID(collegeId));
+//                student.setHappinessLevel(70);
+//                student.setAthleticAbility(rand.nextInt(10));
+//                if (student.getAthleticAbility() > 6) {
+//                    student.setAthlete(true);
+//                } else {
+//                    student.setAthlete(false);
+//                }
+//                student.setTeam("");
+//                student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
+//                student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
+//                student.setDorm(buildingMgr.assignDorm(collegeId));
+//                student.setRunId(collegeId);
+//                students.add(student);
+//                dao.saveAllStudents(collegeId, students);
+//            }
+
+            college = collegeDao.getCollege(collegeId);
+            college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
+
+            collegeDao.saveCollege(college);
+
+            if (numNewStudents > 0) {
+                NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            }
+        }
+    }
+
+    private void acceptStudents(String collegeId, int hoursAlive){
+        int openBeds = buildingMgr.getOpenBeds(collegeId);
+        int openPlates = buildingMgr.getOpenPlates(collegeId);
+        int openDesks = buildingMgr.getOpenDesks(collegeId);
+        int numNewStudents;
+        List<StudentModel> students = dao.getStudents(collegeId);
+
         // Are we fully booked?
         if (openBeds <= 0 || openPlates <= 0 || openDesks <= 0) {
             return;
@@ -76,9 +185,43 @@ public class StudentManager {
 
         numNewStudents = rand.nextInt(openBeds);
 
+//        for (int i = 0; i < numNewStudents; i++) {
+//            StudentModel student = new StudentModel();
+//            if(rand.nextInt(10) + 1 > 5){
+//                student.setName(NameGenDao.generateName(false));
+//                student.setGender("Male");
+//            } else {
+//                student.setName(NameGenDao.generateName(true));
+//                student.setGender("Female");
+//            }
+//            student.setIdNumber(IdNumberGenDao.getID(collegeId));
+//            student.setHappinessLevel(70);
+//            student.setAthleticAbility(rand.nextInt(10));
+//            if(student.getAthleticAbility() > 6) {
+//                student.setAthlete(true);
+//            }
+//            else {
+//                student.setAthlete(false);
+//            }
+//            student.setTeam("");
+//            student.setDorm(buildingMgr.assignDorm(collegeId));
+//            student.setRunId(collegeId);
+//            dao.saveAllStudents(collegeId, students);
+//        }
+
+        college = collegeDao.getCollege(collegeId);
+        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
+        collegeDao.saveCollege(college);
+
+        if (numNewStudents > 0) {
+            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+        }
+    }
+
+    private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students){
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
-            if(rand.nextInt(10) + 1 > 5){
+            if (rand.nextInt(10) + 1 > 5) {
                 student.setName(NameGenDao.generateName(false));
                 student.setGender("Male");
             } else {
@@ -88,10 +231,9 @@ public class StudentManager {
             student.setIdNumber(IdNumberGenDao.getID(collegeId));
             student.setHappinessLevel(70);
             student.setAthleticAbility(rand.nextInt(10));
-            if(student.getAthleticAbility() > 6) {
+            if (student.getAthleticAbility() > 6) {
                 student.setAthlete(true);
-            }
-            else {
+            } else {
                 student.setAthlete(false);
             }
             student.setTeam("");
@@ -101,14 +243,6 @@ public class StudentManager {
             student.setRunId(collegeId);
             students.add(student);
             dao.saveAllStudents(collegeId, students);
-        }
-
-        college = collegeDao.getCollege(collegeId);
-        college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
-        collegeDao.saveCollege(college);
-
-        if (numNewStudents > 0) {
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
         }
     }
 

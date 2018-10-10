@@ -100,7 +100,6 @@ public class BuildingManager {
         //newBuilding.setBuildingType(buildingType);
 //        setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
-        newBuilding.setReputation(20);
         newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
         // Pay for building
@@ -167,19 +166,19 @@ public class BuildingManager {
      */
     public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
         if(buildingType.equals("Academic Center")){
-            return new AcademicCenterModel(buildingName, 0, 100, buildingSize);
+            return new AcademicCenterModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Administrative Building")){
-            return new AdministrativeBldgModel(buildingName, 0);
+            return new AdministrativeBldgModel(buildingName);
         }
         else if(buildingType.equals("Dining Hall")){
-            return new DiningHallModel(buildingName, 0, 0, buildingSize);
+            return new DiningHallModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Dormitory")){
-            return new DormModel(buildingName, 0, 0, buildingSize);
+            return new DormModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Entertainment Center")){
-            return new EntertainmentCenterModel(buildingName, 0);
+            return new EntertainmentCenterModel(buildingName);
         }
         else if(buildingType.equals("Health Center")){
             return new HealthCenterModel();
@@ -188,7 +187,7 @@ public class BuildingManager {
             return new LibraryModel();
         }
         else if(buildingType.equals("Sports Center")){
-            return new SportsCenterModel(buildingName, 0);
+            return new SportsCenterModel(buildingName);
         }
         else{ //if for some reason it is none of these it will still make a new building
             return new BuildingModel();
@@ -490,19 +489,18 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, 20, "Medium");
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
-                 0, 20, "Medium");
+                 0, "Medium");
         saveBuildingHelper(startingDiningHall, collegeId, college);
 
         AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
-                0, 20,"Medium");
+                0,"Medium");
         saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
-        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative",
-                20);
+        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
         saveBuildingHelper(startingAdministrative, collegeId, college);
     }
 

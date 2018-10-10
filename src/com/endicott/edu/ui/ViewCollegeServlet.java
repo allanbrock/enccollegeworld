@@ -5,6 +5,7 @@ import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
@@ -12,14 +13,16 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+        HttpSession session = request.getSession();
+        session.setAttribute("popupMan", popupManager);
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 1, popupManager);
+            CollegeManager.iterateTime(collegeId, 1, popupManager, session);
         }
         if (request.getParameter("nextWeekButton") != null) {
-            CollegeManager.iterateTime(collegeId, 7, popupManager);
+            CollegeManager.iterateTime(collegeId, 7, popupManager, session);
         }
         if (request.getParameter("nextMonthButton") != null) {
-            CollegeManager.iterateTime(collegeId, 30, popupManager);
+            CollegeManager.iterateTime(collegeId, 30, popupManager, session);
         }
         if(request.getParameter("updateTuitionButton") != null){
             //call update tuition
@@ -44,8 +47,9 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+        HttpSession session = request.getSession();
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 0, popupManager);
+            CollegeManager.iterateTime(collegeId, 0, popupManager, session);
         }
 
         // Attempt to fetch the college and load into
