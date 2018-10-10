@@ -109,6 +109,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
@@ -334,7 +335,7 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -344,8 +345,18 @@
                 </div>
             </div>
 
+            <div class="col-sm-2">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1><%=college.getNumberStudentsAccepted()%>
+                        </h1>
+                        <h3>Accepted Students</h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Retention Rate -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=college.getRetentionRate()%>%
@@ -356,7 +367,7 @@
             </div>
 
             <!-- Ranking -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>?
