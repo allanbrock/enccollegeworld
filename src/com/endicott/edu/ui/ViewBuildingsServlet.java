@@ -28,8 +28,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
             request.setAttribute("beginBuildingPurchase", beginPurchaseStr);
             request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr);
-            doGet(request, response);
-            addDorm(request, response);
+            addBuilding(request, response);
+            //doGet(request, response);
         }
         else if(request.getParameter("beginBuildingPurchase") != null){ //if they want to begin the process of purchasing a building
             beginPurchase = true; //begin attribute becomes true
@@ -116,7 +116,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void addDorm(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        //doGet(request, response);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
         String buildingType=request.getParameter("buildingType");

@@ -271,7 +271,7 @@
                                placeholder="Enter building name.">
                         </div>
                         <!-- Button -->
-                        <input type="submit" class="btn btn-info" name="purchaseBuilding" value="Purchase Building">
+                        <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
                     <%}%>
             </div>
