@@ -89,27 +89,28 @@ public class BuildingManager {
         }
     }
 
-    static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType) {
+    static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
             return null;
         }
 
-        int buildingTypeInt;
-        if (buildingType.equals("Small")) {
-            buildingTypeInt = 1;
-        } else if (buildingType.equals("Medium")) {
-            buildingTypeInt = 2;
-        } else if (buildingType.equals("Large")) {
-            buildingTypeInt = 3;
-        } else {
-            return null;
-        }
+        //get rid of this ?????
+        //int buildingTypeInt;
+        //if (buildingType.equals("Small")) {
+            //buildingTypeInt = 1;
+        //} else if (buildingType.equals("Medium")) {
+            ///buildingTypeInt = 2;
+        //} else if (buildingType.equals("Large")) {
+            //buildingTypeInt = 3;
+        //} else {
+            //return null;
+        //}
 
         // Override some fields
         BuildingDao buildingDao = new BuildingDao();
         CollegeDao dao = new CollegeDao();
         CollegeModel college = dao.getCollege(collegeId);
-        return (BuildingManager.createBuilding(collegeId, buildingName, buildingTypeInt,college.getHoursAlive()));
+        return (BuildingManager.createBuilding(collegeId, buildingName, buildingType,college.getHoursAlive(),buildingSize));
     }
 
     /**
@@ -121,12 +122,12 @@ public class BuildingManager {
      * @param hoursAlive number of hours college has existed
      * @return
      */
-    public static BuildingModel createBuilding(String collegeId, String buildingName, int buildingType, int hoursAlive) {
+    public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
 
         // Create building
-        BuildingModel newBuilding = new BuildingModel();
+        BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         newBuilding.setName(buildingName);
-        newBuilding.setBuildingType(buildingType);
+        //newBuilding.setBuildingType(buildingType);
         setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
         newBuilding.setReputation(5);
@@ -147,6 +148,51 @@ public class BuildingManager {
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, newBuilding);
         return newBuilding;
+    }
+    /**
+     * Creates the desired type of building
+     *
+     * @param buildingType type of building
+     * @param buildingName name of building
+     * @param buildingSize size of building
+     */
+    public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
+        if(buildingType.equals("Academic Center")){
+            AcademicCenterModel newBuilding = new AcademicCenterModel(buildingName, 0, 100, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Administrative Building")){
+            AdministrativeBldgModel newBuilding = new AdministrativeBldgModel(buildingName, 0);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Dining Hall")){
+            DiningHallModel newBuilding = new DiningHallModel(buildingName, 0, 0, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Dormitory")){
+            DormModel newBuilding = new DormModel(buildingName, 0, 0, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Entertainment Center")){
+            EntertainmentCenterModel newBuilding = new EntertainmentCenterModel(buildingName, 0);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Health Center")){
+            HealthCenterModel newBuilding = new HealthCenterModel();
+            return newBuilding;
+        }
+        else if(buildingType.equals("Library")){
+            LibraryModel newBuilding = new LibraryModel();
+            return newBuilding;
+        }
+        else if(buildingType.equals("Sports Center")){
+            SportsCenterModel newBuilding = new SportsCenterModel(buildingName, 0);
+            return newBuilding;
+        }
+        else{ //if for some reason it is none of these it will still make a new building
+            BuildingModel newBuilding = new BuildingModel();
+            return newBuilding;
+        }
     }
 
     /**
@@ -192,24 +238,54 @@ public class BuildingManager {
      * under the student.
      *
      * @param collegeId college name
+     * @param buildingType type of building
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
-    public String assignDorm(String collegeId) {
+    private String findBuildingToAssignToStudent(String collegeId, String buildingType){
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         String buildingName = "";
         for (BuildingModel b : buildings) {
             int s = b.getNumStudents();
             int c = b.getCapacity();
             buildingName = b.getName();
-            if (b.getKindOfBuilding().equals("Dorm") && s < c) {
+            if (b.getKindOfBuilding().equals(buildingType) && s < c) {
                 b.setNumStudents(s + 1);
                 dao.saveAllBuildings(collegeId, buildings);
                 return buildingName;
             }
         }
 
-        // This means we didn't find room for the student!
         return "Commuter";
+    }
+
+    /**
+     * Return the name of a building that has an open spot for a student.
+     *
+     * @param collegeId college name
+     * @return the name of the building where the student as placed.  If no space available, return commuter.
+     */
+    public String assignDorm(String collegeId) {
+        return findBuildingToAssignToStudent(collegeId, BuildingModel.getDormConst());
+    }
+
+    /**
+     * Return the name of a building that has an open spot for a student.
+     *
+     * @param collegeId college name
+     * @return the name of the building where the student as placed.  If no space available, return commuter.
+     */
+    public String assignDiningHall(String collegeId) {
+        return findBuildingToAssignToStudent(collegeId, BuildingModel.getDiningConst());
+    }
+
+    /**
+     * Return the name of a building that has an open spot for a student.
+     *
+     * @param collegeId college name
+     * @return the name of the building where the student as placed.  If no space available, return commuter.
+     */
+    public String assignAcademicBuilding(String collegeId) {
+        return findBuildingToAssignToStudent(collegeId, BuildingModel.getAcademicConst());
     }
 
     /**
@@ -218,15 +294,17 @@ public class BuildingManager {
      * stored under the student.
      *
      * @param collegeId
-     * @param buildingName
+     * @param dormName
+     * @param diningName
+     * @param academicName
      */
-    public void removeStudent(String collegeId, String buildingName) {
+    public void removeStudent(String collegeId, String dormName, String diningName, String academicName) {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         Boolean removed = false;
         for (BuildingModel b : buildings) {
             String name = b.getName();
             int s = b.getNumStudents();
-            if (name.equals(buildingName)) {
+            if (name.equals(dormName) || name.equals(diningName) || name.equals(academicName)) {
                 b.setNumStudents(s - 1);
             }
         }
@@ -234,22 +312,53 @@ public class BuildingManager {
     }
 
     /**
-     * Return the number of open beds in the college.
+     * Helper function to return the number of open spots in certain buildings within the college.
      *
      * @param collegeId
+     * @param buildingType
      * @return
      */
-    public static int getOpenBeds(String collegeId) {
+    private static int getOpenSpots(String collegeId, String buildingType) {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
-        int openBeds = 0;
+        int openSpots = 0;
         for (BuildingModel b : buildings) {
-            if(b.getKindOfBuilding().equals("Dorm") && b.getHoursToComplete() <= 0) {
+            if(b.getKindOfBuilding().equals(buildingType) && b.getHoursToComplete() <= 0) {
                 int numStudents = b.getNumStudents();
                 int capacity = b.getCapacity();
-                openBeds += capacity - numStudents;
+                openSpots += capacity - numStudents;
             }
         }
-        return openBeds;
+        return openSpots;
+    }
+
+    /**
+     * Return the number of open beds in the college using helper method.
+     *
+     * @param collegeID
+     * @return
+     */
+    public static int getOpenBeds(String collegeID){
+        return getOpenSpots(collegeID, BuildingModel.getDormConst());
+    }
+
+    /**
+     * Return the number of open desks in the college using helper method.
+     *
+     * @param collegeID
+     * @return
+     */
+    public static int getOpenDesks(String collegeID){
+        return getOpenSpots(collegeID, BuildingModel.getAcademicConst());
+    }
+
+    /**
+     * Return the number of open plates in the college using helper method.
+     *
+     * @param collegeID
+     * @return
+     */
+    public static int getOpenPlates(String collegeID){
+        return getOpenSpots(collegeID, BuildingModel.getDiningConst());
     }
 
     /**
@@ -364,10 +473,11 @@ public class BuildingManager {
         }
     }
 
-    private static void establishCollegeHelper(BuildingModel building, String collegeId, CollegeModel college){
+    private static void saveBuildingHelper(BuildingModel building, String collegeId, CollegeModel college){
         building.setHoursToComplete(0);
         building.setMaintenanceCostPerDay(60);
         building.setTotalBuildCost(100);
+        building.setCurDisaster("None");
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, building);
         NewsManager.createNews(collegeId, college.getCurrentDay(), "Building " + building.getName() + " has opened.", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
@@ -380,21 +490,20 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",
-                0, 20, "Dorm", "Medium");
-        establishCollegeHelper(startingDorm, collegeId, college);
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, 20, "Medium");
+        saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
-                 0, 20, "Dining", "Medium");
-        establishCollegeHelper(startingDiningHall, collegeId, college);
+                 0, 20, "Medium");
+        saveBuildingHelper(startingDiningHall, collegeId, college);
 
         AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
-                0, 20, "Academic", "Medium");
-        establishCollegeHelper(startingAcademicBuilding, collegeId, college);
+                0, 20,"Medium");
+        saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
         AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative",
-                20, "Administrative");
-        establishCollegeHelper(startingAdministrative, collegeId, college);
+                20);
+        saveBuildingHelper(startingAdministrative, collegeId, college);
     }
 
     /**

@@ -63,6 +63,10 @@
     }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
+
+    String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
+    String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
+    String buildingType = (String) request.getAttribute("buildingType");
 %>
 
 
@@ -109,7 +113,7 @@
                         int filledBeds = 0;
                         for (BuildingModel d : buildings){
                             if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals("Dorm")) {
+                                if(d.getKindOfBuilding().equals(BuildingModel.getDormConst())) {
                                     int numStudents = d.getNumStudents();
                                     int capacity = d.getCapacity();
                                     openBeds += capacity - numStudents;
@@ -130,7 +134,7 @@
                         int takenPlates = 0;
                         for (BuildingModel d : buildings){
                             if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals("Dining")) {
+                                if(d.getKindOfBuilding().equals(BuildingModel.getDiningConst())) {
                                     int numStudents = d.getNumStudents();
                                     int capacity = d.getCapacity();
                                     availablePlates += capacity - numStudents;
@@ -151,7 +155,7 @@
                         int filledDesks = 0;
                         for (BuildingModel d : buildings){
                             if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals("Academic")) {
+                                if(d.getKindOfBuilding().equals(BuildingModel.getAcademicConst())) {
                                     int numStudents = d.getNumStudents();
                                     int capacity = d.getCapacity();
                                     openDesks += capacity - numStudents;
@@ -211,46 +215,65 @@
         <!-- Add Dorm -->
         <div class="col-sm-4">
             <div class="well well-sm">
-                <div class="form-group">
-                    <label for="buildingType">Select a building type</label>
-                    <select class="form-control" id="buildingType" name="buildingType">
-                        <option>Academic Center</option>
-                        <option>Dining Hall</option>
-                        <option>Dormitory</option>
-                        <option>Entertainment Center</option>
-                        <option>Health Center</option>
-                        <option>Library</option>
-                        <option>Sports Center</option>
-                    </select>
 
-                    <%%>
-                        <label for="buildingSize" > Select a building size</label >
-                    <%if(college.getNumberStudentsAdmitted()<700){%>
-                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                            <option > Small </option >
-                            <option > Medium </option >
-                        </select >
-                    <%}else if(college.getNumberStudentsAdmitted()<1500){%>
-                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                            <option > Small </option >
-                            <option > Medium </option >
-                            <option > Large </option >
-                        </select >
-                    <%}else{%>
-                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                            <option > Small </option >
-                            <option > Medium </option >
-                            <option > Large </option >
-                            <option > Extra Large </option >
-                        </select >
-                    <%}%>
+                <!-- if they haven't hit begin purchase, only one option is visible -->
+                <% if(beginPurchase == "false"){%>
+                    <h4>Purchase a new Building</h4>
+                    <input type="submit" class="btn btn-info" name="beginBuildingPurchase" value="Begin">
+                <%}
+                else if(wasBuildingTypeSelected == "false"){ %>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="buildingName" name="buildingName"
-                               placeholder="Enter building name.">
+                        <label for="buildingType">Select a building type</label>
+                        <select class="form-control" id="buildingType" name="buildingType">
+                            <option value="Academic Center">Academic Center</option>
+                            <option value="Administrative Building">Administrative Building</option>
+                            <option value="Dining Hall">Dining Hall</option>
+                            <option value="Dormitory">Dormitory</option>
+                            <option value="Entertainment Center">Entertainment Center</option>
+                            <option value="Health Center">Health Center</option>
+                            <option value="Library">Library</option>
+                            <option value="Sports Center">Sports Center</option>
+                        </select>
                     </div>
-                    <!-- Button -->
-                    <input type="submit" class="btn btn-info" name="purchaseBuilding" value="Purchase Building">
-                </div>
+                        <!-- Button -->
+                    <input type="submit" class="btn btn-info" name="selectBuildingType" value="Select">
+                <%}
+                else if(wasBuildingTypeSelected == "true"){ %>
+                <!-- if the building selected is a building with a size-->
+                <div class="form-group">
+                <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
+                        buildingType.equals("Academic Center")){%>
+                        <!--form group used to be here -->
+                            <label for="buildingSize" > Select a building size</label >
+                            <%if(college.getNumberStudentsAdmitted()<700){%>
+                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                                    <option > Small </option >
+                                    <option > Medium </option >
+                                </select >
+                            <%}else if(college.getNumberStudentsAdmitted()<1500){%>
+                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                                    <option > Small </option >
+                                    <option > Medium </option >
+                                    <option > Large </option >
+                                </select >
+                            <%}else{%>
+                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                                    <option > Small </option >
+                                    <option > Medium </option >
+                                    <option > Large </option >
+                                    <option > Extra Large </option >
+                                </select >
+                            <%}%>
+                        <%}%>
+                            <h4>Confirm Purchase of <%=buildingType%></h4>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="buildingName" name="buildingName"
+                               placeholder="Enter building name.">
+                        </div>
+                        <!-- Button -->
+                        <input type="submit" class="btn btn-info" name="purchaseBuilding" value="Purchase Building">
+                    </div>
+                    <%}%>
             </div>
         </div>
 
