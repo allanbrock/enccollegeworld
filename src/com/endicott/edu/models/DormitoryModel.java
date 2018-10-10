@@ -34,8 +34,8 @@ public class DormitoryModel extends BuildingModel implements Serializable{
 //        this.name = name;
 //        this.runId = runId;
 //    }
-    public DormitoryModel(String name, String size, int numStudents, int reputation) {
-        super(name, numStudents, reputation, BuildingModel.getDormConst(), size);
+    public DormitoryModel(String name, String size, int numStudents) {
+        super(name, numStudents, BuildingModel.getDormConst(), size);
     }
 
     public DormitoryModel(int capacity, int hourLastUpdated, String name, int numStudents,

@@ -32,14 +32,14 @@ public class BuildingModel implements Serializable {
 
     //some classes use this constructor
     public BuildingModel(int hourLastUpdated, String name, int numStudents,
-                         String curDisaster, int reputation, String runId, int numRooms,
+                         String curDisaster, String runId, int numRooms,
                          String kindOfBuilding, String size){
         this.capacity=setCapacityBasedOnSize(size);
         this.hourLastUpdated=hourLastUpdated;
         this.name=name;
         this.numStudents=numStudents;
         this.curDisaster=curDisaster;
-        this.reputation=reputation;
+        this.reputation=20;
         this.runId=runId;
         this.numRooms=numRooms;
         this.kindOfBuilding = kindOfBuilding;
@@ -47,18 +47,18 @@ public class BuildingModel implements Serializable {
     }
 
     //for DormModel, DiningHallModel and AcademicCenterModel
-    public BuildingModel(String name, int numStudents, int reputation, String kindOfBuilding, String size){
+    public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
         this.name = name;
         this.size = size;
         this.capacity = setCapacityBasedOnSize(size);
         this.numStudents = numStudents;
-        this.reputation = reputation;
+        this.reputation = 20;
         this.kindOfBuilding = kindOfBuilding;
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
-    public BuildingModel(String name, int reputation, String kindOfBuilding){
+    public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
-        this.reputation = reputation;
+        this.reputation = 20;
         this.kindOfBuilding = kindOfBuilding;
     }
     //for LibraryModel and HealthCenterModel
