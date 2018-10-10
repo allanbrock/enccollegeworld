@@ -94,23 +94,33 @@ public class BuildingManager {
             return null;
         }
 
-        //get rid of this ?????
-        //int buildingTypeInt;
-        //if (buildingType.equals("Small")) {
-            //buildingTypeInt = 1;
-        //} else if (buildingType.equals("Medium")) {
-            ///buildingTypeInt = 2;
-        //} else if (buildingType.equals("Large")) {
-            //buildingTypeInt = 3;
-        //} else {
-            //return null;
-        //}
+        // Create building
+        BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
+        newBuilding.setName(buildingName);
+        //newBuilding.setBuildingType(buildingType);
+        setBuildingAttributesByBuildingType(newBuilding);
+        newBuilding.setHourLastUpdated(0);
+        newBuilding.setReputation(5);
+        newBuilding.setCurDisaster("none");
+        newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
-        // Override some fields
-        BuildingDao buildingDao = new BuildingDao();
+        // Pay for building
+        if (newBuilding.getTotalBuildCost() >= Accountant.getAvailableCash(collegeId)) {
+            newBuilding.setNote("Not enough money to build it.");
+            return newBuilding;
+        }
+
+        Accountant.payBill(collegeId, "Charge of new building", newBuilding.getTotalBuildCost());
         CollegeDao dao = new CollegeDao();
         CollegeModel college = dao.getCollege(collegeId);
-        return (BuildingManager.createBuilding(collegeId, buildingName, buildingType,college.getHoursAlive(),buildingSize));
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" building has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
+        newBuilding.setNote("A new building has been created.");
+
+        // Save building
+        BuildingDao buildingDao = new BuildingDao();
+        buildingDao.saveNewBuilding(collegeId, newBuilding);
+        return newBuilding;
+        // Override some fields
     }
 
     /**
@@ -122,7 +132,7 @@ public class BuildingManager {
      * @param hoursAlive number of hours college has existed
      * @return
      */
-    public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
+    /*public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
@@ -148,7 +158,7 @@ public class BuildingManager {
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, newBuilding);
         return newBuilding;
-    }
+    }*/
     /**
      * Creates the desired type of building
      *
