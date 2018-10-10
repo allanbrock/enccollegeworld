@@ -10,6 +10,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Enumeration;
@@ -28,8 +29,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
             request.setAttribute("beginBuildingPurchase", beginPurchaseStr);
             request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr);
-            doGet(request, response);
-            addDorm(request, response);
+            addBuilding(request, response);
+            //doGet(request, response);
         }
         else if(request.getParameter("beginBuildingPurchase") != null){ //if they want to begin the process of purchasing a building
             beginPurchase = true; //begin attribute becomes true
@@ -102,10 +103,10 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("beginBuildingPurchase", beginStr); //begin attribute is originally false
         String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
         request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr); //building type selected is originally false
-
+        HttpSession session = request.getSession();
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0,popupManager);
+            CollegeManager.iterateTime(runId, 0,popupManager, session);
         }
 
         // Attempt to fetch the college and load into
@@ -116,7 +117,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void addDorm(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        //doGet(request, response);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
         String buildingType=request.getParameter("buildingType");

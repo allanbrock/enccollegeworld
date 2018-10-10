@@ -1,6 +1,8 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
@@ -12,6 +14,7 @@ public class CollegeModel implements Serializable {
     private int studentBodyHappiness;        // out of 100, 0 is unhappy
     private int studentFacultyRatio = 100;     // number of students per faculty member
     private int numberStudentsAdmitted = 0;  // number of students admitted since college created.
+    private int numberStudentsAccepted = 0;  // number of students accepted to the school.
     private int numberStudentsWithdrew = 0;  // number of students withdrawn since college created.
     private int numberStudentsGraduated = 0; // number of students graduate since college created
     private float retentionRate = 0f;        // percentage of students retained (or graduated) since college created
@@ -118,4 +121,7 @@ public class CollegeModel implements Serializable {
 
     public void setRetentionRate(float retentionRate) { this.retentionRate = retentionRate; }
 
+    public int getNumberStudentsAccepted() { return numberStudentsAccepted; }
+
+    public void setNumberStudentsAccepted(int numberStudentsAccepted) { this.numberStudentsAccepted = numberStudentsAccepted; }
 }

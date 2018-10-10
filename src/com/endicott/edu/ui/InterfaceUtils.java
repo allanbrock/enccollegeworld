@@ -34,6 +34,7 @@ public class InterfaceUtils {
         FacultyModel[] faculty = FacultyDao.getFacultyArray(collegeId);
         FloodModel[] flood = FloodDao.getFloodsArray(collegeId);
         PopupEventManager popupManager = new PopupEventManager();
+        TutorialModel[] tutorials = TutorialDao.getTutorialsArray(collegeId);
         // TODO: load the tips using TutorialDao.getTips(collegeId);
         //FloodModel[] flood = new FloodModel[0];
 
@@ -52,6 +53,8 @@ public class InterfaceUtils {
         request.setAttribute("faculty",faculty);
         request.setAttribute("floods",flood);
         request.getSession().setAttribute("popupMan", popupManager);
+        //TODO: store the loaded tip array in an attribute called tips.
+        request.setAttribute("tutorials", tutorials);
     }
 
     public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)

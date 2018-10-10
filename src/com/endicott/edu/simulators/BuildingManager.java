@@ -63,54 +63,62 @@ public class BuildingManager {
     /**
      * Given a building type, set attributes of the building.
      *
-     * @param building
+     * @param
      */
-    private static void setBuildingAttributesByBuildingType(BuildingModel building) {
-        BuildingType buildingType = BuildingType.valueOf(building.getBuildingType());
-
-        switch(buildingType) {
-            case SMALL:
-                building.setCapacity(200);
-                building.setNumRooms(100);
-                building.setTotalBuildCost(100);
-                break;
-            case MEDIUM:
-                building.setCapacity(350);
-                building.setNumRooms(175);
-                building.setTotalBuildCost(175);
-                break;
-            case LARGE:
-                building.setCapacity(500);
-                building.setNumRooms(250);
-                building.setTotalBuildCost(250);
-                break;
-            default:
-                logger.severe("Could not add building: '" + building.getName() + "'");
-        }
-    }
+//    private static void setBuildingAttributesByBuildingType(BuildingModel building) {
+//        BuildingType buildingType = BuildingType.valueOf(building.getBuildingType());
+//
+//        switch(buildingType) {
+//            case SMALL:
+//                building.setCapacity(200);
+//                building.setNumRooms(100);
+//                building.setTotalBuildCost(100);
+//                break;
+//            case MEDIUM:
+//                building.setCapacity(350);
+//                building.setNumRooms(175);
+//                building.setTotalBuildCost(175);
+//                break;
+//            case LARGE:
+//                building.setCapacity(500);
+//                building.setNumRooms(250);
+//                building.setTotalBuildCost(250);
+//                break;
+//            default:
+//                logger.severe("Could not add building: '" + building.getName() + "'");
+//        }
+//    }
 
     static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
             return null;
         }
 
-        //get rid of this ?????
-        //int buildingTypeInt;
-        //if (buildingType.equals("Small")) {
-            //buildingTypeInt = 1;
-        //} else if (buildingType.equals("Medium")) {
-            ///buildingTypeInt = 2;
-        //} else if (buildingType.equals("Large")) {
-            //buildingTypeInt = 3;
-        //} else {
-            //return null;
-        //}
+        // Create building
+        BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
+        newBuilding.setName(buildingName);
+        //newBuilding.setBuildingType(buildingType);
+//        setBuildingAttributesByBuildingType(newBuilding);
+        newBuilding.setHourLastUpdated(0);
+        newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
-        // Override some fields
-        BuildingDao buildingDao = new BuildingDao();
+        // Pay for building
+        if (newBuilding.getTotalBuildCost() >= Accountant.getAvailableCash(collegeId)) {
+            newBuilding.setNote("Not enough money to build it.");
+            return newBuilding;
+        }
+
+        Accountant.payBill(collegeId, "Charge of new building", newBuilding.getTotalBuildCost());
         CollegeDao dao = new CollegeDao();
         CollegeModel college = dao.getCollege(collegeId);
-        return (BuildingManager.createBuilding(collegeId, buildingName, buildingType,college.getHoursAlive(),buildingSize));
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" building has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
+        newBuilding.setNote("A new building has been created.");
+
+        // Save building
+        BuildingDao buildingDao = new BuildingDao();
+        buildingDao.saveNewBuilding(collegeId, newBuilding);
+        return newBuilding;
+        // Override some fields
     }
 
     /**
@@ -122,15 +130,15 @@ public class BuildingManager {
      * @param hoursAlive number of hours college has existed
      * @return
      */
-    public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
+    /*public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         newBuilding.setName(buildingName);
         //newBuilding.setBuildingType(buildingType);
-        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setHourLastUpdated(0);
-        newBuilding.setReputation(5);
+//        setBuildingAttributesByBuildingType(newBuilding);
+//        newBuilding.setHourLastUpdated(0);
+        newBuilding.setReputation(20);
         newBuilding.setCurDisaster("none");
         newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
@@ -148,7 +156,7 @@ public class BuildingManager {
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, newBuilding);
         return newBuilding;
-    }
+    }*/
     /**
      * Creates the desired type of building
      *
@@ -158,40 +166,31 @@ public class BuildingManager {
      */
     public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
         if(buildingType.equals("Academic Center")){
-            AcademicCenterModel newBuilding = new AcademicCenterModel(buildingName, 0, 100, buildingSize);
-            return newBuilding;
+            return new AcademicCenterModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Administrative Building")){
-            AdministrativeBldgModel newBuilding = new AdministrativeBldgModel(buildingName, 0);
-            return newBuilding;
+            return new AdministrativeBldgModel(buildingName);
         }
         else if(buildingType.equals("Dining Hall")){
-            DiningHallModel newBuilding = new DiningHallModel(buildingName, 0, 0, buildingSize);
-            return newBuilding;
+            return new DiningHallModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Dormitory")){
-            DormModel newBuilding = new DormModel(buildingName, 0, 0, buildingSize);
-            return newBuilding;
+            return new DormModel(buildingName, 0, buildingSize);
         }
         else if(buildingType.equals("Entertainment Center")){
-            EntertainmentCenterModel newBuilding = new EntertainmentCenterModel(buildingName, 0);
-            return newBuilding;
+            return new EntertainmentCenterModel(buildingName);
         }
         else if(buildingType.equals("Health Center")){
-            HealthCenterModel newBuilding = new HealthCenterModel();
-            return newBuilding;
+            return new HealthCenterModel();
         }
         else if(buildingType.equals("Library")){
-            LibraryModel newBuilding = new LibraryModel();
-            return newBuilding;
+            return new LibraryModel();
         }
         else if(buildingType.equals("Sports Center")){
-            SportsCenterModel newBuilding = new SportsCenterModel(buildingName, 0);
-            return newBuilding;
+            return new SportsCenterModel(buildingName);
         }
         else{ //if for some reason it is none of these it will still make a new building
-            BuildingModel newBuilding = new BuildingModel();
-            return newBuilding;
+            return new BuildingModel();
         }
     }
 
@@ -424,33 +423,33 @@ public class BuildingManager {
      * @param collegeId
      * @return
      */
-    public List<BuildingModel> getWhatTypesOfBuildingsCanBeBuilt(String collegeId){
-        ArrayList<BuildingModel> availableBuildingTypes = new ArrayList<>();
-        BuildingModel smallBuilding = new BuildingModel();
-        smallBuilding.setBuildingType(1);
-        BuildingModel mediumBuilding = new BuildingModel();
-        mediumBuilding.setBuildingType(2);
-        BuildingModel largeBuilding = new BuildingModel();
-        largeBuilding.setBuildingType(3);
-
-        int availableCash = Accountant.getAvailableCash(collegeId);
-
-        if(availableCash >= 250000){
-            //can build all building types
-            availableBuildingTypes.add(smallBuilding);
-            availableBuildingTypes.add(mediumBuilding);
-            availableBuildingTypes.add(largeBuilding);
-        }
-        else if(availableCash >= 175000){
-            availableBuildingTypes.add(smallBuilding);
-            availableBuildingTypes.add(mediumBuilding);
-        }
-        else if(availableCash >=100000){
-            availableBuildingTypes.add(smallBuilding);
-        }
-
-        return availableBuildingTypes;
-    }
+//    public List<BuildingModel> getWhatTypesOfBuildingsCanBeBuilt(String collegeId){
+//        ArrayList<BuildingModel> availableBuildingTypes = new ArrayList<>();
+//        BuildingModel smallBuilding = new BuildingModel();
+//        smallBuilding.setBuildingType(1);
+//        BuildingModel mediumBuilding = new BuildingModel();
+//        mediumBuilding.setBuildingType(2);
+//        BuildingModel largeBuilding = new BuildingModel();
+//        largeBuilding.setBuildingType(3);
+//
+//        int availableCash = Accountant.getAvailableCash(collegeId);
+//
+//        if(availableCash >= 250000){
+//            //can build all building types
+//            availableBuildingTypes.add(smallBuilding);
+//            availableBuildingTypes.add(mediumBuilding);
+//            availableBuildingTypes.add(largeBuilding);
+//        }
+//        else if(availableCash >= 175000){
+//            availableBuildingTypes.add(smallBuilding);
+//            availableBuildingTypes.add(mediumBuilding);
+//        }
+//        else if(availableCash >=100000){
+//            availableBuildingTypes.add(smallBuilding);
+//        }
+//
+//        return availableBuildingTypes;
+//    }
 
     /**
      * See if a surprise event has occurred during construction.
@@ -490,19 +489,18 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, 20, "Medium");
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
-                 0, 20, "Medium");
+                 0, "Medium");
         saveBuildingHelper(startingDiningHall, collegeId, college);
 
         AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
-                0, 20,"Medium");
+                0,"Medium");
         saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
-        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative",
-                20);
+        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
         saveBuildingHelper(startingAdministrative, collegeId, college);
     }
 

@@ -226,7 +226,6 @@
                         <label for="buildingType">Select a building type</label>
                         <select class="form-control" id="buildingType" name="buildingType">
                             <option value="Academic Center">Academic Center</option>
-                            <option value="Administrative Building">Administrative Building</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
                             <option value="Entertainment Center">Entertainment Center</option>
@@ -271,7 +270,7 @@
                                placeholder="Enter building name.">
                         </div>
                         <!-- Button -->
-                        <input type="submit" class="btn btn-info" name="purchaseBuilding" value="Purchase Building">
+                        <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
                     <%}%>
             </div>

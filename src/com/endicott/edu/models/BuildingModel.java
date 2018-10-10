@@ -20,26 +20,26 @@ public class BuildingModel implements Serializable {
     private String runId = "unknown";
     private String note = "no note";
     private int numStudents = 0;
-    private String curDisaster = "";
+    private String curDisaster = "none";
     private int reputation = 0; //same as quality
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
     private int hoursToComplete = 300;
     private int totalBuildCost = 0;
-    private int buildingType; //was dormType
+//    private int buildingType; //was dormType
     private String size = "";
     private String kindOfBuilding;
 
     //some classes use this constructor
     public BuildingModel(int hourLastUpdated, String name, int numStudents,
-                         String curDisaster, int reputation, String runId, int numRooms,
+                         String curDisaster, String runId, int numRooms,
                          String kindOfBuilding, String size){
         this.capacity=setCapacityBasedOnSize(size);
         this.hourLastUpdated=hourLastUpdated;
         this.name=name;
         this.numStudents=numStudents;
         this.curDisaster=curDisaster;
-        this.reputation=reputation;
+        this.reputation=20;
         this.runId=runId;
         this.numRooms=numRooms;
         this.kindOfBuilding = kindOfBuilding;
@@ -47,18 +47,18 @@ public class BuildingModel implements Serializable {
     }
 
     //for DormModel, DiningHallModel and AcademicCenterModel
-    public BuildingModel(String name, int numStudents, int reputation, String kindOfBuilding, String size){
+    public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
         this.name = name;
         this.size = size;
         this.capacity = setCapacityBasedOnSize(size);
         this.numStudents = numStudents;
-        this.reputation = reputation;
+        this.reputation = 20;
         this.kindOfBuilding = kindOfBuilding;
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
-    public BuildingModel(String name, int reputation, String kindOfBuilding){
+    public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
-        this.reputation = reputation;
+        this.reputation = 20;
         this.kindOfBuilding = kindOfBuilding;
     }
     //for LibraryModel and HealthCenterModel
@@ -69,7 +69,7 @@ public class BuildingModel implements Serializable {
     public BuildingModel() {
     }
 
-    private int setCapacityBasedOnSize(String size){
+    public static int setCapacityBasedOnSize(String size){
         if(size.equals("Small")){return 50;}
         else if(size.equals("Medium")){return 200;}
         else if(size.equals("Large")){return 500;}
@@ -77,13 +77,9 @@ public class BuildingModel implements Serializable {
         else{return 0;}
     }
 
-    public int getBuildingType() {
-        return buildingType;
-    }
+//    public int getBuildingType() {return buildingType;}
 
-    public void setBuildingType(int buildingType) {
-        this.buildingType = buildingType;
-    }
+//    public void setBuildingType(int buildingType) {this.buildingType = buildingType; }
 
     public int getCapacity() {
         return capacity;
@@ -219,7 +215,6 @@ public class BuildingModel implements Serializable {
     public void setKindOfBuilding(String kindOfBuilding) {
         this.kindOfBuilding = kindOfBuilding;
     }
-
 
     public static String getAcademicConst() {return academicConst;}
     public static String getAdminConst() {return adminConst;}

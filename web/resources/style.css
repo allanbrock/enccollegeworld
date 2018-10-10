@@ -21,6 +21,7 @@ h3 { font-size: 1.2em ; }
 h4 { font-size: 1.0em; }
 h5 { font-size: 0.9em; }
 h6 { font-size: 0.8em; }
+.line{border-bottom: 1px solid #cccccc}
 a:link { color: #00f; }
 a:visited { color: #009; }
 a:hover { color: #06f; }

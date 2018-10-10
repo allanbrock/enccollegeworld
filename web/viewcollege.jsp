@@ -43,6 +43,7 @@
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
     popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -108,6 +109,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
@@ -129,16 +131,17 @@
                 <h4 class="modal-title">Current Events</h4>
                 <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
-            <% for (PopupEventModel event: popupManager.getEventsList()) {%>
+            <% for (PopupEventModel event:popupManager.getEventsList()) {%>
 
+                <div class="modal-body">
+                    <h5><%=event.getTitle()%></h5>
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
+                    <!-- a work in progress to format this better with the line class in style.css -->
+                    <div class="line"></div>
 
-            <div class="modal-body">
-                <h5><%=event.getTitle()%></h5>
-                <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
-                <!-- the popup may or maynot have buttons. -->
-            </div>
+                </div>
 
-                <%};%>
+            <%};%>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
                 <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
@@ -203,7 +206,6 @@
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
             <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
-            <button type="button" class="btn btn-info" onclick="<%popupManager.newPopupEvent("test title","test description", "add event");%>"
 
             <!-- Flood -->
             <%
@@ -333,7 +335,7 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -343,8 +345,18 @@
                 </div>
             </div>
 
+            <div class="col-sm-2">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1><%=college.getNumberStudentsAccepted()%>
+                        </h1>
+                        <h3>Accepted Students</h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Retention Rate -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=college.getRetentionRate()%>%
@@ -355,7 +367,7 @@
             </div>
 
             <!-- Ranking -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>?
