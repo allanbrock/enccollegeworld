@@ -57,6 +57,11 @@
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
     //TODO: grab the tips from the request.
+    TutorialModel tutorials[] = (TutorialModel[]) request.getAttribute("tutorials");
+    if (tutorials == null) {
+        tutorials = new TutorialModel[0];
+        msg.setMessage("Attribute for tutorial missing.");
+    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -120,7 +125,7 @@
                 <div class="col-md-5">
                         <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
                         <div class="well well-lg">
-                            The more students that you have the more admission money you receive.
+                                <p><%=tutorials[0].getBody()%></p>
                         </div>
                         <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                         <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">

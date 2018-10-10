@@ -43,6 +43,7 @@
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
     popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -77,7 +78,7 @@
 <% } %>
 
 <!-- displays modal for events if there are any -->
-<% if (popupManager.getNumberOfEvents() >= 1) { %>
+<% if (popupManager.isQueueInitiated()) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
@@ -126,19 +127,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
-                <h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>
+                <h4 class="modal-title">Current Events</h4>
                 <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
-            <div class="modal-body">
-                <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
-                <p><%=popupManager.getCurrentEvent().getDescription()%></p>
-                <%--<p>This event is a test of the Popup Event system</p>--%>
-                <!-- the popup may or maynot have buttons. -->
-                <!-- each button needs a name and value (both strings) -->
-                <input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">
-            </div>
+            <% for (PopupEventModel event:popupManager.getEventsList()) {%>
+
+                <div class="modal-body">
+                    <h5><%=event.getTitle()%></h5>
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
+                    <!-- a work in progress to format this better with the line class in style.css -->
+                    <div class="line"></div>
+
+                </div>
+
+            <%};%>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
                 <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
             </div>
         </div>
