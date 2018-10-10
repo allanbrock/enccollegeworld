@@ -5,6 +5,7 @@ import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
+import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -92,9 +93,9 @@ public class CollegeManager {
      * @param collegeId college name
      * @param dayCount  number of days
      */
-    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager) {
+    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager, HttpSession session) {
         CollegeDao collegeDao = new CollegeDao();
-
+//        popupManager.clearPopupManager();
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing x days.
@@ -121,9 +122,10 @@ public class CollegeManager {
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FloodManager floodManager = new FloodManager();
-        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager, session);
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
+        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
 
 
         // After all the simulators are run, there is a final

@@ -7,6 +7,7 @@ import com.endicott.edu.models.FloodModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Random;
 
@@ -25,9 +26,11 @@ public class FloodManager {
      * @param collegeId
      * @param hoursAlive number of hours college has been active.
      */
-    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager, HttpSession session) {
         List<FloodModel> floods = floodDao.getFloods(collegeId);
         List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
+        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
+
 
         // If there are no floods, possibly start one.
         if (floods.size() <= 0) {
@@ -54,6 +57,9 @@ public class FloodManager {
 
         }
         floodDao.saveAllFloods(collegeId, floods);
+        session.setAttribute("popupMan", popupManager);
+
+
     }
 
     /**
