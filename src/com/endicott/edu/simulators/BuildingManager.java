@@ -94,23 +94,23 @@ public class BuildingManager {
             return null;
         }
 
-        //get rid of this ????? 
-        int buildingTypeInt;
-        if (buildingType.equals("Small")) {
-            buildingTypeInt = 1;
-        } else if (buildingType.equals("Medium")) {
-            buildingTypeInt = 2;
-        } else if (buildingType.equals("Large")) {
-            buildingTypeInt = 3;
-        } else {
-            return null;
-        }
+        //get rid of this ?????
+        //int buildingTypeInt;
+        //if (buildingType.equals("Small")) {
+            //buildingTypeInt = 1;
+        //} else if (buildingType.equals("Medium")) {
+            ///buildingTypeInt = 2;
+        //} else if (buildingType.equals("Large")) {
+            //buildingTypeInt = 3;
+        //} else {
+            //return null;
+        //}
 
         // Override some fields
         BuildingDao buildingDao = new BuildingDao();
         CollegeDao dao = new CollegeDao();
         CollegeModel college = dao.getCollege(collegeId);
-        return (BuildingManager.createBuilding(collegeId, buildingName, buildingTypeInt,college.getHoursAlive()));
+        return (BuildingManager.createBuilding(collegeId, buildingName, buildingType,college.getHoursAlive(),buildingSize));
     }
 
     /**
@@ -122,12 +122,12 @@ public class BuildingManager {
      * @param hoursAlive number of hours college has existed
      * @return
      */
-    public static BuildingModel createBuilding(String collegeId, String buildingName, int buildingType, int hoursAlive) {
+    public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
 
         // Create building
-        BuildingModel newBuilding = new BuildingModel();
+        BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         newBuilding.setName(buildingName);
-        newBuilding.setBuildingType(buildingType);
+        //newBuilding.setBuildingType(buildingType);
         setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
         newBuilding.setReputation(5);
@@ -148,6 +148,51 @@ public class BuildingManager {
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, newBuilding);
         return newBuilding;
+    }
+    /**
+     * Creates the desired type of building
+     *
+     * @param buildingType type of building
+     * @param buildingName name of building
+     * @param buildingSize size of building
+     */
+    public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
+        if(buildingType.equals("Academic Center")){
+            AcademicCenterModel newBuilding = new AcademicCenterModel(buildingName, 0, 100, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Administrative Building")){
+            AdministrativeBldgModel newBuilding = new AdministrativeBldgModel(buildingName, 0);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Dining Hall")){
+            DiningHallModel newBuilding = new DiningHallModel(buildingName, 0, 0, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Dormitory")){
+            DormModel newBuilding = new DormModel(buildingName, 0, 0, buildingSize);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Entertainment Center")){
+            EntertainmentCenterModel newBuilding = new EntertainmentCenterModel(buildingName, 0);
+            return newBuilding;
+        }
+        else if(buildingType.equals("Health Center")){
+            HealthCenterModel newBuilding = new HealthCenterModel();
+            return newBuilding;
+        }
+        else if(buildingType.equals("Library")){
+            LibraryModel newBuilding = new LibraryModel();
+            return newBuilding;
+        }
+        else if(buildingType.equals("Sports Center")){
+            SportsCenterModel newBuilding = new SportsCenterModel(buildingName, 0);
+            return newBuilding;
+        }
+        else{ //if for some reason it is none of these it will still make a new building
+            BuildingModel newBuilding = new BuildingModel();
+            return newBuilding;
+        }
     }
 
     /**
