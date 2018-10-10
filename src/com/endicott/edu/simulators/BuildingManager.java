@@ -89,11 +89,12 @@ public class BuildingManager {
         }
     }
 
-    static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType) {
+    static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
             return null;
         }
 
+        //get rid of this ????? 
         int buildingTypeInt;
         if (buildingType.equals("Small")) {
             buildingTypeInt = 1;
