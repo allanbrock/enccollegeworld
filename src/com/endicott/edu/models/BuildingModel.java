@@ -26,7 +26,7 @@ public class BuildingModel implements Serializable {
     private int lengthOfDisaster = 0;
     private int hoursToComplete = 300;
     private int totalBuildCost = 0;
-    private int buildingType; //was dormType
+//    private int buildingType; //was dormType
     private String size = "";
     private String kindOfBuilding;
 
@@ -69,7 +69,7 @@ public class BuildingModel implements Serializable {
     public BuildingModel() {
     }
 
-    private int setCapacityBasedOnSize(String size){
+    public static int setCapacityBasedOnSize(String size){
         if(size.equals("Small")){return 50;}
         else if(size.equals("Medium")){return 200;}
         else if(size.equals("Large")){return 500;}
@@ -77,13 +77,9 @@ public class BuildingModel implements Serializable {
         else{return 0;}
     }
 
-    public int getBuildingType() {
-        return buildingType;
-    }
+//    public int getBuildingType() {return buildingType;}
 
-    public void setBuildingType(int buildingType) {
-        this.buildingType = buildingType;
-    }
+//    public void setBuildingType(int buildingType) {this.buildingType = buildingType; }
 
     public int getCapacity() {
         return capacity;
@@ -219,7 +215,6 @@ public class BuildingModel implements Serializable {
     public void setKindOfBuilding(String kindOfBuilding) {
         this.kindOfBuilding = kindOfBuilding;
     }
-
 
     public static String getAcademicConst() {return academicConst;}
     public static String getAdminConst() {return adminConst;}

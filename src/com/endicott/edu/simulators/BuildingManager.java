@@ -63,31 +63,31 @@ public class BuildingManager {
     /**
      * Given a building type, set attributes of the building.
      *
-     * @param building
+     * @param
      */
-    private static void setBuildingAttributesByBuildingType(BuildingModel building) {
-        BuildingType buildingType = BuildingType.valueOf(building.getBuildingType());
-
-        switch(buildingType) {
-            case SMALL:
-                building.setCapacity(200);
-                building.setNumRooms(100);
-                building.setTotalBuildCost(100);
-                break;
-            case MEDIUM:
-                building.setCapacity(350);
-                building.setNumRooms(175);
-                building.setTotalBuildCost(175);
-                break;
-            case LARGE:
-                building.setCapacity(500);
-                building.setNumRooms(250);
-                building.setTotalBuildCost(250);
-                break;
-            default:
-                logger.severe("Could not add building: '" + building.getName() + "'");
-        }
-    }
+//    private static void setBuildingAttributesByBuildingType(BuildingModel building) {
+//        BuildingType buildingType = BuildingType.valueOf(building.getBuildingType());
+//
+//        switch(buildingType) {
+//            case SMALL:
+//                building.setCapacity(200);
+//                building.setNumRooms(100);
+//                building.setTotalBuildCost(100);
+//                break;
+//            case MEDIUM:
+//                building.setCapacity(350);
+//                building.setNumRooms(175);
+//                building.setTotalBuildCost(175);
+//                break;
+//            case LARGE:
+//                building.setCapacity(500);
+//                building.setNumRooms(250);
+//                building.setTotalBuildCost(250);
+//                break;
+//            default:
+//                logger.severe("Could not add building: '" + building.getName() + "'");
+//        }
+//    }
 
     static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
@@ -98,9 +98,9 @@ public class BuildingManager {
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         newBuilding.setName(buildingName);
         //newBuilding.setBuildingType(buildingType);
-        setBuildingAttributesByBuildingType(newBuilding);
+//        setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
-        newBuilding.setReputation(5);
+        newBuilding.setReputation(20);
         newBuilding.setCurDisaster("none");
         newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
@@ -138,9 +138,9 @@ public class BuildingManager {
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         newBuilding.setName(buildingName);
         //newBuilding.setBuildingType(buildingType);
-        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setHourLastUpdated(0);
-        newBuilding.setReputation(5);
+//        setBuildingAttributesByBuildingType(newBuilding);
+//        newBuilding.setHourLastUpdated(0);
+        newBuilding.setReputation(20);
         newBuilding.setCurDisaster("none");
         newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
@@ -434,33 +434,33 @@ public class BuildingManager {
      * @param collegeId
      * @return
      */
-    public List<BuildingModel> getWhatTypesOfBuildingsCanBeBuilt(String collegeId){
-        ArrayList<BuildingModel> availableBuildingTypes = new ArrayList<>();
-        BuildingModel smallBuilding = new BuildingModel();
-        smallBuilding.setBuildingType(1);
-        BuildingModel mediumBuilding = new BuildingModel();
-        mediumBuilding.setBuildingType(2);
-        BuildingModel largeBuilding = new BuildingModel();
-        largeBuilding.setBuildingType(3);
-
-        int availableCash = Accountant.getAvailableCash(collegeId);
-
-        if(availableCash >= 250000){
-            //can build all building types
-            availableBuildingTypes.add(smallBuilding);
-            availableBuildingTypes.add(mediumBuilding);
-            availableBuildingTypes.add(largeBuilding);
-        }
-        else if(availableCash >= 175000){
-            availableBuildingTypes.add(smallBuilding);
-            availableBuildingTypes.add(mediumBuilding);
-        }
-        else if(availableCash >=100000){
-            availableBuildingTypes.add(smallBuilding);
-        }
-
-        return availableBuildingTypes;
-    }
+//    public List<BuildingModel> getWhatTypesOfBuildingsCanBeBuilt(String collegeId){
+//        ArrayList<BuildingModel> availableBuildingTypes = new ArrayList<>();
+//        BuildingModel smallBuilding = new BuildingModel();
+//        smallBuilding.setBuildingType(1);
+//        BuildingModel mediumBuilding = new BuildingModel();
+//        mediumBuilding.setBuildingType(2);
+//        BuildingModel largeBuilding = new BuildingModel();
+//        largeBuilding.setBuildingType(3);
+//
+//        int availableCash = Accountant.getAvailableCash(collegeId);
+//
+//        if(availableCash >= 250000){
+//            //can build all building types
+//            availableBuildingTypes.add(smallBuilding);
+//            availableBuildingTypes.add(mediumBuilding);
+//            availableBuildingTypes.add(largeBuilding);
+//        }
+//        else if(availableCash >= 175000){
+//            availableBuildingTypes.add(smallBuilding);
+//            availableBuildingTypes.add(mediumBuilding);
+//        }
+//        else if(availableCash >=100000){
+//            availableBuildingTypes.add(smallBuilding);
+//        }
+//
+//        return availableBuildingTypes;
+//    }
 
     /**
      * See if a surprise event has occurred during construction.
