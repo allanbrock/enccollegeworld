@@ -20,7 +20,7 @@ public class BuildingModel implements Serializable {
     private String runId = "unknown";
     private String note = "no note";
     private int numStudents = 0;
-    private String curDisaster = "";
+    private String curDisaster = "none";
     private int reputation = 0; //same as quality
     private int numRooms = 0;
     private int lengthOfDisaster = 0;

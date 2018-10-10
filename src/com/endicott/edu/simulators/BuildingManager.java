@@ -101,7 +101,6 @@ public class BuildingManager {
 //        setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
         newBuilding.setReputation(20);
-        newBuilding.setCurDisaster("none");
         newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
 
         // Pay for building
@@ -168,40 +167,31 @@ public class BuildingManager {
      */
     public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
         if(buildingType.equals("Academic Center")){
-            AcademicCenterModel newBuilding = new AcademicCenterModel(buildingName, 0, 100, buildingSize);
-            return newBuilding;
+            return new AcademicCenterModel(buildingName, 0, 100, buildingSize);
         }
         else if(buildingType.equals("Administrative Building")){
-            AdministrativeBldgModel newBuilding = new AdministrativeBldgModel(buildingName, 0);
-            return newBuilding;
+            return new AdministrativeBldgModel(buildingName, 0);
         }
         else if(buildingType.equals("Dining Hall")){
-            DiningHallModel newBuilding = new DiningHallModel(buildingName, 0, 0, buildingSize);
-            return newBuilding;
+            return new DiningHallModel(buildingName, 0, 0, buildingSize);
         }
         else if(buildingType.equals("Dormitory")){
-            DormModel newBuilding = new DormModel(buildingName, 0, 0, buildingSize);
-            return newBuilding;
+            return new DormModel(buildingName, 0, 0, buildingSize);
         }
         else if(buildingType.equals("Entertainment Center")){
-            EntertainmentCenterModel newBuilding = new EntertainmentCenterModel(buildingName, 0);
-            return newBuilding;
+            return new EntertainmentCenterModel(buildingName, 0);
         }
         else if(buildingType.equals("Health Center")){
-            HealthCenterModel newBuilding = new HealthCenterModel();
-            return newBuilding;
+            return new HealthCenterModel();
         }
         else if(buildingType.equals("Library")){
-            LibraryModel newBuilding = new LibraryModel();
-            return newBuilding;
+            return new LibraryModel();
         }
         else if(buildingType.equals("Sports Center")){
-            SportsCenterModel newBuilding = new SportsCenterModel(buildingName, 0);
-            return newBuilding;
+            return new SportsCenterModel(buildingName, 0);
         }
         else{ //if for some reason it is none of these it will still make a new building
-            BuildingModel newBuilding = new BuildingModel();
-            return newBuilding;
+            return new BuildingModel();
         }
     }
 
