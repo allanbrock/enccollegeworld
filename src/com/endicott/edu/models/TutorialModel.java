@@ -3,7 +3,6 @@ package com.endicott.edu.models;
 import java.io.Serializable;
 
 public class TutorialModel implements Serializable {
-    private String title = "";
     private String body = "";
     private String page = "unknown";
     private int refNum = 0;
@@ -11,8 +10,7 @@ public class TutorialModel implements Serializable {
     public TutorialModel(){
     }
 
-    public TutorialModel(String title, String body, String page, int refNum){
-        this.title = title;
+    public TutorialModel(String body, String page, int refNum){
         this.body = body;
         this.page = page;
         this.refNum = refNum;
@@ -32,14 +30,6 @@ public class TutorialModel implements Serializable {
 
     public void setPage(String page) {
         this.page = page;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public int getRefNum() {
