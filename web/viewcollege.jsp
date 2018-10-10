@@ -43,6 +43,7 @@
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
     popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -129,16 +130,17 @@
                 <h4 class="modal-title">Current Events</h4>
                 <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
-            <% for (PopupEventModel event: popupManager.getEventsList()) {%>
+            <% for (PopupEventModel event:popupManager.getEventsList()) {%>
 
+                <div class="modal-body">
+                    <h5><%=event.getTitle()%></h5>
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
+                    <!-- a work in progress to format this better with the line class in style.css -->
+                    <div class="line"></div>
 
-            <div class="modal-body">
-                <h5><%=event.getTitle()%></h5>
-                <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
-                <!-- the popup may or maynot have buttons. -->
-            </div>
+                </div>
 
-                <%};%>
+            <%};%>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
                 <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
@@ -203,7 +205,6 @@
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
             <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
-            <button type="button" class="btn btn-info" onclick="<%popupManager.newPopupEvent("test title","test description", "add event");%>"
 
             <!-- Flood -->
             <%
