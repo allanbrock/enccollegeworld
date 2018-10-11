@@ -57,6 +57,9 @@
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
     ArrayList<Integer> salaryOptions = FacultyModel.getSalaryOptions();
+    if (salaryOptions == null) {
+        salaryOptions = new ArrayList<Integer>();
+    }
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
