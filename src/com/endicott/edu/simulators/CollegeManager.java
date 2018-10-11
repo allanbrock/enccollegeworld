@@ -65,6 +65,8 @@ public class CollegeManager {
 
         EventManager.establishCollege(collegeId);
 
+        GateManager.establishCollege(collegeId);
+
         return college;
     }
 
@@ -91,14 +93,13 @@ public class CollegeManager {
      * All calculations are done in terms of hours.
      *
      * @param collegeId college name
-     * @param dayCount  number of days
      */
-    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager, HttpSession session) {
+    static public CollegeModel iterateTime(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 //        popupManager.clearPopupManager();
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setHoursAlive(college.getHoursAlive() + (24*dayCount));  // We are advancing x days.
+        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
         collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -122,11 +123,9 @@ public class CollegeManager {
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FloodManager floodManager = new FloodManager();
-        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager, session);
+        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
-        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
-
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
@@ -135,6 +134,12 @@ public class CollegeManager {
         return college;
     }
 
+    /**
+     * Returns current Date of college.
+     *
+     * @param collegeId college name
+     * @return the Date of the college
+     */
     static public Date getCollegeDate(String collegeId) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
         int hoursAlive = college.getHoursAlive();
