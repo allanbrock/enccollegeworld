@@ -90,6 +90,7 @@ public class SportsDao {
      * @return
      */
     public boolean checkIfSportCanBeCreated(String sportName){
+        //TODO:
         //Check if sports center has been created
             //Check if the user has enough money to create the sport
                 //Check if the school has enough students to create the sport

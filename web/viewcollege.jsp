@@ -9,6 +9,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
+<%@ page import="com.endicott.edu.simulators.GateManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -20,6 +21,11 @@
     if (college == null) {
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
+    }
+    GateModel gates[] = (GateModel[]) request.getAttribute("gates");
+    if(gates == null) {
+        gates = new GateModel[0]; // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
@@ -36,14 +42,15 @@
         floods = new FloodModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
-    PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+
+    PopupEventManager popupManager = (PopupEventManager) session.getAttribute("popupMan");
 
     if(popupManager == null){
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-    popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
-    popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
+    //popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    //popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -74,7 +81,7 @@
     $(document).ready(function(){
         $("#newCollegePopUp").modal('show');
     });
-</script>x
+</script>
 <% } %>
 
 <!-- displays modal for events if there are any -->
@@ -127,65 +134,57 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
                 <h4 class="modal-title">Current Events</h4>
-                <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
+            <!-- Creates a modal body for each event in the list-->
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
-
                 <div class="modal-body">
                     <h5><%=event.getTitle()%></h5>
-                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
-                    <!-- a work in progress to format this better with the line class in style.css -->
-                    <div class="line"></div>
-
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
+                    </p>
                 </div>
-
             <%};%>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
-                <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
             </div>
         </div>
 
     </div>
-</div>
-    <%--<% if(popupManager.isQueueInitiated()){  %>--%>
-    <%--<div class="modal fade" id="eventPopUp" role="dialog">--%>
-        <%--<div class="modal-dialog">--%>
-
-            <%--<!-- Modal content-->--%>
-            <%--<div class="modal-content">--%>
-                <%--<div class="modal-header">--%>
-                    <%--<!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->--%>
-                    <%--<h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>--%>
-                    <%--&lt;%&ndash;<h4 class="modal-title">Test event</h4>&ndash;%&gt;--%>
-                <%--</div>--%>
-                <%--<div class="modal-body">--%>
-                    <%--<!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->--%>
-                    <%--<p><%=popupManager.getCurrentEvent().getDescription()%></p>--%>
-                    <%--&lt;%&ndash;<p>This event is a test of the Popup Event system</p>&ndash;%&gt;--%>
-                    <%--<!-- the popup may or maynot have buttons. -->--%>
-                    <%--<!-- each button needs a name and value (both strings) -->--%>
-                    <%--<input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">--%>
-                <%--</div>--%>
-                <%--<div class="modal-footer">--%>
-                    <%--<button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>--%>
-                    <%--&lt;%&ndash;<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>&ndash;%&gt;--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-    <%--</div>--%>
-    <%--<% }%>--%>
-
-
+    </div>
 
 
     <div class="container">
 
         <!-- jumbotron -->
         <div class="jumbotron">
+
+            <%-- Gates --%>
+            <div class="gateList" style="float: right; width: 50%;">
+                <h3>Current Objectives(<%=gates.length%>):</h3>
+                <div class="pre-scrollable" style="max-height: 150px">
+                    <ul class="list-group">
+                        <%
+                            for(GateModel gate : gates) {
+                                if(!GateManager.testGate(college.getRunId(), gate.getKey())) {
+                        %>
+                        <li class="list-group-item">
+                            <%=gate.getKey()%>
+                            <div class="progress" style="margin-bottom:0">
+                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                     style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">
+                                    <%=students.length%> / <%=gate.getGoal()%> ( <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>% )
+                                </div>
+                            </div>
+                        </li>
+                        <%
+                                }
+                            }
+                        %>
+                    </ul>
+                </div>
+            </div>
+
             <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>
 

@@ -18,11 +18,6 @@ public class ViewBalanceServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
-        HttpSession session = request.getSession();
-        if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0, popupManager, session);
-        }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
