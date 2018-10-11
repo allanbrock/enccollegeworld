@@ -9,6 +9,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
+<%@ page import="com.endicott.edu.simulators.GateManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -20,6 +21,11 @@
     if (college == null) {
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
+    }
+    GateModel gates[] = (GateModel[]) request.getAttribute("gates");
+    if(gates == null) {
+        gates = new GateModel[0]; // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
@@ -151,6 +157,34 @@
 
         <!-- jumbotron -->
         <div class="jumbotron">
+
+            <%-- Gates --%>
+            <div class="gateList" style="float: right; width: 50%;">
+                <h3>Current Objectives(<%=gates.length%>):</h3>
+                <div class="pre-scrollable" style="max-height: 150px">
+                    <ul class="list-group">
+                        <%
+                            for(GateModel gate : gates) {
+                                if(!GateManager.testGate(college.getRunId(), gate.getKey())) {
+                        %>
+                        <li class="list-group-item">
+                            <%=gate.getKey()%>
+                            <div class="progress" style="margin-bottom:0">
+                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                     style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">
+                                    <%=students.length%> / <%=gate.getGoal()%> ( <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>% )
+                                </div>
+                            </div>
+                        </li>
+                        <%
+                                }
+                            }
+                        %>
+                    </ul>
+                </div>
+            </div>
+
             <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>
 

@@ -65,6 +65,8 @@ public class CollegeManager {
 
         EventManager.establishCollege(collegeId);
 
+        GateManager.establishCollege(collegeId);
+
         return college;
     }
 
