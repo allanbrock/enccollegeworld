@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by abrocken on 7/10/2017.
+ * Testing
  */
 public class SportModel implements Serializable {
     private int minPlayers = 0;
