@@ -193,7 +193,7 @@ public class SportModel implements Serializable {
 
     public void setCurrentPlayers(int currentPlayers) { this.currentPlayers = currentPlayers; }
 
-
+    //TODO: fix these constructors
     public int getActive() { return isActive;
     }
 

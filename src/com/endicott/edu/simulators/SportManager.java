@@ -191,6 +191,7 @@ public class SportManager {
      * @param sport
      */
     public static void fillUpTeamAndSetActiveStatus(String collegeId, SportModel sport){
+        //TODO: edit filling of teams
         if (sport.getCurrentPlayers() < sport.getMinPlayers()){
             addPlayers(collegeId, sport);
             if(sport.getCurrentPlayers() < sport.getMinPlayers()){
