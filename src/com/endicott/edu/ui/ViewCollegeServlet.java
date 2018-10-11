@@ -5,6 +5,7 @@ import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
@@ -12,6 +13,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.iterateTime(collegeId, popupManager);
         }
@@ -37,7 +39,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-
+        InterfaceUtils.setPopupEventManagerInSession(popupManager, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
@@ -46,6 +48,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+
         if (request.getParameter("nextDayButton") != null) {
             CollegeManager.iterateTime(collegeId, popupManager);
         }
@@ -53,6 +56,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+        InterfaceUtils.setPopupEventManagerInSession(popupManager, request);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);

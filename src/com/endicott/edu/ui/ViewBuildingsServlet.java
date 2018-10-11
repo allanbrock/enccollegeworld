@@ -10,17 +10,41 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
 public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
+    private boolean beginPurchase = false;
+    private boolean buildingTypeSelected = false;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
-            addDorm(request, response);
+            beginPurchase = false;
+            buildingTypeSelected = false;
+            String beginPurchaseStr = String.valueOf(beginPurchase);
+            String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
+            request.setAttribute("beginBuildingPurchase", beginPurchaseStr);
+            request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr);
+            addBuilding(request, response);
+            //doGet(request, response);
+        }
+        else if(request.getParameter("beginBuildingPurchase") != null){ //if they want to begin the process of purchasing a building
+            beginPurchase = true; //begin attribute becomes true
+            String beginStr = String.valueOf(beginPurchase);
+            request.setAttribute("beginBuildingPurchase", beginStr);
+            doGet(request, response);
+        }
+        else if(request.getParameter("selectBuildingType") != null){ //if they've selected the building type
+            buildingTypeSelected = true;
+            String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
+            request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr);
+            String buildingType = request.getParameter("buildingType");
+            request.setAttribute("buildingType", buildingType);
+            doGet(request, response);
         }
         else {
             // Might be selling a dorm.
@@ -43,8 +67,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             }
             String i = request.getParameter("sellDorm");
         }
-    }
 
+    }
 //    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
 //        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 //
@@ -75,10 +99,10 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
-        if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, popupManager);
-        }
+        String beginStr = String.valueOf(beginPurchase);
+        request.setAttribute("beginBuildingPurchase", beginStr); //begin attribute is originally false
+        String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
+        request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr); //building type selected is originally false
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
@@ -88,21 +112,24 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void addDorm(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        //doGet(request, response);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-        String dormName=request.getParameter("dormName");
-        String dormType=request.getParameter("dormType");
+        String buildingName=request.getParameter("buildingName");
+        String buildingType=request.getParameter("buildingType");
+        String buildingSize=request.getParameter("buildingSize");
 
         logger.info("In ViewBuildingsServlet.doPost()");
         InterfaceUtils.logRequestParameters(request);
 
-        if(runId == null || dormName ==null || dormType == null){
+        if(runId == null || buildingName ==null || buildingType == null || buildingSize == null){
             UiMessage message = new UiMessage("Cannot add dorm, information is missing");
             request.setAttribute("message", message);
             logger.severe("Parameters bad for adding a dorm.");
         }
         else{
-            BuildingManager.addBuilding(runId, dormName, dormType);
+            //change this so it takes in the building size as well
+            BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 
         //load the request with attributes for the dorm

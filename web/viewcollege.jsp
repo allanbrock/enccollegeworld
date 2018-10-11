@@ -36,13 +36,15 @@
         floods = new FloodModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
-    PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+
+    PopupEventManager popupManager = (PopupEventManager) session.getAttribute("popupMan");
 
     if(popupManager == null){
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-    popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    //popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    //popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -77,7 +79,7 @@
 <% } %>
 
 <!-- displays modal for events if there are any -->
-<% if (popupManager.getNumberOfEvents() >= 1) { %>
+<% if (popupManager.isQueueInitiated()) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
@@ -108,6 +110,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
@@ -125,56 +128,23 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
-                <h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>
-                <%--<h4 class="modal-title">Test event</h4>--%>
+                <h4 class="modal-title">Current Events</h4>
             </div>
-            <div class="modal-body">
-                <!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->
-                <p><%=popupManager.getCurrentEvent().getDescription()%></p>
-                <%--<p>This event is a test of the Popup Event system</p>--%>
-                <!-- the popup may or maynot have buttons. -->
-                <!-- each button needs a name and value (both strings) -->
-                <input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">
-            </div>
+            <!-- Creates a modal body for each event in the list-->
+            <% for (PopupEventModel event:popupManager.getEventsList()) {%>
+                <div class="modal-body">
+                    <h5><%=event.getTitle()%></h5>
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
+                    </p>
+                </div>
+            <%};%>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>
-                <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
             </div>
         </div>
 
     </div>
-</div>
-    <%--<% if(popupManager.isQueueInitiated()){  %>--%>
-    <%--<div class="modal fade" id="eventPopUp" role="dialog">--%>
-        <%--<div class="modal-dialog">--%>
-
-            <%--<!-- Modal content-->--%>
-            <%--<div class="modal-content">--%>
-                <%--<div class="modal-header">--%>
-                    <%--<!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->--%>
-                    <%--<h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>--%>
-                    <%--&lt;%&ndash;<h4 class="modal-title">Test event</h4>&ndash;%&gt;--%>
-                <%--</div>--%>
-                <%--<div class="modal-body">--%>
-                    <%--<!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->--%>
-                    <%--<p><%=popupManager.getCurrentEvent().getDescription()%></p>--%>
-                    <%--&lt;%&ndash;<p>This event is a test of the Popup Event system</p>&ndash;%&gt;--%>
-                    <%--<!-- the popup may or maynot have buttons. -->--%>
-                    <%--<!-- each button needs a name and value (both strings) -->--%>
-                    <%--<input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">--%>
-                <%--</div>--%>
-                <%--<div class="modal-footer">--%>
-                    <%--<button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>--%>
-                    <%--&lt;%&ndash;<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>&ndash;%&gt;--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-    <%--</div>--%>
-    <%--<% }%>--%>
-
-
+    </div>
 
 
     <div class="container">
@@ -330,7 +300,7 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=students.length%>
@@ -340,8 +310,18 @@
                 </div>
             </div>
 
+            <div class="col-sm-2">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h1><%=college.getNumberStudentsAccepted()%>
+                        </h1>
+                        <h3>Accepted Students</h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Retention Rate -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1><%=college.getRetentionRate()%>%
@@ -352,7 +332,7 @@
             </div>
 
             <!-- Ranking -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <div class="text-center">
                         <h1>?

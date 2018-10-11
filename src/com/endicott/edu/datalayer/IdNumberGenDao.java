@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 
+import com.endicott.edu.models.FacultyModel;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -97,6 +98,21 @@ public class IdNumberGenDao {
         } else {
             System.out.println("FAIL");
         }
+    }
+
+    public static String generateFacultyID(FacultyModel member){
+        int randID = IdNumberGenDao.randIDGeneration();
+        for(int i = 0; i < FacultyDao.getFaculty(member.getCollegeID()).size(); i++){
+            if(String.valueOf(randID).equals(FacultyDao.getFaculty(member.getCollegeID()).get(i))){
+                randID = IdNumberGenDao.randIDGeneration();
+                i = -1;
+            }
+        }
+        return String.valueOf(randID);
+    }
+
+    private static int randIDGeneration(){
+        return (int) (100000 + Math.random() * 900000); // Generates random 6 digit ID
     }
 
 }

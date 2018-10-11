@@ -57,6 +57,11 @@
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
     //TODO: grab the tips from the request.
+    TutorialModel tutorials[] = (TutorialModel[]) request.getAttribute("tutorials");
+    if (tutorials == null) {
+        tutorials = new TutorialModel[0];
+        msg.setMessage("Attribute for tutorial missing.");
+    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -120,7 +125,7 @@
                 <div class="col-md-5">
                         <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
                         <div class="well well-lg">
-                            The more students that you have the more admission money you receive.
+                                <p><%=tutorials[0].getBody()%></p>
                         </div>
                         <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                         <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
@@ -128,9 +133,6 @@
 
             </div>
         </div>
-
-
-
 
         <h4>Student Body Happiness</h4>
         <% if (college.getStudentBodyHappiness() >= 80) { %>
@@ -175,6 +177,33 @@
                         <tr>
                             <td>
                                 <li class="list-group-item"><%=students[i].getName()%></li>
+                                <% if (students[i].getHappinessLevel() >= 80) { %>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                        <%=students[i].getHappinessLevel()%>%
+                                    </div>
+                                </div>
+                                <%
+                                } else if (students[i].getHappinessLevel() >= 50 && students[i].getHappinessLevel() < 80 ){
+                                %>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                        <%=students[i].getHappinessLevel()%>%
+                                    </div>
+                                </div>
+                                <% } else if (students[i].getHappinessLevel() < 50){
+                                %>
+                                <div class="col-sm-8">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar"
+                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                            <%=students[i].getHappinessLevel()%>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
                             </td>
                             <td>
                                 <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
@@ -182,7 +211,6 @@
                                     <div class="well well-sm">
                                     ID Number: <%=students[i].getIdNumber()%><br>
                                     Dorm: <%=students[i].getDorm()%><br>
-                                    Happiness: <%=students[i].getHappinessLevel()%><br>
                                     Gender: <%=students[i].getGender()%> <br>
                                         <% if (students[i].getNumberHoursLeftBeingSick() > 0) { %>
                                     Is Sick (<%=students[i].getNumberHoursLeftBeingSick()%> hours til better)<br>

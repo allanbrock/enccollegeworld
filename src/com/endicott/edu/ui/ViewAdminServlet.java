@@ -5,6 +5,7 @@ import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Enumeration;
@@ -33,10 +34,6 @@ public class ViewAdminServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
-        if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, popupManager);
-        }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.

@@ -3,12 +3,14 @@ package com.endicott.edu.simulators;
 import java.util.ArrayList;
 import com.endicott.edu.models.PopupEventModel;
 
+import javax.swing.*;
+
 /**
  * Created by CJ Mustone and Joseph Moss
  */
 public class PopupEventManager {
     //Keeps a list of all Popup Events for the current simulation period
-    ArrayList<PopupEventModel> currentEvents;
+    private ArrayList<PopupEventModel> currentEvents;
 
     public PopupEventManager(){
        currentEvents = new ArrayList<>();
@@ -27,7 +29,7 @@ public class PopupEventManager {
     }
     public void newPopupEvent(String title, String description, String acknowledgeButtonText){
         PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
-        addEvent(newEvent);
+        this.addEvent(newEvent);
 
     }
     public boolean isQueueInitiated(){
@@ -36,6 +38,9 @@ public class PopupEventManager {
         }else{
             return false;
         }
+    }
+    public ArrayList<PopupEventModel> getEventsList(){
+        return this.currentEvents;
     }
     public PopupEventModel getCurrentEvent(){
         return currentEvents.get(0);

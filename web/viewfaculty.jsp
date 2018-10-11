@@ -133,6 +133,7 @@
                                 Department: <%=faculty.get(i).getDepartment()%><br>
                                 Salary: <%=String.valueOf(faculty.get(i).getSalary())%> <br>
                                 Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
                             </div>
                         </div>
                     </td>
@@ -156,6 +157,16 @@
                     </select>
                     <br>
                     <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
+                </div>
+            </div>
+            <div class="well well-sm">
+                <div class="form-group">
+                    <label id="removeFacultyLabel" style="color: darkblue">Remove a faculty member by entering their ID</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="removeFacultyID" name="removeFacultyID">
+                    <br>
+                    <input type="submit" class="btn btn-info" name="removeFaculty" value="Fire Faculty">
                 </div>
             </div>
         </div>
