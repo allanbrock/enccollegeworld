@@ -45,7 +45,6 @@ public class FacultyDao {
             logger.warning("IO exception in retrieving faculty.. ");
             e.printStackTrace();
         }
-
         return faculty;
     }
 

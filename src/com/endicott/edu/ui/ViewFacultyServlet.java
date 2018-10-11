@@ -1,12 +1,13 @@
 package com.endicott.edu.ui;
 
 
+import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.FacultyManager;
 import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.logging.Logger;
@@ -20,10 +21,19 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         if (request.getParameter("addFaculty") != null) {  // addFaculty is present if addFaculty button was pressed
             addFaculty(request, response);
         }
+
+        if(request.getParameter("removeFaculty") != null){
+            removeFaculty(request, response);
+        }
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+        if (request.getParameter("nextDayButton") != null) {
+            CollegeManager.iterateTime(collegeId, 0, popupManager);
+        }
+
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
@@ -46,6 +56,39 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         }
         else {
             FacultyManager.addFaculty(collegeId, salary);
+        }
+
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
+        dispatcher.forward(request,response);
+    }
+
+    private void removeFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        Boolean valid = false;
+        FacultyModel removedMember = null;
+        String facultyID = request.getParameter("removeFacultyID");
+        for(FacultyModel member : FacultyDao.getFaculty(collegeId)){
+            if(facultyID.equals(member.getFacultyID())){
+                removedMember = member;
+                valid = true;
+                break;
+            }
+        }
+        if (collegeId == null) {
+            UiMessage message = new UiMessage("Can't remove a faculty member because missing information");
+            request.setAttribute("message", message);
+            logger.severe("Parameters bad for removing faculty.");
+        }
+        else {
+            if(valid)
+                FacultyManager.removeFaculty(collegeId, removedMember);
+            else {
+                UiMessage message = new UiMessage("Faculty member was not found");
+                request.setAttribute("message", message);
+                logger.severe("Parameters bad for finding faculty.");
+            }
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);

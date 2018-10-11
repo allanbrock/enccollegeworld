@@ -1,11 +1,11 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.datalayer.IdNumberGenDao;
+import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -22,9 +22,11 @@ public class FacultyModel implements Serializable {
     private int salary;   //private int salary = 115000; //yearly salary
     private String officeLocation; //office building and number
     private int happiness;
+    private int performance;
 
     public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String facultyID) {
         System.out.print("Other constructor hit");
+        FacultyManager.establishSalaryOptions();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
@@ -33,14 +35,16 @@ public class FacultyModel implements Serializable {
     }
 
     public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
+        FacultyManager.establishSalaryOptions();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
         this.officeLocation = officeLocation;
         this.collegeID = collegeID;
         this.salary = salary;
-        this.facultyID = this.generateFacultyID();
-        this.computeFacultyHappiness(salary);
+        this.facultyID = IdNumberGenDao.generateFacultyID(this);
+        this.performance = 75;
+        FacultyManager.computeFacultyHappiness(this, false);
     }
 
     public String getFacultyName() {
@@ -88,59 +92,13 @@ public class FacultyModel implements Serializable {
     public void setHappiness(int happiness){ this.happiness = happiness; }
     public int getHappiness() { return this.happiness; }
 
-    // TODO: this needs to be moved.  The models should not have any logic in them.
+    public void setCollegeID(String collegeID){ this.collegeID = collegeID; }
+    public String getCollegeID() { return this.collegeID; }
 
-    private void computeFacultyHappiness(int pay){
-        if (salaryOptions == null) {
-            happiness = 0;
-            return;
-        }
+    public static ArrayList<Integer> getSalaryOptions(){ return salaryOptions; }
+    public static void instantiateSalaryOptions(){ salaryOptions = new ArrayList<Integer>(); }
 
-        Random r = new Random();
-        int tempHappiness = r.nextInt(100 - 50) + 50;
-        for(int i = 0; i < salaryOptions.size(); i++){
-            if(pay == salaryOptions.get(i)){
-                if(i == 0)
-                    happiness = tempHappiness - 15;
-                else if(i == 1)
-                    happiness = tempHappiness - 5;
-                else if(i == 2)
-                    happiness = tempHappiness + 5;
-                else
-                    happiness = tempHappiness + 15;
-                break;
-            }
-        }
-        if(happiness > 100)
-            happiness = 100;
-    }
+    public int getPerformance(){ return this.performance; }
+    public void setPerformance(int performance) { this.performance = performance; }
 
-    private String generateFacultyID(){
-        List<FacultyModel> curFaculty = FacultyDao.getFaculty(this.collegeID);
-        int randID = this.randIDGeneration();
-        for(int i = 0; i < FacultyDao.getFaculty(this.collegeID).size(); i++){
-            if(String.valueOf(randID).equals(FacultyDao.getFaculty(this.collegeID).get(i))){
-                randID = this.randIDGeneration();
-                i = -1;
-            }
-        }
-        return String.valueOf(randID);
-    }
-
-    private int randIDGeneration(){
-        return (int) (100000 + Math.random() * 900000); // Generates random 6 digit ID
-    }
-
-    private static void establishSalaryOptions(){
-        salaryOptions = new ArrayList();
-        int[] salaries = new int[] {100000, 125000, 150000, 175000};
-        for(int i = 0; i < salaries.length; i++){
-            salaryOptions.add(salaries[i]);
-        }
-    }
-
-    public static ArrayList<Integer> getSalaryOptions(){
-        establishSalaryOptions();
-        return salaryOptions;
-    }
 }
