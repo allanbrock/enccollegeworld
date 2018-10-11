@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by abrocken on 7/10/2017.
+ * Testing
  */
 public class SportModel implements Serializable {
     private int minPlayers = 0;
@@ -24,7 +25,7 @@ public class SportModel implements Serializable {
     private String note = "no note";
     private int isActive = 0;
     private int hoursUntilNextGame = 0;
-    private int hoursReset = 0;
+    private int hoursReset;
     private int division;
     private String sportSeason = "unknown";
 
@@ -187,12 +188,13 @@ public class SportModel implements Serializable {
 
     public int getHoursUntilNextGame() { return hoursUntilNextGame; }
 
-    public void setHoursUntilNextGame() {this.hoursUntilNextGame = this.hoursReset;}
+    public void setHoursUntilNextGame(int hoursNextGame) {this.hoursUntilNextGame = hoursNextGame;}
 
     public int getCurrentPlayers() { return currentPlayers; }
 
     public void setCurrentPlayers(int currentPlayers) { this.currentPlayers = currentPlayers; }
 
+    public int getResetHours() {return hoursReset;}
 
     public int getActive() { return isActive;
     }

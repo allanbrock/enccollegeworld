@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 /**
  * Responsible for simulating everything sports related.
+ * testing
  */
 public class SportManager {
     SportsDao dao = new SportsDao();
@@ -69,11 +70,11 @@ public class SportManager {
         SportModel result = null;
 
         if (sportName.equals("$50,000 - Men's Basketball")){
-            result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 48, "Male",3, "Winter", 72);
+            result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male",3, "Winter", 72);
             Accountant.payBill(collegeId, "Men's Basketball start up fee", result.getStartupCost());
         }
         else if(sportName.equals("$50,000 - Women's Basketball")){
-            result  = new SportModel(12, 0, 15, 100, 0,0,0,20,50000,50,0,"Women's Basketball", collegeId, 0,48, "Female", 3, "Winter", 72);
+            result  = new SportModel(12, 0, 15, 100, 0,0,0,20,50000,50,0,"Women's Basketball", collegeId, 0,72, "Female", 3, "Winter", 72);
             Accountant.payBill(collegeId, "Women's Basketball start up fee", result.getStartupCost());
         }
         else if(sportName.equals("$50,000 - Baseball")){
@@ -85,15 +86,15 @@ public class SportManager {
             Accountant.payBill(collegeId, "Softball start up fee", result.getStartupCost());
         }
         else if(sportName.equals("$50,000 - Women's Soccer")){
-            result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Women's Soccer", collegeId, 0,48, "Female", 3, "Fall", 72);
+            result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Women's Soccer", collegeId, 0,72, "Female", 3, "Fall", 72);
             Accountant.payBill(collegeId, "Women's Soccer start up fee", result.getStartupCost());
         }
         else if(sportName.equals("$50,000 - Men's Soccer")){
-            result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Soccer", collegeId, 0, 48,"Male", 3, "Fall", 72);
+            result  = new SportModel(15,0, 20, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Soccer", collegeId, 0, 72,"Male", 3, "Fall", 72);
             Accountant.payBill(collegeId, "Men's Soccer start up fee", result.getStartupCost());
         }
         else if(sportName.equals("$50,000 - Men's Football")){
-            result  = new SportModel(33,0, 75, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Football", collegeId, 0, 48,"Male", 3, "Fall", 144);
+            result  = new SportModel(33,0, 75, 100, 0, 0, 0 , 20 , 50000, 50, 0, "Men's Football", collegeId, 0, 144,"Male", 3, "Fall", 144);
             Accountant.payBill(collegeId, "Men's Football start up fee", result.getStartupCost());
         } else {
             logger.severe("Could not add sport: '" + sportName + "'");
@@ -246,9 +247,9 @@ public class SportManager {
     public static void playGame(SportModel sport, int hoursAlive, String collegeId ){
         if (sport.getHoursUntilNextGame() <= 0) {
             simulateGame(sport, hoursAlive, collegeId);
-            sport.setHoursUntilNextGame();
+            sport.setHoursUntilNextGame(sport.getResetHours());
         } else {
-            sport.setHoursUntilNextGame();
+            sport.setHoursUntilNextGame(Math.max(0, hoursAlive - sport.getHourLastUpdated()));
         }
     }
 
