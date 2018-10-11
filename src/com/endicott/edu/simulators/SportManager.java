@@ -7,6 +7,7 @@ import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -25,6 +26,9 @@ public class SportManager {
      * @param hoursAlive number of hours since the college started.
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        //Make sure sports in season are active and vise versa
+        checkSportSeasons(collegeId);
+
         List<SportModel> sports = dao.getSports(collegeId);
 
         for (SportModel sport : sports) {
@@ -32,10 +36,65 @@ public class SportManager {
             fillUpTeamAndSetActiveStatus(collegeId, sport);
             billRunningCostofSport(collegeId, hoursAlive, sport);
             sport.setHourLastUpdated(hoursAlive);
+            //playGame will check whether or not a sport is in season
             playGame(sport, hoursAlive, collegeId);
         }
 
         dao.saveAllSports(collegeId, sports);
+    }
+
+    /**
+     * Checks the current date to see what season it is,
+     * makes sure each sport in season is set to active,
+     * makes sure each sport not in season is set to inactive
+     *
+     * @param collegeId
+     */
+    public void checkSportSeasons(String collegeId){
+        List<SportModel> sports = dao.getSports(collegeId);
+
+        //This gets the current date
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        int hoursAlive = college.getHoursAlive();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 8);
+        cal.set(Calendar.YEAR, 2018);
+        cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
+
+        //This int is for debugging
+        int thisMonth = cal.get(Calendar.MONTH);
+
+        for (SportModel sport : sports) {
+            //Check if it is currently between fall season dates
+            if (cal.get(Calendar.MONTH) >= 8 && cal.get(Calendar.MONTH) < 11){
+                //if this sport is a fall sport, make it active. If not, make it inactive
+                if (sport.getSportSeason().equalsIgnoreCase("Fall"))
+                    sport.setActive(1);
+                else
+                    sport.setActive(0);
+            }
+            //Check if it is currently between winter season dates
+            else if ((cal.get(Calendar.MONTH) == 11) || (cal.get(Calendar.MONTH) >= 0 && cal.get(Calendar.MONTH) < 2)){
+                //if this sport is a winter sport, make it active. If not, make it inactive
+                if (sport.getSportSeason().equalsIgnoreCase("Winter"))
+                    sport.setActive(1);
+                else
+                    sport.setActive(0);
+            }
+            //Check if it is currently between spring season dates
+            else if (cal.get(Calendar.MONTH) >= 2 && cal.get(Calendar.MONTH) < 5){
+                //if this sport is a spring sport, make it active. If not, make it inactive
+                if (sport.getSportSeason().equalsIgnoreCase("Spring"))
+                    sport.setActive(1);
+                else
+                    sport.setActive(0);
+            }
+            //This will be the else, it is the summer, set all to inactive
+            else {
+                sport.setActive(0);
+            }
+        }
     }
 
     /**
@@ -138,11 +197,11 @@ public class SportManager {
                 sport.setActive(0);
             }
             else{
-                sport.setActive(1);
+                checkAvailableSports(collegeId);
             }
         }
         else {
-            sport.setActive(1);
+            checkAvailableSports(collegeId);
         }
     }
 
@@ -237,18 +296,20 @@ public class SportManager {
     }
 
     /**
-     * If enough time has elapsed since the last game, play a game.
+     * If the sport is in season and enough time has elapsed since the last game, play a game.
      *
      * @param sport
      * @param hoursAlive
      * @param collegeId
      */
     public static void playGame(SportModel sport, int hoursAlive, String collegeId ){
-        if (sport.getHoursUntilNextGame() <= 0) {
-            simulateGame(sport, hoursAlive, collegeId);
-            sport.setHoursUntilNextGame(48);
-        } else {
-            sport.setHoursUntilNextGame(Math.max(0, hoursAlive - sport.getHourLastUpdated()));
+        if (sport.getActive() == 1) {
+            if (sport.getHoursUntilNextGame() <= 0) {
+                simulateGame(sport, hoursAlive, collegeId);
+                sport.setHoursUntilNextGame(48);
+            } else {
+                sport.setHoursUntilNextGame(Math.max(0, hoursAlive - sport.getHourLastUpdated()));
+            }
         }
     }
 
