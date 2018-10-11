@@ -128,61 +128,23 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->
                 <h4 class="modal-title">Current Events</h4>
-                <%--<h4 class="modal-title">Test event</h4>--%>
             </div>
+            <!-- Creates a modal body for each event in the list-->
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
-
                 <div class="modal-body">
                     <h5><%=event.getTitle()%></h5>
-                    <p><%=event.getDescription()%>
-                        <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
+                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
                     </p>
-                    <!-- a work in progress to format this better with the line class in style.css -->
-                    <div class="line"></div>
-
                 </div>
-
             <%};%>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
-                <%--<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>--%>
             </div>
         </div>
 
     </div>
-</div>
-    <%--<% if(popupManager.isQueueInitiated()){  %>--%>
-    <%--<div class="modal fade" id="eventPopUp" role="dialog">--%>
-        <%--<div class="modal-dialog">--%>
-
-            <%--<!-- Modal content-->--%>
-            <%--<div class="modal-content">--%>
-                <%--<div class="modal-header">--%>
-                    <%--<!-- hard coded title to avoid accessing ArrayList becuase of out of bounds exceptions-->--%>
-                    <%--<h4 class="modal-title"><%=popupManager.getCurrentEvent().getTitle()%></h4>--%>
-                    <%--&lt;%&ndash;<h4 class="modal-title">Test event</h4>&ndash;%&gt;--%>
-                <%--</div>--%>
-                <%--<div class="modal-body">--%>
-                    <%--<!-- viewCollege - a popup should have the name of the servlet to call (viewDorms, viewCollege... -->--%>
-                    <%--<p><%=popupManager.getCurrentEvent().getDescription()%></p>--%>
-                    <%--&lt;%&ndash;<p>This event is a test of the Popup Event system</p>&ndash;%&gt;--%>
-                    <%--<!-- the popup may or maynot have buttons. -->--%>
-                    <%--<!-- each button needs a name and value (both strings) -->--%>
-                    <%--<input type="button" class="btn btn-info" name="acknowledgeButton" value="TEST">--%>
-                <%--</div>--%>
-                <%--<div class="modal-footer">--%>
-                    <%--<button type="button" class="btn btn-default" data-dismiss="modal"><%=popupManager.getCurrentEvent().getAcknowledgeButtonText()%></button>--%>
-                    <%--&lt;%&ndash;<button type="button" class="btn btn-default" data-dismiss="modal">Ok!</button>&ndash;%&gt;--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-        <%--</div>--%>
-    <%--</div>--%>
-    <%--<% }%>--%>
-
-
+    </div>
 
 
     <div class="container">
