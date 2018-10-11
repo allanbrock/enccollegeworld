@@ -103,11 +103,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("beginBuildingPurchase", beginStr); //begin attribute is originally false
         String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
         request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr); //building type selected is originally false
-        HttpSession session = request.getSession();
-        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
-        if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(runId, 0,popupManager, session);
-        }
 
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.

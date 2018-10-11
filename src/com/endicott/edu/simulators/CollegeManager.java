@@ -93,7 +93,7 @@ public class CollegeManager {
      * @param collegeId college name
      * @param dayCount  number of days
      */
-    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager, HttpSession session) {
+    static public CollegeModel iterateTime(String collegeId, int dayCount, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 //        popupManager.clearPopupManager();
         // Advance time college has been alive.
@@ -122,11 +122,9 @@ public class CollegeManager {
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FloodManager floodManager = new FloodManager();
-        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager, session);
+        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
-        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
-
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.

@@ -13,16 +13,15 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
-        HttpSession session = request.getSession();
-        session.setAttribute("popupMan", popupManager);
+
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 1, popupManager, session);
+            CollegeManager.iterateTime(collegeId, 1, popupManager);
         }
         if (request.getParameter("nextWeekButton") != null) {
-            CollegeManager.iterateTime(collegeId, 7, popupManager, session);
+            CollegeManager.iterateTime(collegeId, 7, popupManager);
         }
         if (request.getParameter("nextMonthButton") != null) {
-            CollegeManager.iterateTime(collegeId, 30, popupManager, session);
+            CollegeManager.iterateTime(collegeId, 30, popupManager);
         }
         if(request.getParameter("updateTuitionButton") != null){
             //call update tuition
@@ -38,7 +37,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-
+        request.setAttribute("popupMan", popupManager);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewcollege.jsp");
         dispatcher.forward(request, response);
@@ -49,7 +48,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         HttpSession session = request.getSession();
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, 0, popupManager, session);
+            CollegeManager.iterateTime(collegeId, 0, popupManager);
         }
 
         // Attempt to fetch the college and load into

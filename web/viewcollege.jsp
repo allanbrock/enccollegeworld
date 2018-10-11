@@ -36,14 +36,16 @@
         floods = new FloodModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
-    PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+
+    PopupEventManager popupManager = (PopupEventManager) request.getAttribute("popupMan");
+    // popupManager = (PopupEventManager) session.getAttribute("popupMan");
 
     if(popupManager == null){
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-    popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
-    popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
+    //popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+    //popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -135,7 +137,9 @@
 
                 <div class="modal-body">
                     <h5><%=event.getTitle()%></h5>
-                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>"></p>
+                    <p><%=event.getDescription()%>
+                        <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
+                    </p>
                     <!-- a work in progress to format this better with the line class in style.css -->
                     <div class="line"></div>
 
