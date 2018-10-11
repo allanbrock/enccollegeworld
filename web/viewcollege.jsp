@@ -37,8 +37,7 @@
         msg.setMessage(msg.getMessage() + " Attribute for floods missing.");
     }
 
-    PopupEventManager popupManager = (PopupEventManager) request.getAttribute("popupMan");
-    // popupManager = (PopupEventManager) session.getAttribute("popupMan");
+    PopupEventManager popupManager = (PopupEventManager) session.getAttribute("popupMan");
 
     if(popupManager == null){
         popupManager = new PopupEventManager();

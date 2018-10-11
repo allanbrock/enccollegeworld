@@ -57,6 +57,13 @@ public class InterfaceUtils {
         request.setAttribute("tutorials", tutorials);
     }
 
+
+    public static void setPopupEventManagerInSession(PopupEventManager manager, HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("popupMan",manager);
+    }
+
     public static void setCollegeIdInSession(String collegeId, HttpServletRequest request)
     {
         HttpSession session = request.getSession();
