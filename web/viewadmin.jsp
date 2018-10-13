@@ -114,9 +114,6 @@
     }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
-
-//    List<CollegeModel> colleges = CollegeSimTalker.getAllColleges(server,college.getRunId());
-
 %>
 
 

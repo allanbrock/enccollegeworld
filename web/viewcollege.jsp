@@ -60,12 +60,14 @@
 <title>Enc College World</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="resources/style.css">
+<link rel="stylesheet" href="resources/jquery.circliful.css">
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
 <!-- JQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
@@ -75,6 +77,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
+
+<!-- Circular progress bars -->
+<script src="resources/js/jquery.circliful.min.js"></script>
+<script>
+    $( document ).ready(function() {
+        $('#happinessCircle').circliful();
+        $('#retentionCircle').circliful();
+    });
+</script>
 
 <% if (college.getCurrentDay() <= 1) { %>
 <script type="text/javascript">
@@ -153,6 +164,8 @@
     </div>
 
 
+
+
     <div class="container">
 
         <!-- jumbotron -->
@@ -204,7 +217,7 @@
             <br>
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
             <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>
+            <%--<button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>--%>
 
             <!-- Flood -->
             <%
@@ -220,48 +233,24 @@
 
         <div class="row">
             <!-- Happiness -->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="well well-sm">
                     <%
                         String barType = "progress-bar-success";
                     %>
-                    <% if(college.getStudentBodyHappiness() > 50) { %>
-                    <h2>&#9786;
-                        <small>Student Happiness</small>
-                    </h2>
-                    <% } else { %>
-                    <h2>&#9785;
-                        <small>Student Happiness</small>
-                    </h2>
-                    <% } %>
-                    <% if (college.getStudentBodyHappiness() >= 60) { %>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar"
-                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                             style="width:<%=college.getStudentBodyHappiness()%>%">
-                            <%=college.getStudentBodyHappiness()%>%
-                        </div>
+                    <h2><small>Student Happiness</small></h2>
+                    <!-- progress circle -->
+                    <div id="happinessCircle"
+                         data-dimension="250"
+                         data-text=""
+                         data-info="Happiness"
+                         data-width="12"
+                         data-fontsize="12"
+                         data-percent="<%=college.getStudentBodyHappiness()%>"
+                         data-fgcolor="#61a9dc"
+                         data-bgcolor="#eee"
+                         data-fill="#ddd">
                     </div>
-                    <%
-                    } else if (college.getStudentBodyHappiness() >= 30) {
-                    %>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-warning" role="progressbar"
-                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                             style="width:<%=Math.max(college.getStudentBodyHappiness(),20)%>%">
-                            <%=college.getStudentBodyHappiness()%>%
-                        </div>
-                    </div>
-                    <% } else {
-                    %>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-danger" role="progressbar"
-                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                             style="width:<%=Math.max(college.getStudentBodyHappiness(),20)%>%">
-                            <%=college.getStudentBodyHappiness()%>%
-                        </div>
-                    </div>
-                    <% } %>
                     <br>
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
@@ -357,28 +346,54 @@
             <!-- Retention Rate -->
             <div class="col-sm-2">
                 <div class="well well-sm">
-                    <div class="text-center">
-                        <h1><%=college.getRetentionRate()%>%
-                        </h1>
-                        <h3>Retention Rate</h3>
+                    <h2><small>Retention Rate</small></h2>
+                    <!-- progress circle: retention rate -->
+                    <div id="retentionCircle"
+                         data-dimension="250"
+                         data-text=""
+                         data-info="Retention Rate"
+                         data-width="12"
+                         data-fontsize="12"
+                         data-percent="<%=college.getRetentionRate()%>"
+                         data-fgcolor="#61a9dc"
+                         data-bgcolor="#eee"
+                         data-fill="#ddd">
                     </div>
                 </div>
             </div>
 
-            <!-- Ranking -->
-            <div class="col-sm-2">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h1>?
-                        </h1>
-                        <h3>Ranking</h3>
+            <!-- Tuition -->
+            <div class="col-sm-3">
+                <form id = "tuitionForm">
+                    <div class="well well-sm">
+                        <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
+                        <p>Update Tuition</p>
+                        <form class="form-inline">
+                            <div class="form-group">
+
+                                <label class="sr-only" >Amount (in dollars)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
+                                    <div class="input-group-addon">.00</div>
+                                </div>
+                            </div>
+                            <!--This bit of css hides the arrows on the above text box
+                                these are called spin boxes. If this causes problems
+                                just remove the coode in the <style> tag!-->
+                            <style>
+                                input::-webkit-outer-spin-button,
+                                input::-webkit-inner-spin-button {
+                                    /* display: none; <- Crashes Chrome on hover */
+                                    -webkit-appearance: none;
+                                    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                                }
+                            </style>
+
+                            <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
+                        </form>
                     </div>
-                    <br>
-                    <a href="#rankingDetails" class="btn btn-info" data-toggle="collapse">Details</a>
-                    <div id="rankingDetails" class="collapse">
-                        Coming in FA 2018!
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -464,39 +479,7 @@
 
         <div class="row">
 
-            <!-- Tuition -->
-            <div class="col-sm-6">
-                <form id = "tuitionForm">
-                    <div class="well well-sm">
-                        <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
-                        <p>Update Tuition</p>
-                        <form class="form-inline">
-                            <div class="form-group">
 
-                                <label class="sr-only" >Amount (in dollars)</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">$</div>
-                                    <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
-                                    <div class="input-group-addon">.00</div>
-                                </div>
-                            </div>
-                            <!--This bit of css hides the arrows on the above text box
-                                these are called spin boxes. If this causes problems
-                                just remove the coode in the <style> tag!-->
-                            <style>
-                                input::-webkit-outer-spin-button,
-                                input::-webkit-inner-spin-button {
-                                    /* display: none; <- Crashes Chrome on hover */
-                                    -webkit-appearance: none;
-                                    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-                                }
-                            </style>
-
-                            <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
-                        </form>
-                    </div>
-                </form>
-            </div>
 
             <!-- Student Faculty Ratio -->
             <div class="col-sm-3">
