@@ -34,7 +34,7 @@
 
     <style>
         /*body {*/
-            /*padding-top: 3.5rem;*/
+        /*padding-top: 3.5rem;*/
         /*}*/
 
         /*
@@ -107,8 +107,8 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    CollegeModel colleges[] = (CollegeModel[])request.getAttribute("colleges");
-    if(colleges == null){
+    CollegeModel colleges[] = (CollegeModel[]) request.getAttribute("colleges");
+    if (colleges == null) {
         colleges = new CollegeModel[0];
         msg.setMessage(msg.getMessage() + "No colleges found!");
     }
@@ -117,36 +117,37 @@
 %>
 
 
-
 <form action="viewAdmin" method="post">
     <header>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="viewCollege"><%=college.getRunId()%>
+                        </a></li>
+                        <li><a href="viewStudent">Students</a></li>
+                        <li><a href="viewBuilding">Buildings</a></li>
+                        <li><a href="viewSports">Sports</a></li>
+                        <li><a href="viewFaculty">Faculty</a></li>
+                        <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%>
+                        </a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="viewAdmin">Admin</a></li>
+                        <li><a href="about.jsp">About</a></li>
+                        <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="viewCollege"><%=college.getRunId()%></a></li>
-                    <li><a href="viewStudent">Students</a></li>
-                    <li><a href="viewBuilding">Buildings</a></li>
-                    <li><a href="viewSports">Sports</a></li>
-                    <li><a href="viewFaculty">Faculty</a></li>
-                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="viewAdmin">Admin</a></li>
-                    <li><a href="about.jsp">About</a></li>
-                    <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
 
     </header>
 
@@ -172,17 +173,21 @@
                         </thead>
                         <tbody>
 
-                       <%for(CollegeModel tmp : colleges){ %>
+                        <%for (CollegeModel tmp : colleges) { %>
                         <tr>
-                            <td><%=tmp.getRunId()%></td>
+                            <td><%=tmp.getRunId()%>
+                            </td>
                             <td><input type="submit" class="btn btn-info" name="<%=tmp.getRunId()%>" value="Delete"
-                            <% if (college.getRunId().compareTo(tmp.getRunId()) == 0) {%>
-                                    disabled
-                            <% }%>
+                                <% if (college.getRunId().compareTo(tmp.getRunId()) == 0) {%>
+                                       disabled
+                                <% }%>
                             ></td>
-                            <td><%=tmp.getCurrentDay()%></td>
-                            <td>$<%=tmp.getAvailableCash()%></td>
-                            <td><%=tmp.getNumberStudentsAdmitted()%></td>
+                            <td><%=tmp.getCurrentDay()%>
+                            </td>
+                            <td>$<%=tmp.getAvailableCash()%>
+                            </td>
+                            <td><%=tmp.getNumberStudentsAdmitted()%>
+                            </td>
 
                         </tr>
                         <%}%>
