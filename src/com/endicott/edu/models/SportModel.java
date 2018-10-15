@@ -25,6 +25,7 @@ public class SportModel implements Serializable {
     private String note = "no note";
     private int isActive = 0;
     private int hoursUntilNextGame = 0;
+    private int hoursReset;
     private int division;
     private String sportSeason = "unknown";
 
@@ -32,7 +33,10 @@ public class SportModel implements Serializable {
 
     }
 
-    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay, int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost, int reputation, int hourLastUpdated, String sportName, String runId, int isActive, int hoursUntilNextGame, String gender, int division, String sportSeason) {
+    public SportModel(int minPlayers, int currentPlayers, int maxPlayers, int costPerDay,
+                      int gamesLost, int gamesTied, int gamesWon, int numGames, int startupCost,
+                      int reputation, int hourLastUpdated, String sportName, String runId, int isActive,
+                      int hoursUntilNextGame, String gender, int division, String sportSeason, int resetHours) {
         this.minPlayers = minPlayers;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
@@ -51,6 +55,7 @@ public class SportModel implements Serializable {
         this.gender = gender;
         this.division = division;
         this.sportSeason = sportSeason;
+        this.hoursReset = resetHours;
     }
 
     public SportModel(String sportName, String runId){
@@ -186,14 +191,13 @@ public class SportModel implements Serializable {
 
     public int getHoursUntilNextGame() { return hoursUntilNextGame; }
 
-    public void setHoursUntilNextGame(int hoursUntilNextGame) {
-        this.hoursUntilNextGame = hoursUntilNextGame;
-    }
+    public void setHoursUntilNextGame(int hoursNextGame) {this.hoursUntilNextGame = hoursNextGame;}
 
     public int getCurrentPlayers() { return currentPlayers; }
 
     public void setCurrentPlayers(int currentPlayers) { this.currentPlayers = currentPlayers; }
 
+    public int getResetHours() {return hoursReset;}
 
     public int getActive() { return isActive;
     }
