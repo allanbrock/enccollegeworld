@@ -83,7 +83,7 @@ public class StudentManager {
 
             numNewStudents = 150;
 
-            createStudents(numNewStudents, collegeId, students);
+            createStudents(numNewStudents, collegeId, students, initial);
 
             college = collegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
@@ -100,7 +100,7 @@ public class StudentManager {
                 numNewStudents = openBeds;
             }
 
-            createStudents(numNewStudents, collegeId, students);
+            createStudents(numNewStudents, collegeId, students, false);
 
             college = collegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
@@ -136,7 +136,7 @@ public class StudentManager {
         }
     }
 
-    private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students){
+    private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
             if (rand.nextInt(10) + 1 > 5) {
@@ -149,11 +149,14 @@ public class StudentManager {
 
             student.setIdNumber(IdNumberGenDao.getID(collegeId));
             student.setHappinessLevel(70);
-            if(i <= 50) {
+            if(i <= 50 && initial) {
                 student.setAthleticAbility(rand.nextInt(5) + 5);
             }
-            else{
+            else if (i > 50 && initial){
                 student.setAthleticAbility(rand.nextInt(5));
+            }
+            else{
+                student.setAthleticAbility(rand.nextInt(10));
             }
 
             if (student.getAthleticAbility() > 6) {
