@@ -215,7 +215,7 @@
         <!-- Add Dorm -->
         <div class="col-sm-4">
             <div class="well well-sm">
-
+                <a id="purchase">
                 <!-- if they haven't hit begin purchase, only one option is visible -->
                 <% if(beginPurchase == "false"){%>
                     <h4>Purchase a new Building</h4>
@@ -225,13 +225,13 @@
                     <div class="form-group">
                         <label for="buildingType">Select a building type</label>
                         <select class="form-control" id="buildingType" name="buildingType">
-                            <option value="Academic Center">Academic Center</option>
-                            <option value="Dining Hall">Dining Hall</option>
-                            <option value="Dormitory">Dormitory</option>
-                            <option value="Entertainment Center">Entertainment Center</option>
-                            <option value="Health Center">Health Center</option>
-                            <option value="Library">Library</option>
-                            <option value="Sports Center">Sports Center</option>
+                            <option value="Academic Center">Academic Center: $50,000</option>
+                            <option value="Dining Hall">Dining Hall: $50,000</option>
+                            <option value="Dormitory">Dormitory: $50,000</option>
+                            <option value="Entertainment Center">Entertainment Center: $50,000</option>
+                            <option value="Health Center">Health Center: $50,000</option>
+                            <option value="Library">Library: $50,000</option>
+                            <option value="Sports Center">Sports Center: $50,000</option>
                         </select>
                     </div>
                         <!-- Button -->
@@ -273,6 +273,7 @@
                         <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
                     <%}%>
+                </a>
             </div>
         </div>
 

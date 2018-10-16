@@ -111,6 +111,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
         dispatcher.forward(request, response);
+        
+        //if the purchase process was started, should go to the anchor tag
     }
 
     private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
