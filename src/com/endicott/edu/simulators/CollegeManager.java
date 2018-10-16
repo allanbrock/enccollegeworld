@@ -154,6 +154,28 @@ public class CollegeManager {
     }
 
     /**
+     * Returns the current month (1 based) of the date in the college.
+     */
+    static public int getCollegeCurrentMonth(String collegeId) {
+        Date date = getCollegeDate(collegeId);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int m = cal.get(Calendar.MONTH);
+        int d = cal.get(Calendar.DAY_OF_MONTH);
+        return cal.get(Calendar.MONTH) + 1;
+    }
+
+    /**
+     * Returns the day of the date in the college.
+     */
+    static public int getCollegeCurrentDay(String collegeId) {
+        Date date = getCollegeDate(collegeId);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
      * Sets college yearly tuition.
      *
      * @param collegeId college name

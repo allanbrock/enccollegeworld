@@ -180,7 +180,7 @@
                                 <% if (students[i].getHappinessLevel() >= 80) { %>
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-success" role="progressbar"
-                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
                                         <%=students[i].getHappinessLevel()%>%
                                     </div>
                                 </div>
@@ -189,20 +189,18 @@
                                 %>
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-warning" role="progressbar"
-                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
                                         <%=students[i].getHappinessLevel()%>%
                                     </div>
                                 </div>
                                 <% } else if (students[i].getHappinessLevel() < 50){
                                 %>
-                                <div class="col-sm-8">
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-danger" role="progressbar"
-                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
+                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
                                             <%=students[i].getHappinessLevel()%>%
                                         </div>
                                     </div>
-                                </div>
                                 <% } %>
                             </td>
                             <td>
