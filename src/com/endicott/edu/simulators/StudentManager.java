@@ -146,9 +146,16 @@ public class StudentManager {
                 student.setName(NameGenDao.generateName(true));
                 student.setGender("Female");
             }
+
             student.setIdNumber(IdNumberGenDao.getID(collegeId));
             student.setHappinessLevel(70);
-            student.setAthleticAbility(rand.nextInt(10));
+            if(i <= 50) {
+                student.setAthleticAbility(rand.nextInt(5) + 5);
+            }
+            else{
+                student.setAthleticAbility(rand.nextInt(5));
+            }
+
             if (student.getAthleticAbility() > 6) {
                 student.setAthlete(true);
             } else {
