@@ -238,7 +238,7 @@
                     <%
                         String barType = "progress-bar-success";
                     %>
-                    <h2><small>Student Happiness</small></h2>
+                    <h2><small>College Happiness</small></h2>
                     <!-- progress circle -->
                     <div id="happinessCircle"
                          data-dimension="250"

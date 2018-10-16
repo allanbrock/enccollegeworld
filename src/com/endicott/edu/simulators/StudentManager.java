@@ -81,88 +81,30 @@ public class StudentManager {
 
         if(initial) {
 
-
-            numNewStudents = rand.nextInt(openBeds);
-            if (numNewStudents > openBeds) {
-                numNewStudents = openBeds;
-            }
+            numNewStudents = 150;
 
             createStudents(numNewStudents, collegeId, students);
 
-//            for (int i = 0; i < numNewStudents; i++) {
-//                StudentModel student = new StudentModel();
-//                if (rand.nextInt(10) + 1 > 5) {
-//                    student.setName(NameGenDao.generateName(false));
-//                    student.setGender("Male");
-//                } else {
-//                    student.setName(NameGenDao.generateName(true));
-//                    student.setGender("Female");
-//                }
-//                student.setIdNumber(IdNumberGenDao.getID(collegeId));
-//                student.setHappinessLevel(70);
-//                student.setAthleticAbility(rand.nextInt(10));
-//                if (student.getAthleticAbility() > 6) {
-//                    student.setAthlete(true);
-//                } else {
-//                    student.setAthlete(false);
-//                }
-//                student.setTeam("");
-//                student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
-//                student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
-//                student.setDorm(buildingMgr.assignDorm(collegeId));
-//                student.setRunId(collegeId);
-//                students.add(student);
-//                dao.saveAllStudents(collegeId, students);
-//            }
-
             college = collegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
-
             collegeDao.saveCollege(college);
 
             if (numNewStudents > 0) {
                 NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             }
         }
-        else if(date.subSequence(5,7).equals("Sep") && date.subSequence(9,10).equals("06") || date.subSequence(5,7).equals("Jan") && date.subSequence(9,10).equals("01")) {
+        else if((CollegeManager.getCollegeCurrentMonth(collegeId) == 9 && CollegeManager.getCollegeCurrentDay(collegeId) == 1) || (CollegeManager.getCollegeCurrentMonth(collegeId) == 1 && CollegeManager.getCollegeCurrentDay(collegeId) == 1)){
 
-
-            numNewStudents = rand.nextInt(college.getNumberStudentsAccepted());
+            numNewStudents = college.getNumberStudentsAccepted();
             if (numNewStudents > openBeds) {
                 numNewStudents = openBeds;
             }
 
             createStudents(numNewStudents, collegeId, students);
 
-//            for (int i = 0; i < numNewStudents; i++) {
-//                StudentModel student = new StudentModel();
-//                if (rand.nextInt(10) + 1 > 5) {
-//                    student.setName(NameGenDao.generateName(false));
-//                    student.setGender("Male");
-//                } else {
-//                    student.setName(NameGenDao.generateName(true));
-//                    student.setGender("Female");
-//                }
-//                student.setIdNumber(IdNumberGenDao.getID(collegeId));
-//                student.setHappinessLevel(70);
-//                student.setAthleticAbility(rand.nextInt(10));
-//                if (student.getAthleticAbility() > 6) {
-//                    student.setAthlete(true);
-//                } else {
-//                    student.setAthlete(false);
-//                }
-//                student.setTeam("");
-//                student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
-//                student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
-//                student.setDorm(buildingMgr.assignDorm(collegeId));
-//                student.setRunId(collegeId);
-//                students.add(student);
-//                dao.saveAllStudents(collegeId, students);
-//            }
-
             college = collegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
-
+            college.setNumberStudentsAccepted(0);
             collegeDao.saveCollege(college);
 
             if (numNewStudents > 0) {
@@ -183,31 +125,7 @@ public class StudentManager {
             return;
         }
 
-        numNewStudents = rand.nextInt(openBeds);
-
-//        for (int i = 0; i < numNewStudents; i++) {
-//            StudentModel student = new StudentModel();
-//            if(rand.nextInt(10) + 1 > 5){
-//                student.setName(NameGenDao.generateName(false));
-//                student.setGender("Male");
-//            } else {
-//                student.setName(NameGenDao.generateName(true));
-//                student.setGender("Female");
-//            }
-//            student.setIdNumber(IdNumberGenDao.getID(collegeId));
-//            student.setHappinessLevel(70);
-//            student.setAthleticAbility(rand.nextInt(10));
-//            if(student.getAthleticAbility() > 6) {
-//                student.setAthlete(true);
-//            }
-//            else {
-//                student.setAthlete(false);
-//            }
-//            student.setTeam("");
-//            student.setDorm(buildingMgr.assignDorm(collegeId));
-//            student.setRunId(collegeId);
-//            dao.saveAllStudents(collegeId, students);
-//        }
+        numNewStudents = rand.nextInt(10);
 
         college = collegeDao.getCollege(collegeId);
         college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
