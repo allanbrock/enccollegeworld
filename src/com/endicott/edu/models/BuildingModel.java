@@ -12,6 +12,9 @@ public class BuildingModel implements Serializable {
     private final static String healthConst = "HEALTH";
     private final static String libraryConst = "LIBRARY";
     private final static String sportsConst = "SPORTS";
+    private final static String baseballDiamond = "BASEBALL DIAMOND";
+    private final static String footballStadium = "FOOTBALL STADIUM";
+    private final static String hockeyRink = "HOCKEY RINK";
 
     private int capacity = 0;
     private int costPerDay = 0;
@@ -21,12 +24,16 @@ public class BuildingModel implements Serializable {
     private String note = "no note";
     private int numStudents = 0;
     private String curDisaster = "none";
-    private int reputation = 0; //same as quality
+
+    private float hiddenQuality = 0; //same as quality
+    private static final int maxHiddenQuality = 10;
+    private static final int minHiddenQuality = -10;
+    private float shownQuality = 0;
+
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
     private int hoursToComplete = 300;
     private int totalBuildCost = 0;
-//    private int buildingType; //was dormType
     private String size = "";
     private String kindOfBuilding;
 
@@ -39,26 +46,37 @@ public class BuildingModel implements Serializable {
         this.name=name;
         this.numStudents=numStudents;
         this.curDisaster=curDisaster;
-        this.reputation=20;
+        this.hiddenQuality=10;
+        this.shownQuality = updateShownQuality(hiddenQuality);
         this.runId=runId;
         this.numRooms=numRooms;
         this.kindOfBuilding = kindOfBuilding;
         this.size = size;
     }
 
-    //for DormModel, DiningHallModel and AcademicCenterModel
+    //for DormModel, DiningHallModel, LibraryModel, HealthCenterModel, and AcademicCenterModel
     public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
         this.name = name;
         this.size = size;
         this.capacity = setCapacityBasedOnSize(size);
         this.numStudents = numStudents;
-        this.reputation = 20;
+        this.hiddenQuality = 10;
+        this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
+    }
+    //For Football Stadium, Hockey Rink, and Baseball Diamond
+    public BuildingModel(String name, String kindOfBuilding, String size){
+        this.name = name;
+        this.hiddenQuality = 10;
+        this.shownQuality = updateShownQuality(hiddenQuality);
+        this.kindOfBuilding = kindOfBuilding;
+        this.size = size;
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
     public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
-        this.reputation = 20;
+        this.hiddenQuality = 10;
+        this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
     }
     //for LibraryModel and HealthCenterModel
@@ -66,9 +84,12 @@ public class BuildingModel implements Serializable {
         this.kindOfBuilding = kindOfBuilding;
     }
 
+
+
     public BuildingModel() {
     }
 
+    //Helper function to set the building capacity
     public static int setCapacityBasedOnSize(String size){
         if(size.equals("Small")){return 50;}
         else if(size.equals("Medium")){return 200;}
@@ -77,9 +98,20 @@ public class BuildingModel implements Serializable {
         else{return 0;}
     }
 
-//    public int getBuildingType() {return buildingType;}
+    //Keeps the hidden quality between the min and max values
+    public static int keepHiddenQualityWithinBounds(int hiddenQuality){
+        if(hiddenQuality < minHiddenQuality){return minHiddenQuality;}
+        else if(hiddenQuality > maxHiddenQuality){return maxHiddenQuality;}
+        else{return hiddenQuality;}
+    }
 
-//    public void setBuildingType(int buildingType) {this.buildingType = buildingType; }
+    //Updates/Sets the shown quality based on what the hidden quality is
+    //This will always return a number between 0-100 since
+    // the hidden quality is controlled using the function above
+    public static float updateShownQuality(float hiddenQuality){
+        float starting = 50;
+        return starting + (hiddenQuality * 5);
+    }
 
     public int getCapacity() {
         return capacity;
@@ -137,6 +169,22 @@ public class BuildingModel implements Serializable {
         this.costPerDay = costPerDay;
     }
 
+    public float getHiddenQuality() {
+        return hiddenQuality;
+    }
+
+    public void setHiddenQuality(int hiddenQuality) {
+        this.hiddenQuality = hiddenQuality;
+    }
+
+    public float getShownQuality() {
+        return shownQuality;
+    }
+
+    public void setShownQuality(int shownQuality) {
+        this.shownQuality = shownQuality;
+    }
+
     public void setHoursToComplete(int hoursToComplete) {
         this.hoursToComplete = hoursToComplete;
     }
@@ -165,14 +213,6 @@ public class BuildingModel implements Serializable {
 
     public void setCurDisaster(String curDisaster) {
         this.curDisaster = curDisaster;
-    }
-
-    public int getReputation() {
-        return reputation;
-    }
-
-    public void setReputation(int reputation) {
-        this.reputation = reputation;
     }
 
     public int getNumRooms() {
@@ -224,6 +264,7 @@ public class BuildingModel implements Serializable {
     public static String getHealthConst() {return healthConst;}
     public static String getLibraryConst() {return libraryConst;}
     public static String getSportsConst() {return sportsConst;}
-
-
+    public static String getBaseballDiamondConst() {return baseballDiamond;}
+    public static String getFootballStadiumConst() {return  footballStadium;}
+    public static String getHockeyRinkConst() {return hockeyRink;}
 }

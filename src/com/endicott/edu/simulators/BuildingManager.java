@@ -20,6 +20,7 @@ public class BuildingManager {
     static private DormitoryDao dormDao = new DormitoryDao();
     static private Logger logger = Logger.getLogger("BuildingManager");
     static private StudentDao studentDao = new StudentDao();
+    static private GateManager gateManager = new GateManager();
 
     /**
      * Simulate all changes in buildings caused by advancing the hours the college
@@ -96,7 +97,6 @@ public class BuildingManager {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
-        newBuilding.setName(buildingName);
         //newBuilding.setBuildingType(buildingType);
 //        setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
@@ -181,13 +181,22 @@ public class BuildingManager {
             return new EntertainmentCenterModel(buildingName);
         }
         else if(buildingType.equals("Health Center")){
-            return new HealthCenterModel();
+            return new HealthCenterModel(buildingName);
         }
         else if(buildingType.equals("Library")){
-            return new LibraryModel();
+            return new LibraryModel(buildingName);
         }
         else if(buildingType.equals("Sports Center")){
             return new SportsCenterModel(buildingName);
+        }
+        else if(buildingType.equals("Baseball Diamond")){
+            return new BaseballDiamondModel(buildingName, buildingSize);
+        }
+        else if(buildingType.equals("Football Stadium")){
+            return new FootballStadiumModel(buildingName, buildingSize);
+        }
+        else if(buildingType.equals("Hockey Rink")){
+            return new HockeyRinkModel(buildingName, buildingSize);
         }
         else{ //if for some reason it is none of these it will still make a new building
             return new BuildingModel();
@@ -502,6 +511,9 @@ public class BuildingManager {
 
         AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
         saveBuildingHelper(startingAdministrative, collegeId, college);
+
+        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", 700);
+        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", 1500);
     }
 
     /**

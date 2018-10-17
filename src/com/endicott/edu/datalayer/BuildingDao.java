@@ -142,7 +142,7 @@ public class BuildingDao {
 
         System.out.println("First building: a(n) " + m1.getSize() + " " + m1.getKindOfBuilding() + " with a capacity of "
                             + m1.getCapacity());
-        System.out.println("Second building: a(n) " + m2.getKindOfBuilding() + " with a reputation of " + m2.getReputation());
+        System.out.println("Second building: a(n) " + m2.getKindOfBuilding() + " with a reputation of " + m2.getHiddenQuality());
         System.out.println("Third building: a(n) " + m3.getSize() + " " + m3.getKindOfBuilding());
         System.out.println("Fourth building: a(n) " + m4.getKindOfBuilding() + " with a capacity of " + m4.getCapacity());
     }
