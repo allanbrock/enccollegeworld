@@ -130,6 +130,9 @@ public class CollegeManager {
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
+        if(college.getAvailableCash() <= 0){
+            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!", "Return to Main Menu", "returnToWelcome");
+        }
 
         return college;
     }
@@ -191,6 +194,23 @@ public class CollegeManager {
         calculateStatisticsAndRatings(collegeId);
 
         NewsManager.createNews(collegeId, college.getHoursAlive(),"Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
+
+        StudentManager studentManager = new StudentManager();
+        studentManager.calculateStatistics(collegeId);
+
+        return college;
+    }
+    //TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
+    public static CollegeModel bankruptCollege(String collegeId){
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setAvailableCash(0);
+        cao.saveCollege(college);
+
+        calculateStatisticsAndRatings(collegeId);
+
+
 
         StudentManager studentManager = new StudentManager();
         studentManager.calculateStatistics(collegeId);

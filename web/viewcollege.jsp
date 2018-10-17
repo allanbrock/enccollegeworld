@@ -49,7 +49,7 @@
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-    //popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
+//    popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
     //popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
@@ -151,7 +151,7 @@
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
                 <div class="modal-body">
                     <h5><%=event.getTitle()%></h5>
-                    <p><%=event.getDescription()%> <input type="button" class="btn btn-info" name="acknowledgeButton" value="<%=event.getAcknowledgeButtonText()%>">
+                    <p><%=event.getDescription()%> <input type="submit" class="btn btn-info" name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
                     </p>
                 </div>
             <%};%>
@@ -214,6 +214,8 @@
                 <input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month">
             <%}%>
             <br>
+                <p>(For testing uses only, also advances time by one day)</p>
+                <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
             <br>
             <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
             <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>

@@ -18,18 +18,32 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             CollegeManager.iterateTime(collegeId, popupManager);
         }
         if (request.getParameter("nextWeekButton") != null) {
-            for(int i = 0; i < 7; i++)
-                CollegeManager.iterateTime(collegeId, popupManager);
+            for(int i = 0; i < 7; i++) {
+                if (popupManager.isManagerEmpty())
+                    CollegeManager.iterateTime(collegeId, popupManager);
+            }
         }
         if (request.getParameter("nextMonthButton") != null) {
-            for(int i = 0; i < 30; i++)
-                CollegeManager.iterateTime(collegeId, popupManager);
+            for(int i = 0; i < 30; i++) {
+                if(popupManager.isManagerEmpty())
+                    CollegeManager.iterateTime(collegeId, popupManager);
+            }
         }
         if(request.getParameter("updateTuitionButton") != null){
             //call update tuition
             String tuitionValue = request.getParameter("tuitionValue");
             int tuition = Integer.parseInt(tuitionValue);
             CollegeManager.updateCollegeTuition(collegeId, tuition);
+        }
+        if(request.getParameter("returnToWelcome") != null){
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+        if(request.getParameter("bankruptCollege") != null){
+            CollegeManager.bankruptCollege(collegeId);
+            CollegeManager.iterateTime(collegeId, popupManager);
+
         }
 //        if(request.getParameter("addEventButton") != null){
 //            PopupEventManager popupMan = (PopupEventManager) request.getAttribute("popupMan");

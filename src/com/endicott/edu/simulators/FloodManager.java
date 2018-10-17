@@ -30,7 +30,7 @@ public class FloodManager {
         List<FloodModel> floods = floodDao.getFloods(collegeId);
         List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
 
-        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
+//        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
 
         // If there are no floods, possibly start one.
         if (floods.size() <= 0) {

@@ -27,11 +27,15 @@ public class PopupEventManager {
         currentEvents.add(newEvent);
 
     }
-    public void newPopupEvent(String title, String description, String acknowledgeButtonText){
-        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
+//    public void newPopupEvent(String title, String description, String acknowledgeButtonText){
+//        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
+//        this.addEvent(newEvent);
+//    }
+    public void newPopupEvent(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback) {
+        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText, acknowledgeButtonCallback);
         this.addEvent(newEvent);
-
     }
+
     public boolean isQueueInitiated(){
         if(getNumberOfEvents() > 0){
             return true;
@@ -50,6 +54,14 @@ public class PopupEventManager {
     }
     public void clearPopupManager(){
         currentEvents.clear();
+    }
+    public boolean isManagerEmpty(){
+        if(currentEvents.size() == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
