@@ -32,6 +32,12 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
+<% if( request.getParameter("hash") != null ) { %>
+<script>
+    location.hash = "<%=request.getParameter("hash")%>";
+</script>
+<% }%>
+
 </head>
 <body>
 <%
@@ -68,8 +74,6 @@
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
 %>
-
-
 <form action="viewBuilding" method="post">
 
     <!-- Navigation Bar -->
@@ -215,7 +219,7 @@
         <!-- Add Dorm -->
         <div class="col-sm-4">
             <div class="well well-sm">
-                <a id="purchase">
+                <div id="purchase">
                 <!-- if they haven't hit begin purchase, only one option is visible -->
                 <% if(beginPurchase == "false"){%>
                     <h4>Purchase a new Building</h4>
@@ -273,7 +277,7 @@
                         <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
                     <%}%>
-                </a>
+                </div>
             </div>
         </div>
 
