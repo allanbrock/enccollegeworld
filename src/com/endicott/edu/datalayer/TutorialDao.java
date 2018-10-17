@@ -95,8 +95,8 @@ public class TutorialDao {
         final String collegeId = "testtips001";
         TutorialDao dao = new TutorialDao();
 
-        TutorialModel m1 = new TutorialModel("This is a test", "admin", 1);
-        TutorialModel m2 = new TutorialModel("This is another test", "admin", 2);
+        TutorialModel m1 = new TutorialModel("This is a test", "admin", 1, true);
+        TutorialModel m2 = new TutorialModel("This is another test", "admin", 2, false);
         ArrayList<TutorialModel> tutorials = new ArrayList<>();
         tutorials.add(m1);
         tutorials.add(m2);
@@ -105,7 +105,7 @@ public class TutorialDao {
         List<TutorialModel> outMsgs = dao.getTutorials(collegeId);
 
 
-        TutorialModel m3 = new TutorialModel("It's like groundhog day.", "Home", 3);
+        TutorialModel m3 = new TutorialModel("It's like groundhog day.", "Home", 3, true);
         dao.saveNewTutorial(collegeId, m3);
         outMsgs = dao.getTutorials(collegeId);
         assert(outMsgs.size() == 3);

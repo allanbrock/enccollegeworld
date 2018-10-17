@@ -105,13 +105,21 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
         request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr); //building type selected is originally false
 
-        // Attempt to fetch the college and load into
-        // request attributes to pass to the jsp page.
-        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        if(beginPurchase == true){
+            // Attempt to fetch the college and load into
+            // request attributes to pass to the jsp page.
+            InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp?hash=purchase");
+            dispatcher.forward(request, response);
+        }
+        else{
+            // Attempt to fetch the college and load into
+            // request attributes to pass to the jsp page.
+            InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+            dispatcher.forward(request, response);
+        }
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
-        dispatcher.forward(request, response);
-        
         //if the purchase process was started, should go to the anchor tag
     }
 

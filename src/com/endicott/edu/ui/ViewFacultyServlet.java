@@ -10,14 +10,19 @@ import com.endicott.edu.simulators.PopupEventManager;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     static private Logger logger = Logger.getLogger("ViewFacultyServlet");
+    static private ArrayList<Integer> raiseBtnPos = new ArrayList();
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         logRequestParameters(request);
+        PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupManager");
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+
         if (request.getParameter("addFaculty") != null) {  // addFaculty is present if addFaculty button was pressed
             addFaculty(request, response);
         }
@@ -25,6 +30,17 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         if(request.getParameter("removeFaculty") != null){
             removeFaculty(request, response);
         }
+        for(int i = 0; i < FacultyDao.getFaculty(collegeId).size(); i++) {
+            // Pop up messages for raises
+            if (request.getParameter("facultyRaise" + i) != null) {
+                if (giveFacultyRaise(request, response, i)) {
+                    // popupManager.newPopupEvent("Employee Raise", FacultyDao.getFaculty(collegeId).get(i) + " got a raise!", "Okay");
+                } else {
+                    // popupManager.newPopupEvent("Can't give a raise!", FacultyDao.getFaculty(collegeId).get(i) + " is already getting paid the max annual salary", "Okay");
+                }
+            }
+        }
+        InterfaceUtils.setPopupEventManagerInSession(popupManager, request);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -66,7 +82,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     private void removeFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        Boolean valid = false;
+        Boolean valid = false; // Variable that checks if ID entered is valid
         FacultyModel removedMember = null;
         String facultyID = request.getParameter("removeFacultyID");
         for(FacultyModel member : FacultyDao.getFaculty(collegeId)){
@@ -95,6 +111,11 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request,response);
+    }
+
+    private Boolean giveFacultyRaise(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, int facultyNum) throws javax.servlet.ServletException, IOException{
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        return FacultyManager.giveFacultyRaise(collegeId, FacultyDao.getFaculty(collegeId).get(facultyNum));
     }
 
     private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {

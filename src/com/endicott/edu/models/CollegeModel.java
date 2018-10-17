@@ -1,12 +1,10 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
-    private int availableCash = 0;           // amount of money in college bank account
+    private int availableCash = 200000;           // amount of money in college bank account
     private int yearlyTuitionCost = 40000;   // the amount it costs to attend the school for a single year
     private int reputation = 50;             // reputation of college based on 1-100
     private String runId = "unknown";        // name of the college

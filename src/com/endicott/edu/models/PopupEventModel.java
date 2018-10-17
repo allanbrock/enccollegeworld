@@ -15,6 +15,7 @@ public class PopupEventModel implements Serializable {
     private String badButtonText;
     private String badButtonCallback;
     private String acknowledgeButtonText;
+    private String acknowledgeButtonCallback;
 
     /**
      *
@@ -33,11 +34,19 @@ public class PopupEventModel implements Serializable {
         this.goodButtonCallback = goodButtonCallback;
         this.badButtonCallback = badButtonCallback;
     }
-    public PopupEventModel(String title, String description, String acknowledgeButtonText){
-
+    //For use when a single button with no response is required
+//    public PopupEventModel(String title, String description, String acknowledgeButtonText){
+//        this.title = title;
+//        this.description = description;
+//        this.acknowledgeButtonText = acknowledgeButtonText;
+//
+//    }
+    //For use when a single callback with a server response is required
+    public PopupEventModel(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback){
         this.title = title;
         this.description = description;
         this.acknowledgeButtonText = acknowledgeButtonText;
+        this.acknowledgeButtonCallback = acknowledgeButtonCallback;
     }
 
 
@@ -69,4 +78,6 @@ public class PopupEventModel implements Serializable {
     public String getAcknowledgeButtonText() {
         return acknowledgeButtonText;
     }
+
+    public String getAcknowledgeButtonCallback(){ return acknowledgeButtonCallback; }
 }
