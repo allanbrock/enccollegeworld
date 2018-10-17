@@ -6,14 +6,16 @@ public class TutorialModel implements Serializable {
     private String body = "";
     private String page = "unknown";
     private int refNum = 0;
+    private boolean isCurrent = false;
 
     public TutorialModel(){
     }
 
-    public TutorialModel(String body, String page, int refNum){
+    public TutorialModel(String body, String page, int refNum, boolean isCurrent){
         this.body = body;
         this.page = page;
         this.refNum = refNum;
+        this.setCurrent(isCurrent);
     }
 
     public String getBody() {
@@ -38,5 +40,13 @@ public class TutorialModel implements Serializable {
 
     public void setRefNum(int refNum) {
         this.refNum = refNum;
+    }
+
+    public boolean isCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
     }
 }

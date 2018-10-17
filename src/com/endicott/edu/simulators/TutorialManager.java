@@ -3,15 +3,44 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.TutorialDao;
 import com.endicott.edu.models.TutorialModel;
 
+import java.util.List;
+
 public class TutorialManager {
     static private TutorialDao tutorialDao = new TutorialDao();
     private int counter = 0;
     private String description = "";
 
+    public static TutorialModel getCurrentTip(String page, String collegeId){
+        List<TutorialModel> tips = tutorialDao.getTutorials(collegeId);
+        for (TutorialModel t : tips){
+            if(t.getPage().equals(page) && t.isCurrent()){
+                return t;
+            }
+        }
+        return null;
+    }
 
-    public static void loadTip(String collegeId, int i, String page, String tip){
-        // TODO: call TutorialDao to save the tip.
-        TutorialModel tutorial = new TutorialModel(tip, page, i);
+    public static void advanceTip(String page, String collegeId){
+        List<TutorialModel> tips = tutorialDao.getTutorials(collegeId);
+        for (int i = 0; i < tips.size(); i++){
+            TutorialModel t = tips.get(i);
+            if(t.getPage().equals(page) && t.isCurrent()){
+                t.setCurrent(false);
+                if (i < tips.size() - 1){
+                    tips.get(i + 1).setCurrent(true);
+                    tutorialDao.saveAllTutorials(collegeId, tips);
+                    return;
+                } else{
+                    tips.get(0).setCurrent(true);
+                    tutorialDao.saveAllTutorials(collegeId, tips);
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void saveNewTip(String collegeId, int i, String page, String tip, boolean isCurrent){
+        TutorialModel tutorial = new TutorialModel(tip, page, i, isCurrent);
         tutorialDao.saveNewTutorial(collegeId, tutorial);
     }
 

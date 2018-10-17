@@ -346,7 +346,8 @@ public class StudentManager {
 
     private void loadTips(String collegeId) {
         // TODO: need to fill this out.
-        TutorialManager.loadTip(collegeId, 1,"viewStudent", "This is a student tip.");
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "This is a student tip.", true);
+        TutorialManager.saveNewTip(collegeId, 2,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 }
 
