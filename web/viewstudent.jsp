@@ -10,6 +10,7 @@
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%--
   Created by IntelliJ IDEA.
   User: abrocken
@@ -56,18 +57,19 @@
         students  = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
-    //TODO: grab the tips from the request.
-    TutorialModel tutorials[] = (TutorialModel[]) request.getAttribute("tutorials");
-    if (tutorials == null) {
-        tutorials = new TutorialModel[0];
-        msg.setMessage("Attribute for tutorial missing.");
-    }
+
+    TutorialModel tip = TutorialManager.getCurrentTip("viewStudent", college.getRunId());
+//    TutorialModel tutorials[] = (TutorialModel[]) request.getAttribute("tutorials");
+//    if (tutorials == null) {
+//        tutorials = new TutorialModel[0];
+//        msg.setMessage("Attribute for tutorial missing.");
+//    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
 
 
-<form action="updateCollege" method="post">
+<form action="viewStudent" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -121,11 +123,11 @@
                     <h3><%=nSick%> Students Sick</h3>
                 </div>
 
-                <!-- Tips TODO: use tips you pulled in from session.  Just display 1st tip. -->
+                <!-- Tips -->
                 <div class="col-md-5">
                         <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
                         <div class="well well-lg">
-                                <p><%=tutorials[0].getBody()%></p>
+                                <p><%=tip.getBody()%></p>
                         </div>
                         <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                         <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
