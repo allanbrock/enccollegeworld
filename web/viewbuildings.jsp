@@ -14,6 +14,7 @@
 <%@ page import="com.endicott.edu.datalayer.BuildingDao" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.endicott.edu.simulators.GateManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>College World Building</title>
@@ -73,6 +74,8 @@
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
+
+    GateManager gateManager = new GateManager();
 %>
 <form action="viewBuilding" method="post">
 
@@ -203,7 +206,20 @@
                     </td>
                     <td><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
                     </td>
-                    <td><%=buildings[i].getReputation()%>
+                    <td>
+                        <%--<%--%>
+                        <%--String progressBarColor;--%>
+                        <%--if(buildings[i].getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
+                        <%--else if(buildings[i].getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
+                        <%--else{progressBarColor = "progress-bar progress-bar-success";}--%>
+                        <%--public String getProgressBarColor(){return "test";}--%>
+                        <%--%>--%>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings[i].getShownQuality()%>%">
+                                <%=buildings[i].getShownQuality()%>%
+                            </div>
+                        </div>
                     </td>
                     <td><%=buildings[i].getCurDisaster()%>
                     </td>
@@ -229,46 +245,43 @@
                     <div class="form-group">
                         <label for="buildingType">Select a building type</label>
                         <select class="form-control" id="buildingType" name="buildingType">
-                            <option value="Academic Center">Academic Center: $50,000</option>
-                            <option value="Dining Hall">Dining Hall: $50,000</option>
-                            <option value="Dormitory">Dormitory: $50,000</option>
-                            <option value="Entertainment Center">Entertainment Center: $50,000</option>
-                            <option value="Health Center">Health Center: $50,000</option>
-                            <option value="Library">Library: $50,000</option>
-                            <option value="Sports Center">Sports Center: $50,000</option>
+                            <option value="Academic Center">Academic Center</option>
+                            <option value="Baseball Diamond">Baseball Diamond</option>
+                            <option value="Dining Hall">Dining Hall</option>
+                            <option value="Dormitory">Dormitory</option>
+                            <option value="Entertainment Center">Entertainment Center</option>
+                            <option value="Football Stadium">Football Stadium</option>
+                            <option value="Health Center">Health Center</option>
+                            <option value="Hockey Rink">Hockey Rink</option>
+                            <option value="Library">Library</option>
+                            <option value="Sports Center">Sports Center</option>
                         </select>
                     </div>
                         <!-- Button -->
                     <input type="submit" class="btn btn-info" name="selectBuildingType" value="Select">
-                <%}
-                else if(wasBuildingTypeSelected == "true"){ %>
-                <!-- if the building selected is a building with a size-->
-                <div class="form-group">
-                <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
-                        buildingType.equals("Academic Center")){%>
+                <%}else if(wasBuildingTypeSelected == "true"){ %>
+                    <!-- if the building selected is a building with a size-->
+                    <div class="form-group">
+                    <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
+                            buildingType.equals("Academic Center")){%>
                         <!--form group used to be here -->
-                            <label for="buildingSize" > Select a building size</label >
-                            <%if(college.getNumberStudentsAdmitted()<700){%>
-                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                    <option > Small </option >
-                                    <option > Medium </option >
-                                </select >
-                            <%}else if(college.getNumberStudentsAdmitted()<1500){%>
-                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                    <option > Small </option >
-                                    <option > Medium </option >
+                        <label for="buildingSize" > Select a building size</label >
+                            <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                                <option > Small </option >
+                                <option > Medium </option >
+                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
                                     <option > Large </option >
-                                </select >
-                            <%}else{%>
-                                <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                    <option > Small </option >
-                                    <option > Medium </option >
-                                    <option > Large </option >
+                                <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
                                     <option > Extra Large </option >
-                                </select >
-                            <%}%>
+                            </select >
                         <%}%>
-                            <h4>Confirm Purchase of <%=buildingType%></h4>
+                    <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
+                            || buildingType.equals("Hockey Rink")){%>
+                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                            <option > Small </option >
+                        </select >
+                    <%}%>
+                        <h4>Confirm Purchase of <%=buildingType%></h4>
                         <div class="form-group">
                             <input type="text" class="form-control" id="buildingName" name="buildingName"
                                placeholder="Enter building name.">
