@@ -16,6 +16,8 @@
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.endicott.edu.simulators.FacultyManager" %>
+<%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -50,19 +52,26 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>)FacultyDao.getFaculty(college.getRunId());
+    List<FacultyModel> faculty = FacultyDao.getFaculty(college.getRunId());
     if (faculty == null) {
         faculty = new ArrayList<FacultyModel>();
         faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", "LSB311", college.getRunId(), 100000)); // Default salary val for now
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
-    ArrayList<Integer> salaryOptions = FacultyModel.getSalaryOptions();
+    ArrayList<Integer> salaryOptions = FacultyManager.getSalaryOptions();
     if (salaryOptions == null) {
         salaryOptions = new ArrayList<Integer>();
     }
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
+
+    PopupEventManager popupManager = (PopupEventManager) session.getAttribute("popupManager");
+
+    if(popupManager == null){
+        popupManager = new PopupEventManager();
+        msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
+    }
 %>
 
 <form action="viewFaculty" method="post">
@@ -139,6 +148,9 @@
                                 Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise">
                     </td>
                 </tr>
                 <% } %>

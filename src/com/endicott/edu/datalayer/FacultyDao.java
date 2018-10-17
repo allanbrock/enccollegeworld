@@ -71,7 +71,7 @@ public class FacultyDao {
      * @param collegeId
      * @param faculty
      */
-    private void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
+    public void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
         try {
             File file = new File(getFilePath(collegeId));
             file.createNewFile();
@@ -103,23 +103,20 @@ public class FacultyDao {
         file.delete();
     }
 
-    public void removeSingleFaculty(String collegeId,FacultyModel member){
+    public void removeSingleFaculty(String collegeId, FacultyModel member){
         logger.info("Removing faculty member..");
-        String tmp = member.getFacultyName();
-
-        List<FacultyModel> faculty = getFaculty(collegeId);
-        for( int i = 0; i < faculty.size(); i++){
-            if(member.getFacultyID() == faculty.get(i).getFacultyID()){
-                logger.info("removing " + faculty.get(i).getFacultyName());
-                faculty.remove(i);
+        String tmp = member.getFacultyID();
+        List<FacultyModel> newFacultyList = getFaculty(collegeId);
+        for(FacultyModel faculty : newFacultyList){
+            if(tmp.equals(faculty.getFacultyID())){
+                logger.info("removing " + faculty.getFacultyName());
+                newFacultyList.remove(faculty);
+                break;
             }
 
         }
-        saveAllFaculty(collegeId,faculty);
-
+        saveAllFaculty(collegeId, newFacultyList);
         logger.info("Faculty member removed: " + tmp);
-
-
     }
 
     /**

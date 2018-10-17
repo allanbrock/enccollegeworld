@@ -1,11 +1,7 @@
 package com.endicott.edu.models;
-
-import com.endicott.edu.datalayer.FacultyDao;
-import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -13,7 +9,6 @@ import java.util.ArrayList;
  */
 public class FacultyModel implements Serializable {
 
-    private static ArrayList<Integer> salaryOptions;
     private String facultyID; // a unique id for that member of the faculty.
     private String collegeID;
     private String facultyName; //simply the name
@@ -26,7 +21,6 @@ public class FacultyModel implements Serializable {
 
     public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String facultyID) {
         System.out.print("Other constructor hit");
-        FacultyManager.establishSalaryOptions();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
@@ -35,14 +29,13 @@ public class FacultyModel implements Serializable {
     }
 
     public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
-        FacultyManager.establishSalaryOptions();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
         this.officeLocation = officeLocation;
         this.collegeID = collegeID;
         this.salary = salary;
-        this.facultyID = IdNumberGenDao.generateFacultyID(this);
+        this.facultyID = FacultyManager.generateFacultyID(this);
         this.performance = 75;
         FacultyManager.computeFacultyHappiness(this, false);
     }
@@ -94,9 +87,6 @@ public class FacultyModel implements Serializable {
 
     public void setCollegeID(String collegeID){ this.collegeID = collegeID; }
     public String getCollegeID() { return this.collegeID; }
-
-    public static ArrayList<Integer> getSalaryOptions(){ return salaryOptions; }
-    public static void instantiateSalaryOptions(){ salaryOptions = new ArrayList<Integer>(); }
 
     public int getPerformance(){ return this.performance; }
     public void setPerformance(int performance) { this.performance = performance; }
