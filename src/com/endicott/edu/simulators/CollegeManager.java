@@ -62,6 +62,7 @@ public class CollegeManager {
 
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
+        //FireManager
 
         EventManager.establishCollege(collegeId);
 
@@ -126,6 +127,9 @@ public class CollegeManager {
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId,hoursAlive);
+
+        FireManager fireManager = new FireManager();
+        fireManager.handleTimeChange(collegeId,hoursAlive,popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.

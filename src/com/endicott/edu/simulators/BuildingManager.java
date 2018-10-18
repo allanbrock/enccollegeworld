@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * BuildingManager is responsible for simulating all building activity and for
  * providing functions for manipulation and retrieving information
  * about buildings.
- */
+ */;
 public class BuildingManager {
     static private BuildingDao dao = new BuildingDao();
     static private DormitoryDao dormDao = new DormitoryDao();
