@@ -111,7 +111,7 @@ public class BuildingManager {
         Accountant.payBill(collegeId, "Charge of new building", newBuilding.getTotalBuildCost());
         CollegeDao dao = new CollegeDao();
         CollegeModel college = dao.getCollege(collegeId);
-        NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" building has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
         newBuilding.setNote("A new building has been created.");
 
         // Save building

@@ -33,6 +33,7 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
+<!-- solution from https://www.experts-exchange.com/questions/20683436/Using-anchors-in-JSP-code.html -->
 <% if( request.getParameter("hash") != null ) { %>
 <script>
     location.hash = "<%=request.getParameter("hash")%>";
@@ -241,8 +242,7 @@
                 <% if(beginPurchase == "false"){%>
                     <h4>Purchase a new Building</h4>
                     <input type="submit" class="btn btn-info" name="beginBuildingPurchase" value="Begin">
-                <%}
-                else if(wasBuildingTypeSelected == "false"){ %>
+                <%}else if(wasBuildingTypeSelected == "false"){ %>
                     <div class="form-group">
                         <label for="buildingType">Select a building type</label>
                         <select class="form-control" id="buildingType" name="buildingType">
@@ -263,10 +263,10 @@
                 <%}else if(wasBuildingTypeSelected == "true"){ %>
                     <!-- if the building selected is a building with a size-->
                     <div class="form-group">
-                    <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
-                            buildingType.equals("Academic Center")){%>
-                        <!--form group used to be here -->
-                        <label for="buildingSize" > Select a building size</label >
+                        <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
+                                buildingType.equals("Academic Center")){%>
+                            <!--form group used to be here -->
+                            <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <option > Small </option >
                                 <option > Medium </option >
@@ -274,14 +274,14 @@
                                     <option > Large </option >
                                 <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
                                     <option > Extra Large </option >
+                                <%}%>
+                            </select >
+                        <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
+                                || buildingType.equals("Hockey Rink")){%>
+                            <select class="form-control" id = "buildingSize" name = "buildingSize" >
+                                <option > Small </option >
                             </select >
                         <%}%>
-                    <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
-                            || buildingType.equals("Hockey Rink")){%>
-                        <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                            <option > Small </option >
-                        </select >
-                    <%}%>
                         <h4>Confirm Purchase of <%=buildingType%></h4>
                         <div class="form-group">
                             <input type="text" class="form-control" id="buildingName" name="buildingName"
@@ -290,7 +290,7 @@
                         <!-- Button -->
                         <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
-                    <%}%>
+                <%}%>
                 </div>
             </div>
         </div>
