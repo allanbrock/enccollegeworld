@@ -25,7 +25,7 @@ public class FireModel implements Serializable {
         this.numOfFatalities = numOfFatalities;
         this.costOfFire = costOfFire;
         this.buildingBurned = buildingBurned;
-        this.description = buildingBurned.getName() + "caught fire! There were " + numOfFatalities + "deaths.";
+        this.description = buildingBurned.getName() + " caught fire! There were " + numOfFatalities + " deaths.";
 
     }
 
