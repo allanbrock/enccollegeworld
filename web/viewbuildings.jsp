@@ -33,6 +33,7 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
+<!-- solution from https://www.experts-exchange.com/questions/20683436/Using-anchors-in-JSP-code.html -->
 <% if( request.getParameter("hash") != null ) { %>
 <script>
     location.hash = "<%=request.getParameter("hash")%>";
