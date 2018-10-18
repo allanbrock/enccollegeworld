@@ -5,7 +5,6 @@ import com.endicott.edu.models.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
 /**
  * Responsible for simulating students at the college.
  */
@@ -97,9 +96,12 @@ public class StudentManager {
         //else if((CollegeManager.getCollegeCurrentMonth(collegeId) == 9 && CollegeManager.getCollegeCurrentDay(collegeId) == 1) || (CollegeManager.getCollegeCurrentMonth(collegeId) == 1 && CollegeManager.getCollegeCurrentDay(collegeId) == 1)){
         else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){
 
+            int leastOpenings = Math.min(openBeds, openDesks);
+            leastOpenings = Math.min(leastOpenings, openPlates);
+
             numNewStudents = college.getNumberStudentsAccepted();
-            if (numNewStudents > openBeds) {
-                numNewStudents = openBeds;
+            if (numNewStudents > leastOpenings) {
+                numNewStudents = leastOpenings;
             }
 
             createStudents(numNewStudents, collegeId, students, false);
@@ -116,16 +118,7 @@ public class StudentManager {
     }
 
     private void acceptStudents(String collegeId, int hoursAlive){
-        int openBeds = buildingMgr.getOpenBeds(collegeId);
-        int openPlates = buildingMgr.getOpenPlates(collegeId);
-        int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents;
-        List<StudentModel> students = dao.getStudents(collegeId);
-
-        // Are we fully booked?
-        if (openBeds <= 0 || openPlates <= 0 || openDesks <= 0) {
-            return;
-        }
 
         numNewStudents = rand.nextInt(10);
 
@@ -272,10 +265,12 @@ public class StudentManager {
             happinessSum += students.get(i).getHappinessLevel();
         }
 
-        int aveHappiness = 0;
-        if (students.size() > 0) {
-            aveHappiness = Math.max(0,happinessSum / students.size());
-        }
+        int aveHappiness = happinessSum/college.getNumberStudentsAdmitted();
+
+//        int aveHappiness = 0;
+//        if (students.size() > 0) {
+//            aveHappiness = Math.max(0,happinessSum / students.size());
+//        }
 
         college.setStudentBodyHappiness(aveHappiness);
         collegeDao.saveCollege(college);
