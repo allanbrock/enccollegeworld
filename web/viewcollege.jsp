@@ -127,6 +127,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
+                    <li><a href="viewGates">Gates</a></li>
                     <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -171,32 +172,32 @@
         <!-- jumbotron -->
         <div class="jumbotron">
 
-            <%-- Gates --%>
-            <div class="gateList" style="float: right; width: 50%;">
-                <h3>Current Objectives(<%=gates.length%>):</h3>
-                <div class="pre-scrollable" style="max-height: 150px">
-                    <ul class="list-group">
-                        <%
-                            for(GateModel gate : gates) {
-                                if(!GateManager.testGate(college.getRunId(), gate.getKey())) {
-                        %>
-                        <li class="list-group-item">
-                            <%=gate.getKey()%>
-                            <div class="progress" style="margin-bottom:0">
-                                <div class="progress-bar progress-bar-success" role="progressbar"
-                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                     style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">
-                                    <%=students.length%> / <%=gate.getGoal()%> ( <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>% )
-                                </div>
-                            </div>
-                        </li>
-                        <%
-                                }
-                            }
-                        %>
-                    </ul>
-                </div>
-            </div>
+            <%-- TEMPORARY DISABLE: Gates --%>
+            <%--<div class="gateList" style="float: right; width: 50%;">--%>
+                <%--<h3>Current Objectives(<%=gates.length%>):</h3>--%>
+                <%--<div class="pre-scrollable" style="max-height: 150px">--%>
+                    <%--<ul class="list-group">--%>
+                        <%--<%--%>
+                            <%--for(GateModel gate : gates) {--%>
+                                <%--if(!GateManager.testGate(college.getRunId(), gate.getKey())) {--%>
+                        <%--%>--%>
+                        <%--<li class="list-group-item">--%>
+                            <%--<%=gate.getKey()%>--%>
+                            <%--<div class="progress" style="margin-bottom:0">--%>
+                                <%--<div class="progress-bar progress-bar-success" role="progressbar"--%>
+                                     <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"--%>
+                                     <%--style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">--%>
+                                    <%--<%=students.length%> / <%=gate.getGoal()%> ( <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>% )--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                        <%--</li>--%>
+                        <%--<%--%>
+                                <%--}--%>
+                            <%--}--%>
+                        <%--%>--%>
+                    <%--</ul>--%>
+                <%--</div>--%>
+            <%--</div>--%>
 
             <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>

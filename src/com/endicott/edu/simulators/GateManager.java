@@ -17,10 +17,10 @@ public class GateManager {
      * @param description   description for gate
      * @param gate          number of students till goal is met
      */
-    public static void createGate(String collegeId, String key, String description, int gate) {
+    public static void createGate(String collegeId, String key, String description, String iconPath, int gate) {
         GateDao gateDao = new GateDao();
 
-        gateDao.saveNewGate(collegeId, new GateModel(key, description, gate));
+        gateDao.saveNewGate(collegeId, new GateModel(key, description, iconPath, gate));
     }
 
     /**
@@ -74,8 +74,8 @@ public class GateManager {
      * @param collegeId
      */
     public static void establishCollege(String collegeId){
-        createGate(collegeId, "Test gate 1", "test 1", 200);
-        createGate(collegeId, "Test gate 2", "test 2", 300);
-        createGate(collegeId, "Test gate 3", "test 3", 400);
+        createGate(collegeId, "Test gate 1", "test description 1", "resources/images/star.png", 200);
+        createGate(collegeId, "Test gate 2", "test description 2", "resources/images/star.png", 300);
+        createGate(collegeId, "Test gate 3", "test description 3", "resources/images/star.png", 400);
     }
 }

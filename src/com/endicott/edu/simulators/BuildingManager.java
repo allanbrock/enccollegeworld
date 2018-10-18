@@ -512,8 +512,8 @@ public class BuildingManager {
         AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
         saveBuildingHelper(startingAdministrative, collegeId, college);
 
-        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", 700);
-        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", 1500);
+        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/dorm.png", 700);
+        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/dorm.png",1500);
     }
 
     /**

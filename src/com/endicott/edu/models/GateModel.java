@@ -5,18 +5,22 @@ import java.io.Serializable;
 public class GateModel implements Serializable {
     private String  key;
     private String  description;
+    private String  iconPath;
     private int     goal;
     private String  runId = "unknown";
 
-    public GateModel(String _key, String _description, int _gate){
+    public GateModel(String _key, String _description, String _iconPath, int _gate){
             this.key            = _key;
             this.description    = _description;
+            this.iconPath       = _iconPath;
             this.goal           = _gate;
     };
 
     public String getKey() { return this.key; }
 
     public String getDescription() { return this.description; }
+
+    public String getIconPath() { return this.iconPath; }
 
     public int getGoal() { return this.goal; }
 

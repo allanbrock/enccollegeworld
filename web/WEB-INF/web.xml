@@ -63,6 +63,14 @@
         <url-pattern>/viewFaculty</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>viewGatesServlet</servlet-name>
+        <servlet-class>com.endicott.edu.ui.ViewGatesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewGatesServlet</servlet-name>
+        <url-pattern>/viewGates</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>viewAdminServlet</servlet-name>
         <servlet-class>com.endicott.edu.ui.ViewAdminServlet</servlet-class>
     </servlet>

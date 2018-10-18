@@ -5,8 +5,7 @@ import com.endicott.edu.models.GateModel;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class GateDao {
@@ -69,6 +68,8 @@ public class GateDao {
         List<GateModel> gates = getGates(collegeId);
         gate.setRunId(collegeId);
         gates.add(gate);
+        Collections.sort(gates, (o1, o2) -> o1.getGoal() - o2.getGoal());
+//        gates.sort(Comparator.comparingInt(GateModel::getGoal));
         saveAllGates(collegeId, gates);
     }
 
