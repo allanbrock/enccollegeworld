@@ -93,7 +93,9 @@ public class StudentManager {
                 NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             }
         }
-        else if((CollegeManager.getCollegeCurrentMonth(collegeId) == 9 && CollegeManager.getCollegeCurrentDay(collegeId) == 1) || (CollegeManager.getCollegeCurrentMonth(collegeId) == 1 && CollegeManager.getCollegeCurrentDay(collegeId) == 1)){
+        // For testing purposes, accepting students on the 1st of every month.
+        //else if((CollegeManager.getCollegeCurrentMonth(collegeId) == 9 && CollegeManager.getCollegeCurrentDay(collegeId) == 1) || (CollegeManager.getCollegeCurrentMonth(collegeId) == 1 && CollegeManager.getCollegeCurrentDay(collegeId) == 1)){
+        else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){
 
             numNewStudents = college.getNumberStudentsAccepted();
             if (numNewStudents > openBeds) {
