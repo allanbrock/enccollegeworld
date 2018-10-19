@@ -220,6 +220,10 @@
                                         Team: <%= students[i].getTeam()%> <br>
                                         Athletic Ability <%=students[i].getAthleticAbility()%> <br>
                                     <% } %>
+                                        Health Happiness: <%=students[i].getHealthHappinessRating()%><br>
+                                        Academic Happiness: <%=students[i].getAcademicHappinessRating()%><br>
+                                        Money Happiness: <%=students[i].getMoneyHappinessRating()%><br>
+                                        Fun Happiness: <%=students[i].getFunHappinessRating()%><br>
                                     </div>
                                 </div>
                             </td>

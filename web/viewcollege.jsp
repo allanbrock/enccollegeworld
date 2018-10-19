@@ -241,7 +241,7 @@
                     <%
                         String barType = "progress-bar-success";
                     %>
-                    <h2><small>College Happiness</small></h2>
+                    <h2><small>Student Happiness</small></h2>
                     <!-- progress circle -->
                     <div id="happinessCircle"
                          data-dimension="250"
@@ -257,70 +257,8 @@
                     <br>
                     <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="happinessDetails" class="collapse">
-                        College Reputation
-                        <%  if (college.getReputation() < 30) {
-                            barType = "progress-bar-danger";
-                        } else if (college.getReputation() < 60) {
-                            barType = "progress-bar-warning";
-                        } else {
-                            barType = "progress-bar-success";
-                        }
-                        %>
-                        <div class="progress">
-                            <div class="progress-bar <%=barType%>" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=Math.max(college.getReputation(),20)%>%">
-                                <%=college.getReputation()%>%
-                            </div>
-                        </div>
-                        Student/Faculty Ratio
-                        <%  if (college.getStudentFacultyRatioRating() < 30) {
-                            barType = "progress-bar-danger";
-                        } else if (college.getStudentFacultyRatioRating() < 60) {
-                            barType = "progress-bar-warning";
-                        } else {
-                            barType = "progress-bar-success";
-                        }
-                        %>
-                        <div class="progress">
-                            <div class="progress-bar <%=barType%>" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=Math.max(college.getStudentFacultyRatioRating(),20)%>%">
-                                <%=college.getStudentFacultyRatioRating()%>%
-                            </div>
-                        </div>
-                        Tuition
-                        <%  if (college.getYearlyTuitionRating() < 30) {
-                                barType = "progress-bar-danger";
-                            } else if (college.getYearlyTuitionRating() < 60) {
-                                barType = "progress-bar-warning";
-                            }  else {
-                            barType = "progress-bar-success";
-                        }
-                        %>
-                        <div class="progress">
-                            <div class="progress-bar <%=barType%>" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=Math.max(college.getYearlyTuitionRating(),20)%>%">
-                                <%=college.getYearlyTuitionRating()%>%
-                            </div>
-                        </div>
-                        Student Health
-                        <%  if (college.getStudentHealthRating() < 30) {
-                            barType = "progress-bar-danger";
-                        } else if (college.getStudentHealthRating() < 60) {
-                            barType = "progress-bar-warning";
-                        }  else {
-                            barType = "progress-bar-success";
-                        }
-                        %>
-                        <div class="progress">
-                            <div class="progress-bar <%=barType%>" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=Math.max(college.getStudentHealthRating(),20)%>%">
-                                <%=college.getStudentHealthRating()%>%
-                            </div>
-                        </div>
+                        The happiness of the students depends on their health, academic success,
+                        tuition bills, and how much fun they are having.
                     </div>
                 </div>
             </div>

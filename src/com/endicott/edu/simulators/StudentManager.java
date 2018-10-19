@@ -227,19 +227,22 @@ public class StudentManager {
      * @param collegeId
      */
     public void calculateStatistics(String collegeId) {
-        calculateStudentHealthRating(collegeId);
-        calculateStudentsHappiness(collegeId);
+        calculaterOverallStudentHealth(collegeId);
         calculateStudentFacultyRatio(collegeId);
         calculateStudentFacultyRatioRating(collegeId);
+
+        setHappinessForEachStudent(collegeId);
+
+        calculateOverallStudentHappiness(collegeId);
+
         calculateRetentionRate(collegeId);
     }
 
-    private void calculateStudentHealthRating(String collegeId) {
+    private void calculaterOverallStudentHealth(String collegeId) {
         CollegeModel college = collegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(collegeId);
 
         int nSick = 0;
-
         for(int i = 0; i < students.size(); i++){
             if(students.get(i).getNumberHoursLeftBeingSick() > 0){
                 nSick++;
@@ -253,52 +256,64 @@ public class StudentManager {
         collegeDao.saveCollege(college);
     }
 
-    private void calculateStudentsHappiness(String collegeId) {
+    private void calculateOverallStudentHappiness(String collegeId) {
         CollegeModel college = collegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(collegeId);
-        List<FacultyModel> faculty = facultyDao.getFaculty(collegeId);
-
-        calculateIndividualStudentHappiness(college.getRunId(), college.getReputation(), faculty.size(), college.getYearlyTuitionCost());
 
         int happinessSum = 0;
         for (int i = 0; i < students.size(); i++) {
             happinessSum += students.get(i).getHappinessLevel();
         }
 
-        int aveHappiness = happinessSum/college.getNumberStudentsAdmitted();
-
-//        int aveHappiness = 0;
-//        if (students.size() > 0) {
-//            aveHappiness = Math.max(0,happinessSum / students.size());
-//        }
+        int aveHappiness = happinessSum/Math.max(1,college.getNumberStudentsAdmitted());
 
         college.setStudentBodyHappiness(aveHappiness);
         collegeDao.saveCollege(college);
     }
 
-    private void calculateIndividualStudentHappiness(String collegeId, int reputation, int numberOfFaculty, int tuitionCost){
+    private void setHappinessForEachStudent(String collegeId){
         List<StudentModel> students = dao.getStudents(collegeId);
         CollegeModel college = collegeDao.getCollege(collegeId);
 
-        // We're not using reputation at the moment because it's
-        // hardcoded at 50%.  That leaves: one third for faculty, one third for tuition, one third for health.
+       for(int i = 0; i < students.size(); i++){
+           StudentModel student = students.get(i);
+           setStudentHealthHappiness(student);
+           setStudentAcademicHappiness(student, college);
+           setStudentMoneyHappiness(student, college);
+           setStudentFunHappiness(student, college);
 
-        for(int i = 0; i < students.size(); i++){
-            int healthRating = 100;
-            if (students.get(i).getNumberHoursLeftBeingSick() > 0){
-                healthRating = 0;
-            }
+           // The overall student happiness is an average of the above.
 
-            int happiness = college.getStudentFacultyRatioRating()/3 +
-                            college.getYearlyTuitionRating()/3 +
-                            healthRating/3;
+            int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
+                             student.getHealthHappinessRating() + student.getMoneyHappinessRating()) / 4;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
-
             students.get(i).setHappinessLevel(happiness);
         }
 
         dao.saveAllStudents(collegeId, students);
+    }
+
+    private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
+        // TODO: how do we decide if students are having fun?
+        s.setFunHappinessRating(50);
+    }
+
+    private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
+        int rating = college.getYearlyTuitionRating(); // This is rating 0 to 100
+        s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100));
+    }
+
+    private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
+        int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
+        s.setAcademicHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100));
+    }
+
+    private void setStudentHealthHappiness(StudentModel s) {
+        s.setHealthHappinessRating(100);
+        if (s.getNumberHoursLeftBeingSick() > 0){
+            s.setHealthHappinessRating(0);
+        }
     }
 
     private void calculateStudentFacultyRatio(String collegeId) {

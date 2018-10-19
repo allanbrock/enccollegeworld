@@ -95,9 +95,9 @@ public class CollegeManager {
      *
      * @param collegeId college name
      */
-    static public CollegeModel iterateTime(String collegeId, PopupEventManager popupManager) {
+    static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
-//        popupManager.clearPopupManager();
+
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
@@ -106,11 +106,9 @@ public class CollegeManager {
         // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
 
-
         // Tell all the simulators about the time change.
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
-
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
@@ -134,6 +132,7 @@ public class CollegeManager {
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
+
         if(college.getAvailableCash() <= 0){
             popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!", "Return to Main Menu", "returnToWelcome");
         }
@@ -204,7 +203,8 @@ public class CollegeManager {
 
         return college;
     }
-    //TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
+
+    // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
     public static CollegeModel bankruptCollege(String collegeId){
         CollegeDao cao = new CollegeDao();
 
@@ -213,8 +213,6 @@ public class CollegeManager {
         cao.saveCollege(college);
 
         calculateStatisticsAndRatings(collegeId);
-
-
 
         StudentManager studentManager = new StudentManager();
         studentManager.calculateStatistics(collegeId);
