@@ -301,12 +301,12 @@ public class StudentManager {
 
     private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
         int rating = college.getYearlyTuitionRating(); // This is rating 0 to 100
-        s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100));
+        s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
-        s.setAcademicHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100));
+        s.setAcademicHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
     private void setStudentHealthHappiness(StudentModel s) {

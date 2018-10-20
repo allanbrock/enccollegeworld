@@ -13,6 +13,8 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
+
+        // Advance Time
         int advanceTimeDays = 0;
         if (request.getParameter("nextDayButton") != null) {
             advanceTimeDays = 1;
@@ -24,7 +26,6 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             advanceTimeDays = 30;
         }
 
-        // Advance time
         for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(); i++) {
             CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
@@ -35,15 +36,20 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             CollegeManager.updateCollegeTuition(collegeId, tuition);
         }
 
+        // TODO: this is for testing purposes, remove.
+        if(request.getParameter("bankruptCollege") != null){
+            CollegeManager.bankruptCollege(collegeId);
+            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
+        }
+
+        // Check if the button pressed was from a popup.  If so clear it.
+        popupManager.removePopupIfButtonPressed(request);
+
+        // Bankrupt college PopupEvent Button
         if(request.getParameter("returnToWelcome") != null){
             RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
             dispatcher.forward(request, response);
             return;
-        }
-
-        if(request.getParameter("bankruptCollege") != null){
-            CollegeManager.bankruptCollege(collegeId);
-            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
 
         // Attempt to fetch the college and load into

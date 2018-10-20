@@ -134,7 +134,8 @@ public class CollegeManager {
         calculateStatisticsAndRatings(collegeId);
 
         if(college.getAvailableCash() <= 0){
-            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!", "Return to Main Menu", "returnToWelcome");
+            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
+                    "Return to Main Menu", "returnToWelcome");
         }
 
         return college;

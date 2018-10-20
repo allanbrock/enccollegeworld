@@ -49,8 +49,6 @@
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
-//    popupManager.newPopupEvent("Test Event", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "Ok!");
-    //popupManager.newPopupEvent("Test 2", "This event is a test of the popup system! Press 'Ok!' to dismiss for now", "TWO!");
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -145,20 +143,19 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Current Events</h4>
-            </div>
             <!-- Creates a modal body for each event in the list-->
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
                 <div class="modal-body">
-                    <h5><%=event.getTitle()%></h5>
+                    <h3><%=event.getTitle()%></h3>
                     <p><%=event.getDescription()%> <input type="submit" class="btn btn-info" name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
                     </p>
                 </div>
             <%};%>
+            <!-- We're not showing the done button because we want each event acknowledged.
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
             </div>
+            -->
         </div>
 
     </div>

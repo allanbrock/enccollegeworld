@@ -97,4 +97,16 @@ public class InterfaceUtils {
             logger.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
         }
     }
+
+    public static boolean isThisParamNameInRequest(javax.servlet.http.HttpServletRequest request, String givenParamName) {
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String paramName = params.nextElement();
+            if (paramName.equals(givenParamName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
