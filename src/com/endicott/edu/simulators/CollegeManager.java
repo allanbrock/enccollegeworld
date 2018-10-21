@@ -98,6 +98,7 @@ public class CollegeManager {
     static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 
+
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
@@ -124,18 +125,19 @@ public class CollegeManager {
         FloodManager floodManager = new FloodManager();
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        FacultyManager.handleTimeChange(collegeId,hoursAlive);
+        FacultyManager.handleTimeChange(collegeId, hoursAlive);
 
         FireManager fireManager = new FireManager();
-        fireManager.handleTimeChange(collegeId,hoursAlive,popupManager);
+        fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
 
-        if(college.getAvailableCash() <= 0){
+        if (college.getAvailableCash() <= 0) {
             popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
-                    "Return to Main Menu", "returnToWelcome");
+                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
+                    "Insert empty Wallet Picture Here");
         }
 
         return college;

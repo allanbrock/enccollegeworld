@@ -10,43 +10,51 @@ public class PopupEventModel implements Serializable {
     private boolean response;
     private String title;
     private String description;
-    private String goodButtonText;
-    private String goodButtonCallback;
-    private String badButtonText;
-    private String badButtonCallback;
+    private String leftButtonText;
+    private String leftButtonCallback;
+    private String rightButtonText;
+    private String rightButtonCallback;
     private String acknowledgeButtonText;
     private String acknowledgeButtonCallback;
+    private String imagePath;
+    private String altImageText;
+    private String servlet;
+    private int type;
+
 
     /**
      *
      *
      * @param title: The title of the event, i.e., "Flood destroys dorm", "Football team won the championship!"
      * @param description: The description for the event.
-     * @param goodButtonText: Text for the "Handle Correctly" button.
-     * @param badButtonText: Text for the "Handle Poorly" button.
+     * @param leftButtonText: Text for the "Handle Correctly" button.
+     * @param rightButtonText: Text for the "Handle Poorly" button.
      */
-    public PopupEventModel(String title, String description, String goodButtonText, String goodButtonCallback, String badButtonText, String badButtonCallback){
+    public PopupEventModel(String title, String description, String leftButtonText, String leftButtonCallback, String rightButtonText, String rightButtonCallback, String imagePath, String altImageText){
         this.title = title;
         this.description = description;
-        this.goodButtonText = goodButtonText;
-        this.badButtonText = badButtonText;
+        this.leftButtonText = leftButtonText;
+        this.rightButtonText = rightButtonText;
         this.response = false;
-        this.goodButtonCallback = goodButtonCallback;
-        this.badButtonCallback = badButtonCallback;
+        this.leftButtonCallback = leftButtonCallback;
+        this.rightButtonCallback = rightButtonCallback;
+        this.imagePath = imagePath;
+        this.altImageText = altImageText;
+        //Two Buttons
+        this.type = 2;
+
     }
-    //For use when a single button with no response is required
-//    public PopupEventModel(String title, String description, String acknowledgeButtonText){
-//        this.title = title;
-//        this.description = description;
-//        this.acknowledgeButtonText = acknowledgeButtonText;
-//
-//    }
+
     //For use when a single callback with a server response is required
-    public PopupEventModel(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback){
+    public PopupEventModel(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback, String imagePath, String altImageText){
         this.title = title;
         this.description = description;
         this.acknowledgeButtonText = acknowledgeButtonText;
         this.acknowledgeButtonCallback = acknowledgeButtonCallback;
+        this.imagePath = imagePath;
+        this.altImageText = altImageText;
+        //One button
+        this.type = 1;
     }
 
 
@@ -67,12 +75,12 @@ public class PopupEventModel implements Serializable {
         return description;
     }
 
-    public String getGoodButtonText() {
-        return goodButtonText;
+    public String getLeftButtonText() {
+        return leftButtonText;
     }
 
-    public String getBadButtonText() {
-        return badButtonText;
+    public String getRightButtonText() {
+        return rightButtonText;
     }
 
     public String getAcknowledgeButtonText() {
@@ -80,4 +88,23 @@ public class PopupEventModel implements Serializable {
     }
 
     public String getAcknowledgeButtonCallback(){ return acknowledgeButtonCallback; }
+
+    public int getType(){ return type; }
+
+    public String getLeftButtonCallback() {
+        return leftButtonCallback;
+    }
+
+    public String getRightButtonCallback() {
+        return rightButtonCallback;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+
+    public String getAltImageText() {
+        return altImageText;
+    }
 }

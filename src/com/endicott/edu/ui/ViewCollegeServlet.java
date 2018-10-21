@@ -18,12 +18,15 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         int advanceTimeDays = 0;
         if (request.getParameter("nextDayButton") != null) {
             advanceTimeDays = 1;
+            popupManager.clearPopupManager();
         }
         if (request.getParameter("nextWeekButton") != null) {
             advanceTimeDays = 7;
+            popupManager.clearPopupManager();
         }
         if (request.getParameter("nextMonthButton") != null) {
             advanceTimeDays = 30;
+            popupManager.clearPopupManager();
         }
 
         for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(); i++) {
@@ -47,8 +50,11 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         // Bankrupt college PopupEvent Button
         if(request.getParameter("returnToWelcome") != null){
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
-            dispatcher.forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+//            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
+//            dispatcher.forward(request, response);
+
+
             return;
         }
 

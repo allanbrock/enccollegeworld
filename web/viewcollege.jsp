@@ -147,8 +147,18 @@
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
                 <div class="modal-body">
                     <h3><%=event.getTitle()%></h3>
-                    <p><%=event.getDescription()%> <input type="submit" class="btn btn-info" name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
-                    </p>
+                    <% if(event.getType() == 1){%>
+                        <p>
+                            <img src="<%=event.getImagePath()%>" alt="<%=event.getAltImageText()%>" width="100" height="100">
+                            <%=event.getDescription()%> <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
+                        </p>
+                    <%} else{%>
+                        <p>
+                            <img src="<%=event.getImagePath()%>" alt="<%=event.getAltImageText()%> "width="100" height="100">
+                            <%=event.getDescription()%> <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getLeftButtonCallback()%>" value="<%=event.getLeftButtonText()%>">
+                            <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getRightButtonCallback()%>" value="<%=event.getRightButtonText()%>">
+                        </p>
+                    <%}%>
                 </div>
             <%};%>
             <!-- We're not showing the done button because we want each event acknowledged.

@@ -46,7 +46,7 @@ public class PlagueManager {
         if (didPlagueEnd) {
             popupManager.newPopupEvent("Plague Ends",
                     "It seems like the plague is ending.",
-                    "Ok", "plagueAckCallback1");
+                    "Ok", "plagueAckCallback1", "resources/images/plague.jpg", "Plague Doctor");
         }
         // Spread the plague
         if (hoursLeftInPlague > 0) {
@@ -58,7 +58,7 @@ public class PlagueManager {
                 popupManager.newPopupEvent("Plague Spreads!",
                         "And the plague continues. " + newVictims +
                          " more students are infected.  There are now " + newNumberSick + " ill.",
-                        "Ok", "plagueAckCallback2");
+                        "Ok", "plagueAckCallback2","resources/images/plague.jpg", "Plague Doctor" );
             }
         }
 
@@ -69,7 +69,7 @@ public class PlagueManager {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus.",
-                        "Ok", "plagueAckCallback3");
+                        "Ok", "plagueAckCallback3", "resources/images/plague.jpg", "Plague Doctor");
             }
         }
 

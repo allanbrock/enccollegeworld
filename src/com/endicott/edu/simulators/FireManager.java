@@ -25,7 +25,7 @@ public class FireManager {
         if (fires.size() != 0) {
             // alert popupManager about each fire
             for (FireModel fire : fires) {
-                popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "ok", "done");
+                popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "ok", "done", "resources/images/fire.png", "Plague Doctor");
             }
         }
 
