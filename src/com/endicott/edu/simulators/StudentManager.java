@@ -362,3 +362,4 @@ public class StudentManager {
         TutorialManager.saveNewTip(collegeId, 2,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 }
+

@@ -86,4 +86,12 @@
         <servlet-name>viewBalanceServlet</servlet-name>
         <url-pattern>/viewBalance</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewStoreServlet</servlet-name>
+        <servlet-class>com.endicott.edu.ui.ViewStoreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewStoreServlet</servlet-name>
+        <url-pattern>/viewStore</url-pattern>
+    </servlet-mapping>
 </web-app>
