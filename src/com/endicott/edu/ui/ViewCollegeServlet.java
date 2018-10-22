@@ -5,7 +5,6 @@ import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
@@ -14,42 +13,51 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
+
+        // Advance Time
+        int advanceTimeDays = 0;
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, popupManager);
+            advanceTimeDays = 1;
+            popupManager.clearPopupManager();
         }
         if (request.getParameter("nextWeekButton") != null) {
-            for(int i = 0; i < 7; i++) {
-                if (popupManager.isManagerEmpty())
-                    CollegeManager.iterateTime(collegeId, popupManager);
-            }
+            advanceTimeDays = 7;
+            popupManager.clearPopupManager();
         }
         if (request.getParameter("nextMonthButton") != null) {
-            for(int i = 0; i < 30; i++) {
-                if(popupManager.isManagerEmpty())
-                    CollegeManager.iterateTime(collegeId, popupManager);
-            }
+            advanceTimeDays = 30;
+            popupManager.clearPopupManager();
         }
+
+        for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(); i++) {
+            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
+        }
+
         if(request.getParameter("updateTuitionButton") != null){
-            //call update tuition
             String tuitionValue = request.getParameter("tuitionValue");
             int tuition = Integer.parseInt(tuitionValue);
             CollegeManager.updateCollegeTuition(collegeId, tuition);
         }
-        if(request.getParameter("returnToWelcome") != null){
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
-            dispatcher.forward(request, response);
-            return;
-        }
+
+        // TODO: this is for testing purposes, remove.
         if(request.getParameter("bankruptCollege") != null){
             CollegeManager.bankruptCollege(collegeId);
-            CollegeManager.iterateTime(collegeId, popupManager);
-
+            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
-//        if(request.getParameter("addEventButton") != null){
-//            PopupEventManager popupMan = (PopupEventManager) request.getAttribute("popupMan");
-//            popupMan.newPopupEvent("Test Event", "Test Event", "This event is a test of the popup system", "Ok!");
-//            request.setAttribute("popupMan", popupMan);
-//        }
+
+        // Check if the button pressed was from a popup.  If so clear it.
+        popupManager.removePopupIfButtonPressed(request);
+
+        // Bankrupt college PopupEvent Button
+        if(request.getParameter("returnToWelcome") != null){
+            response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+//            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome.jsp");
+//            dispatcher.forward(request, response);
+
+
+            return;
+        }
+
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
@@ -64,7 +72,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, popupManager);
+            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
 
         // Attempt to fetch the college and load into

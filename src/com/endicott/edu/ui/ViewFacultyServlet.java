@@ -47,7 +47,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.iterateTime(collegeId, popupManager);
+            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
 
 

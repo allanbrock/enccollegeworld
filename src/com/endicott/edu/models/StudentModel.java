@@ -21,6 +21,10 @@ public class StudentModel implements Serializable {
     private int numberHoursBeenSick = 0; // number of hours of current illness -- 0 if well
     private int numberHoursLeftBeingSick = 0;
     private int hourLastUpdated = 0;
+    private int healthHappinessRating = 0; // 0 if ill, 100 if health
+    private int academicHappinessRating = 0; // 0 to 100
+    private int moneyHappinessRating = 0; // 0 to 100, determined from college tuition.
+    private int funHappinessRating = 0;   // 0 to 100
 
 
     public StudentModel() {
@@ -132,7 +136,36 @@ public class StudentModel implements Serializable {
 
     public void setHourLastUpdated(int hourLastUpdated) { this.hourLastUpdated = hourLastUpdated; }
 
+    public int getHealthHappinessRating() {
+        return healthHappinessRating;
+    }
 
+    public void setHealthHappinessRating(int healthHappinessRating) {
+        this.healthHappinessRating = healthHappinessRating;
+    }
 
+    public int getAcademicHappinessRating() {
+        return academicHappinessRating;
+    }
+
+    public void setAcademicHappinessRating(int academicHappinessRating) {
+        this.academicHappinessRating = academicHappinessRating;
+    }
+
+    public int getMoneyHappinessRating() {
+        return moneyHappinessRating;
+    }
+
+    public void setMoneyHappinessRating(int moneyHappinessRating) {
+        this.moneyHappinessRating = moneyHappinessRating;
+    }
+
+    public int getFunHappinessRating() {
+        return funHappinessRating;
+    }
+
+    public void setFunHappinessRating(int funHappinessRating) {
+        this.funHappinessRating = funHappinessRating;
+    }
 }
 

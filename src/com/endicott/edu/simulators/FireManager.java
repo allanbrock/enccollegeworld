@@ -18,14 +18,15 @@ public class FireManager {
 
     public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager){
 
-        // start fire
-        startFireRandomly(runId,hoursAlive);
+        // possibly start fire
+        possiblyCreateFire(runId,hoursAlive);
         List<FireModel> fires = FireDAO.getFires(runId);
 
-
-        // alert popupManager about each fire
-        for (FireModel fire: fires){
-            popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "ok","done");
+        if (fires.size() != 0) {
+            // alert popupManager about each fire
+            for (FireModel fire : fires) {
+                popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "ok", "done", "resources/images/fire.png", "Plague Doctor");
+            }
         }
 
         fires.clear();
@@ -33,6 +34,15 @@ public class FireManager {
 
     }
 
+    /**
+     *
+     * @param runId
+     * @param hoursAlive
+     *
+     * Creates a fire in a random building
+     * TODO: add dorms to the mix
+     * TODO: add catastrophic chance
+     */
     public void startFireRandomly(String runId,int hoursAlive){
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) buildingDao.getBuildings(runId);
         Random rand = new Random();
@@ -46,6 +56,13 @@ public class FireManager {
         dao.saveNewFire(runId,fire);
 
         NewsManager.createNews(runId, hoursAlive, "Fire detected at " + fire.getBuildingBurned().getName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+    }
+
+    public void possiblyCreateFire(String runId, int hoursAlive){
+        Random rand = new Random();
+        if (rand.nextInt(100) <= 2){
+            startFireRandomly(runId,hoursAlive);
+        }
     }
 
     public void clearFires(String runId){

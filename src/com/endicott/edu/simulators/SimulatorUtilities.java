@@ -1,6 +1,8 @@
 package com.endicott.edu.simulators;
 
-// Created by 
+import java.util.Random;
+
+// Created by
 public class SimulatorUtilities {
     /**
      * Return a number between 0 and 100, based on a given value.
@@ -24,5 +26,25 @@ public class SimulatorUtilities {
             answer = 100 - answer;
         }
         return answer;
+    }
+
+    /**
+     * Return a random number that follows a normal distribution matter.
+     * For example, if the normal distribution you want is centered on 50,
+     * and the standard deviation is 10, then pass 50 for mean and 10 for sd.
+     * This method will also enforce a min/max on the result.
+     *
+     * @param mean
+     * @param standardDev
+     * @param min
+     * @param max
+     * @return
+     */
+    public static int getRandomNumberWithNormalDistribution(int mean, int standardDev, int min, int max) {
+        Random random = new Random();
+        int normalDistNo = (int) (random.nextGaussian()*standardDev + mean + 0.5);
+        normalDistNo = Math.min(max, normalDistNo);
+        normalDistNo = Math.max(min, normalDistNo);
+        return normalDistNo;
     }
 }
