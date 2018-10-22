@@ -1,23 +1,19 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Jeremy
-  Date: 10/16/2018
-  Time: 4:07 PM
+  User: stevesuchcicki
+  Date: 10/22/18
+  Time: 12:10 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="com.endicott.edu.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.CollegeModel" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
-<%@ page import="com.endicott.edu.models.GateModel" %>
-<%@ page import="com.endicott.edu.simulators.GateManager" %>
-<%@ page import="com.endicott.edu.models.StudentModel" %>
-<%@ page import="java.util.Comparator" %>
-<%@ page import="java.util.Arrays" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="com.endicott.edu.ui.UiMessage" %>
+<%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <html>
 <head>
+    <title>College World Store</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="resources/style.css">
     <!-- Latest compiled and minified CSS -->
@@ -37,7 +33,6 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
     if (msg == null) {
@@ -46,23 +41,33 @@
     CollegeModel college = (CollegeModel) request.getAttribute("college");
     if (college == null) {
         college = new CollegeModel();
+        msg.setMessage("Attribute for college missing.");
+    }
+    SportModel sport[] = (SportModel[]) request.getAttribute("sports");
+    if (sport == null) {
+        sport = new SportModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + " Attribute for sports missing.");
+    }
+    SportModel availableSports[] = (SportModel[]) request.getAttribute("availableSports");
+    //need to change this later if col has all sports
+    if (availableSports == null){
+        msg.setMessage(msg.getMessage() + " Issue with getting available sports.");
+    }
+    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
+    if (news == null) {
+        news = new NewsFeedItemModel[0];  // This is really bad
+        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
     StudentModel students[] = (StudentModel[]) request.getAttribute("students");
     if (students == null) {
-        students = new StudentModel[0];  // This is really bad
+        students  = new StudentModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
-    GateModel gates[] = (GateModel[]) request.getAttribute("gates");
-    if(gates == null) {
-        gates = new GateModel[0]; // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
-    }
-
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
 
-<form action="viewGates" method="post">
+<form action="viewStore" method="post">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
@@ -76,75 +81,25 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="viewCollege"><%=college.getRunId()%></a></li>
+                    <li><a href="viewCollege"><%=college.getRunId()%>
+                    </a></li>
                     <li><a href="viewStudent">Students</a></li>
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
-                    <li class="active"><a href="viewGates">Gates</a></li>
+                    <li><a href="viewGates">Gates</a></li>
                     <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
-                    <li><a href="viewStore">Store</a></li>
+                    <li class="active"><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
-                    <li><a href="viewAbout">About</a></li>
+                    <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </form>
-
-<%-- Gates --%>
-<div class="container">
-
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-md-2">
-                <img class="img-responsive" src="resources/images/star.png">
-            </div>
-            <div class="col-md-10">
-
-                <h2>Current Objectives</h2>
-                <h3><%=gates.length%> Objectives</h3>
-                <h3><%=students.length%> Enrolled Students</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="well well-sm">
-        <div class="gateList">
-            <%--<h3>Current Objectives(<%=gates.length%>):</h3>--%>
-            <div class="pre-scrollable" style="max-height: 750px">
-                <ul class="list-group">
-                    <%
-                        for(GateModel gate : gates) {
-                            if(!GateManager.testGate(college.getRunId(), gate.getKey())) {
-                    %>
-                    <li class="list-group-item">
-                        <div class="col-md-2" style="width: 100px">
-                            <img class="img-responsive" style="" src=<%=gate.getIconPath()%>>
-                        </div>
-                        <h4><strong><%=gate.getKey()%></strong> ( <%=students.length%> / <%=gate.getGoal()%> Students )</h4>
-                        <p><%=gate.getDescription()%></p>
-                        <div class="progress" style="margin-bottom:0">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                 style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">
-                                <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%
-                            </div>
-                        </div>
-                    </li>
-                    <%
-                            }
-                        }
-                    %>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
