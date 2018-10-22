@@ -119,18 +119,16 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
             dispatcher.forward(request, response);
         }
-
-        //if the purchase process was started, should go to the anchor tag
     }
 
     private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        //not sure if we want doGet here
-        //doGet(request, response);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
         //String buildingType=request.getParameter("buildingType");
         String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
+
+        //eventually add code that removes the prices from displaying in the chart after we know the prices for sure
 
         logger.info("In ViewBuildingsServlet.doPost()");
         InterfaceUtils.logRequestParameters(request);
