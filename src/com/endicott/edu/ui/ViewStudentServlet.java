@@ -11,9 +11,12 @@ import java.io.IOException;
 public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        if (request.getParameter("nextTip") != null) {
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);                                                       //WHY DOESN'T THIS THING FUCKING WORK!?!?!?
+        if (request.getParameter("nextTip") != null) {                                                                         //IT LOOKS JUST ALL THE OTHERS, WHY IS IT GREY?!
             TutorialManager.advanceTip("viewStudent", collegeId);
+        }
+        if (request.getParameter("hideTips") != null){
+            //insert some magical code that I don't understand to hide the "well well-lg" div class
         }
     }
 
