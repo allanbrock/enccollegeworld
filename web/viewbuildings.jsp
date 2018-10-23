@@ -33,6 +33,7 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
+<!-- solution from https://www.experts-exchange.com/questions/20683436/Using-anchors-in-JSP-code.html -->
 <% if( request.getParameter("hash") != null ) { %>
 <script>
     location.hash = "<%=request.getParameter("hash")%>";
@@ -98,6 +99,7 @@
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
                     <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
+                    <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
@@ -199,15 +201,49 @@
                     for (int i = 0; i < buildings.length; i++) {
                 %>
                 <tr>
-                    <td><%=buildings[i].getName()%>
-                    </td>
-                    <td><%=buildings[i].getKindOfBuilding()%>
-                    </td>
-                    <td><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
-                    </td>
-                    <td><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
+                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getName()%>
                     </td>
                     <td>
+                        <%if(buildings[i].getKindOfBuilding().equals("DORM")){%>
+                        <img class="img-responsive" src="resources/images/dorm.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("DINING")){%>
+                        <img class="img-responsive" src="resources/images/dining.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("ACADEMIC")){%>
+                        <img class="img-responsive" src="resources/images/academic.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("ADMIN")){%>
+                        <img class="img-responsive" src="resources/images/admin.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("BASEBALL DIAMOND")){%>
+                        <img class="img-responsive" src="resources/images/baseball-color.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("ENTERTAINMENT")){%>
+                        <img class="img-responsive" src="resources/images/entertainment.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("FOOTBALL STADIUM")){%>
+                        <img class="img-responsive" src="resources/images/football.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("HEALTH")){%>
+                        <img class="img-responsive" src="resources/images/health.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("HOCKEY RINK")){%>
+                        <img class="img-responsive" src="resources/images/hockey.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("LIBRARY")){%>
+                        <img class="img-responsive" src="resources/images/library.png" style="width:100px; height:100px;">
+                        <%}
+                        else if(buildings[i].getKindOfBuilding().equals("SPORTS")){%>
+                        <img class="img-responsive" src="resources/images/sports.png" style="width:100px; height:100px;">
+                        <%}%>
+                        <%=buildings[i].getKindOfBuilding()%>
+                    </td>
+                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
+                    </td>
+                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
+                    </td>
+                    <td style="vertical-align:middle;">
                         <%--<%--%>
                         <%--String progressBarColor;--%>
                         <%--if(buildings[i].getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
@@ -222,9 +258,9 @@
                             </div>
                         </div>
                     </td>
-                    <td><%=buildings[i].getCurDisaster()%>
+                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getCurDisaster()%>
                     </td>
-                    <td><%=buildings[i].checkIfBeingBuilt()%>
+                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].checkIfBeingBuilt()%>
                     </td>
                 </tr>
                 <% } %>
@@ -267,18 +303,18 @@
                             <!--form group used to be here -->
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                <option > Small </option >
-                                <option > Medium </option >
+                                <option > $50,000 - Small (50) </option >
+                                <option > $100,000 - Medium (200) </option >
                                 <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                    <option > Large </option >
+                                    <option > $150,000 - Large (500) </option >
                                 <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
-                                    <option > Extra Large </option >
+                                    <option > $200,000 - Extra Large (1000) </option >
                                 <%}%>
                             </select >
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
                                 || buildingType.equals("Hockey Rink")){%>
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                <option > Small </option >
+                                <option > $50,000 - Small </option >
                             </select >
                         <%}%>
                         <h4>Confirm Purchase of <%=buildingType%></h4>

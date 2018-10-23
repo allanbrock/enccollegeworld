@@ -2,6 +2,7 @@ package com.endicott.edu.simulators;
 
 import java.util.ArrayList;
 import com.endicott.edu.models.PopupEventModel;
+import com.endicott.edu.ui.InterfaceUtils;
 
 import javax.swing.*;
 
@@ -21,9 +22,9 @@ public class PopupEventManager {
         currentEvents.add(event);
     }
 
-
-    public void newPopupEvent(String title, String description, String goodButtonText, String goodButtonCallback, String badButtonText, String badButtonCallback){
-        PopupEventModel newEvent = new PopupEventModel(title, description, goodButtonText, goodButtonCallback, badButtonText, badButtonCallback);
+    //Use this function when you want to create a popup that
+    public void newPopupEvent(String title, String description, String leftButtonText, String leftButtonCallback, String rightButtonText, String rightButtonCallback, String imagePath, String altImageText){
+        PopupEventModel newEvent = new PopupEventModel(title, description, leftButtonText, leftButtonCallback, rightButtonText, rightButtonCallback, imagePath, altImageText);
         currentEvents.add(newEvent);
 
     }
@@ -31,8 +32,8 @@ public class PopupEventManager {
 //        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
 //        this.addEvent(newEvent);
 //    }
-    public void newPopupEvent(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback) {
-        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText, acknowledgeButtonCallback);
+    public void newPopupEvent(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback, String imagePath, String altImageText) {
+        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText, acknowledgeButtonCallback, imagePath, altImageText);
         this.addEvent(newEvent);
     }
 
@@ -64,5 +65,20 @@ public class PopupEventManager {
         }
     }
 
+
+
+    /**
+     * Take the request and see if indicates that a popup acknowledgement button was pressed.
+     * If so, call the Manager that is support to handle the request, delete the pop event,
+     * and return true.  Return false we didn't find that a popup
+     */
+    public void removePopupIfButtonPressed(javax.servlet.http.HttpServletRequest request) {
+        for (PopupEventModel e : currentEvents) {
+            if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
+                currentEvents.remove(e);
+                return;
+            }
+        }
+    }
 
 }
