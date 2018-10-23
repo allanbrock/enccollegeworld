@@ -126,7 +126,6 @@ public class FacultyDao {
      */
     public int numberOfFaculty(String collegeId){
         return getFaculty(collegeId).size();
-
     }
 
 

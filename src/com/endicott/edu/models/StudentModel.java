@@ -25,9 +25,12 @@ public class StudentModel implements Serializable {
     private int academicHappinessRating = 0; // 0 to 100
     private int moneyHappinessRating = 0; // 0 to 100, determined from college tuition.
     private int funHappinessRating = 0;   // 0 to 100
+    private int advisorHappinessRating = 0;
+    private String advisorName;
 
 
     public StudentModel() {
+
     }
 
     public StudentModel(String name, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, String runId, int numberHoursBeenSick, int numberHoursLeftBeingSick, int hourLastUpdated) {
@@ -167,5 +170,16 @@ public class StudentModel implements Serializable {
     public void setFunHappinessRating(int funHappinessRating) {
         this.funHappinessRating = funHappinessRating;
     }
+
+    public int getAdvisorHappinessHappinessRating() {
+        return advisorHappinessRating;
+    }
+
+    public void setAdvisorHappinessHappinessRating(int advisorHappinessRating) {
+        this.advisorHappinessRating = advisorHappinessRating;
+    }
+
+    public void setAdvisorName(String name) { this.advisorName = name; }
+    public String getAdvisorName() { return this.advisorName; }
 }
 

@@ -2,6 +2,7 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -18,6 +19,7 @@ public class FacultyModel implements Serializable {
     private String officeLocation; //office building and number
     private int happiness;
     private int performance;
+    private ArrayList<StudentModel> advisees;
 
     public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String facultyID) {
         System.out.print("Other constructor hit");
@@ -29,6 +31,7 @@ public class FacultyModel implements Serializable {
     }
 
     public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
+        this.advisees = new ArrayList<>();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
@@ -91,4 +94,7 @@ public class FacultyModel implements Serializable {
     public int getPerformance(){ return this.performance; }
     public void setPerformance(int performance) { this.performance = performance; }
 
+    public void addAdvisee(StudentModel student){ this.advisees.add(student); }
+    public ArrayList<StudentModel> getAdvisees() { return this.advisees; }
+    public void initiateAdvisees() { this.advisees = new ArrayList<>(); }
 }
