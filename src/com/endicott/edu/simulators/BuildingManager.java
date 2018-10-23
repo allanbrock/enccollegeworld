@@ -239,6 +239,39 @@ public class BuildingManager {
         dao.saveAllBuildings(collegeId, buildings);
     }
 
+    public void buildingDecayForOneDay(String collegeId){
+        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        for (BuildingModel b : buildings){
+            float currentQuality = b.getHiddenQuality();
+            double randomDecay = Math.random();
+            b.setHiddenQuality((float)(currentQuality - (randomDecay * 0.5)));
+        }
+        dao.saveAllBuildings(collegeId, buildings);
+    }
+
+    public void buildingDecayForOneWeek(String collegeId){
+        for(int i = 0; i <= 6; i++){
+            buildingDecayForOneDay(collegeId);
+        }
+    }
+
+    public void buildingDecayForOneMonth(String collegeId){
+        for(int i = 0; i <= 29; i++){
+            buildingDecayForOneDay(collegeId);
+        }
+
+    }
+
+    public void destroyBuildingInCaseOfDisaster(String collegeId, String buildingName){
+        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        for (BuildingModel b : buildings) {
+            if (b.getName() == buildingName) {
+                buildings.remove(b);
+            }
+        }
+        dao.saveAllBuildings(collegeId, buildings);
+    }
+
     /**
      * Return the name of a building that has an open spot for a student
      * and reserve this spot by increasing the building occupancy by 1.
