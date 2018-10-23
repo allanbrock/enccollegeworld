@@ -21,6 +21,17 @@ public class CollegeModel implements Serializable {
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
     //public PopupEventModel;
 
+    //Counts amount of total championships won to be tracked in the trophy case
+    private int footballChampionships = 0;
+    private int mHockeyChampionships = 0;
+    private int wHockeyChampionships = 0;
+    private int mSoccerChampionships = 0;
+    private int wSoccerChampionships = 0;
+    private int baseballChampionships = 0;
+    private int softballChampionships = 0;
+    private int mBasketballChampionships = 0;
+    private int wBasketballChampionships = 0;
+
     public int getStudentHealthRating() {
         return studentHealthRating;
     }
@@ -122,4 +133,23 @@ public class CollegeModel implements Serializable {
     public int getNumberStudentsAccepted() { return numberStudentsAccepted; }
 
     public void setNumberStudentsAccepted(int numberStudentsAccepted) { this.numberStudentsAccepted = numberStudentsAccepted; }
+
+    //Getters for Championships Won
+    public int getFootballChampionships() { return footballChampionships;}
+
+    public int getMSoccerChampionships() { return mSoccerChampionships;}
+
+    public int getWSoccerChampionships() { return wSoccerChampionships;}
+
+    public int getMHockeyChampionships() { return mHockeyChampionships;}
+
+    public int getWHockeyChampionships() { return wHockeyChampionships;}
+
+    public int getMBasketballChampionships() { return mBasketballChampionships;}
+
+    public int getWBasketballChampionships() { return wBasketballChampionships;}
+
+    public int getBaseballChampionships() { return baseballChampionships;}
+
+    public int getSoftballChampionships() { return softballChampionships;}
 }

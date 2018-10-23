@@ -16,7 +16,7 @@ public class SportManager {
     static private Logger logger = Logger.getLogger("SportManager");
 
     /**
-     * Simulate the elaspe of time at the college.
+     * Simulate the elapse of time at the college.
      *
      * @param collegeId
      * @param hoursAlive number of hours since the college started.
