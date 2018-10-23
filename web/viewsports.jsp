@@ -42,6 +42,9 @@
 </head>
 <body>
 <%
+    //if addSportResultMsg is null, the sport was succesfully created. If not, there was a problem
+    String addSportResultMsg = (String) request.getAttribute("addSportResultMsg");
+
     UiMessage msg = (UiMessage) request.getAttribute("message");
     if (msg == null) {
         msg = new UiMessage();
