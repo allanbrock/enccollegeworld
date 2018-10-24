@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TutorialManager {
     static private TutorialDao tutorialDao = new TutorialDao();
-    private int counter = 0;
+    private static int lastCurrent = 0;
     private String description = "";
 
     public static TutorialModel getCurrentTip(String page, String collegeId){
@@ -18,6 +18,29 @@ public class TutorialManager {
             }
         }
         return null;
+    }
+
+    public static void showTips(String page, String collegeId){
+        List<TutorialModel> tips = tutorialDao.getTutorials(collegeId);
+        for (int i = 0; i < tips.size(); i++){
+            TutorialModel t = tips.get(i);
+            if(t.getPage().equals(page) && t.getRefNum() == lastCurrent){
+                t.setCurrent(true);
+                tutorialDao.saveAllTutorials(collegeId, tips);
+            }
+        }
+    }
+
+    public static void hideTips(String page, String collegeId){
+        List<TutorialModel> tips = tutorialDao.getTutorials(collegeId);
+        for (int i = 0; i < tips.size(); i++){
+            TutorialModel t = tips.get(i);
+            if(t.getPage().equals(page) && t.isCurrent()){
+                lastCurrent = t.getRefNum();
+                t.setCurrent(false);
+                tutorialDao.saveAllTutorials(collegeId, tips);
+            }
+        }
     }
 
     public static void advanceTip(String page, String collegeId){

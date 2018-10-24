@@ -126,6 +126,7 @@
                 </div>
 
                 <!-- Tips -->
+                <%if (tip != null){%>
                 <div class="col-md-5">
                         <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
                         <div class="well well-lg">
@@ -134,6 +135,10 @@
                         <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                         <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
                 </div>
+                <%}%>
+                <%if (tip == null){%>
+                    <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+                <%}%>
 
             </div>
         </div>
