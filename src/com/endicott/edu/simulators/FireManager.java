@@ -25,7 +25,7 @@ public class FireManager {
         // alert popupManager about each fire, currently only one exists fire at a time
         if (fires.size() != 0) {
             for (FireModel fire : fires) {
-                popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "ok", "done", "resources/images/fire.png", "Plague Doctor");
+                popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(), "Buy Upgrade", "goToStore", "resources/images/fire.png", "Plague Doctor");
             }
         }
 
@@ -46,43 +46,42 @@ public class FireManager {
     public void startFireRandomly(String runId,int hoursAlive){
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) buildingDao.getBuildings(runId);
         ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
-        ArrayList<StudentModel> fireVictims = new ArrayList<>();
+        List<FireModel> fires = FireDAO.getFires(runId);
+        FireDAO dao = new FireDAO();
+        StudentDao studentDao = new StudentDao();
+        String victims = "";
+
 
         Random rand = new Random();
         int randomIndex = rand.nextInt(buildings.size());
         BuildingModel buildingToBurn = buildings.get(randomIndex);
 
-        FireModel fire = new FireModel(getFireCost(), getNumFatalities(), runId, buildingToBurn);
+        int numDeaths = getNumFatalities();
+        FireModel fire = new FireModel(getFireCost(numDeaths), numDeaths, runId, buildingToBurn);
 
-        if (buildingToBurn.getNumStudents() > 0 && getNumFatalities() > 0){
-            for (int i =0; i == getNumFatalities(); i++){
+        //Lines 61-72 get the names of students who die in fire if there are and builds the description for the popup
+        if (numDeaths > 0){
+            for (int i =0; i < numDeaths; i++){
                 int studentIndex = rand.nextInt(students.size());
-                StudentModel victim = students.get(studentIndex);
-                fireVictims.add(victim);
+                victims += students.get(studentIndex).getName().trim() + ", ";
                 students.remove(studentIndex);
-
             }
-            fire.setDescription(fireVictims);
+            fire.setDescription(victims);
         } else{
-            fire.setNumOfFatalities(0);
+            victims = "No one";
+            fire.setDescription(victims);
         }
 
-        FireDAO dao = new FireDAO();
-        StudentDao studentDao = new StudentDao();
-        List<FireModel> fires = FireDAO.getFires(runId);
         fires.add(fire);
         dao.saveNewFire(runId,fire);
         studentDao.saveAllStudents(runId,students);
-        fireVictims.clear();
-
-
-
-        NewsManager.createNews(runId, hoursAlive, "Fire detected at " + fire.getBuildingBurned().getName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+        Accountant.payBill(runId,"Fire damaged cost ", fire.getCostOfFire());
+        NewsManager.createNews(runId, hoursAlive, "Fire in " + fire.getBuildingBurned().getName() + ", " + numDeaths + " died.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
     }
 
     public void possiblyCreateFire(String runId, int hoursAlive){
         Random rand = new Random();
-        if (rand.nextInt(100) <= 2){
+        if (rand.nextInt(100) <= 4){
             startFireRandomly(runId,hoursAlive);
         }
     }
@@ -91,10 +90,16 @@ public class FireManager {
         FireDAO.deleteFires(runId);
     }
 
-    public int getFireCost(){
+    public int getFireCost(int victims){
         Random rand = new Random();
-        int costOfFire = rand.nextInt(1000);
-        return costOfFire;
+        int costOfFire;
+        if (getNumFatalities()>1) {
+            costOfFire = rand.nextInt(1000);
+            return costOfFire * victims;
+        } else{
+            costOfFire = rand.nextInt(1000);
+            return costOfFire;
+        }
     }
 
     public int getNumFatalities(){

@@ -63,11 +63,13 @@ public class FireModel implements Serializable {
         return this.buildingBurned;
     }
 
-    public void setDescription(ArrayList<StudentModel> victims) {
+    public void setDescription(String victims) {
         String names = "";
-        for (StudentModel victim:victims) {
-            names = victim.getName() + " ";
+
+        if (victims.equalsIgnoreCase("No one")) {
+            this.description = this.buildingBurned.getName() + " caught fire! Everyone made it out safe.";
         }
-        this.description = this.buildingBurned.getName() + " caught fire! " + names + "died in the fire.";
+
+        this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire.";
     }
 }

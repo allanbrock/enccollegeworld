@@ -44,6 +44,11 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             CollegeManager.bankruptCollege(collegeId);
             CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
+        // upgrade button for fire popup sends user to store page
+        if (request.getParameter("goToStore") != null){
+            response.sendRedirect(request.getContextPath() + "/viewstore.jsp");
+            return;
+        }
 
         // Check if the button pressed was from a popup.  If so clear it.
         popupManager.removePopupIfButtonPressed(request);

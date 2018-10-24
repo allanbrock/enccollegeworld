@@ -67,8 +67,8 @@ public class CollegeManager {
 
         GateManager.establishCollege(collegeId);
 
-        InventoryManager inventoryManager = new InventoryManager();
-        inventoryManager.establishCollege(collegeId);
+        //InventoryManager inventoryManager = new InventoryManager();
+        //inventoryManager.establishCollege(collegeId);
 
         return college;
     }

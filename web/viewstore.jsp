@@ -79,7 +79,12 @@
                     <li class="active"><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+
+                    <%-- This is commented out because it was throwing a null pointer,
+                         theres a warning on the getCollegeDate declaration it may throw one.
+                         This was to test the fire pop up upgrade button.
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                    --%>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
