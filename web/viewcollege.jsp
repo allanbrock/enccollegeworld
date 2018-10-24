@@ -148,18 +148,23 @@
             <% for (PopupEventModel event:popupManager.getEventsList()) {%>
                 <div class="modal-body">
                     <h3><%=event.getTitle()%></h3>
-                    <% if(event.getType() == 1){%>
-                        <p>
-                            <img src="<%=event.getImagePath()%>" alt="<%=event.getAltImageText()%>" width="100" height="100">
-                            <%=event.getDescription()%> <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
-                        </p>
-                    <%} else{%>
-                        <p>
-                            <img src="<%=event.getImagePath()%>" alt="<%=event.getAltImageText()%> "width="100" height="100">
-                            <%=event.getDescription()%> <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getLeftButtonCallback()%>" value="<%=event.getLeftButtonText()%>">
-                            <input type="submit" class="btn btn-info" style="float:right" name="<%= event.getRightButtonCallback()%>" value="<%=event.getRightButtonText()%>">
-                        </p>
-                    <%}%>
+                    <div>
+                        <img style="float:left; margin-right:1em;" src="<%=event.getImagePath()%>" alt="<%=event.getAltImageText()%> "width="100" height="100">
+                        <%if(event.getType() == 1){%>
+                            <p>
+                                <%=event.getDescription()%><br>
+                                <input type="submit" class="btn btn-info" style="position: absolute; right: 1em; bottom: 1em;"  name="<%= event.getAcknowledgeButtonCallback()%>" value="<%=event.getAcknowledgeButtonText()%>">
+                                <div style="clear: both;"></div>
+                            </p>
+                        <%}else{%>
+                           <p>
+                                <%=event.getDescription()%><br>
+                                <input type="submit" class="btn btn-info" style="position: absolute; right: 1em; bottom: 1em;" name="<%= event.getRightButtonCallback()%>" value="<%=event.getRightButtonText()%>">
+                                <input type="submit" class="btn btn-info" style="position: absolute; right: 10em; bottom: 1em;" name="<%= event.getLeftButtonCallback()%>" value="<%=event.getLeftButtonText()%>">
+                                <div style="clear: both;"></div>
+                            </p>
+                        <%}%>
+                    </div>
                 </div>
             <%};%>
             <!-- We're not showing the done button because we want each event acknowledged.
