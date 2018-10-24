@@ -335,7 +335,7 @@
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
                                 || buildingType.equals("Hockey Rink") && college.getAvailableCash() > 50000){%>
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                <option > $50,000 - Small </option >
+                                <option > $50,000 - Small (50) </option >
                             </select >
                         <%}%>
                         <h4>Confirm Purchase of <%=buildingType%></h4>

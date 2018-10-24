@@ -133,7 +133,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
        else if(buildingSize.equals("$350,000 - Large (500)")){
            buildingSize = "Large";
        }
-       else{
+       else {
            buildingSize = "Extra Large";
        }
         //set the capacity
