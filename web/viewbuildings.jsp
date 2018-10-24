@@ -273,7 +273,11 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div id="purchase">
-                <!-- if they haven't hit begin purchase, only one option is visible -->
+                    <!-- if they don't have enough money for the cheapest building they can't try to purchase -->
+                    <%if(college.getAvailableCash() < 50000){%>
+                    <h4>You don't have enough money to buy a new building :(</h4>
+                    <%}else{%>
+                    <!-- if they haven't hit begin purchase, only one option is visible -->
                 <% if(beginPurchase == "false"){%>
                     <h4>Purchase a new Building</h4>
                     <input type="submit" class="btn btn-info" name="beginBuildingPurchase" value="Begin">
@@ -303,16 +307,33 @@
                             <!--form group used to be here -->
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                <option > $50,000 - Small (50) </option >
-                                <option > $100,000 - Medium (200) </option >
+                                <!--if they can afford everything they can see everything-->
+                                <%if(college.getAvailableCash() > 650000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
                                 <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                    <option > $150,000 - Large (500) </option >
+                                    <option > $350,000 - Large (500) </option >
                                 <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
-                                    <option > $200,000 - Extra Large (1000) </option >
+                                    <option > $650,000 - Extra Large (1000) </option >
+                                <%}%>
+                                <!--if they can afford 3/4 they can see 3/4-->
+                                <%}else if(college.getAvailableCash() > 350000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
+                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
+                                <option > $350,000 - Large (500) </option >
+                                <%}%>
+                                <!-- if they can afford 2/4 they can see 2/4-->
+                                <%}else if(college.getAvailableCash() > 150000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
+                                <!-- if they can afford 1/4 they can see 1/4-->
+                                <%}else if(college.getAvailableCash() > 50000){%>
+                                <option> $50,000 - Small (50) </option >
                                 <%}%>
                             </select >
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
-                                || buildingType.equals("Hockey Rink")){%>
+                                || buildingType.equals("Hockey Rink") && college.getAvailableCash() > 50000){%>
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <option > $50,000 - Small </option >
                             </select >
@@ -326,6 +347,7 @@
                         <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
                     </div>
                 <%}%>
+                    <%}%>
                 </div>
             </div>
         </div>

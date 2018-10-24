@@ -104,18 +104,14 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         request.setAttribute("beginBuildingPurchase", beginStr); //begin attribute is originally false
         String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
         request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr); //building type selected is originally false
-
-        if(beginPurchase == true){
-            // Attempt to fetch the college and load into
-            // request attributes to pass to the jsp page.
-            InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+        if(beginPurchase){
             RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp?hash=purchase");
             dispatcher.forward(request, response);
         }
         else{
-            // Attempt to fetch the college and load into
-            // request attributes to pass to the jsp page.
-            InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
             RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
             dispatcher.forward(request, response);
         }
@@ -128,7 +124,20 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
 
-        //eventually add code that removes the prices from displaying in the chart after we know the prices for sure
+       if(buildingSize.equals("$50,000 - Small (50)")){
+           buildingSize = "Small";
+       }
+       else if(buildingSize.equals("$150,000 - Medium (200)")){
+           buildingSize = "Medium";
+       }
+       else if(buildingSize.equals("$350,000 - Large (500)")){
+           buildingSize = "Large";
+       }
+       else{
+           buildingSize = "Extra Large";
+       }
+        //set the capacity
+        //subtract the building cost amount from the balance
 
         logger.info("In ViewBuildingsServlet.doPost()");
         InterfaceUtils.logRequestParameters(request);
