@@ -25,10 +25,10 @@ public class BuildingModel implements Serializable {
     private int numStudents = 0;
     private String curDisaster = "none";
 
-    private float hiddenQuality = 0; //same as quality
+    private float hiddenQuality = 0;
+    private float shownQuality = 0;
     private static final int maxHiddenQuality = 10;
     private static final int minHiddenQuality = -10;
-    private float shownQuality = 0;
 
     private int numRooms = 0;
     private int lengthOfDisaster = 0;
@@ -99,7 +99,7 @@ public class BuildingModel implements Serializable {
     }
 
     //Keeps the hidden quality between the min and max values
-    public static int keepHiddenQualityWithinBounds(int hiddenQuality){
+    public static float keepHiddenQualityWithinBounds(float hiddenQuality){
         if(hiddenQuality < minHiddenQuality){return minHiddenQuality;}
         else if(hiddenQuality > maxHiddenQuality){return maxHiddenQuality;}
         else{return hiddenQuality;}
@@ -162,7 +162,6 @@ public class BuildingModel implements Serializable {
     }
     public void setMaintenanceCostPerDay(int numRooms){
         this.costPerDay = (((numRooms * 150))/(365*24));
-
     }
 
     public void setCostPerDay(int costPerDay) {
@@ -173,15 +172,20 @@ public class BuildingModel implements Serializable {
         return hiddenQuality;
     }
 
-    public void setHiddenQuality(int hiddenQuality) {
-        this.hiddenQuality = hiddenQuality;
+    //Sets the new hiddenQuality within the bounds
+    //Sets the shownQuality
+    public void setHiddenQuality(float hiddenQuality) {
+        float trueHiddenQuality = keepHiddenQualityWithinBounds(this.hiddenQuality);
+        this.hiddenQuality = trueHiddenQuality;
+        float newShownQuality = updateShownQuality(this.hiddenQuality);
+        setShownQuality(newShownQuality);
     }
 
     public float getShownQuality() {
         return shownQuality;
     }
 
-    public void setShownQuality(int shownQuality) {
+    private void setShownQuality(float shownQuality) {
         this.shownQuality = shownQuality;
     }
 

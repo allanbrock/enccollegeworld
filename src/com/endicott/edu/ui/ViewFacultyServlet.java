@@ -10,13 +10,11 @@ import com.endicott.edu.simulators.PopupEventManager;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     static private Logger logger = Logger.getLogger("ViewFacultyServlet");
-    static private ArrayList<Integer> raiseBtnPos = new ArrayList();
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         logRequestParameters(request);
@@ -31,12 +29,11 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             removeFaculty(request, response);
         }
         for(int i = 0; i < FacultyDao.getFaculty(collegeId).size(); i++) {
-            // Pop up messages for raises
             if (request.getParameter("facultyRaise" + i) != null) {
                 if (giveFacultyRaise(request, response, i)) {
-                    // popupManager.newPopupEvent("Employee Raise", FacultyDao.getFaculty(collegeId).get(i) + " got a raise!", "Okay");
+                    //popupManager.newPopupEvent("Employee Raise", FacultyDao.getFaculty(collegeId).get(i) + " got a raise!", "Okay", "giveFacultyRaise");
                 } else {
-                    // popupManager.newPopupEvent("Can't give a raise!", FacultyDao.getFaculty(collegeId).get(i) + " is already getting paid the max annual salary", "Okay");
+                    //popupManager.newPopupEvent("Can't give a raise!", FacultyDao.getFaculty(collegeId).get(i) + " is already getting paid the max annual salary", "Okay", "giveFacultyRaise");
                 }
             }
         }

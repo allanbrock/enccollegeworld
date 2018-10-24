@@ -25,9 +25,10 @@ public class SportModel implements Serializable {
     private String note = "no note";
     private int isActive = 0;
     private int hoursUntilNextGame = 0;
-    private int hoursReset;
+    private int hoursUntilNextGameReset;
     private int division;
     private String sportSeason = "unknown";
+    private int championshipsWon = 0;
 
     public SportModel() {
 
@@ -55,7 +56,7 @@ public class SportModel implements Serializable {
         this.gender = gender;
         this.division = division;
         this.sportSeason = sportSeason;
-        this.hoursReset = resetHours;
+        this.hoursUntilNextGameReset = resetHours;
     }
 
     public SportModel(String sportName, String runId){
@@ -197,7 +198,7 @@ public class SportModel implements Serializable {
 
     public void setCurrentPlayers(int currentPlayers) { this.currentPlayers = currentPlayers; }
 
-    public int getResetHours() {return hoursReset;}
+    public int getResetHours() {return hoursUntilNextGameReset;}
 
     public int getActive() { return isActive;
     }
@@ -239,4 +240,7 @@ public class SportModel implements Serializable {
     public void setSportSeason(String sportSeason) {
         this.sportSeason = sportSeason;
     }
+
+    //This will be further expanded upon, including division ups and monetary gains once Playoff system functions
+    public void winChampionship() {this.championshipsWon += 1; }
 }

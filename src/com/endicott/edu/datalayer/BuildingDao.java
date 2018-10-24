@@ -82,7 +82,8 @@ public class BuildingDao {
     }
 
     public static void deleteBuilding(String collegeId) {
-
+        List<BuildingModel> buildings = getBuildings(collegeId);
+        BuildingModel testBuilding = buildings.get(0);
         File file = new File(getFilePath(collegeId));
         file.delete();
     }

@@ -106,12 +106,14 @@
             </div>
             <div class="col-md-10">
 
-                <h2>Current Objectives</h2>
+                <h2>Objectives</h2>
                 <h3><%=gates.length%> Objectives</h3>
                 <h3><%=students.length%> Enrolled Students</h3>
             </div>
         </div>
     </div>
+
+    <h3> Current Objectives: </h3>
 
     <div class="well well-sm">
         <div class="gateList">
@@ -133,6 +135,40 @@
                                  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
                                  style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">
                                 <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%
+                            </div>
+                        </div>
+                    </li>
+                    <%
+                            }
+                        }
+                    %>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3> Completed Objectives: </h3>
+
+    <div class="well well-sm">
+        <div class="gateList">
+            <%--<h3>Current Objectives(<%=gates.length%>):</h3>--%>
+            <div class="pre-scrollable" style="max-height: 750px">
+                <ul class="list-group">
+                    <%
+                        for(GateModel gate : gates) {
+                            if(GateManager.testGate(college.getRunId(), gate.getKey())) {
+                    %>
+                    <li class="list-group-item">
+                        <div class="col-md-2" style="width: 100px">
+                            <img class="img-responsive" style="" src=<%=gate.getIconPath()%>>
+                        </div>
+                        <h4><strong><%=gate.getKey()%></strong></h4>
+                        <p><%=gate.getDescription()%></p>
+                        <div class="progress" style="margin-bottom:0">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                 style="width:100%">
+                                100%
                             </div>
                         </div>
                     </li>

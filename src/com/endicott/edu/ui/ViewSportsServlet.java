@@ -36,6 +36,7 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
     private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String sportName=request.getParameter("sportName");
+        String addSportResultMsg = null;
 
         if (collegeId == null || sportName == null) {
             UiMessage message = new UiMessage("Can't add a team because missing information");
@@ -43,10 +44,11 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding sport.");
         }
         else {
-            SportManager.addNewTeam(sportName,collegeId);
+            addSportResultMsg = SportManager.addNewTeam(sportName,collegeId);
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+        request.setAttribute("addSportResultMsg", addSportResultMsg);
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewsports.jsp");
         dispatcher.forward(request,response);

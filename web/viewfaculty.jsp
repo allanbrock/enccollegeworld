@@ -152,7 +152,7 @@
                         </div>
                     </td>
                     <td>
-                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise">
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                     </td>
                 </tr>
                 <% } %>

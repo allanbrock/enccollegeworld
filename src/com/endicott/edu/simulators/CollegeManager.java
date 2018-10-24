@@ -62,7 +62,6 @@ public class CollegeManager {
 
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
-        //FireManager
 
         EventManager.establishCollege(collegeId);
 

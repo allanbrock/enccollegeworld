@@ -215,6 +215,6 @@ public class FacultyManager {
                     nextValueRaise = true;
             }
         }
-        return null; // Statement will should never be hit
+        return null; // Statement should never be hit
     }
 }

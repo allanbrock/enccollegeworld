@@ -25,12 +25,12 @@ public class FireModel implements Serializable {
         this.numOfFatalities = numOfFatalities;
         this.costOfFire = costOfFire;
         this.buildingBurned = buildingBurned;
-        this.description = buildingBurned.getName() + " caught fire! There were " + numOfFatalities + " deaths.";
+        this.description = "";//buildingBurned.getName() + " caught fire! There were " + numOfFatalities + " deaths.";
 
     }
 
     public String getDescription(){
-        return description;
+        return this.description;
     }
 
 
@@ -61,5 +61,13 @@ public class FireModel implements Serializable {
     }
     public BuildingModel getBuildingBurned(){
         return this.buildingBurned;
+    }
+
+    public void setDescription(ArrayList<StudentModel> victims) {
+        String names = "";
+        for (StudentModel victim:victims) {
+            names = victim.getName() + " ";
+        }
+        this.description = this.buildingBurned.getName() + " caught fire! " + names + "died in the fire.";
     }
 }

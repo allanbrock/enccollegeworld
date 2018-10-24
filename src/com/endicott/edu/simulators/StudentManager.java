@@ -35,7 +35,7 @@ public class StudentManager {
      * @param collegeId
      * @param hoursAlive
      */
-    public  void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
         admitStudents(collegeId, hoursAlive, false);
         receiveStudentTuition(collegeId);
@@ -131,6 +131,25 @@ public class StudentManager {
         }
     }
 
+    private String assignAdvisor(String collegeId, StudentModel student){
+        boolean hit = false;
+        int maxSize = 0;
+        FacultyModel newAdvisor = null;
+        List<FacultyModel> updatedFaculty = FacultyDao.getFaculty(collegeId);
+        for(FacultyModel faculty : updatedFaculty){
+            if(maxSize < faculty.getAdvisees().size()){
+                hit = true;
+                maxSize = faculty.getAdvisees().size();
+                newAdvisor = faculty;
+            }
+        }
+        if(!hit){
+            newAdvisor = updatedFaculty.get(0);  // If there are no faculty advisees set yet
+        }
+        newAdvisor.addAdvisee(student);
+        return newAdvisor.getFacultyName();
+    }
+
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
@@ -164,6 +183,7 @@ public class StudentManager {
             student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
+            student.setAdvisorName(this.assignAdvisor(collegeId, student));
             students.add(student);
             dao.saveAllStudents(collegeId, students);
         }
