@@ -51,6 +51,9 @@ public class FireManager {
         StudentDao studentDao = new StudentDao();
         String victims = "";
 
+        // if there are no buildings, there can not be a fire.
+        if (buildings.size() <= 0)
+            return;
 
         Random rand = new Random();
         int randomIndex = rand.nextInt(buildings.size());
