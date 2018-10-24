@@ -43,26 +43,13 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-    SportModel sport[] = (SportModel[]) request.getAttribute("sports");
-    if (sport == null) {
-        sport = new SportModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for sports missing.");
-    }
-    SportModel availableSports[] = (SportModel[]) request.getAttribute("availableSports");
-    //need to change this later if col has all sports
-    if (availableSports == null){
-        msg.setMessage(msg.getMessage() + " Issue with getting available sports.");
-    }
-    NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
-    if (news == null) {
-        news = new NewsFeedItemModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
-    }
-    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
-    if (students == null) {
-        students  = new StudentModel[0];  // This is really bad
+
+    ItemModel items[] = (ItemModel[]) request.getAttribute("items");
+    if (items == null) {
+        items  = new ItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
+
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -92,7 +79,12 @@
                     <li class="active"><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+
+                    <%-- This is commented out because it was throwing a null pointer,
+                         theres a warning on the getCollegeDate declaration it may throw one.
+                         This was to test the fire pop up upgrade button.
                     <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                    --%>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -100,6 +92,53 @@
             </div>
         </div>
     </nav>
+
+
+    <div class="well well-sm">
+        <h1 align="center">Available Items</h1>
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Item Cost</th>
+                    <th></th>
+                </tr>
+            </thread>
+            <tbody>
+                <%
+                    for(int i = 0; i < items.length; i++){
+                %>
+                <tr>
+                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
+                    </td>
+                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getCost()%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="well well-sm">
+        <h1 align="center">Purchased Items</h1>
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th>Item Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thread>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
 </form>
 </body>
 </html>
