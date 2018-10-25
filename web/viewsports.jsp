@@ -44,6 +44,9 @@
 <%
     //if addSportResultMsg is null, the sport was succesfully created. If not, there was a problem
     String addSportResultMsg = (String) request.getAttribute("addSportResultMsg");
+    if (addSportResultMsg == null){
+        addSportResultMsg = "success";
+    }
 
     UiMessage msg = (UiMessage) request.getAttribute("message");
     if (msg == null) {
@@ -77,6 +80,14 @@
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
+
+<% if (!(addSportResultMsg == "success")) { %>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#addSportErrorModal").modal('show');
+    });
+</script>
+<% } %>
 
 
 <form action="viewSports" method="post">
@@ -112,6 +123,26 @@
             </div>
         </div>
     </nav>
+
+    <!-- If addSportResultMsg is not "success", there was an error adding a sport. Display the error modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="addSportErrorModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error Adding Team:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><%=addSportResultMsg%></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!--create array of sport teams -->
     <div class="container">

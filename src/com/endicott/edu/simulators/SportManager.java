@@ -65,14 +65,37 @@ public class SportManager {
         //SportModel sport = new SportModel();
         SportModel result = null;
 
+        //variables for bulidings check
+        boolean stadiumBuilt = false;
+        boolean rinkBuilt = false;
+        boolean diamondBuilt = false;
+        boolean sportCenterBuilt = false;
+
+        //Check what has been built
+        List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
+        if (buildings != null) {
+            for (BuildingModel b : buildings) {
+                if (b.getName().equalsIgnoreCase("FOOTBALL STADIUM")) {
+                    stadiumBuilt = true;
+                } else if (b.getName().equalsIgnoreCase("HOCKEY RINK")) {
+                    rinkBuilt = true;
+                } else if (b.getName().equalsIgnoreCase("SPORTS CENTER")) {
+                    sportCenterBuilt = true;
+                } else if (b.getName().equalsIgnoreCase("BASEBALL DIAMOND")) {
+                    diamondBuilt = true;
+                }
+            }
+        }
+
         //This String will return null if everything is successfull
         String addTeamResult = null;
 
         if (sportName.equals("$50,000 - Men's Basketball")){
             //requires sports center to be created
-            if (!(BuildingModel.getSportsConst().equalsIgnoreCase("SPORTS"))){
+            if (sportCenterBuilt == false){
                 //error: cannot create building, must create sports center first
                 addTeamResult = "Cannot create Men's Basketball until Sports Center is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
@@ -81,9 +104,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Women's Basketball")){
             //requires sports center to be created
-            if (!(BuildingModel.getSportsConst().equalsIgnoreCase("SPORTS"))){
+            if (sportCenterBuilt == false){
                 //error: cannot create building, must create sports center first
                 addTeamResult = "Cannot create Women's Basketball until Sports Center is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
@@ -92,9 +116,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Baseball")){
             //requires baseball diamond
-            if (!(BuildingModel.getBaseballDiamondConst().equalsIgnoreCase("BASEBALL DIAMOND"))){
+            if (diamondBuilt == false){
                 //error: cannot create building, must create baseball diamond first
                 addTeamResult = "Cannot create Baseball until Baseball Diamond is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(16, 0, 20, 100, 0, 0, 0, 20, 50000, 50, 0, "Baseball", collegeId, 0, 48, "Male", 3, "Spring", 48);
@@ -103,9 +128,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Softball")){
             //requires baseball diamond
-            if (!(BuildingModel.getBaseballDiamondConst().equalsIgnoreCase("BASEBALL DIAMOND"))){
+            if (diamondBuilt == false){
                 //error: cannot create building, must create baseball diamond first
                 addTeamResult = "Cannot create Softball until Baseball Diamond is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(16, 0, 20, 100, 0, 0, 0, 20, 50000, 50, 0, "Softball", collegeId, 0, 48, "Female", 3, "Spring", 48);
@@ -114,9 +140,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Women's Soccer")){
             //requires stadium
-            if (!(BuildingModel.getFootballStadiumConst().equalsIgnoreCase("FOOTBALL STADIUM"))){
+            if (stadiumBuilt == false){
                 //error: cannot create building, must create football stadium first
                 addTeamResult = "Cannot create Women's Soccer until Football Stadium is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(15, 0, 20, 100, 0, 0, 0, 20, 50000, 50, 0, "Women's Soccer", collegeId, 0, 72, "Female", 3, "Fall", 72);
@@ -125,9 +152,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Men's Soccer")){
             //requires stadium
-            if (!(BuildingModel.getFootballStadiumConst().equalsIgnoreCase("FOOTBALL STADIUM"))){
+            if (stadiumBuilt == false){
                 //error: cannot create building, must create football stadium first
                 addTeamResult = "Cannot create Men's Soccer until Football Stadium is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(15, 0, 20, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Soccer", collegeId, 0, 72, "Male", 3, "Fall", 72);
@@ -136,9 +164,10 @@ public class SportManager {
         }
         else if(sportName.equals("$50,000 - Men's Football")){
             //requires stadium
-            if (!(BuildingModel.getFootballStadiumConst().equalsIgnoreCase("FOOTBALL STADIUM"))){
+            if (stadiumBuilt == false){
                 //error: cannot create building, must create football stadium first
                 addTeamResult = "Cannot create Men's Football until Football Stadium is built!";
+                return addTeamResult;
             }
             else {
                 result = new SportModel(33, 0, 75, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Football", collegeId, 0, 144, "Male", 3, "Fall", 144);
