@@ -45,7 +45,7 @@ public class CollegeManager {
         }
 
         // Create the college.
-        college = new CollegeModel();
+        college = new CollegeModel();               
         college.setRunId(collegeId);
         college.setHoursAlive(1);
         college.setAvailableCash(STARTUP_FUNDING);
