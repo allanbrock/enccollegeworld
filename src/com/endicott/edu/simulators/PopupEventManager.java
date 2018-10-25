@@ -77,6 +77,10 @@ public class PopupEventManager {
             if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
                 currentEvents.remove(e);
                 return;
+            }else if(InterfaceUtils.isThisParamNameInRequest(request, e.getLeftButtonCallback()) || InterfaceUtils.isThisParamNameInRequest(request, e.getRightButtonCallback())){
+                currentEvents.remove(e);
+                return;
+
             }
         }
     }

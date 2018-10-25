@@ -68,8 +68,9 @@ public class PlagueManager {
             if (Math.random() <= 0.2) {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
-                        "An illness is starting to starting to sweep through the campus.",
-                        "Ok", "plagueAckCallback3", "resources/images/plague.jpg", "Plague Doctor");
+                        "An illness is starting to starting to sweep through the campus. What would you like to do?",
+                        "Quarantine the sick students!", "plagueAckCallback3", "Do nothing", "plagueCallback4",
+                        "resources/images/plague.jpg", "Plague Doctor");
             }
         }
 

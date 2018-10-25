@@ -33,11 +33,12 @@ public class BuildingManager {
         // Read in all the buildings
         List<BuildingModel> buildings = dao.getBuildings(runId);
 
-        // Go through the buildings making changes based on elasped time.
+        // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
+            building.setHourLastUpdated(hoursAlive); //when a building is upgraded, this should go back to zero
             billRunningCostOfBuilding(runId, hoursAlive, building);
-            workOnBuilding(building, 24, runId);
-            building.setHourLastUpdated(hoursAlive);
+            workOnBuilding(building, runId);
+            buildingDecayForOneDay(runId, building);
         }
 
         // Really important the we save the changes to disk.
@@ -45,50 +46,56 @@ public class BuildingManager {
     }
 
     /**
+     * Charge the college the cost of running the building.
+     *
+     * @param collegeId college name
+     * @param hoursAlive number of hours the college has existed
+     * @param building the building that's causing the cost
+     */
+    private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
+        // A building stores the last time it was updated.
+        // Figure out how many hours have past since last updated.
+        // Multiple by cost per hour.
+        int newCharge = (hoursAlive - building.getHourLastUpdated()) * building.getCostPerDay();
+        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
+
+        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
+    }
+
+    /**
      * Perform any construction work needed on buildings.
      *
      * @param building
-     * @param hoursWorkingOnBuilding
      * @param runId
      */
-    public void workOnBuilding(BuildingModel building, int hoursWorkingOnBuilding, String runId){
-        if (building.getHourLastUpdated() > 0) {  // Not sure what this if is about.
-            int left = building.getHoursToComplete() - hoursWorkingOnBuilding;
-            left = Math.max(0, left);
-            building.setHoursToComplete(left);
+    public void workOnBuilding(BuildingModel building, String runId){
+        if (building.getHoursToComplete() > 0) {
+            building.setHoursToComplete(building.getHoursToComplete() - 24);
 
-            surpriseEventDuringConstruction(runId, hoursWorkingOnBuilding);
+            surpriseEventDuringConstruction(runId, 24);
         }
     }
 
     /**
-     * Given a building type, set attributes of the building.
+     * See if a surprise event has occurred during construction.
+     * If so, report it.
      *
-     * @param
+     * @param collegeId
+     * @param hoursWorkingOnBuilding
      */
-//    private static void setBuildingAttributesByBuildingType(BuildingModel building) {
-//        BuildingType buildingType = BuildingType.valueOf(building.getBuildingType());
-//
-//        switch(buildingType) {
-//            case SMALL:
-//                building.setCapacity(200);
-//                building.setNumRooms(100);
-//                building.setTotalBuildCost(100);
-//                break;
-//            case MEDIUM:
-//                building.setCapacity(350);
-//                building.setNumRooms(175);
-//                building.setTotalBuildCost(175);
-//                break;
-//            case LARGE:
-//                building.setCapacity(500);
-//                building.setNumRooms(250);
-//                building.setTotalBuildCost(250);
-//                break;
-//            default:
-//                logger.severe("Could not add building: '" + building.getName() + "'");
-//        }
-//    }
+    public void surpriseEventDuringConstruction(String collegeId, int hoursWorkingOnBuilding) {
+        String buildingName = "";
+        double chance = Math.random();
+
+        // There can be surprise donations to help pay for building costs.
+        // TODO: this change calculation is questionable. Seems like should be hours/24.
+        if (chance < 0.25 * 24f/hoursWorkingOnBuilding) {
+            //25% chance of gaining $1000 dollars every 24 hours working on buildi.
+            Accountant.receiveIncome(collegeId, "Donation received for building " + buildingName, 1000);
+        } else if (chance < 0.35 * 24/hoursWorkingOnBuilding) {
+            Accountant.receiveIncome(collegeId, "Ran into unexpected construction costs building " + buildingName, 500);
+        }
+    }
 
     static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
@@ -100,7 +107,8 @@ public class BuildingManager {
         //newBuilding.setBuildingType(buildingType);
 //        setBuildingAttributesByBuildingType(newBuilding);
         newBuilding.setHourLastUpdated(0);
-        newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
+        newBuilding.setStatsBasedOnSize(buildingSize);
+        newBuilding.setHasBeenAnnouncedAsComplete(false);
 
         // Pay for building
         if (newBuilding.getTotalBuildCost() >= Accountant.getAvailableCash(collegeId)) {
@@ -121,42 +129,6 @@ public class BuildingManager {
         // Override some fields
     }
 
-    /**
-     * Create a building.
-     *
-     * @param collegeId college name
-     * @param buildingName name of new building
-     * @param buildingType type of building (see BuildingType)
-     * @param hoursAlive number of hours college has existed
-     * @return
-     */
-    /*public static BuildingModel createBuilding(String collegeId, String buildingName, String buildingType, int hoursAlive, String buildingSize) {
-
-        // Create building
-        BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
-        newBuilding.setName(buildingName);
-        //newBuilding.setBuildingType(buildingType);
-//        setBuildingAttributesByBuildingType(newBuilding);
-//        newBuilding.setHourLastUpdated(0);
-        newBuilding.setReputation(20);
-        newBuilding.setCurDisaster("none");
-        newBuilding.setMaintenanceCostPerDay(newBuilding.getNumRooms());
-
-        // Pay for building
-        if (newBuilding.getTotalBuildCost() >= Accountant.getAvailableCash(collegeId)) {
-            newBuilding.setNote("Not enough money to build it.");
-            return newBuilding;
-        }
-
-        Accountant.payBill(collegeId, "Charge of new building", newBuilding.getTotalBuildCost());
-        NewsManager.createNews(collegeId, hoursAlive, "Construction of " + buildingName +" building has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
-        newBuilding.setNote("A new building has been created.");
-
-        // Save building
-        BuildingDao buildingDao = new BuildingDao();
-        buildingDao.saveNewBuilding(collegeId, newBuilding);
-        return newBuilding;
-    }*/
     /**
      * Creates the desired type of building
      *
@@ -204,23 +176,6 @@ public class BuildingManager {
     }
 
     /**
-     * Charge the college the cost of running the building.
-     *
-     * @param collegeId college name
-     * @param hoursAlive number of hours the college has existed
-     * @param building the building that's causing the cost
-     */
-    private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
-        // A building stores the last time it was updated.
-        // Figure out how many hours have past since last updated.
-        // Multiple by cost per hour.
-        int newCharge = (hoursAlive - building.getHourLastUpdated()) * building.getMaintenanceCostPerDay();
-        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
-
-        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
-    }
-
-    /**
      * Set the building as having a flood disaster and set the number of hours left in the flooding.
      *
      * @param lengthOfFlood
@@ -239,27 +194,12 @@ public class BuildingManager {
         dao.saveAllBuildings(collegeId, buildings);
     }
 
-    public void buildingDecayForOneDay(String collegeId){
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
-        for (BuildingModel b : buildings){
+    public void buildingDecayForOneDay(String collegeId, BuildingModel b){
+        if(!(b.getHoursToComplete() > 0)) {
             float currentQuality = b.getHiddenQuality();
-            double randomDecay = Math.random();
-            b.setHiddenQuality((float)(currentQuality - (randomDecay * 0.5)));
+            double randomDecay = Math.random() * 0.2;
+            b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
-        dao.saveAllBuildings(collegeId, buildings);
-    }
-
-    public void buildingDecayForOneWeek(String collegeId){
-        for(int i = 0; i <= 6; i++){
-            buildingDecayForOneDay(collegeId);
-        }
-    }
-
-    public void buildingDecayForOneMonth(String collegeId){
-        for(int i = 0; i <= 29; i++){
-            buildingDecayForOneDay(collegeId);
-        }
-
     }
 
     public void destroyBuildingInCaseOfDisaster(String collegeId, String buildingName){
@@ -267,6 +207,17 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
                 buildings.remove(b);
+            }
+        }
+        dao.saveAllBuildings(collegeId, buildings);
+    }
+
+    public void acceleratedDecayAfterDisaster(String collegeId, String buildingName){
+        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        for (BuildingModel b : buildings) {
+            if (b.getName() == buildingName) {
+                float currentQuality = b.getHiddenQuality();
+                double randomDecay = Math.random();
             }
         }
         dao.saveAllBuildings(collegeId, buildings);
@@ -493,31 +444,8 @@ public class BuildingManager {
 //        return availableBuildingTypes;
 //    }
 
-    /**
-     * See if a surprise event has occurred during construction.
-     * If so, report it.
-     *
-     * @param collegeId
-     * @param hoursWorkingOnBuilding
-     */
-    public void surpriseEventDuringConstruction(String collegeId, int hoursWorkingOnBuilding) {
-        String buildingName = "";
-        double chance = Math.random();
-
-        // There can be surprise donations to help pay for building costs.
-        // TODO: this change calculation is questionable. Seems like should be hours/24.
-        if (chance < 0.25 * 24f/hoursWorkingOnBuilding) {
-            //25% chance of gaining $1000 dollars every 24 hours working on buildi.
-            Accountant.receiveIncome(collegeId, "Donation received for building " + buildingName, 1000);
-        } else if (chance < 0.35 * 24/hoursWorkingOnBuilding) {
-            Accountant.receiveIncome(collegeId, "Ran into unexpected construction costs building " + buildingName, 500);
-        }
-    }
-
     private static void saveBuildingHelper(BuildingModel building, String collegeId, CollegeModel college){
         building.setHoursToComplete(0);
-        building.setMaintenanceCostPerDay(60);
-        building.setTotalBuildCost(100);
         building.setCurDisaster("None");
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, building);

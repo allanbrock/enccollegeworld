@@ -22,7 +22,7 @@ public class FloodManager {
 
     /**
      * Simulate changes in floods due to passage of time at college.
-     *
+     * Dao - Data Access Object
      * @param collegeId
      * @param hoursAlive number of hours college has been active.
      */
@@ -45,7 +45,8 @@ public class FloodManager {
                 if (dorm.getName().compareTo(floodedDorm) == 0)
                     billCostOfFlood(collegeId, hoursAlive, dorm);
             }
-
+            // figures out how much times has passed since i updated floods
+            // currentTime -lastTime
             int elapsedTime = hoursAlive - flood.getHourLastUpdated();
             int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
             if (timeLeft <= 0) {
