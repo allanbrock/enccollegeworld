@@ -65,7 +65,7 @@ public class PlagueManager {
         // or possibly start a new plague
         else
         {
-            if (Math.random() <= 0.2) {
+            if (Math.random() <= 0.03) {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",

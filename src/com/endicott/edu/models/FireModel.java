@@ -1,32 +1,23 @@
 package com.endicott.edu.models;
 
-import com.endicott.edu.datalayer.BuildingDao;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
+/**
+ * Created by CJ Mustone
+ */
 public class FireModel implements Serializable {
     private int costOfFire = 0;
-    //private int durationOfFire = 0;
     private int numOfFatalities = 0;
-    //private int numBuildingsOnFire = 0;
     private String runId = "unknown";
     private String description;
     private BuildingModel buildingBurned;
-    //private ArrayList<String> listofBurningBuildings;
-    //private ArrayList<BuildingModel> listofCollegeBuildings;
-
-    public FireModel(){
-
-    }
 
     public FireModel(int costOfFire, int numOfFatalities, String runId, BuildingModel buildingBurned){
         this.runId = runId;
         this.numOfFatalities = numOfFatalities;
         this.costOfFire = costOfFire;
         this.buildingBurned = buildingBurned;
-        this.description = "";//buildingBurned.getName() + " caught fire! There were " + numOfFatalities + " deaths.";
-
+        this.description = "";
     }
 
     public String getDescription(){
@@ -64,12 +55,14 @@ public class FireModel implements Serializable {
     }
 
     public void setDescription(String victims) {
-        String names = "";
-
         if (victims.equalsIgnoreCase("No one")) {
             this.description = this.buildingBurned.getName() + " caught fire! Everyone made it out safe.";
+        } else if (victims.equalsIgnoreCase("all")){
+            this.description = "Catastrophic fire occured in " + this.buildingBurned.getName() + ". If anyone was inside they didn't survive."+
+            "Purchase an upgrade to reduce the chance of these major fires from happening.";
+        } else {
+            this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire. Upgrading " +
+            "the college's fire detection at the store will reduce the chance of losing students to fires.";
         }
-
-        this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire.";
     }
 }

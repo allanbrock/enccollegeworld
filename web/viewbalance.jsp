@@ -71,10 +71,10 @@
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
-                    <li class="active"><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>

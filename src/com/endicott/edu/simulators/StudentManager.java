@@ -14,6 +14,7 @@ public class StudentManager {
     private FacultyDao facultyDao = new FacultyDao();
     private BuildingManager buildingMgr = new BuildingManager();
     private CollegeModel college = new CollegeModel();
+    private static int studentIndex = 0;
     private Random rand = new Random();
 
     /**
@@ -115,6 +116,14 @@ public class StudentManager {
                 NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             }
         }
+    }
+
+    static public void setStudentIndex(int i) {
+        studentIndex = i;
+    }
+
+    static public int getStudentIndex() {
+        return studentIndex;
     }
 
     private void acceptStudents(String collegeId, int hoursAlive){

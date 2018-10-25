@@ -126,11 +126,11 @@
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
-                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                    <li><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li>
+                    <li><a> <%=new SimpleDateFormat("MMM dd").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="viewAbout">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -185,33 +185,6 @@
         <!-- jumbotron -->
         <div class="jumbotron">
 
-            <%-- TEMPORARY DISABLE: Gates --%>
-            <%--<div class="gateList" style="float: right; width: 50%;">--%>
-                <%--<h3>Current Objectives(<%=gates.length%>):</h3>--%>
-                <%--<div class="pre-scrollable" style="max-height: 150px">--%>
-                    <%--<ul class="list-group">--%>
-                        <%--<%--%>
-                            <%--for(GateModel gate : gates) {--%>
-                                <%--if(!GateManager.testGate(college.getRunId(), gate.getKey())) {--%>
-                        <%--%>--%>
-                        <%--<li class="list-group-item">--%>
-                            <%--<%=gate.getKey()%>--%>
-                            <%--<div class="progress" style="margin-bottom:0">--%>
-                                <%--<div class="progress-bar progress-bar-success" role="progressbar"--%>
-                                     <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"--%>
-                                     <%--style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">--%>
-                                    <%--<%=students.length%> / <%=gate.getGoal()%> ( <%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>% )--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                        <%--</li>--%>
-                        <%--<%--%>
-                                <%--}--%>
-                            <%--}--%>
-                        <%--%>--%>
-                    <%--</ul>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
             <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
             </h2>
 
@@ -225,15 +198,12 @@
             <%} else {%>
                 <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
                 <input type="submit" class="btn btn-info" name="nextWeekButton" value="Next Week">
-                <input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month">
+                <!-- input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month" -->
             <%}%>
-            <br>
+            <%-- <br>
                 <p>(For testing uses only, also advances time by one day)</p>
                 <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
-            <br>
-            <!-- This button is just to demonstrate a second popup modal until PopUpManager is fully implimented -->
-            <%--<input type="submit" class="btn btn-info" name="addEventButton" value="Test Event">--%>
-            <%--<button type="button" class="btn btn-info" data-toggle="modal" data-target="#eventPopUp">test event</button>--%>
+                <br> --%>
 
             <!-- Flood -->
             <%
@@ -334,7 +304,7 @@
                             </div>
                             <!--This bit of css hides the arrows on the above text box
                                 these are called spin boxes. If this causes problems
-                                just remove the coode in the <style> tag!-->
+                                just remove the code in the <style> tag!-->
                             <style>
                                 input::-webkit-outer-spin-button,
                                 input::-webkit-inner-spin-button {

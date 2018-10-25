@@ -39,13 +39,7 @@ public class StudentDao {
             e.printStackTrace();
         }
 
-        Collections.sort(students, new Comparator<StudentModel>() {
-            @Override
-            public int compare(StudentModel lhs, StudentModel rhs) {
-                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
+        Collections.sort(students, (o1, o2) -> o2.getHappinessLevel() - o1.getHappinessLevel());
 
         return students;
     }

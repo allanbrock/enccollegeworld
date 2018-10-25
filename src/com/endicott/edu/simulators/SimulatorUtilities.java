@@ -47,4 +47,24 @@ public class SimulatorUtilities {
         normalDistNo = Math.max(min, normalDistNo);
         return normalDistNo;
     }
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        int n;
+
+        // Height using normal distribution
+        int sd, mean;
+
+        mean = 70; // ave height
+        sd = 4;    // SD: 68% fall within 1 SD, 95% within 2
+        
+        n = (int) (random.nextGaussian()*sd + mean);
+        System.out.println(inToFt(n));
+    }
+
+    private static String inToFt(int givenInches) {
+        int ft = givenInches/12;
+        int in = givenInches - 12 * ft;
+        return ("" + ft + "' " + in);
+    }
 }
