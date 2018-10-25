@@ -20,6 +20,9 @@ public class FacultyModel implements Serializable {
     private int happiness;
     private int performance;
     private ArrayList<StudentModel> advisees;
+    private Boolean raiseRecentlyGiven;
+
+    public FacultyModel(){}
 
     public FacultyModel(String facultyName, String title, String department, int salary, String officeLocation, String facultyID) {
         System.out.print("Other constructor hit");
@@ -31,7 +34,7 @@ public class FacultyModel implements Serializable {
     }
 
     public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
-        this.advisees = new ArrayList<>();
+        this.advisees = new ArrayList<StudentModel>();
         this.facultyName = facultyName;
         this.title = title;
         this.department = department;
@@ -40,6 +43,7 @@ public class FacultyModel implements Serializable {
         this.salary = salary;
         this.facultyID = FacultyManager.generateFacultyID(this);
         this.performance = 75;
+        this.raiseRecentlyGiven = false;
         FacultyManager.computeFacultyHappiness(this, false);
     }
 
@@ -94,7 +98,9 @@ public class FacultyModel implements Serializable {
     public int getPerformance(){ return this.performance; }
     public void setPerformance(int performance) { this.performance = performance; }
 
-    public void addAdvisee(StudentModel student){ this.advisees.add(student); }
+    public void addAdvisee(StudentModel student){ advisees.add(student); }
     public ArrayList<StudentModel> getAdvisees() { return this.advisees; }
-    public void initiateAdvisees() { this.advisees = new ArrayList<>(); }
+
+    public void setRaiseRecentlyGiven(Boolean raiseRecentlyGiven){ this.raiseRecentlyGiven = raiseRecentlyGiven; }
+    public Boolean getRaiseRecentlyGiven(){ return this.raiseRecentlyGiven; }
 }

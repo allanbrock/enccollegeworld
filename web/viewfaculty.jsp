@@ -153,6 +153,7 @@
                     </td>
                     <td>
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                     </td>
                 </tr>
                 <% } %>
@@ -174,16 +175,6 @@
                     </select>
                     <br>
                     <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
-                </div>
-            </div>
-            <div class="well well-sm">
-                <div class="form-group">
-                    <label id="removeFacultyLabel" style="color: darkblue">Remove a faculty member by entering their ID</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="removeFacultyID" name="removeFacultyID">
-                    <br>
-                    <input type="submit" class="btn btn-info" name="removeFaculty" value="Fire Faculty">
                 </div>
             </div>
         </div>

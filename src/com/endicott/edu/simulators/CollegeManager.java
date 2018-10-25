@@ -67,9 +67,6 @@ public class CollegeManager {
 
         GateManager.establishCollege(collegeId);
 
-        InventoryManager inventoryManager = new InventoryManager();
-        inventoryManager.establishCollege(collegeId);
-
         return college;
     }
 
@@ -127,7 +124,7 @@ public class CollegeManager {
         FloodManager floodManager = new FloodManager();
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        FacultyManager.handleTimeChange(collegeId, hoursAlive);
+        FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);

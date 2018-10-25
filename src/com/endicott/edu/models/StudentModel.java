@@ -26,7 +26,7 @@ public class StudentModel implements Serializable {
     private int moneyHappinessRating = 0; // 0 to 100, determined from college tuition.
     private int funHappinessRating = 0;   // 0 to 100
     private int advisorHappinessRating = 0;
-    private String advisorName;
+    private FacultyModel advisor;
 
 
     public StudentModel() {
@@ -179,7 +179,7 @@ public class StudentModel implements Serializable {
         this.advisorHappinessRating = advisorHappinessRating;
     }
 
-    public void setAdvisorName(String name) { this.advisorName = name; }
-    public String getAdvisorName() { return this.advisorName; }
+    public void setAdvisor(FacultyModel advisor) { this.advisor = advisor; }
+    public FacultyModel getAdvisor() { return this.advisor; }
 }
 

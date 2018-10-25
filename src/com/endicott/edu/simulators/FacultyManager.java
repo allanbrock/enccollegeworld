@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.models.StudentModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +21,18 @@ public class FacultyManager {
      * @param collegeId
      * @param hoursAlive number of hours college has existed.
      */
-    public static void handleTimeChange(String collegeId, int hoursAlive){
+    public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager){
         FacultyDao fao = new FacultyDao();
         payFaculty(collegeId, hoursAlive, fao);
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);
+            if(member.getRaiseRecentlyGiven()){
+                popupManager.newPopupEvent("Employee Raise", "A raise was given to " + member.getFacultyName(), "ok", "done", "resources/images/money.jpg", "Employee Raise");
+                member.setRaiseRecentlyGiven(false);
+                fao.saveAllFaculty(collegeId, editableFaculty);
+            }
         }
         fao.saveAllFaculty(collegeId, editableFaculty);
     }
@@ -45,7 +51,7 @@ public class FacultyManager {
             int paycheck = member.getSalary()/365;
             total += paycheck;
         }
-        Accountant.payBill(collegeId,"Faculty has been paid", total);
+        Accountant.payBill(collegeId, "Faculty has been paid", total);
    }
 
     /**
@@ -53,8 +59,8 @@ public class FacultyManager {
      *
      * @param collegeId instance of the simulation
      */
-   public static void establishCollege(String collegeId){
-       for (int i=0; i<10; i++) {
+    public static void establishCollege(String collegeId){
+        for (int i=0; i<10; i++) {
            FacultyModel member = addFaculty(collegeId, 100000);  // Default salary for now
        }
    }
@@ -119,7 +125,7 @@ public class FacultyManager {
     // The algorithm is based primarily on member happiness but also randomness
     private static void computeFacultyPerformance(String collegeID, FacultyModel member){
         Random r = new Random();
-        int randGenerator = r.nextInt(4-1) + 1;
+        int randGenerator = r.nextInt((4-1) + 1) + 1;
         Boolean increase = computeDirection(member);
         int curPerformance = member.getPerformance();
         if(member.getHappiness() > 85)
@@ -194,20 +200,23 @@ public class FacultyManager {
         return String.valueOf(randID);
     }
 
-    public static Boolean giveFacultyRaise(String collegeID, FacultyModel member){
+    public static void giveFacultyRaise(String collegeID, FacultyModel member){
         FacultyDao fao = new FacultyDao();
         List<FacultyModel> newFaculty = FacultyDao.getFaculty(collegeID);
         Boolean nextValueRaise = false;
-        if(member.getSalary() == 200000)
-            return false;
+        if(member.getSalary() == 200000) {
+            // Max amount message
+        }
         else{
             for(int i : getSalaryOptions()){
                 if(nextValueRaise){
                     for(FacultyModel faculty : newFaculty){
                         if(member.getFacultyID().equals(faculty.getFacultyID())){
                             faculty.setSalary(i);
+                            faculty.setRaiseRecentlyGiven(true);
                             fao.saveAllFaculty(collegeID, newFaculty);
-                            return true;
+                            // Give faculty raise message
+                            // popupManager.newPopupEvent("Faculty Raise!", "You gave a faculty member a raise", "Ok", "Done", "nil", "Faculty Raise");
                         }
                     }
                 }
@@ -215,6 +224,22 @@ public class FacultyManager {
                     nextValueRaise = true;
             }
         }
-        return null; // Statement should never be hit
+    }
+
+    public static FacultyModel assignAdvisorToStudent(String collegeId, StudentModel student){
+        Random r = new Random();
+        int positionInFaculty = 0;
+        FacultyModel newAdvisor = new FacultyModel();
+        List<FacultyModel> updatedFaculty = FacultyDao.getFaculty(collegeId);
+        int newAdvisorPosition = r.nextInt(FacultyDao.getFaculty(collegeId).size()) + 1;
+        for(FacultyModel faculty : updatedFaculty){
+            if(positionInFaculty == newAdvisorPosition) {
+                newAdvisor = faculty;
+                faculty.addAdvisee(student);
+                break;
+            }
+            positionInFaculty++;
+        }
+        return newAdvisor;
     }
 }

@@ -25,16 +25,13 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             addFaculty(request, response);
         }
 
-        if(request.getParameter("removeFaculty") != null){
-            removeFaculty(request, response);
-        }
         for(int i = 0; i < FacultyDao.getFaculty(collegeId).size(); i++) {
             if (request.getParameter("facultyRaise" + i) != null) {
-                if (giveFacultyRaise(request, response, i)) {
-                    //popupManager.newPopupEvent("Employee Raise", FacultyDao.getFaculty(collegeId).get(i) + " got a raise!", "Okay", "giveFacultyRaise");
-                } else {
-                    //popupManager.newPopupEvent("Can't give a raise!", FacultyDao.getFaculty(collegeId).get(i) + " is already getting paid the max annual salary", "Okay", "giveFacultyRaise");
-                }
+                FacultyManager.giveFacultyRaise(collegeId, FacultyDao.getFaculty(collegeId).get(i));
+            }
+
+            if (request.getParameter("removeFaculty" + i) != null){
+                removeFaculty(request, response, FacultyDao.getFaculty(collegeId).get(i));
             }
         }
         InterfaceUtils.setPopupEventManagerInSession(popupManager, request);
@@ -77,18 +74,9 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request,response);
     }
 
-    private void removeFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    private void removeFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, FacultyModel removedMember) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        Boolean valid = false; // Variable that checks if ID entered is valid
-        FacultyModel removedMember = null;
-        String facultyID = request.getParameter("removeFacultyID");
-        for(FacultyModel member : FacultyDao.getFaculty(collegeId)){
-            if(facultyID.equals(member.getFacultyID())){
-                removedMember = member;
-                valid = true;
-                break;
-            }
-        }
+        Boolean valid = true; // Variable that checks if ID entered is valid
         if (collegeId == null) {
             UiMessage message = new UiMessage("Can't remove a faculty member because missing information");
             request.setAttribute("message", message);
@@ -108,11 +96,6 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
         dispatcher.forward(request,response);
-    }
-
-    private Boolean giveFacultyRaise(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, int facultyNum) throws javax.servlet.ServletException, IOException{
-        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        return FacultyManager.giveFacultyRaise(collegeId, FacultyDao.getFaculty(collegeId).get(facultyNum));
     }
 
     private void logRequestParameters(javax.servlet.http.HttpServletRequest request) {

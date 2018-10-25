@@ -225,7 +225,7 @@
                                         Academic Happiness: <%=students[i].getAcademicHappinessRating()%><br>
                                         Money Happiness: <%=students[i].getMoneyHappinessRating()%><br>
                                         Fun Happiness: <%=students[i].getFunHappinessRating()%><br>
-                                        Advisor: <%=students[i].getAdvisorName()%><br>
+                                        Advisor: <%=students[i].getAdvisor().getFacultyName()%><br>
                                     </div>
                                 </div>
                             </td>
