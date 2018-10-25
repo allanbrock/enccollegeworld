@@ -2,11 +2,14 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
+import com.endicott.edu.simulators.StudentManager;
 import com.endicott.edu.simulators.TutorialManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import static java.lang.Integer.parseInt;
 
 public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
 
@@ -20,6 +23,10 @@ public class ViewStudentServlet extends javax.servlet.http.HttpServlet {
         }
         if (request.getParameter("showTips") != null){
             TutorialManager.showTips("viewStudent", collegeId);
+        }
+        if (request.getParameter("index") != null) {
+            int index = parseInt(request.getParameter("index"));
+            StudentManager.setStudentIndex(index);
         }
 
         // Before exiting doPost we need to load information into the page and dispatch to the JSP page.

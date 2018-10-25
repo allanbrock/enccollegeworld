@@ -11,6 +11,9 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="com.endicott.edu.simulators.TutorialManager" %>
+<%@ page import="java.util.Collections" %>
+<%@ page import="static java.lang.Integer.parseInt" %>
+<%@ page import="com.endicott.edu.simulators.StudentManager" %>
 <%--
   Created by IntelliJ IDEA.
   User: abrocken
@@ -30,6 +33,8 @@
 
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
@@ -40,34 +45,116 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
-</head>
-<body>
-<%
-    UiMessage msg = (UiMessage) request.getAttribute("message");
-    if (msg == null) {
-        msg = new UiMessage();
-    }
-    CollegeModel college = (CollegeModel) request.getAttribute("college");
-    if (college == null) {
-        college = new CollegeModel();
-        msg.setMessage("Attribute for college missing.");
-    }
-    StudentModel students[] = (StudentModel[]) request.getAttribute("students");
-    if (students == null) {
-        students  = new StudentModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + " Attribute for students missing.");
-    }
+    <%!
+        /**
+         *
+         * @param num       value to base scale off of
+         * @param in_min    min value for inputs range
+         * @param in_max    max value for inputs range
+         * @param out_min   min value for outputs range
+         * @param out_max   max value for outputs range
+         * @return          scaled value
+         */
+        public int scale(int num, int in_min, int in_max, int out_min, int out_max) {
+            return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        }
+    %>
 
-    TutorialModel tip = TutorialManager.getCurrentTip("viewStudent", college.getRunId());
+    <%
+        UiMessage msg = (UiMessage) request.getAttribute("message");
+        if (msg == null) {
+            msg = new UiMessage();
+        }
+        CollegeModel college = (CollegeModel) request.getAttribute("college");
+        if (college == null) {
+            college = new CollegeModel();
+            msg.setMessage("Attribute for college missing.");
+        }
+        StudentModel students[] = (StudentModel[]) request.getAttribute("students");
+        if (students == null) {
+            students  = new StudentModel[0];  // This is really bad
+            msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+        }
+
+        TutorialModel tip = TutorialManager.getCurrentTip("viewStudent", college.getRunId());
 //    TutorialModel tutorials[] = (TutorialModel[]) request.getAttribute("tutorials");
 //    if (tutorials == null) {
 //        tutorials = new TutorialModel[0];
 //        msg.setMessage("Attribute for tutorial missing.");
 //    }
-    NumberFormat numberFormatter = NumberFormat.getInstance();
-    numberFormatter.setGroupingUsed(true);
-%>
+        NumberFormat numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setGroupingUsed(true);
+    %>
 
+<style>
+    .studentContainer {
+        display: grid;
+        margin-right: 20px;
+        grid-template-columns: repeat(10,10%);
+    }
+
+    .studentElement {
+        width: 55px;
+        height: 55px;
+        margin: 10px 15px 20px 15px;
+        border-radius: 50%;
+        background: #aaa;
+        white-space: nowrap;
+    }
+
+    .studentElement:hover {
+        background: #888;
+        width: 60px;
+        height: 60px;
+        margin: 7.5px 10px 17.5px 12px;
+    }
+
+    .studentElement img {
+        width:80%;
+        margin: 5px;
+    }
+
+    .studentElement p {
+        font-size: xx-small;
+        text-align: center;
+        margin-top: 5px;
+    }
+</style>
+<script>
+    function post(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function select(e) {
+        post(window.location.href, {index: e.id})
+        document.getElementById("studentName").value = "<%=students[StudentManager.getStudentIndex()].getName()%>";
+    }
+</script>
+
+</head>
+<body>
+
+<form id="selectForm" style="visibility: hidden"><input name="index" type="hidden"/></form>
 
 <form action="viewStudent" method="post">
 
@@ -178,67 +265,70 @@
             <div class="well well-sm">
                 <h4>Students</h4>
                 <div class="pre-scrollable">
-                    <table class="table table-condensed">
-                        <tbody>
+                    <div class="studentContainer">
                         <%
                             for (int i = 0; i < students.length; i++) {
+                                int happiness = students[i].getHappinessLevel();
                         %>
-                        <tr>
-                            <td>
-                                <li class="list-group-item"><%=students[i].getName()%></li>
-                                <% if (students[i].getHappinessLevel() >= 80) { %>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar"
-                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
-                                        <%=students[i].getHappinessLevel()%>%
-                                    </div>
-                                </div>
-                                <%
-                                } else if (students[i].getHappinessLevel() >= 50 && students[i].getHappinessLevel() < 80 ){
-                                %>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-warning" role="progressbar"
-                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
-                                        <%=students[i].getHappinessLevel()%>%
-                                    </div>
-                                </div>
-                                <% } else if (students[i].getHappinessLevel() < 50){
-                                %>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar"
-                                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=students[i].getHappinessLevel()%>%">
-                                            <%=students[i].getHappinessLevel()%>%
-                                        </div>
-                                    </div>
-                                <% } %>
-                            </td>
-                            <td>
-                                <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
-                                <div id="<%=i%>" class="collapse">
-                                    <div class="well well-sm">
-                                    ID Number: <%=students[i].getIdNumber()%><br>
-                                    Dorm: <%=students[i].getDorm()%><br>
-                                    Gender: <%=students[i].getGender()%> <br>
-                                        <% if (students[i].getNumberHoursLeftBeingSick() > 0) { %>
-                                    Is Sick (<%=students[i].getNumberHoursLeftBeingSick()%> hours til better)<br>
-                                        <% } %>
-                                    <% if(!students[i].getTeam().equals("")){ %>
-                                        Team: <%= students[i].getTeam()%> <br>
-                                        Athletic Ability <%=students[i].getAthleticAbility()%> <br>
-                                    <% } %>
-                                        Health Happiness: <%=students[i].getHealthHappinessRating()%><br>
-                                        Academic Happiness: <%=students[i].getAcademicHappinessRating()%><br>
-                                        Money Happiness: <%=students[i].getMoneyHappinessRating()%><br>
-                                        Fun Happiness: <%=students[i].getFunHappinessRating()%><br>
-                                        Advisor: <%=students[i].getAdvisorName()%><br>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+
+                        <div class = "studentElement" id="<%=i%>"
+                            style = "
+                                <%if(i == StudentManager.getStudentIndex()) {%>
+                                    background: #666;
+                                <%}%>
+                                box-shadow: 0 0 5px 3px rgb(
+                                    <%=scale(happiness, 50, 100, 255,   0)%>,
+                                    <%=scale(happiness,  0,  50,   0, 255)%>,
+                                    0
+                                );
+                            "
+                            onclick="select(this)"
+                        >
+                            <img src="resources/images/student.png">
+                            <p><%=students[i].getName().split(" ")[1]%>, <%=students[i].getName().split(" ")[0].charAt(0)%></p>
+                        </div>
                         <% } %>
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-sm-4" >
+            <div class="well well-sm" style="height: 399px">
+                <table>
+                    <% StudentModel student = students[StudentManager.getStudentIndex()];%>
+                    <tr>
+                        <td>Student: </td>
+                        <td><%=student.getName()%></td>
+                    </tr>
+                    <tr>
+                        <td>ID Number: </td>
+                        <td><%=student.getIdNumber()%></td>
+                    </tr>
+                    <tr>
+                        <td>Gender: </td>
+                        <td><%=student.getGender()%></td>
+                    </tr>
+                    <tr>
+                        <td>Advisor: </td>
+                        <td><%=student.getAdvisorName()%></td>
+                    </tr>
+                    <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
+                        <tr>
+                            <td>Sick for:</td>
+                            <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
+                        <tr/>
+                    <% } %>
+                    <% if(!student.getTeam().equals("")){ %>
+                    <tr>
+                        <td>Team: </td>
+                        <td> <%= student.getTeam()%> </td>
+                    </tr>
+                    <tr>
+                        <td> Athletic Ability: </td>
+                        <td> <%=student.getAthleticAbility()%> </td>
+                    </tr>
+                    <% } %>
+                </table>
             </div>
         </div>
     </div>
