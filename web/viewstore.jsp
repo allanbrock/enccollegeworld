@@ -75,15 +75,14 @@
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
-                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li class="active"><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-
+                    <li><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <%-- This is commented out because it was throwing a null pointer,
                          theres a warning on the getCollegeDate declaration it may throw one.
                          This was to test the fire pop up upgrade button.
-                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                    <li><a> <%=new SimpleDateFormat("MMM dd").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     --%>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
