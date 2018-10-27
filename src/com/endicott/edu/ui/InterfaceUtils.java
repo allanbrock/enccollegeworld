@@ -79,16 +79,7 @@ public class InterfaceUtils {
         HttpSession session = request.getSession();
         return (String) session.getAttribute("runId");
     }
-//    public static void setPopupManagerInSession(PopupEventManager popupManager, HttpServletRequest request)
-//    {
-//        HttpSession session = request.getSession();
-//        session.setAttribute("popupMan",popupManager);
-//    }
-//    public static PopupEventManager getPopupManagerFromSession(HttpServletRequest request)
-//    {
-//        HttpSession session = request.getSession();
-//        return (PopupEventManager) session.getAttribute("popupMan");
-//    }
+
 
     public static void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
         Enumeration<String> params = request.getParameterNames();
