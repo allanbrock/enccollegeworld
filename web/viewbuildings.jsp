@@ -254,7 +254,7 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
                                  aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings[i].getShownQuality()%>%">
-                                <%=buildings[i].getShownQuality()%>%
+                                <%=buildings[i].getShownQualityString()%>%
                             </div>
                         </div>
                     </td>

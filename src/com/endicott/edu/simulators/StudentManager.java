@@ -13,6 +13,7 @@ public class StudentManager {
     private CollegeDao collegeDao = new CollegeDao();
     private FacultyDao facultyDao = new FacultyDao();
     private BuildingManager buildingMgr = new BuildingManager();
+    private BuildingModel buildingModel = new BuildingModel();
     private CollegeModel college = new CollegeModel();
     private static int studentIndex = 0;
     private Random rand = new Random();
@@ -388,6 +389,27 @@ public class StudentManager {
         // TODO: need to fill this out.
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "This is a student tip.", true);
         TutorialManager.saveNewTip(collegeId, 2,"viewStudent", "Keep students happy to keep them in school.", false);
+    }
+
+    public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
+        List<StudentModel> students = dao.getStudents(collegeId);
+        for(StudentModel s : students){
+            if(buildingType.equals(buildingModel.getDormConst())){
+                if(buildingName.equals(s.getDorm())){
+                    buildingMgr.assignDorm(collegeId);
+                }
+            }
+            else if(buildingType.equals(buildingModel.getDiningConst())){
+                if(buildingName.equals(s.getDiningHall())){
+                    buildingMgr.assignDiningHall(collegeId);
+                }
+            }
+            else if(buildingType.equals(buildingModel.getAcademicConst())){
+                if(buildingName.equals(s.getAcademicBuilding())){
+                    buildingMgr.assignAcademicBuilding(collegeId);
+                }
+            }
+        }
     }
 }
 

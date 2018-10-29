@@ -21,6 +21,7 @@ public class BuildingManager {
     static private Logger logger = Logger.getLogger("BuildingManager");
     static private StudentDao studentDao = new StudentDao();
     static private GateManager gateManager = new GateManager();
+    static private StudentManager studentManager = new StudentManager();
 
     /**
      * Simulate all changes in buildings caused by advancing the hours the college
@@ -35,7 +36,7 @@ public class BuildingManager {
 
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
-            building.setHourLastUpdated(hoursAlive); //when a building is upgraded, this should go back to zero
+            building.updateTimeSinceLastUpdate(24); //when a building is upgraded, this should go back to zero
             billRunningCostOfBuilding(runId, hoursAlive, building);
             workOnBuilding(building, runId);
             buildingDecayForOneDay(runId, building);
@@ -56,7 +57,7 @@ public class BuildingManager {
         // A building stores the last time it was updated.
         // Figure out how many hours have past since last updated.
         // Multiple by cost per hour.
-        int newCharge = (hoursAlive - building.getHourLastUpdated()) * building.getCostPerDay();
+        int newCharge = (hoursAlive - building.getTimeSinceLastUpdate()) * building.getCostPerDay();
         Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
 
         // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
@@ -106,7 +107,8 @@ public class BuildingManager {
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
         //newBuilding.setBuildingType(buildingType);
 //        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setHourLastUpdated(0);
+        newBuilding.setTimeSinceLastUpdate(0);
+        newBuilding.setHoursToBuildBasedOnSize(buildingSize);
         newBuilding.setStatsBasedOnSize(buildingSize);
         newBuilding.setHasBeenAnnouncedAsComplete(false);
 
@@ -197,6 +199,9 @@ public class BuildingManager {
     public void buildingDecayForOneDay(String collegeId, BuildingModel b){
         if(!(b.getHoursToComplete() > 0)) {
             float currentQuality = b.getHiddenQuality();
+            //Generates a random number between 0-1
+            //Multiply by .2 since One hidden quality point = Five shown quality points
+            //It's impossible for a building to ever lose more than 1% per day
             double randomDecay = Math.random() * 0.2;
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
@@ -205,11 +210,12 @@ public class BuildingManager {
     public void destroyBuildingInCaseOfDisaster(String collegeId, String buildingName){
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         for (BuildingModel b : buildings) {
-            if (b.getName() == buildingName) {
+            if (b.getName().equals(buildingName)) {
                 buildings.remove(b);
+                dao.saveAllBuildings(collegeId, buildings);
+                studentManager.removeFromBuildingAndReassignAfterDisaster(collegeId, buildingName, b.getKindOfBuilding());
             }
         }
-        dao.saveAllBuildings(collegeId, buildings);
     }
 
     public void acceleratedDecayAfterDisaster(String collegeId, String buildingName){
