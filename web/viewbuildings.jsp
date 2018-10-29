@@ -94,7 +94,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li class="active"><a href="viewDorm">Buildings</a></li>
+                    <li class="active"><a href="/viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
@@ -222,7 +222,7 @@
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
                                  aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings[i].getShownQuality()%>%">
-                                <%=buildings[i].getShownQuality()%>%
+                                <%=buildings[i].getShownQualityString()%>%
                             </div>
                         </div>
                     </td>

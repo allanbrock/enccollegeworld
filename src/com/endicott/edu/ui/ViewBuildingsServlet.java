@@ -70,6 +70,33 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         }
 
     }
+//    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
+//        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+//
+//        logger.info("In ViewBuildingsServlet.sellDorm()");
+//        InterfaceUtils.logRequestParameters(request);
+//
+//        if(collegeId == null || dormName == null){
+//            UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
+//            request.setAttribute("message", message);
+//            logger.info("Bad parameters for deleting a dorm");
+//        }
+//        else {
+//            // Need to do the work here.
+//            DormManager.sellDorm(collegeId, dormName);
+//         }
+//
+//
+//        //load the request with attributes for the dorm
+//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+//
+//
+//        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+//        dispatcher.forward(request, response);
+//        // Attempt to fetch the college and load into
+//        // request attributes to pass to the jsp page.
+//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+//    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
@@ -97,22 +124,23 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
 
+        // Some buildings (Sports Center) are missing the size.
         if(buildingSize == null){
             buildingSize = "N/A";
         }
 
-        if(buildingSize.equals("$50,000 - Small (50)")){
+       if(buildingSize.equals("$50,000 - Small (50)")){
            buildingSize = "Small";
-        }
-        else if(buildingSize.equals("$150,000 - Medium (200)")){
+       }
+       else if(buildingSize.equals("$150,000 - Medium (200)")){
            buildingSize = "Medium";
-        }
-        else if(buildingSize.equals("$350,000 - Large (500)")){
+       }
+       else if(buildingSize.equals("$350,000 - Large (500)")){
            buildingSize = "Large";
-        }
-        else {
+       }
+       else {
            buildingSize = "Extra Large";
-        }
+       }
         //set the capacity
         //subtract the building cost amount from the balance
 
@@ -125,10 +153,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding a dorm.");
         }
         else{
-            //change this so it takes in the building size as well
-            //if(buildingSize == null){
-                //buildingSize = "N/A";
-            //}
             BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 

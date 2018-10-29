@@ -3,6 +3,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
+import com.endicott.edu.simulators.TutorialManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -61,6 +62,16 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
 
             return;
+        }
+
+        if (request.getParameter("nextTip") != null) {
+            TutorialManager.advanceTip("viewCollege", collegeId);
+        }
+        if (request.getParameter("hideTips") != null){
+            TutorialManager.hideTips("viewCollege", collegeId);
+        }
+        if (request.getParameter("showTips") != null){
+            TutorialManager.showTips("viewCollege", collegeId);
         }
 
         // Attempt to fetch the college and load into
