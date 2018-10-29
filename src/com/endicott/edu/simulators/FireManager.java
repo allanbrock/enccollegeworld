@@ -119,9 +119,8 @@ public class FireManager {
         int fireCost = getFireCost(numDeaths, buildingToBurn);
         FireModel fire = new FireModel(fireCost, numDeaths, runId, buildingToBurn);
         Random rand = new Random();
-        int numStudents = students.size();
-        for (int i = 0; i < numDeaths; ++i) {
-            students.remove(rand.nextInt(numStudents));
+        for (int i = 0; i < numDeaths && students.size() > 10; ++i) {
+            students.remove(rand.nextInt(students.size()));
         }
         fire.setDescription(victims);
         fires.add(fire);

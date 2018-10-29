@@ -50,9 +50,11 @@ public class TutorialManager {
             if(t.getPage().equals(page) && t.isCurrent()){
                 t.setCurrent(false);
                 if (i < tips.size() - 1){
-                    tips.get(i + 1).setCurrent(true);
-                    tutorialDao.saveAllTutorials(collegeId, tips);
-                    return;
+                    if(tips.get(i + 1).getPage().equals(page)) {
+                        tips.get(i + 1).setCurrent(true);
+                        tutorialDao.saveAllTutorials(collegeId, tips);
+                        return;
+                    }
                 } else{
                     tips.get(0).setCurrent(true);
                     tutorialDao.saveAllTutorials(collegeId, tips);

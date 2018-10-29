@@ -181,13 +181,24 @@ public class StudentManager {
     }
 
     /**
+     * Is this a day on which figure out which students are leaving the college?
+     */
+    private boolean isWithdrawlDay(String collegeId) {
+        int day = CollegeManager.getCollegeCurrentDay(collegeId);
+        return (day % 7 == 0);
+    }
+    /**
      * Withdraw students from the college.
      *
      * @param collegeId
      * @param hoursAlive
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
-        float scalingFactor = .0001f;
+
+        if (!isWithdrawlDay(collegeId))
+            return;
+
+        float scalingFactor = .01f;
         List<StudentModel> students = dao.getStudents(collegeId);
         int currentSize = students.size();
 
@@ -209,8 +220,12 @@ public class StudentManager {
 
         college = collegeDao.getCollege(collegeId);
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
-        collegeDao.saveCollege(college);
 
+        // The retention rate is based on the last 7 days (withdrawl day)
+        int retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
+        college.setRetentionRate(retentionRate);
+
+        collegeDao.saveCollege(college);
         // Don't create a news story if no students leave
         if ((currentSize - students.size()) > 0) {
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(currentSize - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
@@ -246,7 +261,7 @@ public class StudentManager {
 
         calculateOverallStudentHappiness(collegeId);
 
-        calculateRetentionRate(collegeId);
+        //calculateRetentionRate(collegeId);
     }
 
     private void calculaterOverallStudentHealth(String collegeId) {
@@ -276,7 +291,7 @@ public class StudentManager {
             happinessSum += students.get(i).getHappinessLevel();
         }
 
-        int aveHappiness = happinessSum/Math.max(1,college.getNumberStudentsAdmitted());
+        int aveHappiness = happinessSum/Math.max(1,students.size());
 
         college.setStudentBodyHappiness(aveHappiness);
         collegeDao.saveCollege(college);
@@ -386,7 +401,6 @@ public class StudentManager {
     }
 
     private void loadTips(String collegeId) {
-        // TODO: need to fill this out.
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "This is a student tip.", true);
         TutorialManager.saveNewTip(collegeId, 2,"viewStudent", "Keep students happy to keep them in school.", false);
     }

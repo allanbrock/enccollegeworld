@@ -11,6 +11,7 @@
 <%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
 <%@ page import="com.endicott.edu.simulators.GateManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -52,6 +53,8 @@
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
+
+    TutorialModel tip = TutorialManager.getCurrentTip("viewCollege", college.getRunId());
 %>
 
 <html>
@@ -184,37 +187,56 @@
 
         <!-- jumbotron -->
         <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-3">
+                    <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
+                    </h2>
 
-            <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
-            </h2>
+                    <p>Day <%=college.getCurrentDay()%>
+                    </p>
+                    <% if (college.getAvailableCash() <= 0) { %>
+                        <h2><p class="text-danger">Bankrupt</h2>
+                        <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
+                        <input type="submit" class="btn btn-info" disabled name="nextWeekButton" value="Next Week">
+                        <input type="submit" class="btn btn-info" disabled name="nextMonthButton" value="Next Month">
+                    <%} else {%>
+                        <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
+                        <input type="submit" class="btn btn-info" name="nextWeekButton" value="Next Week">
+                        <!-- input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month" -->
+                    <%}%>
+                </div>
 
-            <p>Day <%=college.getCurrentDay()%>
-            </p>
-            <% if (college.getAvailableCash() <= 0) { %>
-                <h2><p class="text-danger">Bankrupt</h2>
-                <input type="submit" class="btn btn-info" disabled name="nextDayButton" value="Next Day">
-                <input type="submit" class="btn btn-info" disabled name="nextWeekButton" value="Next Week">
-                <input type="submit" class="btn btn-info" disabled name="nextMonthButton" value="Next Month">
-            <%} else {%>
-                <input type="submit" class="btn btn-info" name="nextDayButton" value="Next Day">
-                <input type="submit" class="btn btn-info" name="nextWeekButton" value="Next Week">
-                <!-- input type="submit" class="btn btn-info" name="nextMonthButton" value="Next Month" -->
-            <%}%>
-            <%-- <br>
-                <p>(For testing uses only, also advances time by one day)</p>
-                <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
-                <br> --%>
+                <!-- Tips -->
+                <%if (tip != null){%>
+                <div class="col-md-5">
+                    <h4 style="color:blue">Tip</h4>
+                    <div class="well well-lg">
+                        <p><%=tip.getBody()%></p>
+                    </div>
+                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+                <%}%>
+                <%if (tip == null){%>
+                <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+                <%}%>
+                <%-- <br>
+                    <p>(For testing uses only, also advances time by one day)</p>
+                    <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
+                    <br> --%>
 
-            <!-- Flood -->
-            <%
-                for(int i = 0; i < floods.length; i++ ){
-                    FloodModel f = floods[i];
-                    String dormName = f.getDormName(); %>
-                <h4> Dorm <%=dormName%> is flooded.</h4>
-            <%
-                }
-            %>
+                <!-- Flood -->
+                <%
+                    for(int i = 0; i < floods.length; i++ ){
+                        FloodModel f = floods[i];
+                        String dormName = f.getDormName(); %>
+                    <h4> Dorm <%=dormName%> is flooded.</h4>
+                <%
+                    }
+                %>
 
+
+            </div>
         </div> <!-- jumbotron -->
 
         <div class="row">

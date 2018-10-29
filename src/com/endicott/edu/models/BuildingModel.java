@@ -113,14 +113,16 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Medium")){setHoursToComplete(504);} //three weeks
         else if(size.equals("Large")){setHoursToComplete(720);} //one month
         else if(size.equals("Extra Large")){setHoursToComplete(840);} //five weeks
+        else setHoursToComplete(336);  // You always need a fall through case
     }
 
     //Helper function to set the cost of building the building
     private void setTotalBuildingCostBasedOnSize(String size){
         if(size.equals("Small")){setTotalBuildCost(50000);}
         else if(size.equals("Medium")){setTotalBuildCost(150000);}
-        else if(size.equals("Large")){setHoursToComplete(350000);}
-        else if(size.equals("Extra Large")){setHoursToComplete(650000);}
+        else if(size.equals("Large")){setTotalBuildCost(350000);}
+        else if(size.equals("Extra Large")){setTotalBuildCost(650000);}
+        else {setTotalBuildCost(150000);}
     }
 
     //Helper function to set the upgrade cost

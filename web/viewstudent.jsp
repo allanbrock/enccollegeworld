@@ -176,11 +176,11 @@
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Gates</a></li>
-                    <li><a href="viewBalance">Balance $<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a> <%=new SimpleDateFormat("MM/dd/yyyy").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
+                    <li><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li>
+                    <li><a> <%=new SimpleDateFormat("MMM dd").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
                     <li><a href="welcome.jsp"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -312,12 +312,6 @@
                         <td>Advisor: </td>
                         <td><%=student.getAdvisor().getFacultyName()%></td>
                     </tr>
-                    <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
-                    <tr>
-                        <td>Sick for:</td>
-                        <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
-                    <tr/>
-                    <% } %>
                     <% if(!student.getTeam().equals("")){ %>
                     <tr>
                         <td>Team: </td>
@@ -328,6 +322,20 @@
                         <td> <%=student.getAthleticAbility()%> </td>
                     </tr>
                     <% } %>
+
+                    <tr><td><b>Hidden Attributes</b></td><td></td></tr>
+                    <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
+                    <tr>
+                        <td>Sick for:</td>
+                        <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
+                    <tr/>
+                    <% } %>
+                    <tr><td>Overall Happiness</td><td><%=student.getHappinessLevel()%></td></tr>
+                    <tr><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
+                    <tr><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
+                    <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
+                    <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
+                    <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
                 </table>
             </div>
         </div>

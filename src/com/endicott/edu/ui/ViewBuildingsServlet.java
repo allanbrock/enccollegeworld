@@ -124,6 +124,11 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
 
+        // Some buildings (Sports Center) are missing the size.
+        if(buildingSize == null){
+            buildingSize = "N/A";
+        }
+
        if(buildingSize.equals("$50,000 - Small (50)")){
            buildingSize = "Small";
        }
@@ -148,10 +153,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding a dorm.");
         }
         else{
-            //change this so it takes in the building size as well
-            if(buildingSize == null){
-                buildingSize = "N/A";
-            }
             BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 
