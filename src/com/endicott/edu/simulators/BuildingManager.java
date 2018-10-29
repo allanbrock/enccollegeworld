@@ -372,12 +372,12 @@ public class BuildingManager {
         return openBeds;
     }
 
-    /**
+   /* *//**
      * Sell a building.
      *
      * @param collegeId
      * @param buildingName
-     */
+     *//*
     public static void sellBuilding(String collegeId, String buildingName) {
 
         BuildingDao buildingDao = new BuildingDao();
@@ -407,7 +407,7 @@ public class BuildingManager {
         }
 
     }
-
+*/
     /**
      * Get a list of the types of the buildings that can be built.
      * Returns a list of buildings where the building type is indicating
@@ -473,8 +473,11 @@ public class BuildingManager {
         AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
         saveBuildingHelper(startingAdministrative, collegeId, college);
 
-        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/dorm.png", 700);
-        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/dorm.png",1500);
+        SportsCenterModel startingSportsCenter = new SportsCenterModel(college.getRunId()+" Sports Center");
+        saveBuildingHelper(startingSportsCenter, collegeId, college);
+
+        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 700);
+        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",1500);
     }
 
     /**

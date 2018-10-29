@@ -201,47 +201,15 @@
                     for (int i = 0; i < buildings.length; i++) {
                 %>
                 <tr>
-                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getName()%>
+                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings[i].getName()%>
                     </td>
                     <td>
-                        <%if(buildings[i].getKindOfBuilding().equals("DORM")){%>
-                        <img class="img-responsive" src="resources/images/dorm.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("DINING")){%>
-                        <img class="img-responsive" src="resources/images/dining.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("ACADEMIC")){%>
-                        <img class="img-responsive" src="resources/images/academic.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("ADMIN")){%>
-                        <img class="img-responsive" src="resources/images/admin.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("BASEBALL DIAMOND")){%>
-                        <img class="img-responsive" src="resources/images/baseball-color.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("ENTERTAINMENT")){%>
-                        <img class="img-responsive" src="resources/images/entertainment.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("FOOTBALL STADIUM")){%>
-                        <img class="img-responsive" src="resources/images/football.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("HEALTH")){%>
-                        <img class="img-responsive" src="resources/images/health.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("HOCKEY RINK")){%>
-                        <img class="img-responsive" src="resources/images/hockey.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("LIBRARY")){%>
-                        <img class="img-responsive" src="resources/images/library.png" style="width:100px; height:100px;">
-                        <%}
-                        else if(buildings[i].getKindOfBuilding().equals("SPORTS")){%>
-                        <img class="img-responsive" src="resources/images/sports.png" style="width:100px; height:100px;">
-                        <%}%>
+                        <img class="img-responsive" src="resources/images/<%=buildings[i].getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
                         <%=buildings[i].getKindOfBuilding()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
                     </td>
                     <td style="vertical-align:middle;">
                         <%--<%--%>
@@ -258,9 +226,9 @@
                             </div>
                         </div>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].getCurDisaster()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCurDisaster()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;"><%=buildings[i].checkIfBeingBuilt()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].checkIfBeingBuilt()%>
                     </td>
                 </tr>
                 <% } %>
@@ -294,7 +262,6 @@
                             <option value="Health Center">Health Center</option>
                             <option value="Hockey Rink">Hockey Rink</option>
                             <option value="Library">Library</option>
-                            <option value="Sports Center">Sports Center</option>
                         </select>
                     </div>
                         <!-- Button -->
