@@ -141,8 +141,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
        else {
            buildingSize = "Extra Large";
        }
-        //set the capacity
-        //subtract the building cost amount from the balance
+
 
         logger.info("In ViewBuildingsServlet.doPost()");
         InterfaceUtils.logRequestParameters(request);
@@ -156,7 +155,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 
-        //load the request with attributes for the dorm
+        //load the request with attributes for the dormm
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
 

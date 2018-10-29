@@ -466,6 +466,7 @@ public class BuildingManager {
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
         DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
+        //pre-loaded buildings
         saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",

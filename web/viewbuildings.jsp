@@ -245,7 +245,7 @@
                     <%if(college.getAvailableCash() < 50000){%>
                     <h4>You don't have enough money to buy a new building :(</h4>
                     <%}else{%>
-                    <!-- if they haven't hit begin purchase, only one option is visible -->
+                    <!-- if they haven't hit begin purchase, only one option i s visible -->
                 <% if(beginPurchase == "false"){%>
                     <h4>Purchase a new Building</h4>
                     <input type="submit" class="btn btn-info" name="beginBuildingPurchase" value="Begin">
