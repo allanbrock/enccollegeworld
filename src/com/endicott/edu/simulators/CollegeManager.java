@@ -26,6 +26,7 @@ public class CollegeManager {
      * @return the college
      */
     static public CollegeModel establishCollege(String collegeId) {
+        loadTips(collegeId);
         CollegeDao collegeDao = new CollegeDao();
         Logger logger = Logger.getLogger("CollegeManager");
         logger.info("Establishing the college");
@@ -236,6 +237,11 @@ public class CollegeManager {
         int rating = SimulatorUtilities.getRatingZeroToOneHundred(60000, 24000, college.getYearlyTuitionCost());
         college.setYearlyTuitionRating(rating);
         collegeDao.saveCollege(college);
+    }
+
+    static private void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Welcome to College Simulator!", true);
+        TutorialManager.saveNewTip(collegeId, 2,"viewCollege", "Don't spend all your money at once.", false);
     }
 
     /**
