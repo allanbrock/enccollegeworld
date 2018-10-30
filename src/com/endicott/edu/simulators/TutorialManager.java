@@ -50,15 +50,28 @@ public class TutorialManager {
             if(t.getPage().equals(page) && t.isCurrent()){
                 t.setCurrent(false);
                 if (i < tips.size() - 1){
-                    if(tips.get(i + 1).getPage().equals(page)) {
-                        tips.get(i + 1).setCurrent(true);
-                        tutorialDao.saveAllTutorials(collegeId, tips);
-                        return;
+                    for (int k = i + 1; k < tips.size(); k++) {
+                        if (tips.get(k).getPage().equals(page)) {
+                            tips.get(k).setCurrent(true);
+                            tutorialDao.saveAllTutorials(collegeId, tips);
+                            return;
+                        }
+                    }
+                    for (int l = 0; l < tips.size(); l++) {
+                        if (tips.get(l).getPage().equals(page)) {
+                            tips.get(l).setCurrent(true);
+                            tutorialDao.saveAllTutorials(collegeId, tips);
+                            return;
+                        }
                     }
                 } else{
-                    tips.get(0).setCurrent(true);
-                    tutorialDao.saveAllTutorials(collegeId, tips);
-                    return;
+                    for (int j = 0; j < tips.size(); j++) {
+                        if (tips.get(j).getPage().equals(page)) {
+                            tips.get(j).setCurrent(true);
+                            tutorialDao.saveAllTutorials(collegeId, tips);
+                            return;
+                        }
+                    }
                 }
             }
         }
