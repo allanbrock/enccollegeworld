@@ -205,7 +205,7 @@ public class CollegeManager {
         NewsManager.createNews(collegeId, college.getHoursAlive(),"Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
 
         StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId);
+        studentManager.calculateStatistics(collegeId, false);
 
         return college;
     }
@@ -221,7 +221,7 @@ public class CollegeManager {
         calculateStatisticsAndRatings(collegeId);
 
         StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId);
+        studentManager.calculateStatistics(collegeId, false);
 
         return college;
     }
