@@ -16,7 +16,7 @@ public class DormitoryDao {
     private static String getFilePath(String collegeId) {
         return DaoUtils.getFilePathPrefix(collegeId) +  "dormitory.dat";
     }
-    private Logger logger = Logger.getLogger("DormitoryDao");
+    private static Logger logger = Logger.getLogger("DormitoryDao");
 
     public static List<DormitoryModel> getDorms(String collegeId) {
         ArrayList<DormitoryModel> dorms = new ArrayList<>();
@@ -45,7 +45,7 @@ public class DormitoryDao {
         return dorms.toArray(new DormitoryModel[dorms.size()]);
     }
 
-    public void saveAllDorms(String collegeId, List<DormitoryModel> notes){
+    public static void saveAllDorms(String collegeId, List<DormitoryModel> notes){
         logger.info("Saving all dorm...");
         try {
             File file = new File(getFilePath(collegeId));
@@ -68,7 +68,7 @@ public class DormitoryDao {
         logger.info("Saved dorms...");
     }
 
-    public void saveNewDorm(String collegeId, DormitoryModel dorm) {
+    public static void saveNewDorm(String collegeId, DormitoryModel dorm) {
         logger.info("Saving new dorm...");
         List<DormitoryModel> dorms = getDorms(collegeId);
         dorm.setRunId(collegeId);

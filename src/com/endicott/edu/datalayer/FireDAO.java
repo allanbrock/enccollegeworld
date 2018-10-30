@@ -13,7 +13,7 @@ public class FireDAO {
     private static String getFilePath(String collegeId) {
         return DaoUtils.getFilePathPrefix(collegeId) +  "fire.dat";
     }
-    private Logger logger = Logger.getLogger("FireDao");
+    private static Logger logger = Logger.getLogger("FireDao");
 
     public static List<FireModel> getFires(String collegeId) {
         ArrayList<FireModel> fires = new ArrayList<>();
@@ -42,7 +42,7 @@ public class FireDAO {
         return fires.toArray(new FireModel[fires.size()]);
     }
 
-    public void saveAllFires(String collegeId, List<FireModel> notes){
+    public static void saveAllFires(String collegeId, List<FireModel> notes){
         logger.info("Saving fire...");
         try {
             File file = new File(getFilePath(collegeId));
@@ -65,7 +65,7 @@ public class FireDAO {
         logger.info("Saved fire...");
     }
 
-    public void saveNewFire(String collegeId, FireModel fire) {
+    public static void saveNewFire(String collegeId, FireModel fire) {
         logger.info("Saving new fire...");
         List<FireModel> fires = getFires(collegeId);
         fire.setRunId(collegeId);
