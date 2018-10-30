@@ -81,7 +81,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
-                    <li class="active"><a href="viewGates">Gates</a></li>
+                    <li class="active"><a href="viewGates">Objectives</a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
