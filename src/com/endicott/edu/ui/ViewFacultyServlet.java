@@ -27,7 +27,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         for(int i = 0; i < FacultyDao.getFaculty(collegeId).size(); i++) {
             if (request.getParameter("facultyRaise" + i) != null) {
-                FacultyManager.giveFacultyRaise(collegeId, FacultyDao.getFaculty(collegeId).get(i));
+                giveFacultyRaise(request, response, FacultyDao.getFaculty(collegeId).get(i));
             }
 
             if (request.getParameter("removeFaculty" + i) != null){
@@ -65,7 +65,19 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding faculty.");
         }
         else {
-            FacultyManager.addFaculty(collegeId, salary);
+            FacultyManager.addFaculty(collegeId, salary, FacultyManager.generateFacultyTile(), FacultyManager.generateFacultyDepartment());
+        }
+
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
+        dispatcher.forward(request,response);
+    }
+
+    private void giveFacultyRaise(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, FacultyModel member) throws javax.servlet.ServletException, IOException {
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        if(!FacultyManager.giveFacultyRaise(collegeId, member)){
+            // Don't give faculty raise
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);

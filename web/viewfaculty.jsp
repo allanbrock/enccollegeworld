@@ -99,7 +99,7 @@
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li
+                    <li><a href="viewBalance">$<%=numberFormatter.format(college.getAvailableCash())%></a></li>
                     <li><a> <%=new SimpleDateFormat("MMM dd").format(CollegeManager.getCollegeDate(college.getRunId()))%> </a></li>
                     <li><a href="viewAdmin">Admin</a></li>
                     <li><a href="about.jsp">About</a></li>
@@ -144,12 +144,12 @@
                             <div class="well well-sm">
                                 Title: <%=faculty.get(i).getTitle()%><br>
                                 Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
-                                Department: <%=faculty.get(i).getDepartment()%><br>
-                                Salary: <%=String.valueOf(faculty.get(i).getSalary())%> <br>
+                                Department: <%="Arts and Sciences"%><br>  <!--Soon will be replaced by getDepartment-->
                                 Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
                                 Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
                             </div>
                         </div>
+                        <label id="facultySalary" style="color: blue"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
                     </td>
                     <td>
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
