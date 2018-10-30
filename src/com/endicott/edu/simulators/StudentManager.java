@@ -222,7 +222,10 @@ public class StudentManager {
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
 
         // The retention rate is based on the last 7 days (withdrawl day)
-        int retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
+        int retentionRate = 0;
+        if (currentSize > 0) {
+            retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
+        }
         college.setRetentionRate(retentionRate);
 
         collegeDao.saveCollege(college);
