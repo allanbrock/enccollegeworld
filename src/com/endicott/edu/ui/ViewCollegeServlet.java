@@ -1,12 +1,15 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
+import com.endicott.edu.datalayer.PlagueDao;
+import com.endicott.edu.models.PlagueModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.TutorialManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.util.List;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
@@ -49,6 +52,15 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         if (request.getParameter("goToStore") != null){
             response.sendRedirect(request.getContextPath() + "/viewstore.jsp");
             return;
+        }
+        if(request.getParameter("quarantineStudents") != null){
+            PlagueDao dao = new PlagueDao();
+            List<PlagueModel> plagues = dao.getPlagues(collegeId);
+            for (PlagueModel plague : plagues) {
+                plague.setQuarantine(true);
+            }
+            dao.saveAllPlagues(collegeId, plagues);
+
         }
 
         // Check if the button pressed was from a popup.  If so clear it.

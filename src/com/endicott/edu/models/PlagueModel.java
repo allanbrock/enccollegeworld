@@ -19,6 +19,7 @@ public class PlagueModel implements Serializable {
     private String dormName = "unknown";//?
     private int hourLastUpdated;  // the time we last updated this record
     private int numberOfHoursLeftInPlague;  // if 0, then plague is over.  No one new can get sick.
+    private boolean quarantine = false;
 
     public PlagueModel() {
     }
@@ -89,4 +90,11 @@ public class PlagueModel implements Serializable {
 
     public void setNumberOfHoursLeftInPlague(int numberOfHoursLeftInPlague) { this.numberOfHoursLeftInPlague = numberOfHoursLeftInPlague; }
 
+    public boolean isQuarantine() {
+        return quarantine;
+    }
+
+    public void setQuarantine(boolean quarantine) {
+        this.quarantine = quarantine;
+    }
 }
