@@ -535,7 +535,7 @@ public class BuildingManager {
         List<BuildingModel> buildingsToReturn = null;
         for(BuildingModel b : allBuildings){
             if(b.getKindOfBuilding().equals(buildingType)){
-                buildingsToReturn.add(b);
+//                buildingsToReturn.add(b);
             }
         }
 
