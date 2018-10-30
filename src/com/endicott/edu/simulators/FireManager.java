@@ -104,6 +104,7 @@ public class FireManager {
         ArrayList<DormitoryModel> dorms = (ArrayList) DormitoryDao.getDorms(runId);
         ArrayList<StudentModel> students = (ArrayList) StudentDao.getStudents(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
+        BuildingManager buildingManager = new BuildingManager();
         String victims = "all";
 
         // if there are no buildings, there can not be a fire.
@@ -128,8 +129,7 @@ public class FireManager {
         StudentDao.saveAllStudents(runId, students);
         Accountant.payBill(runId, "Fire damage cost ", fire.getCostOfFire());
         NewsManager.createNews(runId, hoursAlive, ("Major fire at " + fire.getBuildingBurned().getName() + " was destroyed, " + numDeaths + " died."), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-        // TODO: better way to remove the building and students/figure out if dorm or reg building
-        buildings.remove(buildingToBurn);
+        //buildingManager.destroyBuildingInCaseOfDisaster(runId,buildingToBurn.getName());
         BuildingDao.saveAllBuildings(runId, buildings);
     }
 
