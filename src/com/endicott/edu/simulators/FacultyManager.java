@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
+import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.models.StudentModel;
 
@@ -60,15 +61,15 @@ public class FacultyManager {
      * @param collegeId instance of the simulation
      */
     public static void establishCollege(String collegeId){
-        for (int i=0; i<10; i++) {
-           FacultyModel member = addFaculty(collegeId, 100000);  // Default salary for now
+        for (int i=0; i<12; i++) {
+           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(), generateFacultyDepartment());  // Default salary for now
        }
    }
 
     /**
      * Add new faculty to the college.
      */
-    public static FacultyModel addFaculty(String collegeID, int salary) {
+    public static FacultyModel addFaculty(String collegeID, int salary, String facultyTitle, String facultyDepartment) {
         Boolean isFemale;
         FacultyModel member;
         FacultyDao fao = new FacultyDao();
@@ -77,9 +78,21 @@ public class FacultyManager {
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), "Dean", "Science", "LSB", collegeID, salary);
+        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, "LSB", collegeID, salary);
         fao.saveNewFaculty(collegeID, member);
         return member;
+    }
+
+    public static String generateFacultyTile(){
+        String[] titles = getTitleOptions();
+        for(String s : titles){
+            // Todo add logic to split faculty into departments
+        }
+        return "";
+    }
+
+    public static String generateFacultyDepartment(){
+        return "";
     }
 
     public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
@@ -113,12 +126,22 @@ public class FacultyManager {
     }
 
     public static ArrayList<Integer> getSalaryOptions(){
-        ArrayList<Integer> salaryOptions = new ArrayList<Integer>();
+        ArrayList<Integer> salaryOptions = new ArrayList();
         int[] salaries = new int[] {100000, 125000, 150000, 175000};
         for(int i = 0; i < salaries.length; i++){
             salaryOptions.add(salaries[i]);
         }
         return salaryOptions;
+    }
+
+    private static DepartmentModel[] getDepartmentOptions(){
+        DepartmentModel[] departmentOptions = {new DepartmentModel("Arts and Sciences"), new DepartmentModel("Sport science and fitness"), new DepartmentModel("Business"), new DepartmentModel("Nursing")};
+        return departmentOptions;
+    }
+
+    private static String[] getTitleOptions(){
+        String[] titleOptions = {"Dean", "Assistant Dean", "Professor"};
+        return titleOptions;
     }
 
     // Computes an algorithm to generate a daily performance for an employee member
@@ -200,12 +223,13 @@ public class FacultyManager {
         return String.valueOf(randID);
     }
 
-    public static void giveFacultyRaise(String collegeID, FacultyModel member){
+    public static Boolean giveFacultyRaise(String collegeID, FacultyModel member){
         FacultyDao fao = new FacultyDao();
         List<FacultyModel> newFaculty = FacultyDao.getFaculty(collegeID);
         Boolean nextValueRaise = false;
         if(member.getSalary() == 200000) {
             // Max amount message
+            return false;
         }
         else{
             for(int i : getSalaryOptions()){
@@ -215,8 +239,7 @@ public class FacultyManager {
                             faculty.setSalary(i);
                             faculty.setRaiseRecentlyGiven(true);
                             fao.saveAllFaculty(collegeID, newFaculty);
-                            // Give faculty raise message
-                            // popupManager.newPopupEvent("Faculty Raise!", "You gave a faculty member a raise", "Ok", "Done", "nil", "Faculty Raise");
+                            return true;
                         }
                     }
                 }
@@ -224,6 +247,7 @@ public class FacultyManager {
                     nextValueRaise = true;
             }
         }
+        return true; // Statement should never be hit
     }
 
     public static FacultyModel assignAdvisorToStudent(String collegeId, StudentModel student){
@@ -235,7 +259,6 @@ public class FacultyManager {
         for(FacultyModel faculty : updatedFaculty){
             if(positionInFaculty == newAdvisorPosition) {
                 newAdvisor = faculty;
-                faculty.addAdvisee(student);
                 break;
             }
             positionInFaculty++;

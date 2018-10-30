@@ -242,5 +242,18 @@ public class SportModel implements Serializable {
     }
 
     //This will be further expanded upon, including division ups and monetary gains once Playoff system functions
-    public void winChampionship() {this.championshipsWon += 1; }
+    public void winChampionship(CollegeModel college) {
+        this.championshipsWon += 1;
+        if (this.division == 3)
+            college.setAvailableCash(college.getAvailableCash() + 10000);
+        else if(this.division == 2)
+            college.setAvailableCash(college.getAvailableCash() + 30000);
+        else if(this.division == 1)
+            college.setAvailableCash(college.getAvailableCash() + 100000);
+
+        if (this.division == 3)
+                this.setDivision(2);
+            else if(this.division == 2)
+                this.setDivision(1);
+    }
 }

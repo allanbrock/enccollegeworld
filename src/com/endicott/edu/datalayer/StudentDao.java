@@ -18,7 +18,7 @@ public class StudentDao {
     private static String getFilePath(String runId) {
         return DaoUtils.getFilePathPrefix(runId) +  "student.dat";
     }
-    private Logger logger = Logger.getLogger("StudentDao");
+    private static Logger logger = Logger.getLogger("StudentDao");
 
     public static List<StudentModel> getStudents(String runId) {
         ArrayList<StudentModel> students = new ArrayList<>();
@@ -50,7 +50,7 @@ public class StudentDao {
         return students.toArray(new StudentModel[students.size()]);
     }
 
-    public List<StudentModel> getStudentsOnSport(String runId, String teamName) {
+    public static List<StudentModel> getStudentsOnSport(String runId, String teamName) {
         List<StudentModel> students = new ArrayList<>();
         ArrayList<StudentModel> playerList = new ArrayList<>();
         students = getStudents(runId);
@@ -62,7 +62,7 @@ public class StudentDao {
         return playerList;
     }
 
-    public void saveAllStudents(String runId, List<StudentModel> students){
+    public static void saveAllStudents(String runId, List<StudentModel> students){
         logger.info("Saving all students...");
         try {
             File file = new File(getFilePath(runId));

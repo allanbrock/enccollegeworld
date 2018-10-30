@@ -110,7 +110,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li class="active"><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
-                    <li><a href="viewGates">Gates</a></li>
+                    <li><a href="viewGates">Objectives</a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -167,31 +167,32 @@
             <div class="row-1">
                 <div class="col-1">
                     <img class="img-responsive"  src="resources/images/footballicon.png">
-                    <h3>Football Championships Won: <%=college.getFootballChampionships()%></h3>
+                    <h4>Football Championships Won: <%=college.getFootballChampionships()%></h4>
                 </div>
             </div>
             <div class="row-2">
                 <div class="col-2">
                     <img class="img-responsive"  src="resources/images/hockeyicon.png">
-                    <h3>Men's Hockey Championships Won: <%=college.getMHockeyChampionships()%></h3>
-                    <h3>Women's Hockey Championships Won:<%=college.getWHockeyChampionships()%></h3>
+                    <h4>Men's Hockey Championships Won: <%=college.getMHockeyChampionships()%></h4>
+                    <h4>Women's Hockey Championships Won:<%=college.getWHockeyChampionships()%></h4>
                 </div>
             </div>
                 <div class="col-3">
                     <img class="img-responsive"  src="resources/images/baseballicon.png">
-                    <h3>Baseball Championships Won: <%=college.getBaseballChampionships()%></h3>
-                    <h3>Softball Championships Won: <%=college.getSoftballChampionships()%></h3>
+                    <h4>Baseball Championships Won: <%=college.getBaseballChampionships()%></h4>
+                    <h4>Softball Championships Won: <%=college.getSoftballChampionships()%></h4>
                 </div>
                 <div class="col-4">
                     <img class="img-responsive"  src="resources/images/soccerballicon.png">
-                    <h3>Men's Soccer Championships Won: <%=college.getMSoccerChampionships()%></h3>
-                    <h3>Women's Soccer Championships Won: <%=college.getWSoccerChampionships()%></h3>
+                    <h4>Men's Soccer Championships Won: <%=college.getMSoccerChampionships()%></h4>
+                    <h4>Women's Soccer Championships Won: <%=college.getWSoccerChampionships()%></h4>
                 </div>
                 <div class="col-5">
                     <img class="img-responsive"  src="resources/images/basketballicon.png">
-                    <h3>Men's Basketball Championships Won: <%=college.getMBasketballChampionships()%></h3>
-                    <h3>Women's Basketball Championships Won: <%=college.getWBasketballChampionships()%></h3>
+                    <h4>Men's Basketball Championships Won: <%=college.getMBasketballChampionships()%></h4>
+                    <h4>Women's Basketball Championships Won: <%=college.getWBasketballChampionships()%></h4>
                 </div>
+            }
         </div>
     </div>
     </div>

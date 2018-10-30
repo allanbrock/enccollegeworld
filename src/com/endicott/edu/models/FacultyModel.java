@@ -2,7 +2,6 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -14,12 +13,11 @@ public class FacultyModel implements Serializable {
     private String collegeID;
     private String facultyName; //simply the name
     private String title; //EX: Assoicate prof, Dean, VP...
-    private String department; //department of the faculty member EX: Math, Computer Science, Biology
+    private String departmentName; //department of the faculty member EX: Math, Computer Science, Biology
     private int salary;   //private int salary = 115000; //yearly salary
     private String officeLocation; //office building and number
     private int happiness;
     private int performance;
-    private ArrayList<StudentModel> advisees;
     private Boolean raiseRecentlyGiven;
 
     public FacultyModel(){}
@@ -28,16 +26,15 @@ public class FacultyModel implements Serializable {
         System.out.print("Other constructor hit");
         this.facultyName = facultyName;
         this.title = title;
-        this.department = department;
+        this.departmentName = department;
         this.officeLocation = officeLocation;
         this.facultyID = facultyID;
     }
 
     public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
-        this.advisees = new ArrayList<StudentModel>();
         this.facultyName = facultyName;
         this.title = title;
-        this.department = department;
+        this.departmentName = department;
         this.officeLocation = officeLocation;
         this.collegeID = collegeID;
         this.salary = salary;
@@ -63,12 +60,12 @@ public class FacultyModel implements Serializable {
         this.title = title;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartmentName(String department) {
+        this.departmentName = department;
     }
 
     public int getSalary() {
@@ -97,9 +94,6 @@ public class FacultyModel implements Serializable {
 
     public int getPerformance(){ return this.performance; }
     public void setPerformance(int performance) { this.performance = performance; }
-
-    public void addAdvisee(StudentModel student){ advisees.add(student); }
-    public ArrayList<StudentModel> getAdvisees() { return this.advisees; }
 
     public void setRaiseRecentlyGiven(Boolean raiseRecentlyGiven){ this.raiseRecentlyGiven = raiseRecentlyGiven; }
     public Boolean getRaiseRecentlyGiven(){ return this.raiseRecentlyGiven; }

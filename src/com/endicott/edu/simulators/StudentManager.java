@@ -27,7 +27,7 @@ public class StudentManager {
     public void establishCollege(String collegeId) {
         loadTips(collegeId);
         admitStudents(collegeId, college.getCurrentDay()/24, true);
-        calculateStatistics(collegeId);
+        calculateStatistics(collegeId, true);
     }
 
     /**
@@ -42,7 +42,7 @@ public class StudentManager {
         admitStudents(collegeId, hoursAlive, false);
         receiveStudentTuition(collegeId);
         withdrawStudents(collegeId, hoursAlive);
-        calculateStatistics(collegeId);
+        calculateStatistics(collegeId, false);
         updateStudentsTime(collegeId, hoursAlive);
     }
 
@@ -222,7 +222,10 @@ public class StudentManager {
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
 
         // The retention rate is based on the last 7 days (withdrawl day)
-        int retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
+        int retentionRate = 0;
+        if (currentSize > 0) {
+            retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
+        }
         college.setRetentionRate(retentionRate);
 
         collegeDao.saveCollege(college);
@@ -252,12 +255,12 @@ public class StudentManager {
      * Recalculate all the statistics that are being maintained involving students.
      * @param collegeId
      */
-    public void calculateStatistics(String collegeId) {
+    public void calculateStatistics(String collegeId, boolean initial) {
         calculaterOverallStudentHealth(collegeId);
         calculateStudentFacultyRatio(collegeId);
         calculateStudentFacultyRatioRating(collegeId);
 
-        setHappinessForEachStudent(collegeId);
+        setHappinessForEachStudent(collegeId, initial);
 
         calculateOverallStudentHappiness(collegeId);
 
@@ -297,14 +300,14 @@ public class StudentManager {
         collegeDao.saveCollege(college);
     }
 
-    private void setHappinessForEachStudent(String collegeId){
+    private void setHappinessForEachStudent(String collegeId, boolean initial){
         List<StudentModel> students = dao.getStudents(collegeId);
         CollegeModel college = collegeDao.getCollege(collegeId);
 
        for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student);
-           setStudentAcademicHappiness(student, college);
+           setStudentAcademicHappiness(student, college, initial);
            setStudentMoneyHappiness(student, college);
            setStudentFunHappiness(student, college);
 
@@ -330,10 +333,14 @@ public class StudentManager {
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
-    private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
+    private void setStudentAcademicHappiness(StudentModel s, CollegeModel college, boolean initial) {
         Random r = new Random();
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
-        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
+        int happinessRating;
+        if(initial)
+            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
+        else
+            happinessRating = s.getAcademicHappinessRating();
         if(s.getAdvisor().getPerformance() > 75){
             int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
             happinessRating += happinessIncrease;

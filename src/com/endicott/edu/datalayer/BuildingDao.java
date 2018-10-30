@@ -20,7 +20,7 @@ public class BuildingDao {
     private static String getFilePath(String collegeId) {
         return DaoUtils.getFilePathPrefix(collegeId) +  "building.dat";
     }
-    private Logger logger = Logger.getLogger("BuildingDao");
+    private static Logger logger = Logger.getLogger("BuildingDao");
 
     public static List<BuildingModel> getBuildings(String collegeId) {
         ArrayList<BuildingModel> buildings = new ArrayList<>();
@@ -49,7 +49,7 @@ public class BuildingDao {
         return buildings.toArray(new BuildingModel[buildings.size()]);
     }
 
-    public void saveAllBuildings(String collegeId, List<BuildingModel> notes){
+    public static void saveAllBuildings(String collegeId, List<BuildingModel> notes){
         logger.info("Saving all buildings...");
         try {
             File file = new File(getFilePath(collegeId));
@@ -72,7 +72,7 @@ public class BuildingDao {
         logger.info("Saved buildings...");
     }
 
-    public void saveNewBuilding(String collegeId, BuildingModel building) {
+    public static void saveNewBuilding(String collegeId, BuildingModel building) {
         logger.info("Saving new building...");
         List<BuildingModel> buildings = getBuildings(collegeId);
         building.setRunId(collegeId);

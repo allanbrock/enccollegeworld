@@ -29,6 +29,7 @@ public class PlagueManager {
         // First work on the overall health of students.
         makeStudentsBetter(collegeId, hoursAlive);
         randomlyMakeSomeStudentsSicker(collegeId, hoursAlive);
+        boolean quarantine = false;
 
         int hoursLeftInPlague = 0;
 
@@ -41,6 +42,7 @@ public class PlagueManager {
             hoursLeftInPlague = Math.max(0,oldHoursLeftInPlague - timePassed);
             plague.setNumberOfHoursLeftInPlague(hoursLeftInPlague);
             didPlagueEnd = (oldHoursLeftInPlague > 0 && hoursLeftInPlague <= 0);
+            quarantine = plague.isQuarantine();
         }
 
         if (didPlagueEnd) {
@@ -51,7 +53,7 @@ public class PlagueManager {
         // Spread the plague
         if (hoursLeftInPlague > 0) {
             int oldNumberSick = getNumberSick(collegeId);
-            plagueSpreadsThroughStudents(collegeId, hoursAlive, hoursLeftInPlague, getNumberSick(collegeId));
+            plagueSpreadsThroughStudents(collegeId, hoursAlive, hoursLeftInPlague, getNumberSick(collegeId), quarantine);
             int newNumberSick = getNumberSick(collegeId);
             int newVictims = newNumberSick - oldNumberSick;
             if (newVictims > 15) {
@@ -69,7 +71,7 @@ public class PlagueManager {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
-                        "Quarantine the sick students!", "plagueAckCallback3", "Do nothing", "plagueCallback4",
+                        "Quarantine the sick students ($5,000)", "quarantineStudents", "Do nothing ($0)", "plagueCallback4",
                         "resources/images/plague.jpg", "Plague Doctor");
             }
         }
@@ -88,6 +90,7 @@ public class PlagueManager {
 
         for (PlagueModel plague : plagues) {
             plague.setNumberOfHoursLeftInPlague(plagueLengthInHours);
+            plague.setQuarantine(false);
         }
     }
 
@@ -117,7 +120,7 @@ public class PlagueManager {
      */
     static public void establishCollege(String collegeId){
         int hoursInPlague = createInitialPlague(collegeId);
-        plagueSpreadsThroughStudents(collegeId, 0, hoursInPlague, 0);
+//        plagueSpreadsThroughStudents(collegeId, 0, hoursInPlague, 0);
     }
 
     /**
@@ -145,7 +148,7 @@ public class PlagueManager {
      * @param hoursLeftInPlague
      * @param studentSickCount  number of students currently sick.
      */
-    private static int plagueSpreadsThroughStudents(String collegeId, int currentHour, int hoursLeftInPlague, int studentSickCount) {
+    private static int plagueSpreadsThroughStudents(String collegeId, int currentHour, int hoursLeftInPlague, int studentSickCount, boolean quarantine) {
         StudentDao dao = new StudentDao();
         List<StudentModel> students = dao.getStudents(collegeId);
         int nSick = 0;
@@ -154,8 +157,12 @@ public class PlagueManager {
         if (students.size() <= 0) {
             return 0;
         }
-
-        int probCatchesFromOthers = (studentSickCount * 100) / students.size();
+        int probCatchesFromOthers;
+        if(!quarantine) {
+            probCatchesFromOthers = (studentSickCount * 100) / students.size();
+        }else{
+            probCatchesFromOthers = (studentSickCount * 25) / students.size();
+        }
         int probCatchesFromOutside = 10; // out of 100
         int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
         Random rand = new Random();

@@ -119,6 +119,31 @@
             text-align: center;
             margin-top: 5px;
         }
+
+        .speech-bubble {
+            position: relative;
+            background: #5bc0de;
+            border-radius: .4em;
+            margin: 15px;
+            color: white;
+            padding: 10px;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 70%;
+            width: 0;
+            height: 0;
+            border: 1.125em solid transparent;
+            border-right-color: #5bc0de;
+            border-left: 0;
+            border-bottom: 0;
+            margin-top: -0.562em;
+            margin-left: -1.125em;
+        }
+
     </style>
     <script>
         function post(path, params, method) {
@@ -175,7 +200,7 @@
                     <li><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
-                    <li><a href="viewGates">Gates</a></li>
+                    <li><a href="viewGates">Objectives</a></li>
                     <li><a href="viewStore">Store</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -293,7 +318,8 @@
             </div>
         </div>
         <div class="col-sm-4" >
-            <div class="well well-sm" style="height: 399px">
+            <div class="well well-sm" <%--*style="height: 399px"--%>>
+
                 <table>
                     <% StudentModel student = students[StudentManager.getStudentIndex()];%>
                     <tr>
@@ -337,6 +363,10 @@
                     <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
                     <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
                 </table>
+
+                <div class="speech-bubble">
+                    <strong>Test text</strong>
+                </div>
             </div>
         </div>
     </div>
