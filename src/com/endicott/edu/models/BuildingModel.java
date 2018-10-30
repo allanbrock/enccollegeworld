@@ -16,9 +16,13 @@ public class BuildingModel implements Serializable {
     private final static String footballStadium = "FOOTBALL STADIUM";
     private final static String hockeyRink = "HOCKEY RINK";
 
-    private int capacity = 0;
+    private int hoursToComplete = 0;
     private int costPerDay = 0;
-    private int hourLastUpdated = 0;
+    private int upgradeCost = 0;
+    private int totalBuildCost = 0;
+
+    private int timeSinceLastUpdate = 0;
+    private int capacity = 0;
     private String name = "unknown";
     private String runId = "unknown";
     private String note = "no note";
@@ -31,10 +35,8 @@ public class BuildingModel implements Serializable {
     private static final int minHiddenQuality = -10;
 
     private boolean hasBeenAnnouncedAsComplete = true;
-    private int hoursToComplete = 0;
 
     private int lengthOfDisaster = 0;
-    private int totalBuildCost = 0;
     private String size = "";
     private String kindOfBuilding;
 
@@ -63,8 +65,8 @@ public class BuildingModel implements Serializable {
         this.numStudents = numStudents;
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
-        setCostPerDayBasedOnSize(size);
         this.kindOfBuilding = kindOfBuilding;
+        setStatsBasedOnSize(size);
     }
     //For Football Stadium, Hockey Rink, and Baseball Diamond
     public BuildingModel(String name, String kindOfBuilding, String size){
@@ -73,7 +75,7 @@ public class BuildingModel implements Serializable {
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
         this.size = size;
-        setCostPerDayBasedOnSize(size);
+        setStatsBasedOnSize(size);
     }
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
     public BuildingModel(String name, String kindOfBuilding){
@@ -81,12 +83,10 @@ public class BuildingModel implements Serializable {
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
-        setCostPerDayBasedOnSize("");
     }
     //for LibraryModel and HealthCenterModel
     public BuildingModel(String kindOfBuilding){
         this.kindOfBuilding = kindOfBuilding;
-        setCostPerDayBasedOnSize("");
     }
 
     public BuildingModel() {
@@ -102,13 +102,13 @@ public class BuildingModel implements Serializable {
     }
 
     public void setStatsBasedOnSize(String size){
-        setHoursToBuildBasedOnSize(size);
         setTotalBuildingCostBasedOnSize(size);
+        setUpgradeCostBasedOnSize(size);
         setCostPerDayBasedOnSize(size);
     }
 
     //Helper function to set the build time
-    private void setHoursToBuildBasedOnSize(String size){
+    public void setHoursToBuildBasedOnSize(String size){
         if(size.equals("Small")){setHoursToComplete(336);} //two weeks
         else if(size.equals("Medium")){setHoursToComplete(504);} //three weeks
         else if(size.equals("Large")){setHoursToComplete(720);} //one month
@@ -116,13 +116,21 @@ public class BuildingModel implements Serializable {
         else setHoursToComplete(336);  // You always need a fall through case
     }
 
-    //Helper fucntion to set the cost of building the building
+    //Helper function to set the cost of building the building
     private void setTotalBuildingCostBasedOnSize(String size){
         if(size.equals("Small")){setTotalBuildCost(50000);}
         else if(size.equals("Medium")){setTotalBuildCost(150000);}
         else if(size.equals("Large")){setTotalBuildCost(350000);}
         else if(size.equals("Extra Large")){setTotalBuildCost(650000);}
         else {setTotalBuildCost(150000);}
+    }
+
+    //Helper function to set the upgrade cost
+    private void setUpgradeCostBasedOnSize(String size){
+        if(size.equals("Small")){setUpgradeCost(100000);}
+        else if(size.equals("Medium")){setUpgradeCost(200000);}
+        else if(size.equals("Large")){setUpgradeCost(300000);}
+        else if(size.equals("Extra Large")){return;}
     }
 
     //Helper function to set the cost per day
@@ -133,6 +141,7 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Extra Large")){setCostPerDay(650);}
         else{setCostPerDay(200);}
     }
+
 
     public int getCapacity() {
         return capacity;
@@ -146,12 +155,17 @@ public class BuildingModel implements Serializable {
         return costPerDay;
     }
 
-    public int getHourLastUpdated() {
-        return hourLastUpdated;
+    public int getTimeSinceLastUpdate() {
+        return timeSinceLastUpdate;
     }
 
-    public void setHourLastUpdated(int hourLastUpdated) {
-        this.hourLastUpdated = hourLastUpdated;
+    public void setTimeSinceLastUpdate(int timeSinceLastUpdate) {
+        this.timeSinceLastUpdate = timeSinceLastUpdate;
+    }
+
+    //This advances time and keeps track of how long the building has gone without an update
+    public void updateTimeSinceLastUpdate(int hoursAdvanced){
+        setTimeSinceLastUpdate(timeSinceLastUpdate + hoursAdvanced);
     }
 
     public String getName() {
@@ -208,6 +222,12 @@ public class BuildingModel implements Serializable {
         this.hiddenQuality = trueHiddenQuality;
         float newShownQuality = updateShownQuality(this.hiddenQuality);
         setShownQuality(newShownQuality);
+    }
+
+    public String getShownQualityString(){
+        float tempShownQuality = getShownQuality();
+        String shownQualityString = String.format("%.2f", tempShownQuality);
+        return shownQualityString;
     }
 
     public float getShownQuality() {
@@ -301,4 +321,12 @@ public class BuildingModel implements Serializable {
     public static String getFootballStadiumConst() {return  footballStadium;}
 
     public static String getHockeyRinkConst() {return hockeyRink;}
+
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
+
+    public void setUpgradeCost(int upgradeCost) {
+        this.upgradeCost = upgradeCost;
+    }
 }
