@@ -11,6 +11,7 @@ public class FireModel implements Serializable {
     private String runId = "unknown";
     private String description;
     private BuildingModel buildingBurned;
+    private boolean isCatastrophic;
 
     public FireModel(int costOfFire, int numOfFatalities, String runId, BuildingModel buildingBurned){
         this.runId = runId;
@@ -58,11 +59,15 @@ public class FireModel implements Serializable {
         if (victims.equalsIgnoreCase("No one")) {
             this.description = this.buildingBurned.getName() + " caught fire! Everyone made it out safe.";
         } else if (victims.equalsIgnoreCase("all")){
-            this.description = "Catastrophic fire occured in " + this.buildingBurned.getName() + ". If anyone was inside they didn't survive."+
-            "Purchase an upgrade to reduce the chance of these major fires from happening.";
+            this.description = "Catastrophic fire occurred in " + this.buildingBurned.getName() + ". If anyone was inside they didn't survive."+
+            "Visit the Buildings page to rebuild. Don't forget you can purchase an upgrade to reduce the chance of these major fires from happening.";
         } else {
             this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire. Upgrading " +
             "the college's fire detection at the store will reduce the chance of losing students to fires.";
         }
+    }
+
+    public boolean isCatastrophic() {
+        return this.isCatastrophic;
     }
 }
