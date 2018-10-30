@@ -1,7 +1,6 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.DormitoryDao;
 import com.endicott.edu.datalayer.FireDAO;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
@@ -61,7 +60,6 @@ public class FireManager {
      */
     public void startNormalFire(String runId, int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList) BuildingDao.getBuildings(runId);
-        ArrayList<DormitoryModel> dorms = (ArrayList) DormitoryDao.getDorms(runId);
         ArrayList<StudentModel> students = (ArrayList) StudentDao.getStudents(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         String victims = "";
@@ -70,7 +68,7 @@ public class FireManager {
         if (buildings.size() <= 0)
             return;
 
-        BuildingModel buildingToBurn = findBuildingToBurn(buildings, dorms);
+        BuildingModel buildingToBurn = findBuildingToBurn(buildings);
         int numDeaths = getNumFatalities();
         int cost = getFireCost(numDeaths, buildingToBurn,runId);
 
@@ -101,7 +99,6 @@ public class FireManager {
      */
     public void startCatastrophicFire(String runId, int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList) BuildingDao.getBuildings(runId);
-        ArrayList<DormitoryModel> dorms = (ArrayList) DormitoryDao.getDorms(runId);
         ArrayList<StudentModel> students = (ArrayList) StudentDao.getStudents(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         BuildingManager buildingManager = new BuildingManager();
@@ -111,7 +108,7 @@ public class FireManager {
         if (buildings.size() <= 0)
             return;
 
-        BuildingModel buildingToBurn = findBuildingToBurn(buildings, dorms);
+        BuildingModel buildingToBurn = findBuildingToBurn(buildings);
         int numDeaths = buildingToBurn.getNumStudents();
 
         // If all students are in fire building, leave some alive
@@ -180,14 +177,10 @@ public class FireManager {
     }
 
     public BuildingModel findBuildingToBurn
-            (ArrayList<BuildingModel> buildings, ArrayList<DormitoryModel> dorms) {
-        ArrayList<BuildingModel> allBuildings = buildings;
+            (ArrayList<BuildingModel> buildings) {
         Random rand = new Random();
         int randomIndex = rand.nextInt(buildings.size());
-        for (DormitoryModel d : dorms) {
-            allBuildings.add(d);
-        }
-        return allBuildings.get(randomIndex);
+        return buildings.get(randomIndex);
     }
 }
 
