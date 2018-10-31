@@ -2,6 +2,7 @@ package com.endicott.edu.ui;
 
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
+import com.endicott.edu.simulators.InventoryManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.SportManager;
 
@@ -37,6 +38,7 @@ public class InterfaceUtils {
         PopupEventManager popupManager = new PopupEventManager();
         TutorialModel[] tutorials = TutorialDao.getTutorialsArray(collegeId);
         FireModel[] fires = FireDAO.getFiresArray(collegeId);
+        ItemModel[] items = InventoryDao.getInventoryArray(collegeId);
         // TODO: load the tips using TutorialDao.getTips(collegeId);
         //FloodModel[] flood = new FloodModel[0];
 
@@ -56,6 +58,7 @@ public class InterfaceUtils {
         request.setAttribute("faculty",faculty);
         request.setAttribute("floods",flood);
         request.setAttribute("fires", fires);
+        request.setAttribute("items", items);
         request.getSession().setAttribute("popupMan", popupManager);
         //TODO: store the loaded tip array in an attribute called tips.
         request.setAttribute("tutorials", tutorials);
