@@ -241,8 +241,8 @@ public class CollegeManager {
     }
 
     static private void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Welcome to College Simulator!", true);
-        TutorialManager.saveNewTip(collegeId, 2,"viewCollege", "Don't spend all your money at once.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
     }
 
     /**

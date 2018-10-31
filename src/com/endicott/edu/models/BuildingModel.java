@@ -80,12 +80,14 @@ public class BuildingModel implements Serializable {
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
     public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
+        this.size = "N/A";
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
     }
     //for LibraryModel and HealthCenterModel
     public BuildingModel(String kindOfBuilding){
+        this.size = "N/A";
         this.kindOfBuilding = kindOfBuilding;
     }
 

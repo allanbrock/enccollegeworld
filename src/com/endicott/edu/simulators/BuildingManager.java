@@ -2,7 +2,6 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
-import com.endicott.edu.datalayer.DormitoryDao;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
@@ -17,7 +16,6 @@ import java.util.logging.Logger;
  */;
 public class BuildingManager {
     static private BuildingDao dao = new BuildingDao();
-    static private DormitoryDao dormDao = new DormitoryDao();
     static private Logger logger = Logger.getLogger("BuildingManager");
     static private StudentDao studentDao = new StudentDao();
     static private GateManager gateManager = new GateManager();
@@ -207,8 +205,7 @@ public class BuildingManager {
         }
     }
 
-    public void destroyBuildingInCaseOfDisaster(String collegeId, String buildingName){
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+    public void destroyBuildingInCaseOfDisaster(List<BuildingModel> buildings, String collegeId, String buildingName){
         for (BuildingModel b : buildings) {
             if (b.getName().equals(buildingName)) {
                 buildings.remove(b);
@@ -240,13 +237,13 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     private String findBuildingToAssignToStudent(String collegeId, String buildingType){
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        List<BuildingModel> buildings = getBuildingListByType(buildingType, collegeId);
         String buildingName = "";
         for (BuildingModel b : buildings) {
             int s = b.getNumStudents();
             int c = b.getCapacity();
             buildingName = b.getName();
-            if (b.getKindOfBuilding().equals(buildingType) && s < c) {
+            if (s < c) {
                 b.setNumStudents(s + 1);
                 dao.saveAllBuildings(collegeId, buildings);
                 return buildingName;
@@ -493,25 +490,25 @@ public class BuildingManager {
      * @param collegeId
      * @return
      */
-    static public List<DormitoryModel> getDorms(String collegeId){
-        String dormName = "";
-        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
-        for(DormitoryModel d : dorms){
-            d.setNumStudents(0);
-        }
-        List<StudentModel> students = studentDao.getStudents(collegeId);
-        for(StudentModel s : students){
-            dormName = s.getDorm();
-            for (DormitoryModel d : dorms) {
-                if (dormName.equals(d.getName())) {
-                    d.incrementNumStudents(1);
-                } else {
-                    logger.info("Dorm was not found.");
-                }
-            }
-        }
-        return dorms;
-    }
+//    static public List<DormitoryModel> getDorms(String collegeId){
+//        String dormName = "";
+//        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
+//        for(DormitoryModel d : dorms){
+//            d.setNumStudents(0);
+//        }
+//        List<StudentModel> students = studentDao.getStudents(collegeId);
+//        for(StudentModel s : students){
+//            dormName = s.getDorm();
+//            for (DormitoryModel d : dorms) {
+//                if (dormName.equals(d.getName())) {
+//                    d.incrementNumStudents(1);
+//                } else {
+//                    logger.info("Dorm was not found.");
+//                }
+//            }
+//        }
+//        return dorms;
+//    }
     //made copy of above method because not sure which is right here
     static public List<BuildingModel> getBuildings(String collegeId){
         String buildingName = "";
@@ -531,6 +528,18 @@ public class BuildingManager {
             }
         }
         return buildings;
+    }
+
+    public List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
+        List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
+        List<BuildingModel> buildingsToReturn = null;
+        for(BuildingModel b : allBuildings){
+            if(b.getKindOfBuilding().equals(buildingType)){
+//                buildingsToReturn.add(b);
+            }
+        }
+
+        return buildingsToReturn;
     }
 }
 

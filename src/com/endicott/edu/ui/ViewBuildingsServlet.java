@@ -128,19 +128,18 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         if(buildingSize == null){
             buildingSize = "N/A";
         }
-
-       if(buildingSize.equals("$50,000 - Small (50)")){
+        else if(buildingSize.equals("$50,000 - Small (50)")){
            buildingSize = "Small";
-       }
-       else if(buildingSize.equals("$150,000 - Medium (200)")){
+        }
+        else if(buildingSize.equals("$150,000 - Medium (200)")){
            buildingSize = "Medium";
-       }
-       else if(buildingSize.equals("$350,000 - Large (500)")){
+        }
+        else if(buildingSize.equals("$350,000 - Large (500)")){
            buildingSize = "Large";
-       }
-       else {
+        }
+        else if(buildingSize.equals("$650,000 - Extra Large (1000)")){
            buildingSize = "Extra Large";
-       }
+        }
 
 
         logger.info("In ViewBuildingsServlet.doPost()");

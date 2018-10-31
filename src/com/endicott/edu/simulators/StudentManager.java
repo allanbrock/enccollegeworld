@@ -408,8 +408,8 @@ public class StudentManager {
     }
 
     private void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "This is a student tip.", true);
-        TutorialManager.saveNewTip(collegeId, 2,"viewStudent", "Keep students happy to keep them in school.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
