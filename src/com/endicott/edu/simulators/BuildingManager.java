@@ -21,6 +21,7 @@ public class BuildingManager {
     static private GateManager gateManager = new GateManager();
     static private StudentManager studentManager = new StudentManager();
 
+
     /**
      * Simulate all changes in buildings caused by advancing the hours the college
      * has been alive to the given value.
@@ -237,15 +238,15 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     private String findBuildingToAssignToStudent(String collegeId, String buildingType){
-        List<BuildingModel> buildings = getBuildingListByType(buildingType, collegeId);
+        List<BuildingModel> buildingsByType = getBuildingListByType(buildingType, collegeId);
         String buildingName = "";
-        for (BuildingModel b : buildings) {
+        for (BuildingModel b : buildingsByType) {
             int s = b.getNumStudents();
             int c = b.getCapacity();
             buildingName = b.getName();
             if (s < c) {
                 b.setNumStudents(s + 1);
-                dao.saveAllBuildings(collegeId, buildings);
+                dao.updateSingleBuilding(collegeId, b);
                 return buildingName;
             }
         }
@@ -462,8 +463,8 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         //pre-loaded buildings
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
@@ -532,10 +533,10 @@ public class BuildingManager {
 
     public List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
-        List<BuildingModel> buildingsToReturn = null;
+        List<BuildingModel> buildingsToReturn = new ArrayList<>();
         for(BuildingModel b : allBuildings){
             if(b.getKindOfBuilding().equals(buildingType)){
-//                buildingsToReturn.add(b);
+                buildingsToReturn.add(b);
             }
         }
 
