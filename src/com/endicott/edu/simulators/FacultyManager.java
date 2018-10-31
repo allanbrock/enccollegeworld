@@ -61,6 +61,7 @@ public class FacultyManager {
      * @param collegeId instance of the simulation
      */
     public static void establishCollege(String collegeId){
+        loadTips(collegeId);
         for (int i=0; i<12; i++) {
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(), generateFacultyDepartment());  // Default salary for now
        }
@@ -264,5 +265,10 @@ public class FacultyManager {
             positionInFaculty++;
         }
         return newAdvisor;
+    }
+
+    private static void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 0,"viewFaculty", "Happier Professors means happier students.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewFaculty", "Give faculty a raise to make them happy.", false);
     }
 }

@@ -6,6 +6,7 @@ import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.FacultyManager;
 import com.endicott.edu.simulators.PopupEventManager;
+import com.endicott.edu.simulators.TutorialManager;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -34,7 +35,23 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
                 removeFaculty(request, response, FacultyDao.getFaculty(collegeId).get(i));
             }
         }
+
+        if (request.getParameter("nextTip") != null) {
+            TutorialManager.advanceTip("viewFaculty", collegeId);
+        }
+        if (request.getParameter("hideTips") != null){
+            TutorialManager.hideTips("viewFaculty", collegeId);
+        }
+        if (request.getParameter("showTips") != null){
+            TutorialManager.showTips("viewFaculty", collegeId);
+        }
+
         InterfaceUtils.setPopupEventManagerInSession(popupManager, request);
+
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
+        dispatcher.forward(request, response);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {

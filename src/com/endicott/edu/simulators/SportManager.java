@@ -15,6 +15,10 @@ public class SportManager {
     SportsDao dao = new SportsDao();
     static private Logger logger = Logger.getLogger("SportManager");
 
+    public void establishCollege(String collegeId) {
+        loadTips(collegeId);
+    }
+
     /**
      * Simulate the elapse of time at the college.
      *
@@ -390,6 +394,11 @@ public class SportManager {
         rep = Math.max(rep, 0);
         rep = Math.min(rep, 100);
         sport.setReputation(rep);
+    }
+
+    private void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);
     }
 }
 

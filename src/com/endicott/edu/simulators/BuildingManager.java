@@ -463,6 +463,8 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
+        loadTips(collegeId);
+
         //pre-loaded buildings
         DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
@@ -541,6 +543,11 @@ public class BuildingManager {
         }
 
         return buildingsToReturn;
+    }
+
+    private static void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct buildings to allow a greater maximum capacity.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings", "Construct sports buildings to make sports teams.", false);
     }
 }
 
