@@ -106,14 +106,19 @@
             <tbody>
                 <%
                     for(int i = 0; i < items.length; i++){
+                        if(items[i].getPurchased().equals(false)){
                 %>
                 <tr>
                     <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
                     </td>
                     <td style="vertical-align:middle; font-size:120%;"><%=items[i].getCost()%>
                     </td>
+                    <td style="vertical-align:middle; font-size:120%;">
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                    </td>
                 </tr>
                 <%
+                        }
                     }
                 %>
             </tbody>
@@ -133,7 +138,20 @@
                 </tr>
             </thread>
             <tbody>
-
+                <%
+                    for(int i = 0; i < items.length; i++){
+                        if(items[i].getPurchased()){
+                %>
+                <tr>
+                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
+                    </td>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <%
+                        }
+                    }
+                %>
             </tbody>
         </table>
 

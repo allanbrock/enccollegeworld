@@ -6,5 +6,4 @@ public enum NewsType {
     SPORTS_NEWS,
     RES_LIFE_NEWS,
     COLLEGE_NEWS
-
 }
