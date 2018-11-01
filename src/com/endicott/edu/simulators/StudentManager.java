@@ -494,9 +494,9 @@ public class StudentManager {
 
         // Conclusion
         String[] conclusion =  {"here", "at this school", "at "+collegeId, ""};
-        feedback += conclusion[(int) Math.random() * conclusion.length];
+        feedback += conclusion[new Random().nextInt(conclusion.length)];
         String[] punctuation = {".", "!", "...", "!!!"};
-        feedback += punctuation[(int) Math.random() * punctuation.length];
+        feedback += punctuation[new Random().nextInt(punctuation.length)];
 
         return feedback;
     }
