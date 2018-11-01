@@ -46,7 +46,7 @@ public class InventoryManager {
     }
 
     public void createAllItems(String collegeId){
-        createItem("smoke detecters", false, null, 50000, collegeId);
+        createItem("smoke detectors", false, null, 50000, collegeId);
     }
 
     public void createItem(String name, Boolean isPurchased, String imageName, int cost, String collegeId){
@@ -61,6 +61,7 @@ public class InventoryManager {
             for (int i = 0; i < items.size(); i++){
                 if(items.get(i).getName().equals(name)){
                     items.get(i).setPurchased(true);
+                    Accountant.payBill(collegeId,"Upgrade cost ", items.get(i).getCost());
                 }
             }
         }

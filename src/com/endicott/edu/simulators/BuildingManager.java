@@ -217,8 +217,8 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             if (b.getName().equals(buildingName)) {
                 buildings.remove(b);
-                dao.saveAllBuildings(collegeId, buildings);
                 studentManager.removeFromBuildingAndReassignAfterDisaster(collegeId, buildingName, b.getKindOfBuilding());
+                return;
             }
         }
     }
