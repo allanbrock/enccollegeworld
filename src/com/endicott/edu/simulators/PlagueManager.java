@@ -158,10 +158,10 @@ public class PlagueManager {
             return 0;
         }
         int probCatchesFromOthers;
-        if(!quarantine) {
-            probCatchesFromOthers = (studentSickCount * 100) / students.size();
+        if(quarantine) {
+            return 0;
         }else{
-            probCatchesFromOthers = (studentSickCount * 25) / students.size();
+            probCatchesFromOthers = (studentSickCount * 100) / students.size();
         }
         int probCatchesFromOutside = 10; // out of 100
         int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
