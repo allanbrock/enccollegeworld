@@ -2,9 +2,8 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 /**
  * Responsible for simulating students at the college.
  */
@@ -440,6 +439,91 @@ public class StudentManager {
                 }
             }
         }
+    }
+
+    /**
+     * @param student   The student who's giving feedback
+     * @return          The feedback based on the students happiness levels
+     */
+    public static String getStudentFeedback(StudentModel student, String collegeId) {
+
+        Boolean usesVerb    = (Math.random() >= 0.5);
+        Boolean useNoun     = true;
+        String feedback     = (usesVerb ? "I " : "The ");
+
+        List<String> verbs      = new ArrayList<>();
+        List<String> adjectives = new ArrayList<>();
+
+        HashMap<String, Integer> happinessLevels = new HashMap<>();
+
+        happinessLevels.put("academic", student.getAcademicHappinessRating());
+//      happinessLevels.put("advisor", student.getAdvisorHappinessHappinessRating());
+        happinessLevels.put("health", student.getHealthHappinessRating());
+        happinessLevels.put("money", student.getMoneyHappinessRating());
+//      happinessLevels.put("Fun" , student.getFunHappinessRating());
+
+        // Negative feedback
+        if(student.getHappinessLevel() < 50) {
+            Collections.addAll(verbs, "hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
+            Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
+
+        // Positive feedback
+        } else if(student.getHappinessLevel() > 70) {
+            Collections.addAll(verbs, "love", "am very pleased with", "am ecstatic about");
+            Collections.addAll(adjectives, "great", "fantastic", "super", "surprisingly well");
+
+        // Neutral feedback
+        } else {
+            useNoun                 = false;
+            String[] neutralIntro   = {"All things considered, ", "All together, ", ""};
+            String[] neutralMidro   = {"Everything is ", "All is ", "Things are "};
+            String[] neutralOutro   = {"okay ", "alright ", "going well ", "not bad "};
+
+            feedback =  neutralIntro[new Random().nextInt(neutralIntro.length)] +
+                        neutralMidro[new Random().nextInt(neutralMidro.length)] +
+                        neutralOutro[new Random().nextInt(neutralOutro.length)];
+        }
+
+        if(useNoun)
+            if (usesVerb)
+                feedback += verbs.get(new Random().nextInt(verbs.size())) +
+                            "the " + getFeedbackNoun(happinessLevels, true);
+            else
+                feedback += getFeedbackNoun(happinessLevels, true) + "is " +
+                            adjectives.get(new Random().nextInt(adjectives.size()));
+
+        // Conclusion
+        String[] conclusion =  {"here", "at this school", "at "+collegeId, ""};
+        feedback += conclusion[(int) Math.random() * conclusion.length];
+        String[] punctuation = {".", "!", "...", "!!!"};
+        feedback += punctuation[(int) Math.random() * punctuation.length];
+
+        return feedback;
+    }
+
+
+    private static String getFeedbackNoun(HashMap<String, Integer> vals, Boolean isNegative) {
+
+        Map.Entry<String, Integer> current = vals.entrySet().iterator().next();
+        List<String> nouns = new ArrayList<>();
+
+        for(Map.Entry<String, Integer> e : vals.entrySet()) {
+            if(isNegative && e.getValue() < current.getValue())
+                current = e;
+            if(!isNegative && e.getValue() > current.getValue())
+                current = e;
+        }
+
+        if(current.getKey().equals("money"))
+            Collections.addAll(nouns,"tuition ", "tuition rate ");
+
+        else if(current.getKey().equals("academic"))
+            Collections.addAll(nouns,"number of professors ", "student professor ratio ");
+
+        else if(current.getKey().equals("health"))
+            Collections.addAll(nouns,"health care ", "healthiness ", "health system ");
+
+        return nouns.get(new Random().nextInt(nouns.size()));
     }
 }
 

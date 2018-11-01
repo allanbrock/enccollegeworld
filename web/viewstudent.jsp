@@ -365,7 +365,7 @@
                 </table>
 
                 <div class="speech-bubble">
-                    <strong>Test text</strong>
+                    <strong><%=StudentManager.getStudentFeedback(student, college.getRunId())%></strong>
                 </div>
             </div>
         </div>
