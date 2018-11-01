@@ -15,7 +15,7 @@ public class SportManager {
     SportsDao dao = new SportsDao();
     static private Logger logger = Logger.getLogger("SportManager");
 
-    public void establishCollege(String collegeId) {
+    public static void establishCollege(String collegeId) {
         loadTips(collegeId);
     }
 

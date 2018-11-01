@@ -62,6 +62,7 @@ public class CollegeManager {
         studentManager.establishCollege(collegeId);
 
         SportManager.establishDefaultSportsTeams(collegeId);
+        SportManager.establishCollege(collegeId);
 
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
