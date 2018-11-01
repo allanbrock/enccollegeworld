@@ -99,13 +99,19 @@ public class FacultyManager {
                 break;
             }
         }
-        if(curDept.getDepartmentEmployeeCount() == 0)
+        if(curDept.getEmployeeCounts().get("Dean") == 0)
             title = "Dean";
-        else if(curDept.getDepartmentEmployeeCount() == 1)
+        else if(curDept.getEmployeeCounts().get("Assistant Dean") == 0)
             title = "Assistant Dean";
         else
             title = "Faculty";
-        curDept.putInEmployeeCounts(title , curDept.getDepartmentEmployeeCount() - 2 + 1);
+        int newCount = curDept.getEmployeeCounts().get(title);
+        for(DepartmentModel d : departmentOptions){
+            if(d.getDepartmentName().equals(curDept.getDepartmentName())){
+                d.setEmployeeCount(title, newCount);
+                break;
+            }
+        }
         return title;
     }
 
@@ -114,9 +120,9 @@ public class FacultyManager {
         ArrayList<String> emptyDepartments = new ArrayList<>();
         ArrayList<String> onlyDeans = new ArrayList<>();
         for(DepartmentModel d : departmentOptions){
-            if(d.getDepartmentEmployeeCount() == 0)
+            if(d.getEmployeeCounts().get("Dean") == 0)
                 emptyDepartments.add(d.getDepartmentName());
-            else if(d.getDepartmentEmployeeCount() == 1)
+            else if(d.getEmployeeCounts().get("Assistant Dean") == 0)
                 onlyDeans.add(d.getDepartmentName());
         }
         if(emptyDepartments.size() > 0 ){

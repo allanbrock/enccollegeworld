@@ -1,5 +1,6 @@
 package com.endicott.edu.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,9 @@ public class DepartmentModel {
     public DepartmentModel(String name){
         this.departmentName = name;
         employeeCounts = new HashMap<>();
+        employeeCounts.put("Dean", 0);
+        employeeCounts.put("Assistant Dean", 0);
+        employeeCounts.put("Faculty", 0);
     }
 
     public String getDepartmentName(){ return this.departmentName; }
@@ -22,15 +26,9 @@ public class DepartmentModel {
     public HashMap<String, Integer> getEmployeeCounts(){
         return employeeCounts;
     }
+    public void setEmployeeCount(String key, int value) { employeeCounts.put(key, value); }
     public void putInEmployeeCounts(String key, int count){
         employeeCounts.put(key, count);
-    }
-    public int getDepartmentEmployeeCount() {
-        int employeeCount = 0;
-        for(String s : employeeCounts.keySet()){
-            employeeCount = employeeCount + employeeCounts.get(s);
-        }
-        return employeeCount;
     }
 
 }

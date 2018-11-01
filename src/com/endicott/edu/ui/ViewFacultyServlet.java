@@ -88,7 +88,8 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             FacultyManager.addFaculty(collegeId, salary, title, department);
             for(DepartmentModel d : FacultyManager.getDepartmentOptions()){
                 if(department.equals(d.getDepartmentName())){
-                    d.putInEmployeeCounts(title, d.getDepartmentEmployeeCount() - 2);
+                    int newCount = d.getEmployeeCounts().get(title) + 1;
+                    d.putInEmployeeCounts(title, newCount);
                 }
             }
         }
