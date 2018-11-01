@@ -39,6 +39,17 @@ public class SportManager {
         dao.saveAllSports(collegeId, sports);
     }
 
+
+    /**
+     * Returns 0-100 int to be calculated into overall happiness.
+     * int is based on how many spors teams are created and how well sports teams are doing.
+     *
+     * @return
+     */
+    public int getSportsHappinessVariable(){
+        return 50;
+    }
+
     /**
      * Charge the cost of running the sports since the last time
      * the bill was paid (the sport was updated).
@@ -54,6 +65,29 @@ public class SportManager {
         {
             Accountant.payBill(collegeId,"Charge for " + sport.getName(), newCharge);
         }
+    }
+
+    /**
+     * Called by CollegeManager when the college is initially created.
+     * Creates Men's and Women's Basketball as the initial sports teams.
+     *
+     * @param collegeId
+     */
+    public static void establishDefaultSportsTeams(String collegeId){
+        SportsDao newSportDao = new SportsDao();
+
+        //Create Men's and Women's Basketball as default sports
+        SportModel default1 = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
+        addPlayers(collegeId, default1);
+        calculateNumberOfPlayersOnTeam(collegeId, default1);
+        fillUpTeamAndSetActiveStatus(collegeId, default1);
+        newSportDao.saveNewSport(collegeId, default1);
+
+        SportModel default2 = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
+        addPlayers(collegeId, default2);
+        calculateNumberOfPlayersOnTeam(collegeId, default2);
+        fillUpTeamAndSetActiveStatus(collegeId, default2);
+        newSportDao.saveNewSport(collegeId, default2);
     }
 
     /**
@@ -102,7 +136,7 @@ public class SportManager {
                 return addTeamResult;
             }
             else {
-                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
+                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
                 Accountant.payBill(collegeId, "Men's Basketball start up fee", result.getStartupCost());
             }
         }
@@ -114,7 +148,7 @@ public class SportManager {
                 return addTeamResult;
             }
             else {
-                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
+                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
                 Accountant.payBill(collegeId, "Women's Basketball start up fee", result.getStartupCost());
             }
         }
@@ -220,12 +254,17 @@ public class SportManager {
                 sport.setActive(0);
             }
             else{
-                sport.setActive(1);
+                //check if the sport is in season
+                sport.setActive(isSportInSeason(sport));
             }
         }
         else {
-            sport.setActive(1);
+            sport.setActive(isSportInSeason(sport));
         }
+    }
+
+    public static int isSportInSeason(SportModel sport){
+        return 0;
     }
 
     /**
@@ -396,7 +435,7 @@ public class SportManager {
         sport.setReputation(rep);
     }
 
-    private void loadTips(String collegeId) {
+    private static void loadTips(String collegeId) {
         TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);
     }
