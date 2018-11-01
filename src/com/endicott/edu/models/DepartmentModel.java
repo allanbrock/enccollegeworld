@@ -13,15 +13,24 @@ public class DepartmentModel {
         employeeCounts = new HashMap<>();
     }
 
-    public void setDepartmentRating(List<Integer> facultyPerformances){
+    public String getDepartmentName(){ return this.departmentName; }
+
+    public void computeDepartmentRating(List<Integer> facultyPerformances){
 
     }
 
     public HashMap<String, Integer> getEmployeeCounts(){
         return employeeCounts;
     }
-
     public void putInEmployeeCounts(String key, int count){
         employeeCounts.put(key, count);
     }
+    public int getDepartmentEmployeeCount() {
+        int employeeCount = 0;
+        for(String s : employeeCounts.keySet()){
+            employeeCount = employeeCount + employeeCounts.get(s);
+        }
+        return employeeCount;
+    }
+
 }

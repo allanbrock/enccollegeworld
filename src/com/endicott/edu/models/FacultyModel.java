@@ -2,6 +2,7 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -97,4 +98,5 @@ public class FacultyModel implements Serializable {
 
     public void setRaiseRecentlyGiven(Boolean raiseRecentlyGiven){ this.raiseRecentlyGiven = raiseRecentlyGiven; }
     public Boolean getRaiseRecentlyGiven(){ return this.raiseRecentlyGiven; }
+
 }

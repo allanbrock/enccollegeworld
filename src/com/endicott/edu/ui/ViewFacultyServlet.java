@@ -2,6 +2,7 @@ package com.endicott.edu.ui;
 
 
 import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.FacultyManager;
@@ -73,6 +74,8 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String salaryString = request.getParameter("salaryDropdown");
+        String title = "Faculty";
+        String department = request.getParameter("departmentDropdown");
         StringBuilder sb = new StringBuilder(salaryString);
         salaryString = sb.substring(1);
         int salary = Integer.valueOf(salaryString);
@@ -82,7 +85,12 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
             logger.severe("Parameters bad for adding faculty.");
         }
         else {
-            FacultyManager.addFaculty(collegeId, salary, FacultyManager.generateFacultyTile(), FacultyManager.generateFacultyDepartment());
+            FacultyManager.addFaculty(collegeId, salary, title, department);
+            for(DepartmentModel d : FacultyManager.getDepartmentOptions()){
+                if(department.equals(d.getDepartmentName())){
+                    d.putInEmployeeCounts(title, d.getDepartmentEmployeeCount() - 2);
+                }
+            }
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);

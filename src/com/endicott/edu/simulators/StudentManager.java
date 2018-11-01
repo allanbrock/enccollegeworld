@@ -307,7 +307,8 @@ public class StudentManager {
        for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student);
-           setStudentAcademicHappiness(student, college, initial);
+           setStudentAcademicHappiness(student, college);
+           setStudentAdvisorHappiness(student, college, initial);
            setStudentMoneyHappiness(student, college);
            setStudentFunHappiness(student, college);
 
@@ -333,30 +334,38 @@ public class StudentManager {
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
-    private void setStudentAcademicHappiness(StudentModel s, CollegeModel college, boolean initial) {
+    private void setStudentAdvisorHappiness(StudentModel s, CollegeModel college, boolean initial) {
         Random r = new Random();
-        int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
         int happinessRating;
-        if(initial)
-            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
-        else
-            happinessRating = s.getAcademicHappinessRating();
-        if(s.getAdvisor().getPerformance() > 75){
-            int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
-            happinessRating += happinessIncrease;
-        }
-        else if(s.getAdvisor().getPerformance() > 50){
-            double rand = Math.random();
-            int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
-            if(rand <= 0.5)
-                happinessRating += happinessNumber;
-            else
-                happinessRating -= happinessNumber;
+        if (initial){
+            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(50, 15, 0, 100);
         }
         else{
-            int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
-            happinessRating -= happinessDecrease;
+            happinessRating = s.getAdvisorHappinessHappinessRating();
+            if(s.getAdvisor().getPerformance() > 75){
+                int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
+                happinessRating += happinessIncrease;
+            }
+            else if(s.getAdvisor().getPerformance() > 50){
+                double rand = Math.random();
+                int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
+                if(rand <= 0.5)
+                    happinessRating += happinessNumber;
+                else
+                    happinessRating -= happinessNumber;
+            }
+            else{
+                int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
+                happinessRating -= happinessDecrease;
+            }
         }
+        s.setAcademicHappinessRating(happinessRating);
+    }
+
+    private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
+        int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
+        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
+
         s.setAcademicHappinessRating(happinessRating);
     }
 
