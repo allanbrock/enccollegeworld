@@ -21,10 +21,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private boolean beginPurchase = false;
     private boolean buildingTypeSelected = false;
     private String buildingType;
+    private String buildingToUpgrade;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        if(request.getParameter("upgradeBuilding") != null){
+            doGet(request, response);
+        }
+
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
             beginPurchase = false;
             buildingTypeSelected = false;
@@ -49,6 +54,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             request.setAttribute("buildingType", buildingType);
             doGet(request, response);
         }
+
         else {
             // Might be selling a dorm.
             Enumeration<String> params = request.getParameterNames();

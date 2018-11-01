@@ -20,6 +20,7 @@ public class BuildingManager {
     static private StudentDao studentDao = new StudentDao();
     static private GateManager gateManager = new GateManager();
     static private StudentManager studentManager = new StudentManager();
+    static private BuildingModel buildingModel = new BuildingModel();
 
 
     /**
@@ -174,6 +175,12 @@ public class BuildingManager {
         else{ //if for some reason it is none of these it will still make a new building
             return new BuildingModel();
         }
+    }
+
+    public void upgradeBuilding(BuildingModel building){
+        //Upgrade time should always be One(1) week
+        buildingModel.upgradeBuilding(building.getSize());
+        building.setHoursToComplete(168); //always take a week to upgrade
     }
 
     /**

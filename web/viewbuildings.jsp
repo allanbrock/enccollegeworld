@@ -15,7 +15,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.endicott.edu.simulators.GateManager" %>
-<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>College World Building</title>
@@ -58,26 +57,19 @@
 //        buildings = new BuildingModel[0];  // This is really bad
 //        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
 //    }
-    BuildingModel buildings[] = BuildingDao.getBuildingsArray(college.getRunId());
+    List<BuildingModel> buildings= BuildingDao.getBuildings(college.getRunId());
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
 
-    DormModel availableDorms[] = (DormModel[]) request.getAttribute("availableDorms");
-    if (availableDorms == null) {
-        availableDorms = new DormModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
-    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
-
-    TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
     GateManager gateManager = new GateManager();
 %>
@@ -196,42 +188,47 @@
                         <th>Quality</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Upgrade</th>
                     </tr>
                 </thread>
                 <tbody>
                 <%
-                    for (int i = 0; i < buildings.length; i++) {
+                    for (BuildingModel b : buildings) {
                 %>
                 <tr>
-                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings[i].getName()%>
+                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=b.getName()%>
                     </td>
                     <td>
-                        <img class="img-responsive" src="resources/images/<%=buildings[i].getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
-                        <%=buildings[i].getKindOfBuilding()%>
+                        <img class="img-responsive" src="resources/images/<%=b.getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%=b.getKindOfBuilding()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getSize()+ " (" +b.getCapacity() +")"%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCapacity() - b.getNumStudents()%>
                     </td>
                     <td style="vertical-align:middle;">
                         <%--<%--%>
                         <%--String progressBarColor;--%>
-                        <%--if(buildings[i].getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
-                        <%--else if(buildings[i].getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
+                        <%--if(b.getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
+                        <%--else if(b.getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
                         <%--else{progressBarColor = "progress-bar progress-bar-success";}--%>
                         <%--public String getProgressBarColor(){return "test";}--%>
                         <%--%>--%>
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
-                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings[i].getShownQuality()%>%">
-                                <%=buildings[i].getShownQualityString()%>%
+                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=b.getShownQuality()%>%">
+                                <%=b.getShownQualityString()%>%
                             </div>
                         </div>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCurDisaster()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCurDisaster()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].checkIfBeingBuilt()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.checkIfBeingBuilt()%>
+                    </td>
+                    <td style="vertical-align:middle;">
+                        <%if(!((b.getSize().equals("Extra Large")) || (b.getSize().equals("N/A")))){%>
+                            <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="upgradeBuilding" value="Upgrade (<%=b.getUpgradeCost()%>)">
+                        <%}%>
                     </td>
                 </tr>
                 <% } %>
@@ -324,7 +321,7 @@
 
         <!-- DORM NEWS -->
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="well well-sm">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
@@ -341,21 +338,6 @@
                     </div>
                 </div>
             </div>
-
-        <!-- Tips -->
-            <%if (tip != null){%>
-            <div class="col-sm-3">
-                <div class="well well-lg">
-                    <h4 style="color:blue">Tip</h4>
-                    <p><%=tip.getBody()%></p>
-                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
-                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
-                </div>
-            </div>
-            <%}%>
-            <%if (tip == null){%>
-            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
-            <%}%>
         </div>
     </div>
 </form>
