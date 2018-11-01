@@ -240,7 +240,7 @@
                 <!-- Tips -->
                 <%if (tip != null){%>
                 <div class="col-md-5">
-                    <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
+                    <h4 style="color:blue">Tip</h4>
                     <div class="well well-lg">
                         <p><%=tip.getBody()%></p>
                     </div>

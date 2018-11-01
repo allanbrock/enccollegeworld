@@ -15,6 +15,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.endicott.edu.simulators.GateManager" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>College World Building</title>
@@ -70,6 +71,7 @@
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
+    TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
     GateManager gateManager = new GateManager();
 %>
@@ -321,7 +323,7 @@
 
         <!-- DORM NEWS -->
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="well well-sm">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
@@ -338,6 +340,22 @@
                     </div>
                 </div>
             </div>
+            <!-- Tips -->
+            <%if (tip != null){%>
+            <div class="col-sm-3">
+                <div class="well well-lg">
+                <h4 style="color:blue">Tip</h4>
+
+                    <p><%=tip.getBody()%></p>
+
+                <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+            </div>
+            <%}%>
+            <%if (tip == null){%>
+            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+            <%}%>
         </div>
     </div>
 </form>

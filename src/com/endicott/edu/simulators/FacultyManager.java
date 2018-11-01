@@ -71,6 +71,7 @@ public class FacultyManager {
             String department = generateFacultyDepartment();
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
        }
+       loadTips(collegeId);
    }
 
     /**
@@ -330,5 +331,10 @@ public class FacultyManager {
             positionInFaculty++;
         }
         return newAdvisor;
+    }
+
+    private static void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 0,"viewFaculty", "Pay professors more to make them happy.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewFaculty", "If the faculty is happy, then the students are happy.", false);
     }
 }
