@@ -17,10 +17,10 @@ public class FireManager {
     private boolean hasBeenUpgraded = false;
     private final String upgradeName;
 
-    private final int upgradedRegFireProb;
-    private final int regFireProb;
-    private final int upgradedCatFireProb;
-    private final int catFireProb;
+    private int upgradedRegFireProb;
+    private int regFireProb;
+    private int upgradedCatFireProb;
+    private int catFireProb;
 
 
     public FireManager() {
