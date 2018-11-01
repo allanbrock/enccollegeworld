@@ -2,7 +2,6 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
-import com.endicott.edu.datalayer.DormitoryDao;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
@@ -17,11 +16,12 @@ import java.util.logging.Logger;
  */;
 public class BuildingManager {
     static private BuildingDao dao = new BuildingDao();
-    static private DormitoryDao dormDao = new DormitoryDao();
     static private Logger logger = Logger.getLogger("BuildingManager");
     static private StudentDao studentDao = new StudentDao();
     static private GateManager gateManager = new GateManager();
     static private StudentManager studentManager = new StudentManager();
+    static private BuildingModel buildingModel = new BuildingModel();
+
 
     /**
      * Simulate all changes in buildings caused by advancing the hours the college
@@ -177,6 +177,12 @@ public class BuildingManager {
         }
     }
 
+    public void upgradeBuilding(BuildingModel building){
+        //Upgrade time should always be One(1) week
+        buildingModel.upgradeBuilding(building.getSize());
+        building.setHoursToComplete(168); //always take a week to upgrade
+    }
+
     /**
      * Set the building as having a flood disaster and set the number of hours left in the flooding.
      *
@@ -207,13 +213,12 @@ public class BuildingManager {
         }
     }
 
-    public void destroyBuildingInCaseOfDisaster(String collegeId, String buildingName){
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+    public void destroyBuildingInCaseOfDisaster(List<BuildingModel> buildings, String collegeId, String buildingName){
         for (BuildingModel b : buildings) {
             if (b.getName().equals(buildingName)) {
                 buildings.remove(b);
-                dao.saveAllBuildings(collegeId, buildings);
                 studentManager.removeFromBuildingAndReassignAfterDisaster(collegeId, buildingName, b.getKindOfBuilding());
+                return;
             }
         }
     }
@@ -240,15 +245,15 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     private String findBuildingToAssignToStudent(String collegeId, String buildingType){
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        List<BuildingModel> buildingsByType = getBuildingListByType(buildingType, collegeId);
         String buildingName = "";
-        for (BuildingModel b : buildings) {
+        for (BuildingModel b : buildingsByType) {
             int s = b.getNumStudents();
             int c = b.getCapacity();
             buildingName = b.getName();
-            if (b.getKindOfBuilding().equals(buildingType) && s < c) {
+            if (s < c) {
                 b.setNumStudents(s + 1);
-                dao.saveAllBuildings(collegeId, buildings);
+                dao.updateSingleBuilding(collegeId, b);
                 return buildingName;
             }
         }
@@ -465,8 +470,10 @@ public class BuildingManager {
      * @param college
      */
     static public void establishCollege(String collegeId, CollegeModel college) {
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
+        loadTips(collegeId);
+
         //pre-loaded buildings
+        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
         DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
@@ -493,25 +500,25 @@ public class BuildingManager {
      * @param collegeId
      * @return
      */
-    static public List<DormitoryModel> getDorms(String collegeId){
-        String dormName = "";
-        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
-        for(DormitoryModel d : dorms){
-            d.setNumStudents(0);
-        }
-        List<StudentModel> students = studentDao.getStudents(collegeId);
-        for(StudentModel s : students){
-            dormName = s.getDorm();
-            for (DormitoryModel d : dorms) {
-                if (dormName.equals(d.getName())) {
-                    d.incrementNumStudents(1);
-                } else {
-                    logger.info("Dorm was not found.");
-                }
-            }
-        }
-        return dorms;
-    }
+//    static public List<DormitoryModel> getDorms(String collegeId){
+//        String dormName = "";
+//        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
+//        for(DormitoryModel d : dorms){
+//            d.setNumStudents(0);
+//        }
+//        List<StudentModel> students = studentDao.getStudents(collegeId);
+//        for(StudentModel s : students){
+//            dormName = s.getDorm();
+//            for (DormitoryModel d : dorms) {
+//                if (dormName.equals(d.getName())) {
+//                    d.incrementNumStudents(1);
+//                } else {
+//                    logger.info("Dorm was not found.");
+//                }
+//            }
+//        }
+//        return dorms;
+//    }
     //made copy of above method because not sure which is right here
     static public List<BuildingModel> getBuildings(String collegeId){
         String buildingName = "";
@@ -531,6 +538,23 @@ public class BuildingManager {
             }
         }
         return buildings;
+    }
+
+    public List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
+        List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
+        List<BuildingModel> buildingsToReturn = new ArrayList<>();
+        for(BuildingModel b : allBuildings){
+            if(b.getKindOfBuilding().equals(buildingType)){
+                buildingsToReturn.add(b);
+            }
+        }
+
+        return buildingsToReturn;
+    }
+
+    private static void loadTips(String collegeId) {
+        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct buildings to allow a greater maximum capacity.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings", "Construct sports buildings to make sports teams.", false);
     }
 }
 

@@ -79,7 +79,6 @@ public class InventoryDao {
     public void saveNewItem(String runId, ItemModel item) {
         logger.info("Saving new item...");
         List<ItemModel> inventory = getItems(runId);
-        item.setName(runId);
         inventory.add(item);
         saveAllItems(runId, inventory);
     }

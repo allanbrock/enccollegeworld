@@ -18,6 +18,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.endicott.edu.simulators.FacultyManager" %>
 <%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
+<%@ page import="com.endicott.edu.models.TutorialModel" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -60,11 +62,22 @@
     }
     ArrayList<Integer> salaryOptions = FacultyManager.getSalaryOptions();
     if (salaryOptions == null) {
-        salaryOptions = new ArrayList<Integer>();
+        salaryOptions = new ArrayList();
+    }
+
+    String[] titleOptions = FacultyManager.getTitleOptions();
+    if (titleOptions == null) {
+        titleOptions = new String[FacultyManager.getTitleOptions().length];
+    }
+
+    String[] departmentOptions = FacultyManager.getDepartmentOptionStrings();
+    if (departmentOptions == null) {
+        departmentOptions = new String[FacultyManager.getDepartmentOptionStrings().length];
     }
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
+    TutorialModel tip = TutorialManager.getCurrentTip("viewFaculty", college.getRunId());
 
     PopupEventManager popupManager = (PopupEventManager) session.getAttribute("popupManager");
 
@@ -116,11 +129,25 @@
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/student.png">
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-5">
 
                     <h2>Faculty</h2>
                     <h3><%=faculty.size()%> faculty members</h3>
                 </div>
+                <!-- Tips -->
+                <%if (tip != null){%>
+                <div class="col-md-5">
+                    <h4 style="color:blue">Tip</h4>
+                    <div class="well well-lg">
+                        <p><%=tip.getBody()%></p>
+                    </div>
+                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+                <%}%>
+                <%if (tip == null){%>
+                <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+                <%}%>
             </div>
         </div>
 
@@ -144,7 +171,7 @@
                             <div class="well well-sm">
                                 Title: <%=faculty.get(i).getTitle()%><br>
                                 Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
-                                Department: <%="Arts and Sciences"%><br>  <!--Soon will be replaced by getDepartment-->
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
                                 Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
                                 Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
                             </div>
@@ -163,13 +190,21 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <label id="salaryLabel" style="color: darkblue">Pick an annual salary if you would like to add a new faculty member</label>
+                    <label id="salaryLabel" style="color: darkblue">Pick an annual salary and a department if you would like to add a new faculty member</label>
                 </div>
                 <div class="form-group">
                     <select class="form-control" id="salaryDropdown" name="salaryDropdown">
                         <% for(int i = 0; i < salaryOptions.size(); i++) { %>
                         <tr>
                             <option><%= "$" + salaryOptions.get(i) %></option>
+                        </tr>
+                        <% } %>
+                    </select>
+                    <br>
+                    <select class="form-control" id="departmentDropdown" name="departmentDropdown">
+                        <% for(int i = 0; i < departmentOptions.length; i++) { %>
+                        <tr>
+                            <option><%= departmentOptions[i] %></option>
                         </tr>
                         <% } %>
                     </select>

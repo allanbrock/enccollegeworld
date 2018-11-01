@@ -57,18 +57,13 @@
 //        buildings = new BuildingModel[0];  // This is really bad
 //        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
 //    }
-    BuildingModel buildings[] = BuildingDao.getBuildingsArray(college.getRunId());
+    List<BuildingModel> buildings= BuildingDao.getBuildings(college.getRunId());
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + "Attribute for news missing.");
     }
 
-    DormitoryModel availableDorms[] = (DormitoryModel[]) request.getAttribute("availableDorms");
-    if (availableDorms == null) {
-        availableDorms = new DormitoryModel[0];  // This is really bad
-        msg.setMessage(msg.getMessage() + "Attribute for news missing.");
-    }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 
@@ -193,42 +188,47 @@
                         <th>Quality</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Upgrade</th>
                     </tr>
                 </thread>
                 <tbody>
                 <%
-                    for (int i = 0; i < buildings.length; i++) {
+                    for (BuildingModel b : buildings) {
                 %>
                 <tr>
-                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings[i].getName()%>
+                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=b.getName()%>
                     </td>
                     <td>
-                        <img class="img-responsive" src="resources/images/<%=buildings[i].getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
-                        <%=buildings[i].getKindOfBuilding()%>
+                        <img class="img-responsive" src="resources/images/<%=b.getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%=b.getKindOfBuilding()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getSize()+ " (" +buildings[i].getCapacity() +")"%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getSize()+ " (" +b.getCapacity() +")"%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCapacity() - buildings[i].getNumStudents()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCapacity() - b.getNumStudents()%>
                     </td>
                     <td style="vertical-align:middle;">
                         <%--<%--%>
                         <%--String progressBarColor;--%>
-                        <%--if(buildings[i].getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
-                        <%--else if(buildings[i].getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
+                        <%--if(b.getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
+                        <%--else if(b.getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
                         <%--else{progressBarColor = "progress-bar progress-bar-success";}--%>
                         <%--public String getProgressBarColor(){return "test";}--%>
                         <%--%>--%>
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
-                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings[i].getShownQuality()%>%">
-                                <%=buildings[i].getShownQualityString()%>%
+                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=b.getShownQuality()%>%">
+                                <%=b.getShownQualityString()%>%
                             </div>
                         </div>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].getCurDisaster()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCurDisaster()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=buildings[i].checkIfBeingBuilt()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=b.checkIfBeingBuilt()%>
+                    </td>
+                    <td style="vertical-align:middle;">
+                        <%if(!((b.getSize().equals("Extra Large")) || (b.getSize().equals("N/A")))){%>
+                            <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="upgradeBuilding" value="Upgrade (<%=b.getUpgradeCost()%>)">
+                        <%}%>
                     </td>
                 </tr>
                 <% } %>

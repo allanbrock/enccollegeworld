@@ -3,6 +3,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.datalayer.PlagueDao;
 import com.endicott.edu.models.PlagueModel;
+import com.endicott.edu.simulators.Accountant;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.TutorialManager;
@@ -54,12 +55,14 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             return;
         }
         if(request.getParameter("quarantineStudents") != null){
+            Accountant accountant = new Accountant();
             PlagueDao dao = new PlagueDao();
             List<PlagueModel> plagues = dao.getPlagues(collegeId);
             for (PlagueModel plague : plagues) {
                 plague.setQuarantine(true);
             }
             dao.saveAllPlagues(collegeId, plagues);
+            accountant.payBill(collegeId, "Students are now Quarantined", 5000);
 
         }
 

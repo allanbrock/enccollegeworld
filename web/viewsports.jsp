@@ -10,6 +10,7 @@
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -79,6 +80,7 @@
     }
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
+    TutorialModel tip = TutorialManager.getCurrentTip("viewSports", college.getRunId());
 %>
 
 <% if (!(addSportResultMsg == "success")) { %>
@@ -151,11 +153,26 @@
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/stadium.png">
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-5">
 
                     <h2>Sports</h2>
                     <h3><%=sport.length%> sports</h3>
                 </div>
+
+                <!-- Tips -->
+                <%if (tip != null){%>
+                <div class="col-md-5">
+                    <h4 style="color:blue">Tip</h4>
+                    <div class="well well-lg">
+                        <p><%=tip.getBody()%></p>
+                    </div>
+                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+                <%}%>
+                <%if (tip == null){%>
+                <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+                <%}%>
             </div>
         </div>
 

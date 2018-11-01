@@ -61,6 +61,8 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
+        SportManager.establishDefaultSportsTeams(collegeId);
+
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
 
@@ -89,6 +91,7 @@ public class CollegeManager {
         SportsDao.deleteSports(collegeId);
         StudentDao.deleteStudents(collegeId);
         IdNumberGenDao.deleteIDs(collegeId);
+        InventoryDao.deleteItem(collegeId);
     }
 
     /**

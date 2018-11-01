@@ -1,8 +1,8 @@
 package com.endicott.edu.simulators;
 
-import com.endicott.edu.datalayer.DormitoryDao;
 import com.endicott.edu.datalayer.FloodDao;
-import com.endicott.edu.models.DormitoryModel;
+import com.endicott.edu.datalayer.BuildingDao;
+import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.FloodModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
@@ -18,7 +18,8 @@ import java.util.Random;
 public class FloodManager {
     private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.05f;
     FloodDao floodDao = new FloodDao();
-    DormitoryDao dormDao = new DormitoryDao();
+    BuildingDao buildingDao = new BuildingDao();
+    BuildingManager buildingManager = new BuildingManager();
 
     /**
      * Simulate changes in floods due to passage of time at college.
@@ -28,7 +29,7 @@ public class FloodManager {
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<FloodModel> floods = floodDao.getFloods(collegeId);
-        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
+        List<BuildingModel> dorms = buildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
 //        popupManager.newPopupEvent("Flood!", "Oh no, there was a flood!", "Ok!");
 
@@ -41,7 +42,7 @@ public class FloodManager {
         // Advance state of flood.
         for (FloodModel flood : floods) {
             String floodedDorm = flood.getDormName();
-            for (DormitoryModel dorm : dorms) {
+            for (BuildingModel dorm : dorms) {
                 if (dorm.getName().compareTo(floodedDorm) == 0)
                     billCostOfFlood(collegeId, hoursAlive, dorm);
             }
@@ -68,9 +69,9 @@ public class FloodManager {
      * @param hoursAlive
      */
     private void possiblyStartFlood(String collegeId, int hoursAlive) {
-        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
+        List<BuildingModel> dorms = buildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
-        for (DormitoryModel dorm : dorms) {
+        for (BuildingModel dorm : dorms) {
             if (dorm.getHoursToComplete() <= 0) {
                 if (didFloodStartAtThisDorm(collegeId, hoursAlive, dorm)) {
                     return;
@@ -81,12 +82,11 @@ public class FloodManager {
 
     /**
      * Charge the college for flood cleanup costs.
-     *
-     * @param collegeId
+     *  @param collegeId
      * @param hoursAlive
      * @param dorm
      */
-    private void billCostOfFlood(String collegeId, int hoursAlive, DormitoryModel dorm) {
+    private void billCostOfFlood(String collegeId, int hoursAlive, BuildingModel dorm) {
         Random rand = new Random();
         Accountant.payBill(collegeId,"Flood cleanup cost for dorm " + dorm.getName(), rand.nextInt(500) + 500);
     }
@@ -97,16 +97,16 @@ public class FloodManager {
      * @param collegeId
      * @param hoursAlive
      * @param dorm
-     * @return true if fllod started.
+     * @return true if flood started.
      */
-    private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, DormitoryModel dorm) {
-        float oddsOfFlood = (hoursAlive - dorm.getHourLastUpdated()) * PROBABILTY_OF_FLOOD_PER_HOUR;
+    private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm) {
+        float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastUpdate()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         if (Math.random() <= oddsOfFlood) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;
 
-            FloodModel flood = new FloodModel(randomCost, randomLength, randomLength, dorm.getHourLastUpdated(), dorm.getName(), collegeId);
+            FloodModel flood = new FloodModel(randomCost, randomLength, randomLength, dorm.getTimeSinceLastUpdate(), dorm.getName(), collegeId);
             FloodDao floodDao = new FloodDao();
             floodDao.saveNewFlood(collegeId, flood);
 

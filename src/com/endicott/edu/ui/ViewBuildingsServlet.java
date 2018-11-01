@@ -4,6 +4,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
+import com.endicott.edu.simulators.TutorialManager;
 //import com.endicott.edu.simulators.DormManager;
 
 import javax.servlet.RequestDispatcher;
@@ -20,9 +21,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private boolean beginPurchase = false;
     private boolean buildingTypeSelected = false;
     private String buildingType;
+    private String buildingToUpgrade;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        if(request.getParameter("upgradeBuilding") != null){
+            doGet(request, response);
+        }
+
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
             beginPurchase = false;
             buildingTypeSelected = false;
@@ -47,6 +54,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             request.setAttribute("buildingType", buildingType);
             doGet(request, response);
         }
+
         else {
             // Might be selling a dorm.
             Enumeration<String> params = request.getParameterNames();
@@ -68,6 +76,21 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             }
             String i = request.getParameter("sellDorm");
         }
+
+        if (request.getParameter("nextTip") != null) {
+            TutorialManager.advanceTip("viewBuildings", collegeId);
+        }
+        if (request.getParameter("hideTips") != null){
+            TutorialManager.hideTips("viewBuildings", collegeId);
+        }
+        if (request.getParameter("showTips") != null){
+            TutorialManager.showTips("viewBuildings", collegeId);
+        }
+
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+        dispatcher.forward(request, response);
 
     }
 //    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {

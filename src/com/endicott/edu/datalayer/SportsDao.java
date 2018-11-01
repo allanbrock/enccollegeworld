@@ -82,21 +82,6 @@ public class SportsDao {
         file.delete();
     }
 
-
-    /**
-     * This function will check if a sport can be created based on whether or not
-     * the correct facilities are created, the user has enough money, or if there is enough students
-     * @param sportName - name of the sport the user wishes to create
-     * @return
-     */
-    public boolean checkIfSportCanBeCreated(String sportName){
-        //TODO:
-        //Check if sports center has been created
-            //Check if the user has enough money to create the sport
-                //Check if the school has enough students to create the sport
-        return false;
-    }
-
     public void deleteSelectedSport(String collegeId, String sportName){
         List<SportModel> sports = getSports(collegeId);
         for(int i =0; i < sports.size(); i++){

@@ -16,6 +16,7 @@ import java.util.Random;
  */
 public class FacultyManager {
 
+    private static ArrayList<DepartmentModel> departmentOptions;
     /**
      * Simulate changes in faculty based on the passage of time at the college.
      *
@@ -61,8 +62,14 @@ public class FacultyManager {
      * @param collegeId instance of the simulation
      */
     public static void establishCollege(String collegeId){
+        departmentOptions = new ArrayList<>();
+        departmentOptions.add(new DepartmentModel("Arts and Sciences"));
+        departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
+        departmentOptions.add(new DepartmentModel("Business"));
+        departmentOptions.add(new DepartmentModel("Nursing"));
         for (int i=0; i<12; i++) {
-           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(), generateFacultyDepartment());  // Default salary for now
+            String department = generateFacultyDepartment();
+           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
        }
    }
 
@@ -83,16 +90,57 @@ public class FacultyManager {
         return member;
     }
 
-    public static String generateFacultyTile(){
-        String[] titles = getTitleOptions();
-        for(String s : titles){
-            // Todo add logic to split faculty into departments
+    public static String generateFacultyTile(String departmentName){
+        String title;
+        DepartmentModel curDept = new DepartmentModel("tempName");
+        for(DepartmentModel d : departmentOptions){
+            if(d.getDepartmentName().equals(departmentName)){
+                curDept = d;
+                break;
+            }
         }
-        return "";
+        if(curDept.getDepartmentEmployeeCount() == 0)
+            title = "Dean";
+        else if(curDept.getDepartmentEmployeeCount() == 1)
+            title = "Assistant Dean";
+        else
+            title = "Faculty";
+        curDept.putInEmployeeCounts(title , curDept.getDepartmentEmployeeCount() - 2 + 1);
+        return title;
     }
 
     public static String generateFacultyDepartment(){
-        return "";
+        Random r = new Random();
+        ArrayList<String> emptyDepartments = new ArrayList<>();
+        ArrayList<String> onlyDeans = new ArrayList<>();
+        for(DepartmentModel d : departmentOptions){
+            if(d.getDepartmentEmployeeCount() == 0)
+                emptyDepartments.add(d.getDepartmentName());
+            else if(d.getDepartmentEmployeeCount() == 1)
+                onlyDeans.add(d.getDepartmentName());
+        }
+        if(emptyDepartments.size() > 0 ){
+            int rand = r.nextInt((emptyDepartments.size() - 0) + 1);
+            for(int i = 0; i < emptyDepartments.size(); i++){
+                if(i == rand)
+                    return emptyDepartments.get(i);
+            }
+        }
+        else if(onlyDeans.size() > 0){
+            int rand = r.nextInt((onlyDeans.size() - 0) + 1);
+            for(int i = 0; i < onlyDeans.size(); i++){
+                if(i == rand)
+                    return onlyDeans.get(i);
+            }
+        }
+        else{
+            int rand = r.nextInt((departmentOptions.size() - 0) + 1);
+            for(int i = 0; i < departmentOptions.size(); i++){
+                if(i == rand)
+                    return departmentOptions.get(i).getDepartmentName();
+            }
+        }
+        return "";  // Statement should never be hit
     }
 
     public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
@@ -134,15 +182,27 @@ public class FacultyManager {
         return salaryOptions;
     }
 
-    private static DepartmentModel[] getDepartmentOptions(){
-        DepartmentModel[] departmentOptions = {new DepartmentModel("Arts and Sciences"), new DepartmentModel("Sport science and fitness"), new DepartmentModel("Business"), new DepartmentModel("Nursing")};
-        return departmentOptions;
+    private static void addToDepartmentOptions(int departmentLevel){
+        if(departmentLevel == 2)
+            departmentOptions.add(new DepartmentModel("Communications"));
+        else if(departmentLevel == 3)
+            departmentOptions.add(new DepartmentModel("Performing Arts"));
     }
 
-    private static String[] getTitleOptions(){
+    public static String[] getTitleOptions(){
         String[] titleOptions = {"Dean", "Assistant Dean", "Professor"};
         return titleOptions;
     }
+
+    public static String[] getDepartmentOptionStrings (){
+        String[] names = new String[departmentOptions.size()];
+        for(int i = 0; i < departmentOptions.size(); i++){
+            names[i] = departmentOptions.get(i).getDepartmentName();
+        }
+        return names;
+    }
+
+    public static ArrayList<DepartmentModel> getDepartmentOptions() { return departmentOptions; }
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness

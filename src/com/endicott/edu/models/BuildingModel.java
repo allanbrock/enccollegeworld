@@ -61,7 +61,6 @@ public class BuildingModel implements Serializable {
     public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
         this.name = name;
         this.size = size;
-        this.capacity = setCapacityBasedOnSize(size);
         this.numStudents = numStudents;
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
@@ -80,16 +79,26 @@ public class BuildingModel implements Serializable {
     //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
     public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
+        this.size = "N/A";
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
     }
     //for LibraryModel and HealthCenterModel
     public BuildingModel(String kindOfBuilding){
+        this.size = "N/A";
         this.kindOfBuilding = kindOfBuilding;
     }
 
     public BuildingModel() {
+    }
+
+    //Helper function to combine all functions that are controlled by size
+    public void setStatsBasedOnSize(String size){
+        setTotalBuildingCostBasedOnSize(size);
+        setUpgradeCostBasedOnSize(size);
+        setCostPerDayBasedOnSize(size);
+        this.capacity = setCapacityBasedOnSize(size);
     }
 
     //Helper function to set the building capacity
@@ -99,12 +108,6 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Large")){return 500;}
         else if(size.equals("Extra Large")){return 1000;}
         else{return 0;}
-    }
-
-    public void setStatsBasedOnSize(String size){
-        setTotalBuildingCostBasedOnSize(size);
-        setUpgradeCostBasedOnSize(size);
-        setCostPerDayBasedOnSize(size);
     }
 
     //Helper function to set the build time
@@ -142,6 +145,13 @@ public class BuildingModel implements Serializable {
         else{setCostPerDay(200);}
     }
 
+    //Function to modify all the stats when the building is upgraded
+    public void upgradeBuilding(String oldSize){
+        if(oldSize.equals("Small")){this.size.equals("Medium");}
+        else if(oldSize.equals("Medium")){this.size.equals("Large");}
+        else if(oldSize.equals("Large")){this.size.equals("Extra Large");}
+        setStatsBasedOnSize(this.size);
+    }
 
     public int getCapacity() {
         return capacity;

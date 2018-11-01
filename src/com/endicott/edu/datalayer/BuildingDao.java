@@ -78,7 +78,16 @@ public class BuildingDao {
         building.setRunId(collegeId);
         buildings.add(building);
         saveAllBuildings(collegeId, buildings);
+    }
 
+    public static void updateSingleBuilding(String collegeId, BuildingModel building) {
+        List<BuildingModel> buildings = getBuildings(collegeId);
+        for(int b = 0; b < buildings.size(); b++){
+            if(buildings.get(b).getName().equals(building.getName())){
+                buildings.set(b, building);
+                saveAllBuildings(collegeId, buildings);
+            }
+        }
     }
 
     public static void deleteBuilding(String collegeId) {

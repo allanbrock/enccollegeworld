@@ -1,6 +1,7 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
