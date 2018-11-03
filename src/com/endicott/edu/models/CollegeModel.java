@@ -1,7 +1,6 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
@@ -20,7 +19,7 @@ public class CollegeModel implements Serializable {
     private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
     private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
-    //public PopupEventModel;
+    private CollegeMode mode = CollegeMode.PLAY;
 
     //Counts amount of total championships won to be tracked in the trophy case
     private int footballChampionships = 0;
@@ -153,4 +152,22 @@ public class CollegeModel implements Serializable {
     public int getBaseballChampionships() { return baseballChampionships;}
 
     public int getSoftballChampionships() { return softballChampionships;}
+
+    public CollegeMode getMode() {
+        return mode;
+    }
+
+    public void setMode(CollegeMode mode) {
+        this.mode = mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = CollegeMode.PLAY;
+
+        if (mode.equals("Play")) this.mode = CollegeMode.PLAY;
+        else if (mode.equals("Demo")) this.mode = CollegeMode.DEMO;
+        else if (mode.equals("Demo Fire")) this.mode = CollegeMode.DEMO_FIRE;
+        else if (mode.equals("Demo Plague")) this.mode = CollegeMode.DEMO_PLAGUE;
+        else if (mode.equals("Demo Riot")) this.mode = CollegeMode.DEMO_RIOT;
+    }
 }

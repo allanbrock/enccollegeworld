@@ -170,6 +170,9 @@ public class FireManager {
      * @param hoursAlive
      */
     public void possiblyCreateFire(String runId, int hoursAlive, boolean isUpgraded) {
+        // Use mode to change the odds if you are in DEMO_FIRE mode.
+        CollegeMode mode = CollegeManager.getCollegeMode(runId);
+
         Random rand = new Random();
         int odds = rand.nextInt(100);
         if (isUpgraded) {
