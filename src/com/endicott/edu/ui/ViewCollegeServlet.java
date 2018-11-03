@@ -44,6 +44,13 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             CollegeManager.updateCollegeTuition(collegeId, tuition);
         }
 
+        if(request.getParameter("changeCollegeMode") != null){
+            String mode = request.getParameter("collegeMode");
+            CollegeManager.updateCollegeMode(collegeId, mode);
+        }
+
+        InterfaceUtils.logRequestParameters(request);
+
         // TODO: this is for testing purposes, remove.
         if(request.getParameter("bankruptCollege") != null){
             CollegeManager.bankruptCollege(collegeId);

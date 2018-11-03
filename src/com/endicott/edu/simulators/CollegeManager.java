@@ -1,6 +1,7 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
+import com.endicott.edu.models.CollegeMode;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
@@ -191,6 +192,11 @@ public class CollegeManager {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
+    static public CollegeMode getCollegeMode(String collegeId) {
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        return college.getMode();
+    }
+
     /**
      * Sets college yearly tuition.
      *
@@ -212,6 +218,14 @@ public class CollegeManager {
         studentManager.calculateStatistics(collegeId, false);
 
         return college;
+    }
+
+    public static void updateCollegeMode(String collegeId, String mode) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setMode(mode);
+        cao.saveCollege(college);
     }
 
     // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
