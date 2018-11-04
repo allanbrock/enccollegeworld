@@ -49,13 +49,6 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             CollegeManager.updateCollegeMode(collegeId, mode);
         }
 
-        InterfaceUtils.logRequestParameters(request);
-
-        // TODO: this is for testing purposes, remove.
-        if(request.getParameter("bankruptCollege") != null){
-            CollegeManager.bankruptCollege(collegeId);
-            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
-        }
         // upgrade button for fire popup sends user to store page
         if (request.getParameter("goToStore") != null){
             response.sendRedirect(request.getContextPath() + "/viewstore.jsp");
