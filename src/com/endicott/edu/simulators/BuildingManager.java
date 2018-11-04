@@ -3,8 +3,10 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.*;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -473,21 +475,21 @@ public class BuildingManager {
         loadTips(collegeId);
 
         //pre-loaded buildings
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
+        DormModel startingDorm = new DormModel(NameGenDao.generateBuildingName()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
-        DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
+        DiningHallModel startingDiningHall = new DiningHallModel(NameGenDao.generateBuildingName()+" Dining Hall",
                  0, "Medium");
         saveBuildingHelper(startingDiningHall, collegeId, college);
 
-        AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
+        AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(NameGenDao.generateBuildingName()+" Academic Building",
                 0,"Medium");
         saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
-        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
+        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(NameGenDao.generateBuildingName()+" Building");
         saveBuildingHelper(startingAdministrative, collegeId, college);
 
-        SportsCenterModel startingSportsCenter = new SportsCenterModel(college.getRunId()+" Sports Center");
+        SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
         gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 700);

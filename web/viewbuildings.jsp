@@ -244,7 +244,7 @@
             <div class="well well-sm">
                 <div id="purchase">
                     <!-- if they don't have enough money for the cheapest building they can't try to purchase -->
-                    <%if(college.getAvailableCash() < 50000){%>
+                    <%if(college.getAvailableCash() <= 50000){%>
                     <h4>You don't have enough money to buy a new building :(</h4>
                     <%}else{%>
                     <!-- if they haven't hit begin purchase, only one option i s visible -->
@@ -259,11 +259,13 @@
                             <option value="Baseball Diamond">Baseball Diamond</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
-                            <option value="Entertainment Center">Entertainment Center</option>
                             <option value="Football Stadium">Football Stadium</option>
-                            <option value="Health Center">Health Center</option>
                             <option value="Hockey Rink">Hockey Rink</option>
+                            <%if(college.getAvailableCash() > 150000){%>
+                            <option value="Entertainment Center">Entertainment Center</option>
+                            <option value="Health Center">Health Center</option>
                             <option value="Library">Library</option>
+                            <%}%>
                         </select>
                     </div>
                         <!-- Button -->
