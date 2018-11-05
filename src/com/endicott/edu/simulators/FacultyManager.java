@@ -67,7 +67,7 @@ public class FacultyManager {
         departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
         departmentOptions.add(new DepartmentModel("Business"));
         departmentOptions.add(new DepartmentModel("Nursing"));
-        for (int i=0; i<12; i++) {
+        for (int i=0; i<6; i++) {
             String department = generateFacultyDepartment();
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
        }

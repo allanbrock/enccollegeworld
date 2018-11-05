@@ -220,10 +220,6 @@
                 <%if (tip == null){%>
                 <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
                 <%}%>
-                <%-- <br>
-                    <p>(For testing uses only, also advances time by one day)</p>
-                    <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
-                    <br> --%>
 
                 <!-- Flood -->
                 <%
@@ -287,7 +283,7 @@
                     <br>
                     <a href="#retentionDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="retentionDetails" class="collapse">
-                        The rate is the percentage of students that remained at the college last month.
+                        The rate is the percentage of students that remained at the college during the last week.
                     </div>
                 </div>
             </div>
@@ -307,6 +303,11 @@
                         </h2>
                         <h4>Accepted Students</h4>
                     </div>
+                    <br>
+                    <a href="#acceptedDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="acceptedDetails" class="collapse">
+                        Accepted students enter the college on the first of the month.
+                    </div>
                 </div>
             </div>
 
@@ -320,6 +321,20 @@
                         <h4>Student Faculty Ratio</h4>
                     </div>
                 </div>
+
+                    <div class="well well-sm">
+                        <div class="form-group">
+                            <select class="form-control" id="collegeMode" name="collegeMode">
+                                <option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>
+                                <option value="Demo" <% if (college.getMode() == CollegeMode.DEMO) {%> selected <% } %> >Demo</option>
+                                <option value="Demo Fire"<% if (college.getMode() == CollegeMode.DEMO_FIRE) {%> selected <% } %> >Demo Fire</option>
+                                <option value="Demo Plague"<% if (college.getMode() == CollegeMode.DEMO_PLAGUE) {%> selected <% } %> >Demo Plague</option>
+                                <option value="Demo Riot"<% if (college.getMode() == CollegeMode.DEMO_RIOT) {%> selected <% } %> >Demo Riot</option>
+                            </select>
+                        </div>
+                        <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">
+                    </div>
+
             </div>
 
 
@@ -442,21 +457,8 @@
 
         </div>
 
-        <!-- Server -->
+        <!-- Mode -->
         <div class="row">
-            <div class="col-sm-2">
-                <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">
-                <div class="form-group">
-                    <label for="collegeMode">College Mode</label>
-                    <select class="form-control" id="collegeMode" name="collegeMode">
-                        <option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>
-                        <option value="Demo" <% if (college.getMode() == CollegeMode.DEMO) {%> selected <% } %> >Demo</option>
-                        <option value="Demo Fire"<% if (college.getMode() == CollegeMode.DEMO_FIRE) {%> selected <% } %> >Demo Fire</option>
-                        <option value="Demo Plague"<% if (college.getMode() == CollegeMode.DEMO_PLAGUE) {%> selected <% } %> >Demo Plague</option>
-                        <option value="Demo Riot"<% if (college.getMode() == CollegeMode.DEMO_RIOT) {%> selected <% } %> >Demo Riot</option>
-                    </select>
-                </div>
-            </div>
         </div>
 
     </div> <!-- container -->

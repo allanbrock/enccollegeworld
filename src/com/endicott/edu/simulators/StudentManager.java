@@ -129,9 +129,17 @@ public class StudentManager {
     private void acceptStudents(String collegeId, int hoursAlive){
         int numNewStudents;
 
-        numNewStudents = rand.nextInt(10);
+        // The number of accepted students depends on the happiness of the student body.
 
         college = collegeDao.getCollege(collegeId);
+        int happiness = college.getStudentBodyHappiness();
+
+        if (happiness <= 50) {
+            numNewStudents = 0;
+        } else {
+            numNewStudents = rand.nextInt(happiness/10);
+        }
+
         college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
         collegeDao.saveCollege(college);
 

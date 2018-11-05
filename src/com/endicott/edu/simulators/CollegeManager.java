@@ -18,7 +18,7 @@ import java.util.Date;
  */
 
 public class CollegeManager {
-    static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
+    static public final int STARTUP_FUNDING = 100000;  // Amount of money initially in college bank account.
 
     /**
      * Creates a new college.
@@ -49,6 +49,7 @@ public class CollegeManager {
         college.setRunId(collegeId);
         college.setHoursAlive(1);
         college.setAvailableCash(STARTUP_FUNDING);
+        college.setYearlyTuitionCost(60000);
         collegeDao.saveCollege(college);
 
         // Each functional area/simulator in the college gets called to
@@ -226,22 +227,6 @@ public class CollegeManager {
         CollegeModel college = cao.getCollege(collegeId);
         college.setMode(mode);
         cao.saveCollege(college);
-    }
-
-    // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
-    public static CollegeModel bankruptCollege(String collegeId){
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
-        college.setAvailableCash(0);
-        cao.saveCollege(college);
-
-        calculateStatisticsAndRatings(collegeId);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId, false);
-
-        return college;
     }
 
     private static void calculateStatisticsAndRatings(String collegeId) {
