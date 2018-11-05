@@ -354,8 +354,7 @@
             <!-- Tips -->
             <%if (tip != null){%>
             <div class="col-sm-3">
-                <div class="well well-lg">
-                <h4 style="color:blue">Tip</h4>
+                <div class="well well-lg" style="background: white">
 
                     <p><%=tip.getBody()%></p>
 
