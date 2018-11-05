@@ -88,7 +88,7 @@ public class CollegeManager {
         CollegeDao.deleteCollege(collegeId);
         BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
-        FloodDao.deleteFloods(collegeId);
+        FloodDao.deleteFlood(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
         PlagueDao.deletePlagues(collegeId);
         SportsDao.deleteSports(collegeId);
