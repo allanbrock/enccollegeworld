@@ -21,7 +21,7 @@ public class BuildingModel implements Serializable {
     private int upgradeCost = 0;
     private int totalBuildCost = 0;
 
-    private int timeSinceLastUpdate = 0;
+    private int timeSinceLastRepair = 0;
     private int capacity = 0;
     private String name = "unknown";
     private String runId = "unknown";
@@ -83,11 +83,13 @@ public class BuildingModel implements Serializable {
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
+        setStatsBasedOnSize("");
     }
     //for LibraryModel and HealthCenterModel
     public BuildingModel(String kindOfBuilding){
         this.size = "N/A";
         this.kindOfBuilding = kindOfBuilding;
+        setStatsBasedOnSize("");
     }
 
     public BuildingModel() {
@@ -165,17 +167,17 @@ public class BuildingModel implements Serializable {
         return costPerDay;
     }
 
-    public int getTimeSinceLastUpdate() {
-        return timeSinceLastUpdate;
+    public int getTimeSinceLastRepair() {
+        return timeSinceLastRepair;
     }
 
-    public void setTimeSinceLastUpdate(int timeSinceLastUpdate) {
-        this.timeSinceLastUpdate = timeSinceLastUpdate;
+    public void setTimeSinceLastRepair(int timeSinceLastRepair) {
+        this.timeSinceLastRepair = timeSinceLastRepair;
     }
 
     //This advances time and keeps track of how long the building has gone without an update
-    public void updateTimeSinceLastUpdate(int hoursAdvanced){
-        setTimeSinceLastUpdate(timeSinceLastUpdate + hoursAdvanced);
+    public void updateTimeSinceLastRepair(int hoursAdvanced){
+        setTimeSinceLastRepair(timeSinceLastRepair + hoursAdvanced);
     }
 
     public String getName() {
@@ -291,7 +293,7 @@ public class BuildingModel implements Serializable {
     }
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
-            return Integer.toString(this.getHoursToComplete()) + " hours remaining";
+            return Integer.toString(this.getHoursToComplete()/24) + " days remaining";
         }
         else
             return "Built";

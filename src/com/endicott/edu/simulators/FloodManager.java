@@ -100,13 +100,13 @@ public class FloodManager {
      * @return true if flood started.
      */
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm) {
-        float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastUpdate()) * PROBABILTY_OF_FLOOD_PER_HOUR;
+        float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         if (Math.random() <= oddsOfFlood) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;
 
-            FloodModel flood = new FloodModel(randomCost, randomLength, randomLength, dorm.getTimeSinceLastUpdate(), dorm.getName(), collegeId);
+            FloodModel flood = new FloodModel(randomCost, randomLength, randomLength, dorm.getTimeSinceLastRepair(), dorm.getName(), collegeId);
             FloodDao floodDao = new FloodDao();
             floodDao.saveNewFlood(collegeId, flood);
 

@@ -428,6 +428,13 @@ public class StudentManager {
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 
+    /**
+     * @param collegeId
+     * @param buildingName
+     * @param  buildingType
+     *
+     * Checks if the building destroyed was one the student wass assigned to and moves them if necessary
+     */
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){

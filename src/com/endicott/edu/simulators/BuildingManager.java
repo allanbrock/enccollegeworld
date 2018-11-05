@@ -38,7 +38,7 @@ public class BuildingManager {
 
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
-            building.updateTimeSinceLastUpdate(24); //when a building is upgraded, this should go back to zero
+            building.updateTimeSinceLastRepair(24); //when a building is upgraded, this should go back to zero
             billRunningCostOfBuilding(runId, hoursAlive, building);
             workOnBuilding(building, runId);
             buildingDecayForOneDay(runId, building);
@@ -56,13 +56,9 @@ public class BuildingManager {
      * @param building the building that's causing the cost
      */
     private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
-        // A building stores the last time it was updated.
-        // Figure out how many hours have past since last updated.
-        // Multiple by cost per hour.
-        int newCharge = (hoursAlive - building.getTimeSinceLastUpdate()) * building.getCostPerDay();
-        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
-
-        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
+        // Multiple the cost per day based on how much the building is decayed
+        int newCharge = ((int)(100 - building.getShownQuality())) * building.getCostPerDay();
+        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), newCharge);
     }
 
     /**
@@ -107,11 +103,8 @@ public class BuildingManager {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
-        //newBuilding.setBuildingType(buildingType);
-//        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setTimeSinceLastUpdate(0);
+        newBuilding.setTimeSinceLastRepair(0);
         newBuilding.setHoursToBuildBasedOnSize(buildingSize);
-        newBuilding.setStatsBasedOnSize(buildingSize);
         newBuilding.setHasBeenAnnouncedAsComplete(false);
 
         // Pay for building
@@ -230,7 +223,8 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
                 float currentQuality = b.getHiddenQuality();
-                double randomDecay = Math.random();
+                double randomDecay = Math.random() * 4; //Max decay: 20%
+                b.setHiddenQuality((float) (currentQuality - randomDecay));
             }
         }
         dao.saveAllBuildings(collegeId, buildings);
@@ -555,8 +549,16 @@ public class BuildingManager {
     }
 
     private static void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct buildings to allow a greater maximum capacity.", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings", "Construct sports buildings to make sports teams.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct more buildings to allow a greater maximum capacity at your college.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings","Upgrade your buildings to hold more students.", true);
+        TutorialManager.saveNewTip(collegeId, 2,"viewBuildings", "Construct sports buildings to unlock certain sports.", false);
+        TutorialManager.saveNewTip(collegeId, 3,"viewBuildings","Building quality will decay automatically everyday. Be sure to repair your buildings often to keep your students happy!", true);
+        TutorialManager.saveNewTip(collegeId, 4,"viewBuildings", "There must be enough Desks, Plates, and Beds to accommodate students coming into your college.", true);
+        TutorialManager.saveNewTip(collegeId, 5,"viewBuildings", "Certain buildings have specific benefits. Try to see if you can notice them!", true);
+        TutorialManager.saveNewTip(collegeId, 6,"viewBuildings", "Remember when purchasing a building that construction will take time. It won't just be built immediately!", true);
+        TutorialManager.saveNewTip(collegeId, 7,"viewBuildings", "Watch out for disasters in buildings! The results could be catastrophic.", true);
+
+
     }
 }
 
