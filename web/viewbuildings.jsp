@@ -179,7 +179,26 @@
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <p></p>
+
         <div class="well well-sm">
+        <div class="form-group">
+            <label for="buildingType">Sort by Building Type</label>
+            <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
+                <option value="All Buildings">All Buildings</option>
+                <option value="Academic Center">Academic Center</option>
+                <option value="Baseball Diamond">Baseball Diamond</option>
+                <option value="Dining Hall">Dining Hall</option>
+                <option value="Dormitory">Dormitory</option>
+                <option value="Football Stadium">Football Stadium</option>
+                <option value="Hockey Rink">Hockey Rink</option>
+                <option value="Entertainment Center">Entertainment Center</option>
+                <option value="Health Center">Health Center</option>
+                <option value="Library">Library</option>
+            </select>
+            <!-- Button -->
+            <input type="submit" class="btn btn-info" name="SortByBuildingType" value="Sort" style="margin-top: 5px;">
+        </div>
+
             <table class="table table-condensed">
                 <thread>
                     <tr>
