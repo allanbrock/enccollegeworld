@@ -7,8 +7,18 @@ public class TutorialModel implements Serializable {
     private String page = "unknown";
     private int refNum = 0;
     private boolean isCurrent = false;
+    private String image = "";
 
     public TutorialModel(){
+
+    }
+
+    public TutorialModel(String body, String page, int refNum, boolean isCurrent, String image){
+        this.body = body;
+        this.page = page;
+        this.refNum = refNum;
+        this.setCurrent(isCurrent);
+        this.image = image;
     }
 
     public TutorialModel(String body, String page, int refNum, boolean isCurrent){
@@ -48,5 +58,13 @@ public class TutorialModel implements Serializable {
 
     public void setCurrent(boolean current) {
         isCurrent = current;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
