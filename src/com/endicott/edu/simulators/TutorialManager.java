@@ -82,6 +82,11 @@ public class TutorialManager {
         tutorialDao.saveNewTutorial(collegeId, tutorial);
     }
 
+    public static void saveNewTip(String collegeId, int i, String page, String tip, boolean isCurrent, String image){
+        TutorialModel tutorial = new TutorialModel(tip, page, i, isCurrent, image);
+        tutorialDao.saveNewTutorial(collegeId, tutorial);
+    }
+
     public void nextButtonManager(){
 
     }
