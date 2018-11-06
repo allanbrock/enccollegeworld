@@ -435,6 +435,21 @@ public class SportManager {
         sport.setReputation(rep);
     }
 
+    public void winChampionship(SportModel team, String collegeId) {
+        team.addChampionship();
+        if (team.getDivision() == 3) {
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $10,000", 10000);
+            team.setDivision(2);
+        } else if (team.getDivision() == 2)
+        {
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $50,000", 50000);
+        team.setDivision(1);
+        }
+        else if(team.getDivision() == 1)
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $100,000", 100000);
+
+    }
+
     private static void loadTips(String collegeId) {
         TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);

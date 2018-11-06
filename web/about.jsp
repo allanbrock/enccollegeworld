@@ -81,6 +81,7 @@
                 <li class="list-group-item">CJ Mustone</li>
                 <li class="list-group-item">Joseph Moss</li>
                 <li class="list-group-item">Stephen Hoadley</li>
+                <li class="list-group-item">Ryan Gallagher</li>
             </ul>
 
             <h2>Fall 2017</h2>
