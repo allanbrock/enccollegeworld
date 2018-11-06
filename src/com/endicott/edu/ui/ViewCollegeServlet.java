@@ -51,9 +51,11 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         // upgrade button for fire popup sends user to store page
         if (request.getParameter("goToStore") != null){
-            response.sendRedirect(request.getContextPath() + "/viewstore.jsp");
-            return;
+            InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/viewstore.jsp");
+            dispatcher.forward(request, response);
         }
+
         if(request.getParameter("quarantineStudents") != null){
             Accountant accountant = new Accountant();
             PlagueDao dao = new PlagueDao();
