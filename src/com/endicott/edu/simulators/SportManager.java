@@ -451,6 +451,7 @@ public class SportManager {
     }
 
     private static void loadTips(String collegeId) {
+        // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);
     }
