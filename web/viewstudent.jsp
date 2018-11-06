@@ -361,6 +361,9 @@
                     <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
                     <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
                     <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
+                    <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
+                    <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
+                    <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
                 </table>
 
                 <div class="speech-bubble">
