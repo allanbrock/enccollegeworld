@@ -1,24 +1,12 @@
 package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
-import com.endicott.edu.ui.InterfaceUtils;
-
-import javax.servlet.RequestDispatcher;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Responsible for simulating students at the college.
  */
 public class InventoryManager {
-    private StudentDao dao = new StudentDao();
-    private CollegeDao collegeDao = new CollegeDao();
-    private FacultyDao facultyDao = new FacultyDao();
-    private BuildingManager buildingMgr = new BuildingManager();
-    private CollegeModel college = new CollegeModel();
-    private Random rand = new Random();
     private static InventoryDao inventory= new InventoryDao();
 
     /**

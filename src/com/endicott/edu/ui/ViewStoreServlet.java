@@ -1,8 +1,6 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
-import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.InventoryDao;
-import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.models.ItemModel;
 import com.endicott.edu.simulators.InventoryManager;
 import com.endicott.edu.simulators.TutorialManager;
