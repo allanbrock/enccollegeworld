@@ -46,8 +46,41 @@ public class SportManager {
      *
      * @return
      */
-    public int getSportsHappinessVariable(){
-        return 50;
+    public int getSportsHappinessVariable(String collegeId){
+        //get all of the sports teams
+        List<SportModel> sports = dao.getSports(collegeId);
+        //average all of the sports teams records (only if they've played a game)
+        int avgRecord = 0;
+        //this counter is to keep track of how many sports there are so that we can average the records later
+        int counter = 0;
+        for (SportModel sport : sports) {
+            if (sport.getNumGames() > 0) {
+                int thisSportRecord = sport.getGamesWon() / sport.getNumGames();
+                avgRecord += thisSportRecord;
+                counter++;
+            }
+        }
+        avgRecord = (avgRecord / counter) * 100;
+
+        //Bonus Points:
+        for (SportModel sport : sports) {
+            if (sport.getNumGames() > 0){
+                //if a team is undefeated (after more than 3 games)
+                if (sport.getGamesLost() == 0 && sport.getNumGames() > 3){
+                    avgRecord += 5;
+                }
+                //if a team has a winning record
+                if (sport.getGamesWon() > sport.getGamesLost()){
+                    avgRecord += 1;
+                }
+            }
+        }
+
+        //if avgRecord is greater than 100, just reset it to 100
+        if (avgRecord > 100){
+            avgRecord = 100;
+        }
+        return avgRecord;
     }
 
     /**
@@ -255,15 +288,58 @@ public class SportManager {
             }
             else{
                 //check if the sport is in season
-                sport.setActive(isSportInSeason(sport));
+                sport.setActive(isSportInSeason(sport, collegeId));
             }
         }
         else {
-            sport.setActive(isSportInSeason(sport));
+            sport.setActive(isSportInSeason(sport, collegeId));
         }
     }
 
-    public static int isSportInSeason(SportModel sport){
+    /**
+     * This will be called to determine whether or not a sport is in season based on the current month.
+     * This DOES NOT determine if a sport has enough players on the team to play games.
+     *
+     * @param sport the sport we wish to find out whether or not it is in season
+     * @param collegeId
+     * @return 0 if it is not in season, 1 if it is
+     */
+    public static int isSportInSeason(SportModel sport, String collegeId){
+        //What is the current month?
+        int currentMonth = CollegeManager.getCollegeCurrentMonth(collegeId);
+
+        //What is the sport's season?
+        String thisSportSeason = sport.getSportSeason();
+
+        //What is the current season, based on the current month?
+        String currentSeason = null;
+        //if the current month is between september and november
+        if (currentMonth >= 9 && currentMonth <= 11){
+            //set currentSeason to fall
+            currentSeason = "Fall";
+        }
+        //if the current month is between december and february
+        else if ((currentMonth == 12) || (currentMonth >= 1 && currentMonth <= 2)){
+            //set currentSeason to winter
+            currentSeason = "Winter";
+        }
+        //if the current month is between march and may
+        else if (currentMonth >= 3 && currentMonth <= 5){
+            //set currentSeason to spring
+            currentSeason = "Spring";
+        }
+        //if the current month is not any of the above, it is the summer, leave current season set to null
+
+        //If the current season is still null, it is summer
+        if (currentSeason.equalsIgnoreCase(null)){
+            return 0;
+        }
+        //If the current season is the same as this sport's season
+        else if (currentSeason.equalsIgnoreCase(thisSportSeason)){
+            return 1;
+        }
+
+        //return 0 just in case something went wrong.
         return 0;
     }
 
@@ -438,15 +514,15 @@ public class SportManager {
     public void winChampionship(SportModel team, String collegeId) {
         team.addChampionship();
         if (team.getDivision() == 3) {
-            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $10,000", 10000);
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $100,000", 100000);
             team.setDivision(2);
         } else if (team.getDivision() == 2)
         {
-            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $50,000", 50000);
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $500,000", 500000);
         team.setDivision(1);
         }
         else if(team.getDivision() == 1)
-            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $100,000", 100000);
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $1,000,000", 1000000);
 
     }
 
