@@ -2,10 +2,12 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -53,10 +55,10 @@ public class CollegeManager {
         // Each functional area/simulator in the college gets called to
         // take care of its start-the-college needs.
         // The order of this matters (example: a dorm is established, before students enter).
-        NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+        NewsManager.createNews(collegeId, college.getCurrentDay(), "The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         BuildingManager.establishCollege(collegeId, college);
-        FacultyManager.establishCollege(collegeId);
+        FacultyManager.establishCollege(collegeId, college);
 
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
@@ -163,7 +165,7 @@ public class CollegeManager {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, 8);
         cal.set(Calendar.YEAR, 2018);
-        cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
+        cal.add(Calendar.DAY_OF_MONTH, hoursAlive / 24);
 
         return cal.getTime();
     }
@@ -196,7 +198,7 @@ public class CollegeManager {
      * @param collegeId college name
      * @return the college
      */
-    public static CollegeModel updateCollegeTuition(String collegeId, int amount){
+    public static CollegeModel updateCollegeTuition(String collegeId, int amount) {
         CollegeDao cao = new CollegeDao();
 
         CollegeModel college = cao.getCollege(collegeId);
@@ -205,7 +207,7 @@ public class CollegeManager {
 
         calculateStatisticsAndRatings(collegeId);
 
-        NewsManager.createNews(collegeId, college.getHoursAlive(),"Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
 
         StudentManager studentManager = new StudentManager();
         studentManager.calculateStatistics(collegeId, false);
@@ -214,7 +216,7 @@ public class CollegeManager {
     }
 
     // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
-    public static CollegeModel bankruptCollege(String collegeId){
+    public static CollegeModel bankruptCollege(String collegeId) {
         CollegeDao cao = new CollegeDao();
 
         CollegeModel college = cao.getCollege(collegeId);
@@ -243,8 +245,24 @@ public class CollegeManager {
     }
 
     static private void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
+        TutorialManager.saveNewTip(collegeId, 0, "viewCollege", "Welcome to College Simulator!", true);
+        TutorialManager.saveNewTip(collegeId, 1, "viewCollege", "Don't spend all your money at once.", false);
+    }
+
+    private static void addToDepartmentOptions(int departmentLevel, String collegeId) {
+        if (departmentLevel == 2)
+            CollegeDao.getCollege(collegeId).getDepartmentOptions().add(new DepartmentModel("Communications"));
+        else if (departmentLevel == 3)
+            CollegeDao.getCollege(collegeId).getDepartmentOptions().add(new DepartmentModel("Performing Arts"));
+    }
+
+    public static void initializeDepartmentOptions(CollegeModel college) {
+        ArrayList<DepartmentModel> departmentOptions = new ArrayList<>();
+        departmentOptions.add(new DepartmentModel("Arts and Sciences"));
+        departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
+        departmentOptions.add(new DepartmentModel("Business"));
+        departmentOptions.add(new DepartmentModel("Nursing"));
+        college.setDepartmentOptions(departmentOptions);
     }
 
     /**
@@ -253,7 +271,7 @@ public class CollegeManager {
      * @param collegeId college name
      * @return true if exists.
      */
-    static public boolean doesCollegeExist(String collegeId) {
+    public static boolean doesCollegeExist(String collegeId) {
         CollegeDao collegeDao = new CollegeDao();
 
         try {
