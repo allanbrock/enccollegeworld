@@ -334,6 +334,7 @@ public class FacultyManager {
     }
 
     private static void loadTips(String collegeId) {
+        // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewFaculty", "Pay professors more to make them happy.", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewFaculty", "If the faculty is happy, then the students are happy.", false);
     }
