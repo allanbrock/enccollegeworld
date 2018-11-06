@@ -15,7 +15,7 @@ public class SportManager {
     SportsDao dao = new SportsDao();
     static private Logger logger = Logger.getLogger("SportManager");
 
-    public void establishCollege(String collegeId) {
+    public static void establishCollege(String collegeId) {
         loadTips(collegeId);
     }
 
@@ -433,6 +433,21 @@ public class SportManager {
         rep = Math.max(rep, 0);
         rep = Math.min(rep, 100);
         sport.setReputation(rep);
+    }
+
+    public void winChampionship(SportModel team, String collegeId) {
+        team.addChampionship();
+        if (team.getDivision() == 3) {
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $10,000", 10000);
+            team.setDivision(2);
+        } else if (team.getDivision() == 2)
+        {
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $50,000", 50000);
+        team.setDivision(1);
+        }
+        else if(team.getDivision() == 1)
+            Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $100,000", 100000);
+
     }
 
     private static void loadTips(String collegeId) {

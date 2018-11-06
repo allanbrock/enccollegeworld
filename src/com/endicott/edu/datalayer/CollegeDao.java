@@ -48,7 +48,7 @@ public class CollegeDao {
         boolean result = file.delete();
 
         FacultyDao.removeAllFaculty(collegeId);
-        FloodDao.deleteFloods(collegeId);
+        FloodDao.deleteFlood(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
         PlagueDao.deletePlagues(collegeId);
         SportsDao.deleteSports(collegeId);

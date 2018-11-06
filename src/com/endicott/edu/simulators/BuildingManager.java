@@ -3,8 +3,10 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.*;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -36,7 +38,7 @@ public class BuildingManager {
 
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
-            building.updateTimeSinceLastUpdate(24); //when a building is upgraded, this should go back to zero
+            building.updateTimeSinceLastRepair(24); //when a building is upgraded, this should go back to zero
             billRunningCostOfBuilding(runId, hoursAlive, building);
             workOnBuilding(building, runId);
             buildingDecayForOneDay(runId, building);
@@ -54,13 +56,9 @@ public class BuildingManager {
      * @param building the building that's causing the cost
      */
     private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
-        // A building stores the last time it was updated.
-        // Figure out how many hours have past since last updated.
-        // Multiple by cost per hour.
-        int newCharge = (hoursAlive - building.getTimeSinceLastUpdate()) * building.getCostPerDay();
-        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
-
-        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
+        // Multiple the cost per day based on how much the building is decayed
+        int newCharge = ((int)(100 - building.getShownQuality())) * building.getCostPerDay();
+        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), newCharge);
     }
 
     /**
@@ -105,11 +103,8 @@ public class BuildingManager {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
-        //newBuilding.setBuildingType(buildingType);
-//        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setTimeSinceLastUpdate(0);
+        newBuilding.setTimeSinceLastRepair(0);
         newBuilding.setHoursToBuildBasedOnSize(buildingSize);
-        newBuilding.setStatsBasedOnSize(buildingSize);
         newBuilding.setHasBeenAnnouncedAsComplete(false);
 
         // Pay for building
@@ -228,7 +223,8 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
                 float currentQuality = b.getHiddenQuality();
-                double randomDecay = Math.random();
+                double randomDecay = Math.random() * 4; //Max decay: 20%
+                b.setHiddenQuality((float) (currentQuality - randomDecay));
             }
         }
         dao.saveAllBuildings(collegeId, buildings);
@@ -473,21 +469,21 @@ public class BuildingManager {
         loadTips(collegeId);
 
         //pre-loaded buildings
-        DormModel startingDorm = new DormModel(college.getRunId()+" Hall",  0, "Medium");
+        DormModel startingDorm = new DormModel(NameGenDao.generateBuildingName()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college);
 
-        DiningHallModel startingDiningHall = new DiningHallModel(college.getRunId()+" Dining Hall",
+        DiningHallModel startingDiningHall = new DiningHallModel(NameGenDao.generateBuildingName()+" Dining Hall",
                  0, "Medium");
         saveBuildingHelper(startingDiningHall, collegeId, college);
 
-        AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(college.getRunId()+" Academics",
+        AcademicCenterModel startingAcademicBuilding = new AcademicCenterModel(NameGenDao.generateBuildingName()+" Academic Building",
                 0,"Medium");
         saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
-        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(college.getRunId()+" Administrative");
+        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(NameGenDao.generateBuildingName()+" Building");
         saveBuildingHelper(startingAdministrative, collegeId, college);
 
-        SportsCenterModel startingSportsCenter = new SportsCenterModel(college.getRunId()+" Sports Center");
+        SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
         gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 700);
@@ -553,8 +549,16 @@ public class BuildingManager {
     }
 
     private static void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct buildings to allow a greater maximum capacity.", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings", "Construct sports buildings to make sports teams.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct more buildings to allow a greater maximum capacity at your college.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings","Upgrade your buildings to hold more students.", true);
+        TutorialManager.saveNewTip(collegeId, 2,"viewBuildings", "Construct sports buildings to unlock certain sports.", false);
+        TutorialManager.saveNewTip(collegeId, 3,"viewBuildings","Building quality will decay automatically everyday. Be sure to repair your buildings often to keep your students happy!", true);
+        TutorialManager.saveNewTip(collegeId, 4,"viewBuildings", "There must be enough Desks, Plates, and Beds to accommodate students coming into your college.", true);
+        TutorialManager.saveNewTip(collegeId, 5,"viewBuildings", "Certain buildings have specific benefits. Try to see if you can notice them!", true);
+        TutorialManager.saveNewTip(collegeId, 6,"viewBuildings", "Remember when purchasing a building that construction will take time. It won't just be built immediately!", true);
+        TutorialManager.saveNewTip(collegeId, 7,"viewBuildings", "Watch out for disasters in buildings! The results could be catastrophic.", true);
+
+
     }
 }
 

@@ -240,8 +240,7 @@
                 <!-- Tips -->
                 <%if (tip != null){%>
                 <div class="col-md-5">
-                    <h4 style="color:blue"><span class="glyphicon glyphicon-info-sign"  style="color:blue"></span>Tip</h4>
-                    <div class="well well-lg">
+                    <div class="well well-lg" style="background: white">
                         <p><%=tip.getBody()%></p>
                     </div>
                     <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">

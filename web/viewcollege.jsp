@@ -209,8 +209,7 @@
                 <!-- Tips -->
                 <%if (tip != null){%>
                 <div class="col-md-5">
-                    <h4 style="color:blue">Tip</h4>
-                    <div class="well well-lg">
+                    <div class="well well-lg" style="background: white">
                         <p><%=tip.getBody()%></p>
                     </div>
                     <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
@@ -220,10 +219,6 @@
                 <%if (tip == null){%>
                 <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
                 <%}%>
-                <%-- <br>
-                    <p>(For testing uses only, also advances time by one day)</p>
-                    <input type="submit" class="btn btn-info" name="bankruptCollege" value="Bankrupt College">
-                    <br> --%>
 
                 <!-- Flood -->
                 <%
@@ -246,7 +241,7 @@
                     <%
                         String barType = "progress-bar-success";
                     %>
-                    <h2><small>Student Happiness</small></h2>
+                    <h2><small>Happiness</small></h2>
                     <!-- progress circle -->
                     <div id="happinessCircle"
                          data-dimension="250"
@@ -268,27 +263,6 @@
                 </div>
             </div>
 
-            <!-- Number of Students -->
-            <div class="col-sm-2">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h1><%=students.length%>
-                        </h1>
-                        <h3>Students</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-2">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h1><%=college.getNumberStudentsAccepted()%>
-                        </h1>
-                        <h3>Accepted Students</h3>
-                    </div>
-                </div>
-            </div>
-
             <!-- Retention Rate -->
             <div class="col-sm-2">
                 <div class="well well-sm">
@@ -305,15 +279,69 @@
                          data-bgcolor="#eee"
                          data-fill="#ddd">
                     </div>
+                    <br>
+                    <a href="#retentionDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="retentionDetails" class="collapse">
+                        The rate is the percentage of students that remained at the college during the last week.
+                    </div>
                 </div>
             </div>
+
+            <!-- Number of Students -->
+            <div class="col-sm-2">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h2><%=students.length%>
+                        </h2>
+                        <h4>Students</h4>
+                    </div>
+                </div>
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h2><%=college.getNumberStudentsAccepted()%>
+                        </h2>
+                        <h4>Accepted Students</h4>
+                    </div>
+                    <br>
+                    <a href="#acceptedDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="acceptedDetails" class="collapse">
+                        Accepted students enter the college on the first of the month.
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Student Faculty Ratio -->
+            <div class="col-sm-2">
+                <div class="well well-sm">
+                    <div class="text-center">
+                        <h2><%=college.getStudentFacultyRatio()%>
+                        </h2>
+                        <h4>Student Faculty Ratio</h4>
+                    </div>
+                </div>
+
+                    <div class="well well-sm">
+                        <div class="form-group">
+                            <select class="form-control" id="collegeMode" name="collegeMode">
+                                <option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>
+                                <option value="Demo" <% if (college.getMode() == CollegeMode.DEMO) {%> selected <% } %> >Demo</option>
+                                <option value="Demo Fire"<% if (college.getMode() == CollegeMode.DEMO_FIRE) {%> selected <% } %> >Demo Fire</option>
+                                <option value="Demo Plague"<% if (college.getMode() == CollegeMode.DEMO_PLAGUE) {%> selected <% } %> >Demo Plague</option>
+                                <option value="Demo Riot"<% if (college.getMode() == CollegeMode.DEMO_RIOT) {%> selected <% } %> >Demo Riot</option>
+                            </select>
+                        </div>
+                        <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">
+                    </div>
+
+            </div>
+
 
             <!-- Tuition -->
             <div class="col-sm-3">
                 <form id = "tuitionForm">
                     <div class="well well-sm">
-                        <h3>Tuition: $<%=college.getYearlyTuitionCost()%></h3>
-                        <p>Update Tuition</p>
+                        <h3>Tuition is $<%=college.getYearlyTuitionCost()%></h3>
                         <form class="form-inline">
                             <div class="form-group">
 
@@ -426,26 +454,10 @@
         <div class="row">
 
 
-
-            <!-- Student Faculty Ratio -->
-            <div class="col-sm-3">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h1><%=college.getStudentFacultyRatio()%>
-                        </h1>
-                        <h3>Student Faculty Ratio</h3>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Server -->
+        <!-- Mode -->
         <div class="row">
-            <div class="col-sm-6">
-                <div class="well well-sm">
-                    <strong>Info</strong> <%=msg.getMessage()%>
-                </div>
-            </div>
         </div>
 
     </div> <!-- container -->

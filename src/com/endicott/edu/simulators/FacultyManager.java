@@ -1,10 +1,8 @@
 package com.endicott.edu.simulators;
 
-import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.models.StudentModel;
@@ -18,7 +16,7 @@ import java.util.Random;
  */
 public class FacultyManager {
 
-
+    private static ArrayList<DepartmentModel> departmentOptions;
     /**
      * Simulate changes in faculty based on the passage of time at the college.
      *
@@ -63,11 +61,15 @@ public class FacultyManager {
      *
      * @param collegeId instance of the simulation
      */
-    public static void establishCollege(String collegeId, CollegeModel college){
-        CollegeManager.initializeDepartmentOptions(college);
+    public static void establishCollege(String collegeId){
+        departmentOptions = new ArrayList<>();
+        departmentOptions.add(new DepartmentModel("Arts and Sciences"));
+        departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
+        departmentOptions.add(new DepartmentModel("Business"));
+        departmentOptions.add(new DepartmentModel("Nursing"));
         for (int i=0; i<12; i++) {
-            String department = generateFacultyDepartment(college);
-           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department, college), department);  // Default salary for now
+            String department = generateFacultyDepartment();
+           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
        }
    }
 
@@ -88,9 +90,8 @@ public class FacultyManager {
         return member;
     }
 
-    public static String generateFacultyTile(String departmentName, CollegeModel college){
+    public static String generateFacultyTile(String departmentName){
         String title;
-        ArrayList<DepartmentModel> departmentOptions = college.getDepartmentOptions();
         DepartmentModel curDept = new DepartmentModel("tempName");
         for(DepartmentModel d : departmentOptions){
             if(d.getDepartmentName().equals(departmentName)){
@@ -104,7 +105,7 @@ public class FacultyManager {
             title = "Assistant Dean";
         else
             title = "Faculty";
-        int newCount = curDept.getEmployeeCounts().get(title) + 1;
+        int newCount = curDept.getEmployeeCounts().get(title);
         for(DepartmentModel d : departmentOptions){
             if(d.getDepartmentName().equals(curDept.getDepartmentName())){
                 d.setEmployeeCount(title, newCount);
@@ -114,9 +115,8 @@ public class FacultyManager {
         return title;
     }
 
-    public static String generateFacultyDepartment(CollegeModel college){
+    public static String generateFacultyDepartment(){
         Random r = new Random();
-        ArrayList<DepartmentModel> departmentOptions = college.getDepartmentOptions();
         ArrayList<String> emptyDepartments = new ArrayList<>();
         ArrayList<String> onlyDeans = new ArrayList<>();
         for(DepartmentModel d : departmentOptions){
@@ -188,18 +188,27 @@ public class FacultyManager {
         return salaryOptions;
     }
 
+    private static void addToDepartmentOptions(int departmentLevel){
+        if(departmentLevel == 2)
+            departmentOptions.add(new DepartmentModel("Communications"));
+        else if(departmentLevel == 3)
+            departmentOptions.add(new DepartmentModel("Performing Arts"));
+    }
+
     public static String[] getTitleOptions(){
         String[] titleOptions = {"Dean", "Assistant Dean", "Professor"};
         return titleOptions;
     }
 
-    public static String[] getDepartmentOptionStrings (CollegeModel college){
-        String[] names = new String[college.getDepartmentOptions().size()];
-        for(int i = 0; i < college.getDepartmentOptions().size(); i++){
-            names[i] = college.getDepartmentOptions().get(i).getDepartmentName();
+    public static String[] getDepartmentOptionStrings (){
+        String[] names = new String[departmentOptions.size()];
+        for(int i = 0; i < departmentOptions.size(); i++){
+            names[i] = departmentOptions.get(i).getDepartmentName();
         }
         return names;
     }
+
+    public static ArrayList<DepartmentModel> getDepartmentOptions() { return departmentOptions; }
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness

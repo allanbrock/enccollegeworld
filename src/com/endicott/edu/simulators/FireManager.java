@@ -1,6 +1,7 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
+import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.FireDAO;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
@@ -41,7 +42,7 @@ public class FireManager {
     public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
         checkForUpgrade(runId);
 
-        possiblyCreateFire(runId, hoursAlive,hasUpgradeBeenPurchased());
+        createFireByOdds(runId, hoursAlive,hasUpgradeBeenPurchased());
         List<FireModel> fires = FireDAO.getFires(runId);
         if (fires.size() != 0) {
             generateCorrectPopUp(hasUpgradeBeenPurchased(),fires,popupManager);
@@ -90,8 +91,9 @@ public class FireManager {
      * @param hoursAlive
      */
     public void startNormalFire(String runId, int hoursAlive) {
-        ArrayList<BuildingModel> buildings = (ArrayList) BuildingDao.getBuildings(runId);
-        ArrayList<StudentModel> students = (ArrayList) StudentDao.getStudents(runId);
+        ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
+        ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
+        ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         String victims = "";
         final boolean isCatastrophic = false;
@@ -123,6 +125,11 @@ public class FireManager {
         NewsManager.createNews(runId, hoursAlive, ("Fire in " + fire.getBuildingBurned().getName() + ", " + numDeaths + " died."), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
     }
 
+    public void removeVictims(FireModel fire,int victims,boolean isCatastrophic){
+        // TODO: remove faculty for every 4 student deaths
+
+    }
+
     /**
      * Starts a major fire that destroys building and kills number of students inside, if there are any
      *
@@ -130,8 +137,8 @@ public class FireManager {
      * @param hoursAlive
      */
     public void startCatastrophicFire(String runId, int hoursAlive) {
-        ArrayList<BuildingModel> buildings = (ArrayList) BuildingDao.getBuildings(runId);
-        ArrayList<StudentModel> students = (ArrayList) StudentDao.getStudents(runId);
+        ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
+        ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         BuildingManager buildingManager = new BuildingManager();
         String victims = "all";
@@ -169,29 +176,34 @@ public class FireManager {
      * @param runId
      * @param hoursAlive
      */
-    public void possiblyCreateFire(String runId, int hoursAlive, boolean isUpgraded) {
+    public void createFireByOdds(String runId, int hoursAlive, boolean isUpgraded) {
         Random rand = new Random();
         int odds = rand.nextInt(100);
         if (isUpgraded) {
-            if (odds < upgradedRegFireProb) {
-                if (odds < upgradedCatFireProb) {
-                    boolean isCatastrophic = true;
-                    startFireRandomly(runId, hoursAlive, isCatastrophic);
-                    return;
-                }
-                boolean isCatastrophic = false;
-                startFireRandomly(runId, hoursAlive, isCatastrophic);
-            }
+            possiblyCreateFire(odds, upgradedRegFireProb, upgradedCatFireProb, runId, hoursAlive);
         } else {
-            if (odds < regFireProb) {
-                if (odds < catFireProb) {
-                    boolean isCatastrophic = true;
-                    startFireRandomly(runId, hoursAlive, isCatastrophic);
-                    return;
-                }
-                boolean isCatastrophic = false;
+            possiblyCreateFire(odds, regFireProb, catFireProb, runId, hoursAlive);
+        }
+    }
+
+    /**
+     * Starts either type of fire based on the type of probability it receives
+     *
+     * @param odds random number generated
+     * @param regProb probability of a regular fire starting
+     * @param catProb probability of a catastrophic fire happening
+     * @param runId
+     * @param hoursAlive
+     */
+    public void possiblyCreateFire(int odds,int regProb,int catProb,String runId, int hoursAlive){
+        if (odds < regProb) {
+            if (odds < catProb) {
+                boolean isCatastrophic = true;
                 startFireRandomly(runId, hoursAlive, isCatastrophic);
+                return;
             }
+            boolean isCatastrophic = false;
+            startFireRandomly(runId, hoursAlive, isCatastrophic);
         }
     }
 
@@ -230,6 +242,7 @@ public class FireManager {
         }
     }
 
+
     public int getNumFatalities() {
         Random rand = new Random();
         int numDeaths = rand.nextInt(10);
@@ -238,6 +251,8 @@ public class FireManager {
         }
         return numDeaths;
     }
+
+
 
     public BuildingModel findBuildingToBurn(ArrayList<BuildingModel> buildings) {
         Random rand = new Random();

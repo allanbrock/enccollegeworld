@@ -129,9 +129,17 @@ public class StudentManager {
     private void acceptStudents(String collegeId, int hoursAlive){
         int numNewStudents;
 
-        numNewStudents = rand.nextInt(10);
+        // The number of accepted students depends on the happiness of the student body.
 
         college = collegeDao.getCollege(collegeId);
+        int happiness = college.getStudentBodyHappiness();
+
+        if (happiness <= 50) {
+            numNewStudents = 0;
+        } else {
+            numNewStudents = rand.nextInt(happiness/10);
+        }
+
         college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
         collegeDao.saveCollege(college);
 
@@ -420,6 +428,13 @@ public class StudentManager {
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 
+    /**
+     * @param collegeId
+     * @param buildingName
+     * @param  buildingType
+     *
+     * Checks if the building destroyed was one the student wass assigned to and moves them if necessary
+     */
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){
@@ -494,9 +509,9 @@ public class StudentManager {
 
         // Conclusion
         String[] conclusion =  {"here", "at this school", "at "+collegeId, ""};
-        feedback += conclusion[(int) Math.random() * conclusion.length];
+        feedback += conclusion[new Random().nextInt(conclusion.length)];
         String[] punctuation = {".", "!", "...", "!!!"};
-        feedback += punctuation[(int) Math.random() * punctuation.length];
+        feedback += punctuation[new Random().nextInt(punctuation.length)];
 
         return feedback;
     }

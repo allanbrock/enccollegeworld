@@ -15,6 +15,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.endicott.edu.simulators.GateManager" %>
+<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>College World Building</title>
@@ -70,6 +71,7 @@
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
+    TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
     GateManager gateManager = new GateManager();
 %>
@@ -177,7 +179,26 @@
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <p></p>
+
         <div class="well well-sm">
+        <div class="form-group">
+            <label for="buildingType">Sort by Building Type</label>
+            <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
+                <option value="All Buildings">All Buildings</option>
+                <option value="Academic Center">Academic Center</option>
+                <option value="Baseball Diamond">Baseball Diamond</option>
+                <option value="Dining Hall">Dining Hall</option>
+                <option value="Dormitory">Dormitory</option>
+                <option value="Football Stadium">Football Stadium</option>
+                <option value="Hockey Rink">Hockey Rink</option>
+                <option value="Entertainment Center">Entertainment Center</option>
+                <option value="Health Center">Health Center</option>
+                <option value="Library">Library</option>
+            </select>
+            <!-- Button -->
+            <input type="submit" class="btn btn-info" name="SortByBuildingType" value="Sort" style="margin-top: 5px;">
+        </div>
+
             <table class="table table-condensed">
                 <thread>
                     <tr>
@@ -242,7 +263,7 @@
             <div class="well well-sm">
                 <div id="purchase">
                     <!-- if they don't have enough money for the cheapest building they can't try to purchase -->
-                    <%if(college.getAvailableCash() < 50000){%>
+                    <%if(college.getAvailableCash() <= 50000){%>
                     <h4>You don't have enough money to buy a new building :(</h4>
                     <%}else{%>
                     <!-- if they haven't hit begin purchase, only one option i s visible -->
@@ -257,11 +278,13 @@
                             <option value="Baseball Diamond">Baseball Diamond</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
-                            <option value="Entertainment Center">Entertainment Center</option>
                             <option value="Football Stadium">Football Stadium</option>
-                            <option value="Health Center">Health Center</option>
                             <option value="Hockey Rink">Hockey Rink</option>
+                            <%if(college.getAvailableCash() > 150000){%>
+                            <option value="Entertainment Center">Entertainment Center</option>
+                            <option value="Health Center">Health Center</option>
                             <option value="Library">Library</option>
+                            <%}%>
                         </select>
                     </div>
                         <!-- Button -->
@@ -275,28 +298,18 @@
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
-                                <%if(college.getAvailableCash() > 650000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                    <option > $350,000 - Large (500) </option >
-                                <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
-                                    <option > $650,000 - Extra Large (1000) </option >
-                                <%}%>
-                                <!--if they can afford 3/4 they can see 3/4-->
-                                <%}else if(college.getAvailableCash() > 350000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                <option > $350,000 - Large (500) </option >
-                                <%}%>
-                                <!-- if they can afford 2/4 they can see 2/4-->
-                                <%}else if(college.getAvailableCash() > 150000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <!-- if they can afford 1/4 they can see 1/4-->
-                                <%}else if(college.getAvailableCash() > 50000){%>
-                                <option> $50,000 - Small (50) </option >
+                                <%if(college.getAvailableCash() > 50000){%>
+                                    <option> $50,000 - Small (50) </option >
+                                <%}if(college.getAvailableCash() > 150000){%>
+                                    <option > $150,000 - Medium (200) </option >
+                                <%}if(college.getAvailableCash() > 350000){%>
+                                    <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
+                                        <option > $350,000 - Large (500) </option >
+                                    <%}%>
+                                <%}if(college.getAvailableCash() > 650000){%>
+                                    <%if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
+                                        <option > $650,000 - Extra Large (1000) </option >
+                                    <%}%>
                                 <%}%>
                             </select >
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
@@ -321,7 +334,7 @@
 
         <!-- DORM NEWS -->
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="well well-sm">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
@@ -338,6 +351,21 @@
                     </div>
                 </div>
             </div>
+            <!-- Tips -->
+            <%if (tip != null){%>
+            <div class="col-sm-3">
+                <div class="well well-lg" style="background: white">
+
+                    <p><%=tip.getBody()%></p>
+
+                <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+            </div>
+            <%}%>
+            <%if (tip == null){%>
+            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+            <%}%>
         </div>
     </div>
 </form>

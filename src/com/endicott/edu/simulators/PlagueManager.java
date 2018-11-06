@@ -2,10 +2,7 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.PlagueDao;
 import com.endicott.edu.datalayer.StudentDao;
-import com.endicott.edu.models.NewsLevel;
-import com.endicott.edu.models.NewsType;
-import com.endicott.edu.models.PlagueModel;
-import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.models.*;
 
 import java.util.List;
 import java.util.Random;
@@ -67,6 +64,9 @@ public class PlagueManager {
         // or possibly start a new plague
         else
         {
+            // Use mode to change the odds if you are in DEMO_PLAGUE mode.
+            CollegeMode mode = CollegeManager.getCollegeMode(collegeId);
+
             if (Math.random() <= 0.03) {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",

@@ -18,9 +18,8 @@ public class CollegeModel implements Serializable {
     private int numberStudentsGraduated = 0; // number of students graduate since college created
     private float retentionRate = 0f;        // percentage of students retained (or graduated) since college created
     private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
-    private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio//
-    private int studentHealthRating = 0;// 0 to 100 rating of student health
-    private ArrayList<DepartmentModel> departmentOptions;
+    private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
+    private int studentHealthRating = 0;       // 0 to 100 rating of student health
     //public PopupEventModel;
 
     //Counts amount of total championships won to be tracked in the trophy case
@@ -33,9 +32,6 @@ public class CollegeModel implements Serializable {
     private int softballChampionships = 0;
     private int mBasketballChampionships = 0;
     private int wBasketballChampionships = 0;
-
-    public void setDepartmentOptions(ArrayList<DepartmentModel> departmentOptions){ this.departmentOptions = departmentOptions; }
-    public ArrayList<DepartmentModel> getDepartmentOptions(){ return this.departmentOptions; }
 
     public int getStudentHealthRating() {
         return studentHealthRating;
