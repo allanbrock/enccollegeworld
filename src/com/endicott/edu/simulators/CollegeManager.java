@@ -243,6 +243,7 @@ public class CollegeManager {
     }
 
     static private void loadTips(String collegeId) {
+        // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
     }

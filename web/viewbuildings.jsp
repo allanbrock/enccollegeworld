@@ -355,9 +355,10 @@
             <%if (tip != null){%>
             <div class="col-sm-3">
                 <div class="well well-lg" style="background: white">
-
+                    <%if (!tip.getImage().equals("")){%>
+                    <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
+                    <%}%>
                     <p><%=tip.getBody()%></p>
-
                 <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                 <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
                 </div>
