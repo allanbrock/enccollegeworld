@@ -467,7 +467,7 @@ public class BuildingManager {
 //        }
 //        return buildings;
 //    }
-
+//changed this method to static
     public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         List<BuildingModel> buildingsToReturn = new ArrayList<>();

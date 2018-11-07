@@ -39,6 +39,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
                 doGet(request, response);
             }
         }
+        //handles the sort by button parameter
         if(request.getParameter("startSortByBuildingType") != null){
             sortByType = request.getParameter("sortByBuildingType");
             //needs to make the building type from the dropdown match one of the constants for the type of building
