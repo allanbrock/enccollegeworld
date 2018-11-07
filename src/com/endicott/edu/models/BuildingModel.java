@@ -35,6 +35,9 @@ public class BuildingModel implements Serializable {
     private String curDisaster = "None";
     private int lengthOfDisaster = 0;
     private int hoursToComplete = 0;
+    private boolean isBuilt = true;
+    private boolean isUpgradeComplete = true;
+    private float repairCost = 0;
 
     // These are necessary qualities to keep everything in line
     private static final int maxHiddenQuality = 10;
@@ -126,14 +129,6 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Large")){setCostPerDay(350);}
         else if(size.equals("Extra Large")){setCostPerDay(650);}
         else{setCostPerDay(200);}
-    }
-
-    //Function to modify all the stats when the building is upgraded
-    public void upgradeBuilding(String oldSize){
-        if(oldSize.equals("Small")){this.size.equals("Medium");}
-        else if(oldSize.equals("Medium")){this.size.equals("Large");}
-        else if(oldSize.equals("Large")){this.size.equals("Extra Large");}
-        setStatsBasedOnSize(this.size);
     }
 
     //Keeps the hidden quality between the min and max values
@@ -230,6 +225,15 @@ public class BuildingModel implements Serializable {
 
     public int getHoursToComplete() {return this.hoursToComplete;}
     public void setHoursToComplete(int hoursToComplete) {this.hoursToComplete = hoursToComplete;}
+
+    public boolean isBuilt() {return isBuilt;}
+    public void setIsBuilt(boolean isBuilt){this.isBuilt = isBuilt;}
+
+    public boolean isUpgradeComplete() {return isUpgradeComplete;}
+    public void setIsUpgradeComplete(boolean isUpgradeComplete) {this.isUpgradeComplete = isUpgradeComplete;}
+
+    public float getRepairCost() {return repairCost;}
+    public void setRepairCost(float repairCost) {this.repairCost = repairCost;}
 
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}

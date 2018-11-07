@@ -1,6 +1,8 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
+import com.endicott.edu.datalayer.BuildingDao;
+import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
@@ -26,8 +28,14 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        if(request.getParameter("upgradeBuilding") != null){
-            doGet(request, response);
+
+        for(int b = 0; b < BuildingDao.getBuildings(collegeId).size(); b++) {
+            if (request.getParameter("upgradeBuilding" + b) != null) {
+                upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
+            }
+            if (request.getParameter("repairBuilding" + b) != null){
+                doGet(request, response);
+            }
         }
 
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
@@ -79,12 +87,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
         if (request.getParameter("nextTip") != null) {
             TutorialManager.advanceTip("viewBuildings", collegeId);
+            doGet(request, response);
         }
         if (request.getParameter("hideTips") != null){
             TutorialManager.hideTips("viewBuildings", collegeId);
+            doGet(request, response);
         }
         if (request.getParameter("showTips") != null){
             TutorialManager.showTips("viewBuildings", collegeId);
+            doGet(request, response);
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
@@ -177,7 +188,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 
-        //load the request with attributes for the dormm
+        //load the request with attributes for the building
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
 
@@ -186,6 +197,21 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+    }
+
+    private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        BuildingManager.upgradeBuilding(runId, building);
+
+        doGet(request, response);
+
+        //load the request with attributes for the building
+        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+        dispatcher.forward(request, response);
     }
 
 
