@@ -34,12 +34,12 @@ public class InterfaceUtils {
         SportModel[] availableSports = SportManager.getAvailableSports(collegeId);
         StudentModel[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
         FacultyModel[] faculty = FacultyDao.getFacultyArray(collegeId);
-        FloodModel[] flood = FloodDao.getFloodsArray(collegeId);
+        FloodModel flood = FloodDao.getFlood(collegeId);
         PopupEventManager popupManager = new PopupEventManager();
         TutorialModel[] tutorials = TutorialDao.getTutorialsArray(collegeId);
         FireModel[] fires = FireDAO.getFiresArray(collegeId);
         ItemModel[] items = InventoryDao.getInventoryArray(collegeId);
-        //FloodModel[] flood = new FloodModel[0];
+
 
         // Load the name of all colleges.
         CollegeModel[] colleges = CollegeDao.getColleges();
@@ -55,7 +55,7 @@ public class InterfaceUtils {
         request.setAttribute("availableSports",availableSports);
         request.setAttribute("students",students);
         request.setAttribute("faculty",faculty);
-        request.setAttribute("floods",flood);
+        request.setAttribute("flood",flood);
         request.setAttribute("fires", fires);
         request.setAttribute("items", items);
         request.getSession().setAttribute("popupMan", popupManager);

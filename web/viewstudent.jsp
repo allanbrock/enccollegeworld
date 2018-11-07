@@ -240,8 +240,10 @@
                 <!-- Tips -->
                 <%if (tip != null){%>
                 <div class="col-md-5">
-                    <h4 style="color:blue">Tip</h4>
-                    <div class="well well-lg">
+                    <div class="well well-lg" style="background: white">
+                        <%if (!tip.getImage().equals("")){%>
+                            <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
+                        <%}%>
                         <p><%=tip.getBody()%></p>
                     </div>
                     <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
@@ -362,6 +364,9 @@
                     <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
                     <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
                     <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
+                    <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
+                    <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
+                    <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
                 </table>
 
                 <div class="speech-bubble">

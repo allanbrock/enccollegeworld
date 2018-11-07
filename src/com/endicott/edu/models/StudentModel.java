@@ -26,6 +26,9 @@ public class StudentModel implements Serializable {
     private int moneyHappinessRating = 0; // 0 to 100, determined from college tuition.
     private int funHappinessRating = 0;   // 0 to 100
     private int advisorHappinessRating = 0;
+    private int diningHallHappinessRating = 0;
+    private int academicCenterHappinessRating = 0;
+    private int dormHappinessRating = 0;
     private FacultyModel advisor;
 
 
@@ -181,5 +184,29 @@ public class StudentModel implements Serializable {
 
     public void setAdvisor(FacultyModel advisor) { this.advisor = advisor; }
     public FacultyModel getAdvisor() { return this.advisor; }
+
+    public int getDiningHallHappinessRating() {
+        return diningHallHappinessRating;
+    }
+
+    public void setDiningHallHappinessRating(int diningHallHappinessRating) {
+        this.diningHallHappinessRating = diningHallHappinessRating;
+    }
+
+    public int getAcademicCenterHappinessRating() {
+        return academicCenterHappinessRating;
+    }
+
+    public void setAcademicCenterHappinessRating(int academicCenterHappinessRating) {
+        this.academicCenterHappinessRating = academicCenterHappinessRating;
+    }
+
+    public int getDormHappinessRating() {
+        return dormHappinessRating;
+    }
+
+    public void setDormHappinessRating(int dormHappinessRating) {
+        this.dormHappinessRating = dormHappinessRating;
+    }
 }
 

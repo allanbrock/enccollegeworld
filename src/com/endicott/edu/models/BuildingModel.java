@@ -16,48 +16,37 @@ public class BuildingModel implements Serializable {
     private final static String footballStadium = "FOOTBALL STADIUM";
     private final static String hockeyRink = "HOCKEY RINK";
 
-    private int hoursToComplete = 0;
-    private int costPerDay = 0;
-    private int upgradeCost = 0;
-    private int totalBuildCost = 0;
-
-    private int timeSinceLastUpdate = 0;
-    private int capacity = 0;
-    private String name = "unknown";
+    // These are all changed when the building is made (in the order they're set)
     private String runId = "unknown";
-    private String note = "no note";
+    private String name = "unknown";
+    private String size = "";
     private int numStudents = 0;
-    private String curDisaster = "None";
-
     private float hiddenQuality = 0;
     private float shownQuality = 0;
+    private String kindOfBuilding;
+    private int totalBuildCost = 0;
+    private int upgradeCost = 0;
+    private int costPerDay = 0;
+    private int capacity = 0;
+
+    // These are all updated dynamically (as the game is played)
+    private int timeSinceLastRepair = 0;
+    private String note = "no note";
+    private String curDisaster = "None";
+    private int lengthOfDisaster = 0;
+    private int hoursToComplete = 0;
+    private boolean isBuilt = true;
+    private boolean isUpgradeComplete = true;
+    private float repairCost = 0;
+
+    // These are necessary qualities to keep everything in line
     private static final int maxHiddenQuality = 10;
     private static final int minHiddenQuality = -10;
 
+    // This is simply for making a pop-up on the main page
     private boolean hasBeenAnnouncedAsComplete = true;
 
-    private int lengthOfDisaster = 0;
-    private String size = "";
-    private String kindOfBuilding;
-
-    //some classes use this constructor
-//    public BuildingModel(int hourLastUpdated, String name, int numStudents,
-//                         String curDisaster, String runId, int numRooms,
-//                         String kindOfBuilding, String size){
-//        this.capacity=setCapacityBasedOnSize(size);
-//        this.hourLastUpdated=hourLastUpdated;
-//        this.name=name;
-//        this.numStudents=numStudents;
-//        this.curDisaster=curDisaster;
-//        this.hiddenQuality=10;
-//        this.shownQuality = updateShownQuality(hiddenQuality);
-//        this.runId=runId;
-//        this.numRooms=numRooms;
-//        this.kindOfBuilding = kindOfBuilding;
-//        this.size = size;
-//    }
-
-    //for DormModel, DiningHallModel, LibraryModel, HealthCenterModel, and AcademicCenterModel
+    //for DormModel, DiningHallModel, and AcademicCenterModel
     public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
         this.name = name;
         this.size = size;
@@ -66,28 +55,26 @@ public class BuildingModel implements Serializable {
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
         setStatsBasedOnSize(size);
+        this.capacity = setCapacityBasedOnSize(size);
     }
     //For Football Stadium, Hockey Rink, and Baseball Diamond
     public BuildingModel(String name, String kindOfBuilding, String size){
         this.name = name;
+        this.size = size;
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
-        this.size = size;
         setStatsBasedOnSize(size);
     }
-    //for AdministrativeBldgModel, SportsCenterModel and EntertainmentCenterModel
+    //for AdministrativeBldgModel, LibraryModel, EntertainmentCenterModel, HealthCenterModel and SportsCenterModel
     public BuildingModel(String name, String kindOfBuilding){
         this.name = name;
         this.size = "N/A";
         this.hiddenQuality = 10;
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
-    }
-    //for LibraryModel and HealthCenterModel
-    public BuildingModel(String kindOfBuilding){
-        this.size = "N/A";
-        this.kindOfBuilding = kindOfBuilding;
+        setStatsBasedOnSize("");
+        this.capacity = setCapacityBasedOnSize(size);
     }
 
     public BuildingModel() {
@@ -98,7 +85,6 @@ public class BuildingModel implements Serializable {
         setTotalBuildingCostBasedOnSize(size);
         setUpgradeCostBasedOnSize(size);
         setCostPerDayBasedOnSize(size);
-        this.capacity = setCapacityBasedOnSize(size);
     }
 
     //Helper function to set the building capacity
@@ -116,7 +102,7 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Medium")){setHoursToComplete(504);} //three weeks
         else if(size.equals("Large")){setHoursToComplete(720);} //one month
         else if(size.equals("Extra Large")){setHoursToComplete(840);} //five weeks
-        else setHoursToComplete(336);  // You always need a fall through case
+        else setHoursToComplete(504);  // You always need a fall through case
     }
 
     //Helper function to set the cost of building the building
@@ -125,7 +111,7 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Medium")){setTotalBuildCost(150000);}
         else if(size.equals("Large")){setTotalBuildCost(350000);}
         else if(size.equals("Extra Large")){setTotalBuildCost(650000);}
-        else {setTotalBuildCost(150000);}
+        else {setTotalBuildCost(250000);}
     }
 
     //Helper function to set the upgrade cost
@@ -143,71 +129,6 @@ public class BuildingModel implements Serializable {
         else if(size.equals("Large")){setCostPerDay(350);}
         else if(size.equals("Extra Large")){setCostPerDay(650);}
         else{setCostPerDay(200);}
-    }
-
-    //Function to modify all the stats when the building is upgraded
-    public void upgradeBuilding(String oldSize){
-        if(oldSize.equals("Small")){this.size.equals("Medium");}
-        else if(oldSize.equals("Medium")){this.size.equals("Large");}
-        else if(oldSize.equals("Large")){this.size.equals("Extra Large");}
-        setStatsBasedOnSize(this.size);
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getCostPerDay() {
-        return costPerDay;
-    }
-
-    public int getTimeSinceLastUpdate() {
-        return timeSinceLastUpdate;
-    }
-
-    public void setTimeSinceLastUpdate(int timeSinceLastUpdate) {
-        this.timeSinceLastUpdate = timeSinceLastUpdate;
-    }
-
-    //This advances time and keeps track of how long the building has gone without an update
-    public void updateTimeSinceLastUpdate(int hoursAdvanced){
-        setTimeSinceLastUpdate(timeSinceLastUpdate + hoursAdvanced);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRunId() {
-        return runId;
-    }
-
-    public void setRunId(String runId) {
-        this.runId = runId;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public void setCostPerDay(int costPerDay) {
-        this.costPerDay = costPerDay;
-    }
-
-    public float getHiddenQuality() {
-        return hiddenQuality;
     }
 
     //Keeps the hidden quality between the min and max values
@@ -234,90 +155,88 @@ public class BuildingModel implements Serializable {
         setShownQuality(newShownQuality);
     }
 
+    //Returns the shown quality as a nicely formatted string
     public String getShownQualityString(){
         float tempShownQuality = getShownQuality();
         String shownQualityString = String.format("%.2f", tempShownQuality);
         return shownQualityString;
     }
 
-    public float getShownQuality() {
-        return shownQuality;
-    }
-
-    private void setShownQuality(float shownQuality) {
-        this.shownQuality = shownQuality;
-    }
-
-    public void setHoursToComplete(int hoursToComplete) {
-        this.hoursToComplete = hoursToComplete;
-    }
-
-    public int getHoursToComplete() {
-        return this.hoursToComplete;
-    }
-    public void setTotalBuildCost(int totalBuildCost){
-        this.totalBuildCost = totalBuildCost;
-    }
-    public int getTotalBuildCost(){
-        return this.totalBuildCost;
-    }
-
-    public int getNumStudents() {
-        return numStudents;
-    }
-
-    public void setNumStudents(int numStudents) {
-        this.numStudents = numStudents;
-    }
-
-    public String getCurDisaster() {
-        return curDisaster;
-    }
-
-    public void setCurDisaster(String curDisaster) {
-        this.curDisaster = curDisaster;
-    }
-
-    public int getLengthOfDisaster() {
-        return lengthOfDisaster;
-    }
-
-    public void setLengthOfDisaster(int lengthOfDisaster) {
-        this.lengthOfDisaster = lengthOfDisaster;
-    }
-
-    public void incrementNumStudents(int increment){
-        this.numStudents += increment;
-    }
+    // Returns how many days the building has left to construct
     public String checkIfBeingBuilt(){
         if(this.getHoursToComplete() > 0){
-            return Integer.toString(this.getHoursToComplete()) + " hours remaining";
+            return Integer.toString(this.getHoursToComplete()/24) + " days remaining";
         }
         else
             return "Built";
     }
-    public String getSize() {
-        return size;
+
+    //This advances time and keeps track of how long the building has gone without an update
+    public void updateTimeSinceLastRepair(int hoursAdvanced){
+        setTimeSinceLastRepair(timeSinceLastRepair + hoursAdvanced);
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-    public String getKindOfBuilding() {
-        return kindOfBuilding;
-    }
+    public void incrementNumStudents(int increment){this.numStudents += increment;}
 
-    public void setKindOfBuilding(String kindOfBuilding) {
-        this.kindOfBuilding = kindOfBuilding;
-    }
+    public String getRunId() {return runId;}
+    public void setRunId(String runId) {this.runId = runId;}
 
-    public boolean isHasBeenAnnouncedAsComplete() {
-        return hasBeenAnnouncedAsComplete;
-    }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
 
-    public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {
-        this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;
-    }
+    public String getSize() {return size;}
+    public void setSize(String size) {this.size = size;}
+
+    public int getNumStudents() {return numStudents;}
+    public void setNumStudents(int numStudents) {this.numStudents = numStudents;}
+
+    public float getHiddenQuality() {return hiddenQuality;}
+    // See above for setHiddenQuality function
+
+    public float getShownQuality() {return shownQuality;}
+    private void setShownQuality(float shownQuality) {this.shownQuality = shownQuality;}
+
+    public String getKindOfBuilding() {return kindOfBuilding;}
+    public void setKindOfBuilding(String kindOfBuilding) {this.kindOfBuilding = kindOfBuilding;}
+
+    public int getTotalBuildCost(){return this.totalBuildCost;}
+    public void setTotalBuildCost(int totalBuildCost){this.totalBuildCost = totalBuildCost;}
+
+    public int getUpgradeCost() {return upgradeCost;}
+    public void setUpgradeCost(int upgradeCost) {this.upgradeCost = upgradeCost;}
+
+    public int getCostPerDay() {return costPerDay;}
+    public void setCostPerDay(int costPerDay) {this.costPerDay = costPerDay;}
+
+    public int getCapacity() {return capacity;}
+    public void setCapacity(int capacity) {this.capacity = capacity;}
+
+    public int getTimeSinceLastRepair() {return timeSinceLastRepair;}
+    public void setTimeSinceLastRepair(int timeSinceLastRepair) {this.timeSinceLastRepair = timeSinceLastRepair;}
+
+    public String getNote() {return note;}
+    public void setNote(String note) {this.note = note;}
+
+    public String getCurDisaster() {return curDisaster;}
+    public void setCurDisaster(String curDisaster) {this.curDisaster = curDisaster;}
+
+    public int getLengthOfDisaster() {return lengthOfDisaster;}
+    public void setLengthOfDisaster(int lengthOfDisaster) {this.lengthOfDisaster = lengthOfDisaster;}
+
+    public int getHoursToComplete() {return this.hoursToComplete;}
+    public void setHoursToComplete(int hoursToComplete) {this.hoursToComplete = hoursToComplete;}
+
+    public boolean isBuilt() {return isBuilt;}
+    public void setIsBuilt(boolean isBuilt){this.isBuilt = isBuilt;}
+
+    public boolean isUpgradeComplete() {return isUpgradeComplete;}
+    public void setIsUpgradeComplete(boolean isUpgradeComplete) {this.isUpgradeComplete = isUpgradeComplete;}
+
+    public float getRepairCost() {return repairCost;}
+    public void setRepairCost(float repairCost) {this.repairCost = repairCost;}
+
+    public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
+    public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
 
     public static String getAcademicConst() {return academicConst;}
     public static String getAdminConst() {return adminConst;}
@@ -329,14 +248,5 @@ public class BuildingModel implements Serializable {
     public static String getSportsConst() {return sportsConst;}
     public static String getBaseballDiamondConst() {return baseballDiamond;}
     public static String getFootballStadiumConst() {return  footballStadium;}
-
     public static String getHockeyRinkConst() {return hockeyRink;}
-
-    public int getUpgradeCost() {
-        return upgradeCost;
-    }
-
-    public void setUpgradeCost(int upgradeCost) {
-        this.upgradeCost = upgradeCost;
-    }
 }

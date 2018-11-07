@@ -318,17 +318,35 @@ public class StudentManager {
            setStudentAdvisorHappiness(student, college, initial);
            setStudentMoneyHappiness(student, college);
            setStudentFunHappiness(student, college);
+           setDiningHallHappinessRating(student, college);
+           setAcademicCenterHappinessRating(student, college);
+           setDormHappinessRating(student, college);
 
            // The overall student happiness is an average of the above.
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
-                             student.getHealthHappinessRating() + student.getMoneyHappinessRating()) / 4;
+                             student.getHealthHappinessRating() + student.getMoneyHappinessRating()) +
+                             student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
+                             student.getDormHappinessRating() / 7;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
         }
 
         dao.saveAllStudents(collegeId, students);
+    }
+
+    // TODO: building happiness ratings
+    private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
+        student.setDiningHallHappinessRating(50);
+    }
+
+    private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
+        student.setAcademicCenterHappinessRating(50);
+    }
+
+    private void setDormHappinessRating(StudentModel student, CollegeModel college) {
+        student.setDormHappinessRating(50);
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
@@ -424,10 +442,18 @@ public class StudentManager {
     }
 
     private void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true);
+        // Only the first tip should be set to true.
+        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true, "student.png");
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 
+    /**
+     * @param collegeId
+     * @param buildingName
+     * @param  buildingType
+     *
+     * Checks if the building destroyed was one the student wass assigned to and moves them if necessary
+     */
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){
@@ -455,9 +481,9 @@ public class StudentManager {
      */
     public static String getStudentFeedback(StudentModel student, String collegeId) {
 
-        Boolean usesVerb    = (Math.random() >= 0.5);
-        Boolean useNoun     = true;
-        String feedback     = (usesVerb ? "I " : "The ");
+        Boolean usesVerb        = (Math.random() >= 0.5);
+        Boolean useNoun         = true;
+        String feedback         = (usesVerb ? "I " : "The ");
 
         List<String> verbs      = new ArrayList<>();
         List<String> adjectives = new ArrayList<>();
@@ -468,7 +494,7 @@ public class StudentManager {
 //      happinessLevels.put("advisor", student.getAdvisorHappinessHappinessRating());
         happinessLevels.put("health", student.getHealthHappinessRating());
         happinessLevels.put("money", student.getMoneyHappinessRating());
-//      happinessLevels.put("Fun" , student.getFunHappinessRating());
+//      happinessLevels.put("fun" , student.getFunHappinessRating());
 
         // Negative feedback
         if(student.getHappinessLevel() < 50) {

@@ -38,7 +38,7 @@ public class BuildingManager {
 
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
-            building.updateTimeSinceLastUpdate(24); //when a building is upgraded, this should go back to zero
+            building.updateTimeSinceLastRepair(24); //when a building is upgraded, this should go back to zero
             billRunningCostOfBuilding(runId, hoursAlive, building);
             workOnBuilding(building, runId);
             buildingDecayForOneDay(runId, building);
@@ -56,13 +56,9 @@ public class BuildingManager {
      * @param building the building that's causing the cost
      */
     private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
-        // A building stores the last time it was updated.
-        // Figure out how many hours have past since last updated.
-        // Multiple by cost per hour.
-        int newCharge = (hoursAlive - building.getTimeSinceLastUpdate()) * building.getCostPerDay();
-        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), (int) (newCharge));
-
-        // TODO: getMaintenanceCostPerDay() is used like it's an hourly cost.  Seems like it should be divided by 24.
+        // Multiple the cost per day based on how much the building is decayed
+        int newCharge = ((int)(100 - building.getShownQuality())) * building.getCostPerDay();
+        Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), newCharge);
     }
 
     /**
@@ -74,9 +70,29 @@ public class BuildingManager {
     public void workOnBuilding(BuildingModel building, String runId){
         if (building.getHoursToComplete() > 0) {
             building.setHoursToComplete(building.getHoursToComplete() - 24);
-
             surpriseEventDuringConstruction(runId, 24);
         }
+
+        if(building.getHoursToComplete() == 0 & building.isUpgradeComplete() == false){
+            building.setIsBuilt(true);
+            building.setIsUpgradeComplete(true);
+            if(building.isUpgradeComplete()){
+                //This is how the building is upgraded
+                //It's inside this for loop to make sure the extra capacity isn't added until AFTER the upgrade time
+                String oldSize = building.getSize();
+                String newSize;
+                if(oldSize.equals("Small")){newSize = "Medium";}
+                else if(oldSize.equals("Medium")){newSize = "Large";}
+                else if(oldSize.equals("Large")){newSize = "Extra Large";}
+                else{newSize = "";}
+                building.setSize(newSize);
+                building.setStatsBasedOnSize(newSize);
+                building.setCapacity(building.setCapacityBasedOnSize(newSize));
+            }
+            BuildingDao.updateSingleBuilding(runId, building);
+        }
+
+
     }
 
     /**
@@ -107,12 +123,10 @@ public class BuildingManager {
 
         // Create building
         BuildingModel newBuilding = createCorrectBuildingType(buildingType, buildingName, buildingSize);
-        //newBuilding.setBuildingType(buildingType);
-//        setBuildingAttributesByBuildingType(newBuilding);
-        newBuilding.setTimeSinceLastUpdate(0);
+        newBuilding.setTimeSinceLastRepair(0);
         newBuilding.setHoursToBuildBasedOnSize(buildingSize);
-        newBuilding.setStatsBasedOnSize(buildingSize);
         newBuilding.setHasBeenAnnouncedAsComplete(false);
+        newBuilding.setIsBuilt(false);
 
         // Pay for building
         if (newBuilding.getTotalBuildCost() >= Accountant.getAvailableCash(collegeId)) {
@@ -179,10 +193,12 @@ public class BuildingManager {
         }
     }
 
-    public void upgradeBuilding(BuildingModel building){
-        //Upgrade time should always be One(1) week
-        buildingModel.upgradeBuilding(building.getSize());
-        building.setHoursToComplete(168); //always take a week to upgrade
+    public static void upgradeBuilding(String collegeId, BuildingModel building){
+        //Upgrade time should always be Two(2) weeks
+        building.setHoursToComplete(336); //always take two weeks to upgrade
+        building.setIsUpgradeComplete(false);
+        Accountant.payBill(collegeId, "Upgrade to " + building.getName(), building.getUpgradeCost());//pay for upgrade
+        BuildingDao.updateSingleBuilding(collegeId, building);
     }
 
     /**
@@ -197,7 +213,7 @@ public class BuildingManager {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
-                b.setCurDisaster("flood");
+                b.setCurDisaster("Flood");
                 b.setLengthOfDisaster(lengthOfFlood);
             }
         }
@@ -205,7 +221,9 @@ public class BuildingManager {
     }
 
     public void buildingDecayForOneDay(String collegeId, BuildingModel b){
-        if(!(b.getHoursToComplete() > 0)) {
+        if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(buildingModel.getLibraryConst()) ||
+        b.getKindOfBuilding().equals(buildingModel.getHealthConst()) || b.getKindOfBuilding().equals(buildingModel.getEntertainmentConst()))
+        || b.isUpgradeComplete() == false)) {
             float currentQuality = b.getHiddenQuality();
             //Generates a random number between 0-1
             //Multiply by .2 since One hidden quality point = Five shown quality points
@@ -213,6 +231,7 @@ public class BuildingManager {
             double randomDecay = Math.random() * 0.2;
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
+        dao.updateSingleBuilding(collegeId, b);
     }
 
     public void destroyBuildingInCaseOfDisaster(List<BuildingModel> buildings, String collegeId, String buildingName){
@@ -230,7 +249,8 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
                 float currentQuality = b.getHiddenQuality();
-                double randomDecay = Math.random();
+                double randomDecay = Math.random() * 4; //Max decay: 20%
+                b.setHiddenQuality((float) (currentQuality - randomDecay));
             }
         }
         dao.saveAllBuildings(collegeId, buildings);
@@ -366,95 +386,23 @@ public class BuildingManager {
         return getOpenSpots(collegeID, BuildingModel.getDiningConst());
     }
 
-    /**
-     * Return the number of beds under construction.
-     *
-     * @param collegeId
-     * @return
-     */
-    public static int getBedsUnderConstruction(String collegeId) {
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
-        int openBeds = 0;
-        for (BuildingModel b : buildings) {
-            if(b.getHoursToComplete() > 0) {
-                int numStudents = b.getNumStudents();
-                int capacity = b.getCapacity();
-                openBeds += capacity - numStudents;
-            }
-        }
-        return openBeds;
-    }
-
-   /* *//**
-     * Sell a building.
-     *
-     * @param collegeId
-     * @param buildingName
-     *//*
-    public static void sellBuilding(String collegeId, String buildingName) {
-
-        BuildingDao buildingDao = new BuildingDao();
-        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
-        List<StudentModel> students = studentDao.getStudents(collegeId);
-        String name = "";
-        int totalBuildCost = 0;
-        int refund = 0;
-        for(BuildingModel b : buildings){
-            name = b.getName();
-            totalBuildCost = b.getTotalBuildCost();
-
-            //takes 20% of the build cost to refund back to the college.
-            refund = (int)(totalBuildCost/20);
-            if(name.equals(buildingName)){
-                if(students.size() < (getOpenBeds(collegeId) - b.getCapacity())){
-                    buildings.remove(b);
-                    buildingDao.saveAllBuildings(collegeId, buildings);
-                    Accountant.receiveIncome(collegeId, buildingName + "has been sold.", refund);
-                    return;
-                }
-                else{
-                    logger.info("Not enough open beds...");
-                }
-
-            }
-        }
-
-    }
-*/
-    /**
-     * Get a list of the types of the buildings that can be built.
-     * Returns a list of buildings where the building type is indicating
-     * which buildings can be built.
-     *
-     * @param collegeId
-     * @return
-     */
-//    public List<BuildingModel> getWhatTypesOfBuildingsCanBeBuilt(String collegeId){
-//        ArrayList<BuildingModel> availableBuildingTypes = new ArrayList<>();
-//        BuildingModel smallBuilding = new BuildingModel();
-//        smallBuilding.setBuildingType(1);
-//        BuildingModel mediumBuilding = new BuildingModel();
-//        mediumBuilding.setBuildingType(2);
-//        BuildingModel largeBuilding = new BuildingModel();
-//        largeBuilding.setBuildingType(3);
-//
-//        int availableCash = Accountant.getAvailableCash(collegeId);
-//
-//        if(availableCash >= 250000){
-//            //can build all building types
-//            availableBuildingTypes.add(smallBuilding);
-//            availableBuildingTypes.add(mediumBuilding);
-//            availableBuildingTypes.add(largeBuilding);
+//    /**
+//     * Return the number of beds under construction.
+//     *
+//     * @param collegeId
+//     * @return
+//     */
+//    public static int getBedsUnderConstruction(String collegeId) {
+//        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+//        int openBeds = 0;
+//        for (BuildingModel b : buildings) {
+//            if(b.getHoursToComplete() > 0) {
+//                int numStudents = b.getNumStudents();
+//                int capacity = b.getCapacity();
+//                openBeds += capacity - numStudents;
+//            }
 //        }
-//        else if(availableCash >= 175000){
-//            availableBuildingTypes.add(smallBuilding);
-//            availableBuildingTypes.add(mediumBuilding);
-//        }
-//        else if(availableCash >=100000){
-//            availableBuildingTypes.add(smallBuilding);
-//        }
-//
-//        return availableBuildingTypes;
+//        return openBeds;
 //    }
 
     private static void saveBuildingHelper(BuildingModel building, String collegeId, CollegeModel college){
@@ -494,53 +442,31 @@ public class BuildingManager {
 
         gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 700);
         gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",1500);
+        gateManager.createGate(collegeId, "Library", "Gate until library is unlocked.", "resources/images/LIBRARY.png", 2000);
+        gateManager.createGate(collegeId, "Health Center", "Gate until health center is unlocked.", "resources/images/HEALTH.png", 3500);
+        gateManager.createGate(collegeId, "Entertainment Center", "Gate until entertainment center is unlocked.", "resources/images/ENTERTAINMENT.png", 5000);
     }
 
-    /**
-     * Get the dorms at the college.
-     *
-     * @param collegeId
-     * @return
-     */
-//    static public List<DormitoryModel> getDorms(String collegeId){
-//        String dormName = "";
-//        List<DormitoryModel> dorms = dormDao.getDorms(collegeId);
-//        for(DormitoryModel d : dorms){
-//            d.setNumStudents(0);
+//    //made copy of above method because not sure which is right here
+//    static public List<BuildingModel> getBuildings(String collegeId){
+//        String buildingName = "";
+//        List<BuildingModel> buildings = dao.getBuildings(collegeId);
+//        for(BuildingModel b : buildings){
+//            b.setNumStudents(0);
 //        }
 //        List<StudentModel> students = studentDao.getStudents(collegeId);
 //        for(StudentModel s : students){
-//            dormName = s.getDorm();
-//            for (DormitoryModel d : dorms) {
-//                if (dormName.equals(d.getName())) {
-//                    d.incrementNumStudents(1);
+//            buildingName = s.getDorm();
+//            for (BuildingModel b : buildings) {
+//                if (buildingName.equals(b.getName())) {
+//                    b.incrementNumStudents(1);
 //                } else {
-//                    logger.info("Dorm was not found.");
+//                    logger.info("Building was not found.");
 //                }
 //            }
 //        }
-//        return dorms;
+//        return buildings;
 //    }
-    //made copy of above method because not sure which is right here
-    static public List<BuildingModel> getBuildings(String collegeId){
-        String buildingName = "";
-        List<BuildingModel> buildings = dao.getBuildings(collegeId);
-        for(BuildingModel b : buildings){
-            b.setNumStudents(0);
-        }
-        List<StudentModel> students = studentDao.getStudents(collegeId);
-        for(StudentModel s : students){
-            buildingName = s.getDorm();
-            for (BuildingModel b : buildings) {
-                if (buildingName.equals(b.getName())) {
-                    b.incrementNumStudents(1);
-                } else {
-                    logger.info("Building was not found.");
-                }
-            }
-        }
-        return buildings;
-    }
 
     public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
@@ -555,8 +481,17 @@ public class BuildingManager {
     }
 
     private static void loadTips(String collegeId) {
-        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct buildings to allow a greater maximum capacity.", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings", "Construct sports buildings to make sports teams.", false);
+        // Only the first tip should be set to true.
+        TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct more buildings to allow a greater maximum capacity at your college.", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewBuildings","Upgrade your buildings to hold more students.", false);
+        TutorialManager.saveNewTip(collegeId, 2,"viewBuildings", "Construct sports buildings to unlock certain sports.", false);
+        TutorialManager.saveNewTip(collegeId, 3,"viewBuildings","Building quality will decay automatically everyday. Be sure to repair your buildings often to keep your students happy!", false);
+        TutorialManager.saveNewTip(collegeId, 4,"viewBuildings", "There must be enough Desks, Plates, and Beds to accommodate students coming into your college.", false);
+        TutorialManager.saveNewTip(collegeId, 5,"viewBuildings", "Certain buildings have specific benefits. Try to see if you can notice them!", false);
+        TutorialManager.saveNewTip(collegeId, 6,"viewBuildings", "Remember when purchasing a building that construction will take time. It won't just be built immediately!", false);
+        TutorialManager.saveNewTip(collegeId, 7,"viewBuildings", "Watch out for disasters in buildings! The results could be catastrophic.", false);
+
+
     }
 }
 

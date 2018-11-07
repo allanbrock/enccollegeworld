@@ -111,11 +111,24 @@
                 <tr>
                     <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getCost()%>
+                    <td style="vertical-align:middle; font-size:120%;">$<%=numberFormatter.format(items[i].getCost())%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;">
-                        <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
-                    </td>
+                    <%
+                        if(college.getAvailableCash() > items[i].getCost()){
+                    %>
+                        <td style="vertical-align:middle; font-size:120%;">
+                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                        </td>
+                    <%
+                        }
+                        else{
+                    %>
+                        <td style="vertical-align:middle; font-size:120%;">
+                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
+                        </td>
+                    <%
+                        }
+                    %>
                 </tr>
                 <%
                         }
@@ -147,7 +160,6 @@
                     </td>
                     <th></th>
                     <th></th>
-
                 </tr>
                 <%
                         }

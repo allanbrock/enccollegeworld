@@ -88,7 +88,7 @@ public class CollegeManager {
         CollegeDao.deleteCollege(collegeId);
         BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
-        FloodDao.deleteFloods(collegeId);
+        FloodDao.deleteFlood(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
         PlagueDao.deletePlagues(collegeId);
         SportsDao.deleteSports(collegeId);
@@ -243,6 +243,7 @@ public class CollegeManager {
     }
 
     static private void loadTips(String collegeId) {
+        // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
     }

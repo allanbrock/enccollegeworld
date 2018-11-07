@@ -10,7 +10,6 @@
 <%@ page import="java.util.Base64" %>
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
-<%@ page import="com.endicott.edu.simulators.BuildingManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.datalayer.BuildingDao" %>
 <%@ page import="java.util.ArrayList" %>
@@ -59,15 +58,7 @@
 //        buildings = new BuildingModel[0];  // This is really bad
 //        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
 //    }
-
-    String sortByType = (String) request.getAttribute("sortByType");
-    List<BuildingModel> buildings;
-    if(sortByType == null  || sortByType.equals("All Buildings")){
-        buildings = BuildingDao.getBuildings(college.getRunId());
-    }
-    else{
-        buildings = BuildingManager.getBuildingListByType(sortByType, college.getRunId());
-    }
+    List<BuildingModel> buildings= BuildingDao.getBuildings(college.getRunId());
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
@@ -189,14 +180,11 @@
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <p></p>
 
-
         <div class="well well-sm">
-            <div class="col-sm-5" style="margin-top: 30px;">
         <div class="form-group">
             <label for="buildingType">Sort by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
-                <option value="Administrative Building">Administrative Building</option>
                 <option value="Academic Center">Academic Center</option>
                 <option value="Baseball Diamond">Baseball Diamond</option>
                 <option value="Dining Hall">Dining Hall</option>
@@ -208,27 +196,8 @@
                 <option value="Library">Library</option>
             </select>
             <!-- Button -->
-            <input type="submit" class="btn btn-info" name="startSortByBuildingType" value="Sort" style="margin-top: 5px;">
+            <input type="submit" class="btn btn-info" name="SortByBuildingType" value="Sort" style="margin-top: 5px;">
         </div>
-            </div>
-            <!--Tips-->
-
-            <%if (tip != null){%>
-            <div class="col-sm-5" style="float: right;">
-                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;">
-                    <h4 style="color:blue">Tip</h4>
-
-                    <p><%=tip.getBody()%></p>
-
-                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
-                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
-                </div>
-            </div>
-            <%}%>
-            <%if (tip == null){%>
-            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
-            <%}%>
-
 
             <table class="table table-condensed">
                 <thread>
@@ -375,7 +344,7 @@
 
         <!-- DORM NEWS -->
         <div class="row">
-            <div class="col-sm-6" style="margin-left: 150px;">
+            <div class="col-sm-4">
                 <div class="well well-sm">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
@@ -393,7 +362,21 @@
                 </div>
             </div>
             <!-- Tips -->
+            <%if (tip != null){%>
+            <div class="col-sm-3">
+                <div class="well well-lg">
+                <h4 style="color:blue">Tip</h4>
 
+                    <p><%=tip.getBody()%></p>
+
+                <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+            </div>
+            <%}%>
+            <%if (tip == null){%>
+            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+            <%}%>
         </div>
     </div>
 </form>
