@@ -542,7 +542,7 @@ public class BuildingManager {
         return buildings;
     }
 
-    public List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
+    public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         List<BuildingModel> buildingsToReturn = new ArrayList<>();
         for(BuildingModel b : allBuildings){

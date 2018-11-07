@@ -22,6 +22,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private boolean buildingTypeSelected = false;
     private String buildingType;
     private String buildingToUpgrade;
+    private String sortByType;
+    private String matchedConstantType;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -29,7 +31,13 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         if(request.getParameter("upgradeBuilding") != null){
             doGet(request, response);
         }
-
+        if(request.getParameter("startSortByBuildingType") != null){
+            sortByType = request.getParameter("sortByBuildingType");
+            //needs to make the building type from the dropdown match one of the constants for the type of building
+            matchedConstantType = convertToConsts(sortByType);
+            request.setAttribute("sortByType", matchedConstantType);
+            doGet(request, response);
+        }
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
             beginPurchase = false;
             buildingTypeSelected = false;
@@ -93,6 +101,42 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
 
     }
+    private String convertToConsts(String sortByType){
+        if(sortByType.equals("Academic Center")){
+            matchedConstantType = "ACADEMIC";
+        }
+        else if(sortByType.equals("Administrative Building")){
+            matchedConstantType = "ADMIN";
+        }
+        else if(sortByType.equals("Baseball Diamond")){
+            matchedConstantType = "BASEBALL DIAMOND";
+        }
+        else if(sortByType.equals("Dining Hall")){
+            matchedConstantType = "DINING";
+        }
+        else if(sortByType.equals("Dormitory")){
+            matchedConstantType = "DORM";
+        }
+        else if(sortByType.equals("Football Stadium")){
+            matchedConstantType = "FOOTBALL STADIUM";
+        }
+        else if(sortByType.equals("Hockey Rink")){
+            matchedConstantType = "HOCKEY RINK";
+        }
+        else if(sortByType.equals("Entertainment Center")){
+            matchedConstantType = "ENTERTAINMENT";
+        }
+        else if(sortByType.equals("Health Center")){
+            matchedConstantType = "HEALTH";
+        }
+        else if(sortByType.equals("Library")){
+            matchedConstantType = "LIBRARY";
+        }
+        else{
+            matchedConstantType = "All Buildings";
+        }
+        return matchedConstantType;
+    }
 //    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
 //        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 //
@@ -144,7 +188,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
         //String buildingType=request.getParameter("buildingType");
-        String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
 
         // Some buildings (Sports Center) are missing the size.
