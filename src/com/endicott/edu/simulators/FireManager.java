@@ -275,12 +275,12 @@ public class FireManager {
         }
 
         if (numStudentDeaths > 0 && !fire.isCatastrophic()) {
-            for (int i = 0; i < numStudentDeaths; ++i) {
+            for (int i = 0; i < numStudentDeaths && (students.size() > 0); ++i) {
                 int studentToRemove = new Random().nextInt(students.size());
                 victims += students.get(studentToRemove).getName().trim() + ", ";
                 students.remove(studentToRemove);
             }
-            for (int j = 0; j <numFacultyDeaths; j++){
+            for (int j = 0; j <numFacultyDeaths && (faculty.size() > 0); j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
                 victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
                 faculty.remove(facultyToRemove);
