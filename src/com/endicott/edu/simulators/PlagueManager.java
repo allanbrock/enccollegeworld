@@ -12,6 +12,11 @@ import java.util.Random;
  */
 public class PlagueManager {
     PlagueDao dao = new PlagueDao();
+    private double plagueProbablity = .03;
+    private boolean purellUpgradePurchased = false;
+    private InventoryManager inventoryManager = new InventoryManager();
+    private String purellUpgradeName = "Purell Dispensers";
+
 
     /**
      * Simulate changes in the plague due to passage of time.
@@ -21,6 +26,7 @@ public class PlagueManager {
      * @param hoursAlive  number of hours since college was created
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        checkForPurellUpgrade(collegeId);
         List<PlagueModel> plagues = dao.getPlagues(collegeId);
 
         // First work on the overall health of students.
@@ -54,20 +60,35 @@ public class PlagueManager {
             int newNumberSick = getNumberSick(collegeId);
             int newVictims = newNumberSick - oldNumberSick;
             if (newVictims > 15) {
-                popupManager.newPopupEvent("Plague Spreads!",
-                        "And the plague continues. " + newVictims +
-                         " more students are infected.  There are now " + newNumberSick + " ill.",
-                        "Ok", "plagueAckCallback2","resources/images/plague.jpg", "Plague Doctor" );
+                if (!isPurellUpgradePurchased()) {
+                    popupManager.newPopupEvent("Plague Spreads!",
+                            "And the plague continues. " + newVictims +
+                                    " more students are infected.  There are now " + newNumberSick + " ill.\n" +
+                                    "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
+                            "Ok", "plagueAckCallback2", "Go to store", "goToStore",
+                            "resources/images/plague.jpg", "Plague Doctor");
+
+                }
+                else{
+                    popupManager.newPopupEvent("Plague Spreads!",
+                            "And the plague continues. " + newVictims +
+                                    " more students are infected.  There are now " + newNumberSick + " ill.\n" +
+                                    "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
+                            "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
+                }
             }
         }
 
         // or possibly start a new plague
+
         else
         {
+
+
             // Use mode to change the odds if you are in DEMO_PLAGUE mode.
             //CollegeMode mode = CollegeManager.getCollegeMode(collegeId);
 
-            if (Math.random() <= 0.03) {
+            if (Math.random() <= plagueProbablity) {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
@@ -241,5 +262,15 @@ public class PlagueManager {
 
         dao.saveAllStudents(collegeId, students);
         return nSick;
+    }
+    //Checks to see if the Purell Upgrade is puchased, and if so lowers the plague probability to .01
+    public void checkForPurellUpgrade(String runId){
+        if (inventoryManager.isPurchased(purellUpgradeName,runId)){
+            this.purellUpgradePurchased = true;
+            this.plagueProbablity = .01;
+        }
+    }
+    public boolean isPurellUpgradePurchased() {
+        return purellUpgradePurchased;
     }
 }
