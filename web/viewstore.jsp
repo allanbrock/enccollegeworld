@@ -151,8 +151,8 @@
         <table class="table table-condensed">
             <thread>
                 <tr>
-                    <th>Item Name</th>
                     <th></th>
+                    <th>Item Name</th>
                     <th></th>
                 </tr>
             </thread>
@@ -162,9 +162,9 @@
                         if(items[i].getPurchased()){
                 %>
                 <tr>
+                    <th></th>
                     <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
                     </td>
-                    <th></th>
                     <th></th>
                 </tr>
                 <%
