@@ -71,7 +71,7 @@ public class FacultyDao {
      * @param collegeId
      * @param faculty
      */
-    public void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
+    public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
         try {
             File file = new File(getFilePath(collegeId));
             file.createNewFile();
