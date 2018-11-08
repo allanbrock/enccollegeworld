@@ -109,18 +109,12 @@ public class SportManager {
     public static void establishDefaultSportsTeams(String collegeId){
         SportsDao newSportDao = new SportsDao();
 
-        //Create Men's and Women's Basketball as default sports
-        SportModel default1 = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
+        //Create Women's Volleyball as default sport
+        SportModel default1 = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
         addPlayers(collegeId, default1);
         calculateNumberOfPlayersOnTeam(collegeId, default1);
         fillUpTeamAndSetActiveStatus(collegeId, default1);
         newSportDao.saveNewSport(collegeId, default1);
-
-        SportModel default2 = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
-        addPlayers(collegeId, default2);
-        calculateNumberOfPlayersOnTeam(collegeId, default2);
-        fillUpTeamAndSetActiveStatus(collegeId, default2);
-        newSportDao.saveNewSport(collegeId, default2);
     }
 
     /**
@@ -169,7 +163,7 @@ public class SportManager {
                 return addTeamResult;
             }
             else {
-                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
+                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Basketball", collegeId, 0, 72, "Male", 3, "Winter", 72);
                 Accountant.payBill(collegeId, "Men's Basketball start up fee", result.getStartupCost());
             }
         }
@@ -181,7 +175,7 @@ public class SportManager {
                 return addTeamResult;
             }
             else {
-                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
+                result = new SportModel(12, 0, 15, 100, 0, 0, 0, 20, 50000, 50, 0, "Women's Basketball", collegeId, 0, 72, "Female", 3, "Winter", 72);
                 Accountant.payBill(collegeId, "Women's Basketball start up fee", result.getStartupCost());
             }
         }
@@ -243,6 +237,18 @@ public class SportManager {
             else {
                 result = new SportModel(33, 0, 75, 100, 0, 0, 0, 20, 50000, 50, 0, "Men's Football", collegeId, 0, 144, "Male", 3, "Fall", 144);
                 Accountant.payBill(collegeId, "Men's Football start up fee", result.getStartupCost());
+            }
+        }
+        else if(sportName.equals("$50,000 - Women's Volleyball")){
+            //requires stadium
+            if (sportCenterBuilt == false){
+                //error: cannot create building, must create football stadium first
+                addTeamResult = "Cannot create Women's Volleyball until Sports Center is built!";
+                return addTeamResult;
+            }
+            else {
+                result = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 72, "Female", 3, "Fall", 48);
+                Accountant.payBill(collegeId, "Women's Volleyball start up fee", result.getStartupCost());
             }
         } else {
             logger.severe("Could not add sport: '" + sportName + "'");
