@@ -101,7 +101,6 @@ public class FloodManager {
      * @return true if flood started.
      */
 
-
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         //If a flood upgrade was bought from the store, decrease the probability of floods.
@@ -119,8 +118,9 @@ public class FloodManager {
             floodDao.saveTheFlood(collegeId, randomFlood);
 
             logger.info("EVARUBIO .  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
-            popupManager.newPopupEvent("Flood in "+ dorm.getName()+"!", "Oh no! "+dorm.getName() +" has been flooded! Would you like to visit the store invest in more drains to reduce the probability of future floods? ",
-                    "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
+
+            generateCorrectPopup(hasUpgrade,randomFlood,popupManager);
+
             NewsManager.createNews(collegeId, hoursAlive, "Flooding detected at " + randomFlood.getDormName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
 
@@ -129,6 +129,23 @@ public class FloodManager {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Creates correct PopupEventManager for the flood
+     * @param hasUpgrade Bool determining whether the user has bought the upgrade or not
+     * @param theFlood the FloodModel for which the popup will be created
+     * @param popupManager the PopupEventManager
+     * */
+    private void generateCorrectPopup(Boolean hasUpgrade, FloodModel theFlood, PopupEventManager popupManager){
+        if(hasUpgrade){
+            popupManager.newPopupEvent("Flood in  "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded!","Ok","okFloodWithUpgrade",
+                    "resources/images/DORM.png","Unflooded Dorm");
+        }else{
+            popupManager.newPopupEvent("Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
+                    "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
+        }
+
     }
 
     /**
