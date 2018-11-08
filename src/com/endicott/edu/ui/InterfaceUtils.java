@@ -39,6 +39,7 @@ public class InterfaceUtils {
         TutorialModel[] tutorials = TutorialDao.getTutorialsArray(collegeId);
         FireModel[] fires = FireDAO.getFiresArray(collegeId);
         ItemModel[] items = InventoryDao.getInventoryArray(collegeId);
+        SnowModel snowStorm = SnowDao.getSnowStorm(collegeId);
 
 
         // Load the name of all colleges.
@@ -60,6 +61,7 @@ public class InterfaceUtils {
         request.setAttribute("items", items);
         request.getSession().setAttribute("popupMan", popupManager);
         request.setAttribute("tutorials", tutorials);
+        request.setAttribute("snowStorm", snowStorm);
     }
 
 

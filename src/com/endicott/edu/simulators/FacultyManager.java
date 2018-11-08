@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
+import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.models.StudentModel;
@@ -16,7 +17,6 @@ import java.util.Random;
  */
 public class FacultyManager {
 
-    private static ArrayList<DepartmentModel> departmentOptions;
     /**
      * Simulate changes in faculty based on the passage of time at the college.
      *
@@ -26,6 +26,7 @@ public class FacultyManager {
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager){
         FacultyDao fao = new FacultyDao();
         payFaculty(collegeId, hoursAlive, fao);
+        inspectFacultyPerformances(collegeId);
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
@@ -61,16 +62,25 @@ public class FacultyManager {
      *
      * @param collegeId instance of the simulation
      */
-    public static void establishCollege(String collegeId){
-        departmentOptions = new ArrayList<>();
-        departmentOptions.add(new DepartmentModel("Arts and Sciences"));
-        departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
-        departmentOptions.add(new DepartmentModel("Business"));
-        departmentOptions.add(new DepartmentModel("Nursing"));
-        for (int i=0; i<6; i++) {
+    public static void establishCollege(String collegeId, CollegeModel college){
+        DepartmentManager.establishDepartments(college.getDepartmentCount());
+        for (int i=0; i<12; i++) {
             String department = generateFacultyDepartment();
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
+            for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+                if(member.getDepartmentName().equals(d.getDepartmentName())){
+                    if(d.getOverallEmployeeCount() > 2) {
+                        d.putInEmployeeCounts(member.getTitle(), d.getOverallEmployeeCount() - 1);
+                        break;
+                    }
+                    else {
+                        d.putInEmployeeCounts(member.getTitle(), 1);
+                        break;
+                    }
+                }
+            }
        }
+       inspectFacultyPerformances(collegeId);
        loadTips(collegeId);
    }
 
@@ -86,7 +96,7 @@ public class FacultyManager {
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, "LSB", collegeID, salary);
+        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, collegeID, salary);
         fao.saveNewFaculty(collegeID, member);
         return member;
     }
@@ -94,7 +104,7 @@ public class FacultyManager {
     public static String generateFacultyTile(String departmentName){
         String title;
         DepartmentModel curDept = new DepartmentModel("tempName");
-        for(DepartmentModel d : departmentOptions){
+        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
             if(d.getDepartmentName().equals(departmentName)){
                 curDept = d;
                 break;
@@ -106,13 +116,6 @@ public class FacultyManager {
             title = "Assistant Dean";
         else
             title = "Faculty";
-        int newCount = curDept.getEmployeeCounts().get(title);
-        for(DepartmentModel d : departmentOptions){
-            if(d.getDepartmentName().equals(curDept.getDepartmentName())){
-                d.setEmployeeCount(title, newCount);
-                break;
-            }
-        }
         return title;
     }
 
@@ -120,31 +123,31 @@ public class FacultyManager {
         Random r = new Random();
         ArrayList<String> emptyDepartments = new ArrayList<>();
         ArrayList<String> onlyDeans = new ArrayList<>();
-        for(DepartmentModel d : departmentOptions){
+        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
             if(d.getEmployeeCounts().get("Dean") == 0)
                 emptyDepartments.add(d.getDepartmentName());
             else if(d.getEmployeeCounts().get("Assistant Dean") == 0)
                 onlyDeans.add(d.getDepartmentName());
         }
         if(emptyDepartments.size() > 0 ){
-            int rand = r.nextInt((emptyDepartments.size() - 0) + 1);
+            int rand = r.nextInt((emptyDepartments.size() - 0));
             for(int i = 0; i < emptyDepartments.size(); i++){
                 if(i == rand)
                     return emptyDepartments.get(i);
             }
         }
         else if(onlyDeans.size() > 0){
-            int rand = r.nextInt((onlyDeans.size() - 0) + 1);
+            int rand = r.nextInt((onlyDeans.size() - 0));
             for(int i = 0; i < onlyDeans.size(); i++){
                 if(i == rand)
                     return onlyDeans.get(i);
             }
         }
         else{
-            int rand = r.nextInt((departmentOptions.size() - 0) + 1);
-            for(int i = 0; i < departmentOptions.size(); i++){
+            int rand = r.nextInt((DepartmentManager.getDepartmentOptions().size() - 0));
+            for(int i = 0; i < DepartmentManager.getDepartmentOptions().size(); i++){
                 if(i == rand)
-                    return departmentOptions.get(i).getDepartmentName();
+                    return DepartmentManager.getDepartmentOptions().get(i).getDepartmentName();
             }
         }
         return "";  // Statement should never be hit
@@ -189,27 +192,20 @@ public class FacultyManager {
         return salaryOptions;
     }
 
-    private static void addToDepartmentOptions(int departmentLevel){
-        if(departmentLevel == 2)
-            departmentOptions.add(new DepartmentModel("Communications"));
-        else if(departmentLevel == 3)
-            departmentOptions.add(new DepartmentModel("Performing Arts"));
-    }
-
     public static String[] getTitleOptions(){
         String[] titleOptions = {"Dean", "Assistant Dean", "Professor"};
         return titleOptions;
     }
 
     public static String[] getDepartmentOptionStrings (){
-        String[] names = new String[departmentOptions.size()];
-        for(int i = 0; i < departmentOptions.size(); i++){
-            names[i] = departmentOptions.get(i).getDepartmentName();
+        String[] names = new String[DepartmentManager.getDepartmentOptions().size()];
+        for(int i = 0; i < DepartmentManager.getDepartmentOptions().size(); i++){
+            names[i] = DepartmentManager.getDepartmentOptions().get(i).getDepartmentName();
         }
         return names;
     }
 
-    public static ArrayList<DepartmentModel> getDepartmentOptions() { return departmentOptions; }
+    public static ArrayList<DepartmentModel> getDepartmentOptions() { return DepartmentManager.getDepartmentOptions(); }
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness
@@ -333,9 +329,32 @@ public class FacultyManager {
         return newAdvisor;
     }
 
+    private static void inspectFacultyPerformances(String collegeId){
+        List<FacultyModel> faculty = new ArrayList<>();
+        for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
+            if(f.getPerformance() < 45){
+                f.setUnderPerforming(true);
+            }
+            faculty.add(f);
+        }
+        FacultyDao fao = new FacultyDao();
+        fao.saveAllFaculty(collegeId, faculty);
+    }
+
+    public static String generateUnderperformingScenario(String badFacultyName){
+        Random r = new Random();
+        String[] scenarios = {badFacultyName + " showed up drunk to class!",
+        badFacultyName + " has been yelling at all their students!",
+        badFacultyName + " posted something bad online!",
+        badFacultyName + " has been failing all of their students!"};
+        int rand = r.nextInt(scenarios.length - 0);
+        return scenarios[rand];
+    }
+
     private static void loadTips(String collegeId) {
-        // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewFaculty", "Pay professors more to make them happy.", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewFaculty", "If the faculty is happy, then the students are happy.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewFaculty", "Pay Faculty more to increase their happiness", true);
+        TutorialManager.saveNewTip(collegeId, 1,"viewFaculty", "Faculty that have been reported are underperforming", false);
+        TutorialManager.saveNewTip(collegeId, 2,"viewFaculty", "Each department has one Dean and one Assistant Dean. They are most important", false);
+        TutorialManager.saveNewTip(collegeId, 3,"viewFaculty", "Keep overall academic rating high to unlock departments", false);
     }
 }

@@ -34,7 +34,11 @@ public class InventoryManager {
     }
 
     public void createAllItems(String collegeId){
-        createItem("smoke detectors", false, null, 50000, collegeId);
+        createItem("Smoke Detectors", false, "smokedetector.png", 50000, collegeId);
+
+        createItem("Drains investment",false,null,2500, collegeId);
+        createItem("Purell Dispensers", false, null, 10000, collegeId);
+        createItem("Snowplows",false, "snowflake.png", 4200, collegeId);
     }
 
     public void createItem(String name, Boolean isPurchased, String imageName, int cost, String collegeId){
@@ -49,7 +53,7 @@ public class InventoryManager {
             for (int i = 0; i < items.size(); i++){
                 if(items.get(i).getName().equals(name)){
                     items.get(i).setPurchased(true);
-                    Accountant.payBill(collegeId,"Upgrade cost ", items.get(i).getCost());
+                    Accountant.payBill(collegeId,"Upgrade: "+items.get(i).getName()+". Cost: ", items.get(i).getCost());
                 }
             }
         }

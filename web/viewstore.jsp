@@ -32,6 +32,8 @@
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
 </head>
+
+
 <body>
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -53,6 +55,13 @@
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
+
+
+<style>
+    img{
+        width:50px;
+    }
+</style>
 
 <form action="viewStore" method="post">
 
@@ -92,51 +101,50 @@
         </div>
     </nav>
 
-
     <div class="well well-sm">
         <h1 align="center">Available Items</h1>
-        <table class="table table-condensed">
-            <thread>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Item Cost</th>
-                    <th></th>
-                </tr>
-            </thread>
-            <tbody>
+        <%
+            for (int i = 0; i < items.length; i++){
+                if((i%3) == 0){
+        %>
+            <div class="row">
                 <%
-                    for(int i = 0; i < items.length; i++){
-                        if(items[i].getPurchased().equals(false)){
+                    if(items[i].getPurchased().equals(false)){
                 %>
-                <tr>
-                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
-                    </td>
-                    <td style="vertical-align:middle; font-size:120%;">$<%=numberFormatter.format(items[i].getCost())%>
-                    </td>
-                    <%
-                        if(college.getAvailableCash() > items[i].getCost()){
-                    %>
-                        <td style="vertical-align:middle; font-size:120%;">
-                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
-                        </td>
-                    <%
-                        }
-                        else{
-                    %>
-                        <td style="vertical-align:middle; font-size:120%;">
-                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
-                        </td>
-                    <%
-                        }
-                    %>
-                </tr>
+                <div align="center" class="col-sm-4">
+                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <h4><%=items[i].getName()%></h4>
+                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                </div>
+                <%
+                    }
+                    if((i+1) < items.length && items[i+1].getPurchased().equals(false)){
+                %>
+                <div align="center"class="col-sm-4">
+                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <h4><%=items[i+1].getName()%></h4>
+                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy">
+                </div>
+                <%
+                    }
+                    if((i+2) < items.length && items[i+2].getPurchased().equals(false)){
+                %>
+                <div align="center" class="col-sm-4">
+                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <h4><%=items[i+2].getName()%></h4>
+                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy">
+                </div>
                 <%
                         }
                     }
                 %>
-            </tbody>
-        </table>
-
+            </div>
+        <%
+            }
+        %>
     </div>
 
 
@@ -145,8 +153,8 @@
         <table class="table table-condensed">
             <thread>
                 <tr>
-                    <th>Item Name</th>
                     <th></th>
+                    <th>Item Name</th>
                     <th></th>
                 </tr>
             </thread>
@@ -156,9 +164,9 @@
                         if(items[i].getPurchased()){
                 %>
                 <tr>
+                    <th></th>
                     <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
                     </td>
-                    <th></th>
                     <th></th>
                 </tr>
                 <%

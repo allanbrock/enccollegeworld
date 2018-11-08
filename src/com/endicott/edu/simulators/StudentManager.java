@@ -325,9 +325,9 @@ public class StudentManager {
            // The overall student happiness is an average of the above.
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
-                             student.getHealthHappinessRating() + student.getMoneyHappinessRating()) +
+                             student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
                              student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
-                             student.getDormHappinessRating() / 7;
+                             student.getDormHappinessRating()) / 7;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
@@ -503,8 +503,8 @@ public class StudentManager {
 
         // Positive feedback
         } else if(student.getHappinessLevel() > 70) {
-            Collections.addAll(verbs, "love", "am very pleased with", "am ecstatic about");
-            Collections.addAll(adjectives, "great", "fantastic", "super", "surprisingly well");
+            Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
+            Collections.addAll(adjectives, "great ", "fantastic ", "super ", "surprisingly well ");
 
         // Neutral feedback
         } else {

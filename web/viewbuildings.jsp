@@ -127,13 +127,13 @@
                     <h4><%
                         int openBeds = 0;
                         int filledBeds = 0;
-                        for (BuildingModel d : buildings){
-                            if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals(BuildingModel.getDormConst())) {
-                                    int numStudents = d.getNumStudents();
-                                    int capacity = d.getCapacity();
+                        for (BuildingModel b : buildings){
+                            if(b.isBuilt()){
+                                if(b.getKindOfBuilding().equals(BuildingModel.getDormConst())) {
+                                    int numStudents = b.getNumStudents();
+                                    int capacity = b.getCapacity();
                                     openBeds += capacity - numStudents;
-                                    filledBeds += d.getNumStudents();
+                                    filledBeds += b.getNumStudents();
                                 }
                             }
                         }
@@ -148,13 +148,13 @@
                     <h4><%
                         int availablePlates = 0;
                         int takenPlates = 0;
-                        for (BuildingModel d : buildings){
-                            if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals(BuildingModel.getDiningConst())) {
-                                    int numStudents = d.getNumStudents();
-                                    int capacity = d.getCapacity();
+                        for (BuildingModel b : buildings){
+                            if(b.isBuilt()){
+                                if(b.getKindOfBuilding().equals(BuildingModel.getDiningConst())) {
+                                    int numStudents = b.getNumStudents();
+                                    int capacity = b.getCapacity();
                                     availablePlates += capacity - numStudents;
-                                    takenPlates += d.getNumStudents();
+                                    takenPlates += b.getNumStudents();
                                 }
                             }
                         }
@@ -169,13 +169,13 @@
                     <h4><%
                         int openDesks = 0;
                         int filledDesks = 0;
-                        for (BuildingModel d : buildings){
-                            if(d.getHoursToComplete() == 0){
-                                if(d.getKindOfBuilding().equals(BuildingModel.getAcademicConst())) {
-                                    int numStudents = d.getNumStudents();
-                                    int capacity = d.getCapacity();
+                        for (BuildingModel b : buildings){
+                            if(b.isBuilt()){
+                                if(b.getKindOfBuilding().equals(BuildingModel.getAcademicConst())) {
+                                    int numStudents = b.getNumStudents();
+                                    int capacity = b.getCapacity();
                                     openDesks += capacity - numStudents;
-                                    filledDesks += d.getNumStudents();
+                                    filledDesks += b.getNumStudents();
                                 }
                             }
                         }
@@ -237,47 +237,42 @@
                         <th>Quality</th>
                         <th>Current Disaster</th>
                         <th>Status</th>
-                        <th>Upgrade</th>
+                        <th>Actions</th>
                     </tr>
                 </thread>
                 <tbody>
                 <%
-                    for (BuildingModel b : buildings) {
+                    for (int b = 0; b < buildings.size(); b++) {
                 %>
                 <tr>
-                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=b.getName()%>
+                    <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings.get(b).getName()%>
                     </td>
                     <td>
-                        <img class="img-responsive" src="resources/images/<%=b.getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
-                        <%=b.getKindOfBuilding()%>
+                        <img class="img-responsive" src="resources/images/<%=buildings.get(b).getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%=buildings.get(b).getKindOfBuilding()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=b.getSize()+ " (" +b.getCapacity() +")"%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getSize()+ " (" +buildings.get(b).getCapacity() +")"%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCapacity() - b.getNumStudents()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getCapacity() - buildings.get(b).getNumStudents()%>
                     </td>
                     <td style="vertical-align:middle;">
-                        <%--<%--%>
-                        <%--String progressBarColor;--%>
-                        <%--if(b.getShownQuality() <=30){progressBarColor = "progress-bar progress-bar-danger";}--%>
-                        <%--else if(b.getShownQuality() <=60){progressBarColor = "progress-bar progress-bar-warning";}--%>
-                        <%--else{progressBarColor = "progress-bar progress-bar-success";}--%>
-                        <%--public String getProgressBarColor(){return "test";}--%>
-                        <%--%>--%>
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
-                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=b.getShownQuality()%>%">
-                                <%=b.getShownQualityString()%>%
+                                 aria-valuemin="0" aria-valuemax="100" style="width:<%=buildings.get(b).getShownQuality()%>%">
+                                <%=buildings.get(b).getShownQualityString()%>%
                             </div>
                         </div>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=b.getCurDisaster()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getCurDisaster()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:110%;"><%=b.checkIfBeingBuilt()%>
+                    <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).checkIfBeingBuilt()%>
                     </td>
                     <td style="vertical-align:middle;">
-                        <%if(!((b.getSize().equals("Extra Large")) || (b.getSize().equals("N/A")))){%>
-                            <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="upgradeBuilding" value="Upgrade (<%=b.getUpgradeCost()%>)">
+                        <%if(!(buildings.get(b).getSize().equals("Extra Large") || buildings.get(b).getSize().equals("N/A")
+                                || buildings.get(b).getHoursToComplete() > 0 || buildings.get(b).getUpgradeCost() > college.getAvailableCash())){%>
+                            <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="upgradeBuilding" + b%>" value="Upgrade ($<%=buildings.get(b).getUpgradeCost()%>)">
                         <%}%>
+                        <input style="margin-top: 5px; horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="repairBuilding" + b%>" value="Repair ($<%=buildings.get(b).getRepairCost()%>)">
                     </td>
                 </tr>
                 <% } %>
@@ -303,15 +298,17 @@
                         <label for="buildingType">Select a building type</label>
                         <select class="form-control" id="buildingType" name="buildingType">
                             <option value="Academic Center">Academic Center</option>
-                            <option value="Baseball Diamond">Baseball Diamond</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
-                            <option value="Football Stadium">Football Stadium</option>
-                            <option value="Hockey Rink">Hockey Rink</option>
                             <%if(college.getAvailableCash() > 150000){%>
-                            <option value="Entertainment Center">Entertainment Center</option>
-                            <option value="Health Center">Health Center</option>
-                            <option value="Library">Library</option>
+                                <option value="Baseball Diamond">Baseball Diamond</option>
+                                <option value="Football Stadium">Football Stadium</option>
+                                <option value="Hockey Rink">Hockey Rink</option>
+                            <%}%>
+                            <%if(college.getAvailableCash() > 250000){%>
+                                <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
+                                <option value="Health Center" <%if(!gateManager.testGate(college.getRunId(), "Health Center")){%>disabled<%}%>>Health Center</option>
+                                <option value="Entertainment Center" <%if(!gateManager.testGate(college.getRunId(), "Entertainment Center")){%>disabled<%}%>>Entertainment Center</option>
                             <%}%>
                         </select>
                     </div>
@@ -326,34 +323,24 @@
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
-                                <%if(college.getAvailableCash() > 650000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                    <option > $350,000 - Large (500) </option >
-                                <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
-                                    <option > $650,000 - Extra Large (1000) </option >
-                                <%}%>
-                                <!--if they can afford 3/4 they can see 3/4-->
-                                <%}else if(college.getAvailableCash() > 350000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                <option > $350,000 - Large (500) </option >
-                                <%}%>
-                                <!-- if they can afford 2/4 they can see 2/4-->
-                                <%}else if(college.getAvailableCash() > 150000){%>
-                                <option> $50,000 - Small (50) </option >
-                                <option > $150,000 - Medium (200) </option >
-                                <!-- if they can afford 1/4 they can see 1/4-->
-                                <%}else if(college.getAvailableCash() > 50000){%>
-                                <option> $50,000 - Small (50) </option >
+                                <%if(college.getAvailableCash() > 50000){%>
+                                    <option> $50,000 - Small (50) </option >
+                                <%}if(college.getAvailableCash() > 150000){%>
+                                    <option > $150,000 - Medium (200) </option >
+                                <%}if(college.getAvailableCash() > 350000){%>
+                                    <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
+                                        <option > $350,000 - Large (500) </option >
+                                    <%}%>
+                                <%}if(college.getAvailableCash() > 650000){%>
+                                    <%if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
+                                        <option > $650,000 - Extra Large (1000) </option >
+                                    <%}%>
                                 <%}%>
                             </select >
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
-                                || buildingType.equals("Hockey Rink") && college.getAvailableCash() > 50000){%>
+                                || buildingType.equals("Hockey Rink") && college.getAvailableCash() > 150000){%>
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
-                                <option > $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium </option >
                             </select >
                         <%}%>
                         <h4>Confirm Purchase of <%=buildingType%></h4>

@@ -5,8 +5,6 @@ import com.endicott.edu.models.FloodModel;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -79,18 +77,6 @@ public class FloodDao {
 
         logger.info("Saved one flood...");
     }
-
-    /*
-    *  - used in: FloodDao (testNotes)
-    *
-    public void saveNewFlood(String collegeId, FloodModel flood) {
-        logger.info("Saving new flood...");
-        List<FloodModel> floods = getFloods(collegeId);
-        flood.setRunId(collegeId);
-        floods.add(flood);
-        saveAllFloods(collegeId, floods);
-    }
-*/
 
     /**
      * Deletes the file of the flood.

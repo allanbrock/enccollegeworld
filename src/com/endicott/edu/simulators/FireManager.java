@@ -25,7 +25,7 @@ public class FireManager {
 
 
     public FireManager() {
-        upgradeName = "smoke detectors";
+        upgradeName = "Smoke Detectors";
         upgradedRegFireProb = 8;
         regFireProb = 10;
         upgradedCatFireProb = 3;
@@ -95,6 +95,7 @@ public class FireManager {
         ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
         ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
+        BuildingManager buildingManager = new BuildingManager();
         String victims = "";
         final boolean isCatastrophic = false;
 
@@ -103,24 +104,18 @@ public class FireManager {
             return;
 
         BuildingModel buildingToBurn = findBuildingToBurn(buildings);
-        int numDeaths = getNumFatalities();
+        int numStudentDeaths = getNumStudentFatalities();
+        int numFacultyDeaths = getNumFacultyFatalities(numStudentDeaths);
+        int numDeaths = numFacultyDeaths + numStudentDeaths;
         int cost = getFireCost(numDeaths, buildingToBurn,runId,hasUpgradeBeenPurchased(),isCatastrophic);
 
-        FireModel fire = new FireModel(cost, numDeaths, runId, buildingToBurn);
-        if (numDeaths > 0) {
-            for (int i = 0; i < numDeaths; ++i) {
-                int studentToRemove = new Random().nextInt(students.size());
-                victims += students.get(studentToRemove).getName().trim() + ", ";
-                students.remove(studentToRemove);
-            }
-            fire.setDescription(victims, hasUpgradeBeenPurchased());
-        } else {
-            victims = "No one";
-            fire.setDescription(victims,hasUpgradeBeenPurchased());
-        }
+        FireModel fire = new FireModel(cost, numStudentDeaths,numFacultyDeaths, runId, buildingToBurn);
+        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
+        buildingManager.acceleratedDecayAfterDisaster(runId,buildingToBurn.getName());
         fires.add(fire);
         FireDAO.saveNewFire(runId, fire);
         StudentDao.saveAllStudents(runId, students);
+        FacultyDao.saveAllFaculty(runId,faculty);
         Accountant.payBill(runId, "Fire damaged cost ", fire.getCostOfFire());
         NewsManager.createNews(runId, hoursAlive, ("Fire in " + fire.getBuildingBurned().getName() + ", " + numDeaths + " died."), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
     }
@@ -139,6 +134,7 @@ public class FireManager {
     public void startCatastrophicFire(String runId, int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
         ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
+        ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         BuildingManager buildingManager = new BuildingManager();
         String victims = "all";
@@ -149,21 +145,22 @@ public class FireManager {
             return;
 
         BuildingModel buildingToBurn = findBuildingToBurn(buildings);
-        int numDeaths = buildingToBurn.getNumStudents();
+        int numStudentDeaths = buildingToBurn.getNumStudents();
 
         // If all students are in fire building, leave some alive
-        if (numDeaths >= students.size()) numDeaths = students.size() / 2;
+        if (numStudentDeaths >= students.size()) numStudentDeaths = numStudentDeaths / 2;
+
+        int numFacultyDeaths = getNumFacultyFatalities(numStudentDeaths);
+        int numDeaths = numFacultyDeaths + numStudentDeaths;
 
         int fireCost = getFireCost(numDeaths, buildingToBurn, runId,hasUpgradeBeenPurchased(),isCatastrophic);
-        FireModel fire = new FireModel(fireCost, numDeaths, runId, buildingToBurn);
-        Random rand = new Random();
-        for (int i = 0; i < numDeaths && students.size() > 10; ++i) {
-            students.remove(rand.nextInt(students.size()));
-        }
-        fire.setDescription(victims,hasUpgradeBeenPurchased());
+        FireModel fire = new FireModel(fireCost, numStudentDeaths, numFacultyDeaths, runId, buildingToBurn);
+        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
+        fire.setDescription(victims, hasUpgradeBeenPurchased());
         fires.add(fire);
         FireDAO.saveNewFire(runId, fire);
         StudentDao.saveAllStudents(runId, students);
+        FacultyDao.saveAllFaculty(runId,faculty);
         Accountant.payBill(runId, "Fire damage cost ", fire.getCostOfFire());
         NewsManager.createNews(runId, hoursAlive, ("Major fire at " + fire.getBuildingBurned().getName() + " was destroyed, " + numDeaths + " died."), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
         buildingManager.destroyBuildingInCaseOfDisaster(buildings,runId,buildingToBurn.getName());
@@ -196,8 +193,8 @@ public class FireManager {
      * @param hoursAlive
      */
     public void possiblyCreateFire(int odds,int regProb,int catProb,String runId, int hoursAlive){
-        if (odds < regProb) {
-            if (odds < catProb) {
+        if (odds < regProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
+            if (odds < catProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
                 boolean isCatastrophic = true;
                 startFireRandomly(runId, hoursAlive, isCatastrophic);
                 return;
@@ -243,13 +240,56 @@ public class FireManager {
     }
 
 
-    public int getNumFatalities() {
+    public int getNumStudentFatalities() {
         Random rand = new Random();
         int numDeaths = rand.nextInt(10);
         if (hasUpgradeBeenPurchased()){
             return numDeaths/2;
         }
         return numDeaths;
+    }
+
+    public int getNumFacultyFatalities(int studentVictims){
+        if (studentVictims == 0) return studentVictims;
+        return studentVictims/4;
+    }
+
+    public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
+                                     ArrayList<FacultyModel> faculty, String victims, FireModel fire){
+        if (numFacultyDeaths == faculty.size()){
+            numFacultyDeaths = numStudentDeaths/2;
+        } else if (numStudentDeaths == students.size()){
+            numStudentDeaths = numStudentDeaths/2;
+        }
+
+        if (fire.isCatastrophic()){
+            for (int i = 0; i < numStudentDeaths; ++i) {
+                int studentToRemove = new Random().nextInt(students.size());
+                students.remove(studentToRemove);
+            }
+            for (int j = 0; j <numFacultyDeaths; j++){
+                int facultyToRemove = new Random().nextInt(faculty.size());
+                faculty.remove(facultyToRemove);
+            }
+            return;
+        }
+
+        if (numStudentDeaths > 0 && !fire.isCatastrophic()) {
+            for (int i = 0; i < numStudentDeaths && (students.size() > 0); ++i) {
+                int studentToRemove = new Random().nextInt(students.size());
+                victims += students.get(studentToRemove).getName().trim() + ", ";
+                students.remove(studentToRemove);
+            }
+            for (int j = 0; j <numFacultyDeaths && (faculty.size() > 0); j++){
+                int facultyToRemove = new Random().nextInt(faculty.size());
+                victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
+                faculty.remove(facultyToRemove);
+            }
+            fire.setDescription(victims, hasUpgradeBeenPurchased());
+        } else{
+            victims = "No one";
+            fire.setDescription(victims,hasUpgradeBeenPurchased());
+        }
     }
 
 

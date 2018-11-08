@@ -1,12 +1,10 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
-import com.endicott.edu.models.CollegeMode;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.NewsLevel;
-import com.endicott.edu.models.NewsType;
+import com.endicott.edu.models.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -18,7 +16,7 @@ import java.util.Date;
  */
 
 public class CollegeManager {
-    static public final int STARTUP_FUNDING = 100000;  // Amount of money initially in college bank account.
+    static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
 
     /**
      * Creates a new college.
@@ -49,7 +47,6 @@ public class CollegeManager {
         college.setRunId(collegeId);
         college.setHoursAlive(1);
         college.setAvailableCash(STARTUP_FUNDING);
-        college.setYearlyTuitionCost(60000);
         collegeDao.saveCollege(college);
 
         // Each functional area/simulator in the college gets called to
@@ -58,13 +55,12 @@ public class CollegeManager {
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         BuildingManager.establishCollege(collegeId, college);
-        FacultyManager.establishCollege(collegeId);
+        FacultyManager.establishCollege(collegeId, college);
 
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
         SportManager.establishDefaultSportsTeams(collegeId);
-        SportManager.establishCollege(collegeId);
 
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
@@ -95,6 +91,7 @@ public class CollegeManager {
         StudentDao.deleteStudents(collegeId);
         IdNumberGenDao.deleteIDs(collegeId);
         InventoryDao.deleteItem(collegeId);
+        SnowDao.deleteSnowStorm(collegeId);
     }
 
     /**
@@ -138,6 +135,9 @@ public class CollegeManager {
 
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        SnowManager snowManager = new SnowManager();
+        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
@@ -193,11 +193,6 @@ public class CollegeManager {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
-    static public CollegeMode getCollegeMode(String collegeId) {
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-        return college.getMode();
-    }
-
     /**
      * Sets college yearly tuition.
      *
@@ -221,12 +216,20 @@ public class CollegeManager {
         return college;
     }
 
-    public static void updateCollegeMode(String collegeId, String mode) {
+    // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
+    public static CollegeModel bankruptCollege(String collegeId){
         CollegeDao cao = new CollegeDao();
 
         CollegeModel college = cao.getCollege(collegeId);
-        college.setMode(mode);
+        college.setAvailableCash(0);
         cao.saveCollege(college);
+
+        calculateStatisticsAndRatings(collegeId);
+
+        StudentManager studentManager = new StudentManager();
+        studentManager.calculateStatistics(collegeId, false);
+
+        return college;
     }
 
     private static void calculateStatisticsAndRatings(String collegeId) {
@@ -263,5 +266,18 @@ public class CollegeManager {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static void updateCollegeMode(String collegeId, String mode) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setMode(mode);
+        cao.saveCollege(college);
+    }
+
+    static public boolean isMode(String collegeId, CollegeMode mode) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        return (college.getMode() == mode);
     }
 }

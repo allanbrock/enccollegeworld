@@ -7,6 +7,7 @@ import com.endicott.edu.models.CollegeModel;
  * Responsible for handling finances at the college.
  */
 public class Accountant {
+    static final int MINIMUM_BALANCE = 10000;
 
     /**
      * Pay the given bill deducting the money from available
@@ -20,7 +21,8 @@ public class Accountant {
         CollegeDao collegeDao = new CollegeDao();
 
         CollegeModel college = collegeDao.getCollege(collegeId);
-        college.setAvailableCash(college.getAvailableCash() - amount);
+        int newBalance = Math.max(college.getAvailableCash() - amount, MINIMUM_BALANCE);
+        college.setAvailableCash(newBalance);
         collegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId,college.getHoursAlive(), message, - amount);
     }

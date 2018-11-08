@@ -13,13 +13,11 @@
 <%@ page import="com.endicott.edu.datalayer.FacultyDao" %>
 <%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.endicott.edu.simulators.FacultyManager" %>
-<%@ page import="com.endicott.edu.simulators.PopupEventManager" %>
-<%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page import="com.endicott.edu.models.TutorialModel" %>
+<%@ page import="com.endicott.edu.simulators.*" %>
+<%@ page import="java.util.HashMap" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -57,7 +55,7 @@
     List<FacultyModel> faculty = FacultyDao.getFaculty(college.getRunId());
     if (faculty == null) {
         faculty = new ArrayList<FacultyModel>();
-        faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", "LSB311", college.getRunId(), 100000)); // Default salary val for now
+        faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", college.getRunId(), 100000)); // Default salary val for now
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
     ArrayList<Integer> salaryOptions = FacultyManager.getSalaryOptions();
@@ -75,6 +73,7 @@
         departmentOptions = new String[FacultyManager.getDepartmentOptionStrings().length];
     }
 
+
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
     TutorialModel tip = TutorialManager.getCurrentTip("viewFaculty", college.getRunId());
@@ -85,6 +84,7 @@
         popupManager = new PopupEventManager();
         msg.setMessage(msg.getMessage() + "Attribute for Popup Manager is missing.");
     }
+
 %>
 
 <form action="viewFaculty" method="post">
@@ -178,11 +178,14 @@
                                 Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
                             </div>
                         </div>
-                        <label id="facultySalary" style="color: blue"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                        <label id="facultySalary" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
                     </td>
                     <td>
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                            <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <%}%>
                     </td>
                 </tr>
                 <% } %>
@@ -215,6 +218,39 @@
                 </div>
             </div>
         </div>
+    </div>
+    <br>
+
+    <div class="container">
+        <h3 id="departmentRatings" style="text-align: center">Academic Department Ratings</h3>
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th>Department names</th>
+                </tr>
+            </thread>
+            <tbody>
+            <%
+                HashMap<String, Integer> departmentRatingsMap = DepartmentManager.getRatingsForDepartments(college.getRunId());
+                for (String s : departmentRatingsMap.keySet()) {
+            %>
+            <tr>
+                <td><%=s + ": "%></td>
+                <td><%=departmentRatingsMap.get(s)%></td>
+            </tr>
+            <% }
+            int averageRating = 0;
+                int sum = 0;
+                for(String s : departmentRatingsMap.keySet()){
+                    sum += departmentRatingsMap.get(s);
+                }
+                averageRating = sum / departmentRatingsMap.keySet().size();
+                college.setAcademicRating(averageRating);
+            %>
+            <td><%="Overall Academic Rating: "%></td>
+            <td><%=averageRating%></td>
+            </tbody>
+        </table>
     </div>
 </form>
 
