@@ -1,6 +1,8 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
+import com.endicott.edu.datalayer.BuildingDao;
+import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
@@ -22,14 +24,29 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private boolean buildingTypeSelected = false;
     private String buildingType;
     private String buildingToUpgrade;
+    private String sortByType;
+    private String matchedConstantType;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        if(request.getParameter("upgradeBuilding") != null){
+
+        for(int b = 0; b < BuildingDao.getBuildings(collegeId).size(); b++) {
+            if (request.getParameter("upgradeBuilding" + b) != null) {
+                upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
+            }
+            if (request.getParameter("repairBuilding" + b) != null){
+                doGet(request, response);
+            }
+        }
+        //handles the sort by button parameter
+        if(request.getParameter("startSortByBuildingType") != null){
+            sortByType = request.getParameter("sortByBuildingType");
+            //needs to make the building type from the dropdown match one of the constants for the type of building
+            matchedConstantType = convertToConsts(sortByType);
+            request.setAttribute("sortByType", matchedConstantType);
             doGet(request, response);
         }
-
         if (request.getParameter("purchaseBuilding") != null) {  // addDorm is present if addDorm button was pressed
             beginPurchase = false;
             buildingTypeSelected = false;
@@ -79,12 +96,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
         if (request.getParameter("nextTip") != null) {
             TutorialManager.advanceTip("viewBuildings", collegeId);
+            doGet(request, response);
         }
         if (request.getParameter("hideTips") != null){
             TutorialManager.hideTips("viewBuildings", collegeId);
+            doGet(request, response);
         }
         if (request.getParameter("showTips") != null){
             TutorialManager.showTips("viewBuildings", collegeId);
+            doGet(request, response);
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
@@ -92,6 +112,42 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
         dispatcher.forward(request, response);
 
+    }
+    private String convertToConsts(String sortByType){
+        if(sortByType.equals("Academic Center")){
+            matchedConstantType = "ACADEMIC";
+        }
+        else if(sortByType.equals("Administrative Building")){
+            matchedConstantType = "ADMIN";
+        }
+        else if(sortByType.equals("Baseball Diamond")){
+            matchedConstantType = "BASEBALL DIAMOND";
+        }
+        else if(sortByType.equals("Dining Hall")){
+            matchedConstantType = "DINING";
+        }
+        else if(sortByType.equals("Dormitory")){
+            matchedConstantType = "DORM";
+        }
+        else if(sortByType.equals("Football Stadium")){
+            matchedConstantType = "FOOTBALL STADIUM";
+        }
+        else if(sortByType.equals("Hockey Rink")){
+            matchedConstantType = "HOCKEY RINK";
+        }
+        else if(sortByType.equals("Entertainment Center")){
+            matchedConstantType = "ENTERTAINMENT";
+        }
+        else if(sortByType.equals("Health Center")){
+            matchedConstantType = "HEALTH";
+        }
+        else if(sortByType.equals("Library")){
+            matchedConstantType = "LIBRARY";
+        }
+        else{
+            matchedConstantType = "All Buildings";
+        }
+        return matchedConstantType;
     }
 //    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
 //        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
@@ -144,7 +200,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
         //String buildingType=request.getParameter("buildingType");
-        String test = buildingType;
         String buildingSize=request.getParameter("buildingSize");
 
         // Some buildings (Sports Center) are missing the size.
@@ -177,7 +232,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             BuildingManager.addBuilding(runId, buildingName, buildingType, buildingSize);
         }
 
-        //load the request with attributes for the dormm
+        //load the request with attributes for the building
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
 
 
@@ -186,6 +241,21 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         // Attempt to fetch the college and load into
         // request attributes to pass to the jsp page.
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+    }
+
+    private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        BuildingManager.upgradeBuilding(runId, building);
+
+        doGet(request, response);
+
+        //load the request with attributes for the building
+        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+        dispatcher.forward(request, response);
     }
 
 

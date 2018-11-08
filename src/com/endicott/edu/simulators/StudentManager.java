@@ -443,7 +443,7 @@ public class StudentManager {
 
     private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true);
+        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true, "student.png");
         TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
     }
 

@@ -10,6 +10,7 @@
 <%@ page import="java.util.Base64" %>
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
+<%@ page import="com.endicott.edu.simulators.BuildingManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.datalayer.BuildingDao" %>
 <%@ page import="java.util.ArrayList" %>
@@ -58,7 +59,14 @@
 //        buildings = new BuildingModel[0];  // This is really bad
 //        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
 //    }
-    List<BuildingModel> buildings= BuildingDao.getBuildings(college.getRunId());
+    String sortByType = (String) request.getAttribute("sortByType");
+    List<BuildingModel> buildings;
+    if(sortByType == null  || sortByType.equals("All Buildings")){
+        buildings = BuildingDao.getBuildings(college.getRunId());
+    }
+    else{
+        buildings = BuildingManager.getBuildingListByType(sortByType, college.getRunId());
+    }
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
@@ -181,10 +189,12 @@
         <p></p>
 
         <div class="well well-sm">
+            <div class="col-sm-5" style="margin-top: 30px;">
         <div class="form-group">
             <label for="buildingType">Sort by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
+                <option value="Administrative Building">Administrative Building</option>
                 <option value="Academic Center">Academic Center</option>
                 <option value="Baseball Diamond">Baseball Diamond</option>
                 <option value="Dining Hall">Dining Hall</option>
@@ -198,6 +208,23 @@
             <!-- Button -->
             <input type="submit" class="btn btn-info" name="SortByBuildingType" value="Sort" style="margin-top: 5px;">
         </div>
+            </div>
+            <!--Tips-->
+            <%if (tip != null){%>
+            <div class="col-sm-5" style="float: right;">
+                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;">
+                    <h4 style="color:blue">Tip</h4>
+
+                    <p><%=tip.getBody()%></p>
+
+                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
+                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                </div>
+            </div>
+            <%}%>
+            <%if (tip == null){%>
+            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+            <%}%>
 
             <table class="table table-condensed">
                 <thread>
@@ -298,18 +325,28 @@
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
-                                <%if(college.getAvailableCash() > 50000){%>
-                                    <option> $50,000 - Small (50) </option >
-                                <%}if(college.getAvailableCash() > 150000){%>
-                                    <option > $150,000 - Medium (200) </option >
-                                <%}if(college.getAvailableCash() > 350000){%>
-                                    <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
-                                        <option > $350,000 - Large (500) </option >
-                                    <%}%>
-                                <%}if(college.getAvailableCash() > 650000){%>
-                                    <%if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
-                                        <option > $650,000 - Extra Large (1000) </option >
-                                    <%}%>
+                                <%if(college.getAvailableCash() > 650000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
+                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
+                                    <option > $350,000 - Large (500) </option >
+                                <%}else if(gateManager.testGate(college.getRunId(), "Extra Large Size")){%>
+                                    <option > $650,000 - Extra Large (1000) </option >
+                                <%}%>
+                                <!--if they can afford 3/4 they can see 3/4-->
+                                <%}else if(college.getAvailableCash() > 350000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
+                                <%if(gateManager.testGate(college.getRunId(), "Large Size")){%>
+                                <option > $350,000 - Large (500) </option >
+                                <%}%>
+                                <!-- if they can afford 2/4 they can see 2/4-->
+                                <%}else if(college.getAvailableCash() > 150000){%>
+                                <option> $50,000 - Small (50) </option >
+                                <option > $150,000 - Medium (200) </option >
+                                <!-- if they can afford 1/4 they can see 1/4-->
+                                <%}else if(college.getAvailableCash() > 50000){%>
+                                <option> $50,000 - Small (50) </option >
                                 <%}%>
                             </select >
                         <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
@@ -334,7 +371,7 @@
 
         <!-- DORM NEWS -->
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6" style="margin-left: 150px;">
                 <div class="well well-sm">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
@@ -351,21 +388,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Tips -->
-            <%if (tip != null){%>
-            <div class="col-sm-3">
-                <div class="well well-lg" style="background: white">
 
-                    <p><%=tip.getBody()%></p>
-
-                <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
-                <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
-                </div>
-            </div>
-            <%}%>
-            <%if (tip == null){%>
-            <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
-            <%}%>
         </div>
     </div>
 </form>
