@@ -60,6 +60,7 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
+        SportManager.establishCollege(collegeId);
         SportManager.establishDefaultSportsTeams(collegeId);
 
         PlagueManager.establishCollege(collegeId);
