@@ -20,6 +20,7 @@ public class FloodManager {
     FloodDao floodDao = new FloodDao();
     BuildingDao buildingDao = new BuildingDao();
     BuildingManager buildingManager = new BuildingManager();
+    InventoryManager inventoryManager = new InventoryManager();
     private Logger logger = Logger.getLogger("FloodManager");
 
     /**
@@ -31,16 +32,17 @@ public class FloodManager {
      * @param popupManager popup manager instance
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        Boolean hasUpgrade = hasUpgradeBeenPurchased(collegeId);
 
         FloodModel flood = FloodDao.getFlood(collegeId);
         List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
-        //if there is NO flood, possibly start one:
+        //If there is NO flood, possibly start one:
         if (flood == null) {
-            possiblyStartFlood(collegeId, hoursAlive, popupManager);
+            possiblyStartFlood(collegeId, hoursAlive, popupManager, hasUpgrade);
             return;
         }
-        //If there is a flood do the following:
+        //If there IS a flood do the following:
         String floodedDorm = flood.getDormName();
 
         for (BuildingModel dorm : dorms) {
@@ -54,6 +56,7 @@ public class FloodManager {
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
         if (timeLeft <= 0) {
             FloodDao.deleteFlood(collegeId);
+            buildingManager.floodStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
             logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding of " + floodedDorm+" has ended! ", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             popupManager.newPopupEvent("Flood Ended!", "The flood in "+floodedDorm+" is finally over!","Ok","okFloodEnded",
@@ -72,7 +75,7 @@ public class FloodManager {
      * @param collegeId
      * @param hoursAlive
      */
-    private void possiblyStartFlood(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    private void possiblyStartFlood(String collegeId, int hoursAlive, PopupEventManager popupManager, Boolean hasUpgrade) {
         List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
         logger.info(" EVARUBIO . possiblyStartFlood() START-OF-METHOD ");
@@ -80,7 +83,7 @@ public class FloodManager {
         for (BuildingModel dorm : dorms) {
             if (dorm.getHoursToComplete() <= 0) {   //only if a dorm is FULLY built call didFloodStartAtThisDorm()
                 logger.info(" EVARUBIO . possiblyStartFlood() there are dorms completed so call didFloodStartAtThisDorm() to check odds of creating a flood." );
-                if (didFloodStartAtThisDorm(collegeId, hoursAlive, dorm, popupManager)) {     //if the odds say yes start a flood, if not nothing.
+                if (didFloodStartAtThisDorm(collegeId, hoursAlive, dorm, popupManager, hasUpgrade)) {     //if the odds say yes start a flood, if not nothing.
                     //logger.info(" EVARUBIO . possiblyStartFlood() didFloodStartAtThisDorm() good odds- is TRUE, FLOOD CREATED(3/6) in dorm:   " + dorm.getName() );
                     return;
                 }
@@ -99,8 +102,12 @@ public class FloodManager {
      */
 
 
-    private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager) {
+    private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
+        //If a flood upgrade was bought from the store, decrease the probability of floods.
+        if(hasUpgrade){
+            oddsOfFlood = oddsOfFlood - 0.02f;
+        }
         if (Math.random() <= oddsOfFlood) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
@@ -112,16 +119,28 @@ public class FloodManager {
             floodDao.saveTheFlood(collegeId, randomFlood);
 
             logger.info("EVARUBIO .  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
-            popupManager.newPopupEvent("Flood in "+ dorm.getName()+"!", "Oh no! "+dorm.getName() +" has been flooded! Would you like to invest in more drains to reduce the probability of future floods?",
+            popupManager.newPopupEvent("Flood in "+ dorm.getName()+"!", "Oh no! "+dorm.getName() +" has been flooded! Would you like to visit the store invest in more drains to reduce the probability of future floods? ",
                     "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding detected at " + randomFlood.getDormName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
 
             billCostOfFlood(collegeId, dorm);
-            buildingMgr.floodAlert(hoursAlive , dorm.getName(), collegeId);
+            buildingMgr.floodStatusChange(randomLength , dorm.getName(), collegeId, "Flood");
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if a flood upgrade has been purchased or not
+     * future use: param upgradeName the name of the upgrade to check
+     * @param collegeId the college ID
+     * @return the Bool indicating if upgrade was bought or not
+     * */
+    private Boolean hasUpgradeBeenPurchased(String collegeId){
+
+        return inventoryManager.isPurchased("Drains investment", collegeId);
+
     }
 
     /**

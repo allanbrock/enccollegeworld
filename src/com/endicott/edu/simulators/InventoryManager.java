@@ -50,7 +50,7 @@ public class InventoryManager {
             for (int i = 0; i < items.size(); i++){
                 if(items.get(i).getName().equals(name)){
                     items.get(i).setPurchased(true);
-                    Accountant.payBill(collegeId,"Upgrade cost ", items.get(i).getCost());
+                    Accountant.payBill(collegeId,"Upgrade: "+items.get(i).getName()+". Cost: ", items.get(i).getCost());
                 }
             }
         }
