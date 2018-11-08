@@ -256,6 +256,12 @@ public class FireManager {
 
     public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
                                      ArrayList<FacultyModel> faculty, String victims, FireModel fire){
+        if (numFacultyDeaths == faculty.size()){
+            numFacultyDeaths = numStudentDeaths/2;
+        } else if (numStudentDeaths == students.size()){
+            numStudentDeaths = numStudentDeaths/2;
+        }
+
         if (fire.isCatastrophic()){
             for (int i = 0; i < numStudentDeaths; ++i) {
                 int studentToRemove = new Random().nextInt(students.size());
@@ -267,7 +273,6 @@ public class FireManager {
             }
             return;
         }
-
 
         if (numStudentDeaths > 0 && !fire.isCatastrophic()) {
             for (int i = 0; i < numStudentDeaths; ++i) {
