@@ -34,10 +34,11 @@ public class InventoryManager {
     }
 
     public void createAllItems(String collegeId){
-        createItem("Smoke Detectors", false, null, 50000, collegeId);
+        createItem("Smoke Detectors", false, "smokedetector.png", 50000, collegeId);
+
         createItem("Drains investment",false,null,2500, collegeId);
         createItem("Purell Dispensers", false, null, 10000, collegeId);
-        createItem("Snowplows",false, null, 4200, collegeId);
+        createItem("Snowplows",false, "snowflake.png", 4200, collegeId);
     }
 
     public void createItem(String name, Boolean isPurchased, String imageName, int cost, String collegeId){

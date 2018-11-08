@@ -32,6 +32,8 @@
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
 </head>
+
+
 <body>
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -53,6 +55,13 @@
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
+
+
+<style>
+    img{
+        width:50px;
+    }
+</style>
 
 <form action="viewStore" method="post">
 
@@ -92,7 +101,6 @@
         </div>
     </nav>
 
-
     <div class="well well-sm">
         <h1 align="center">Available Items</h1>
         <table class="table table-condensed">
@@ -109,26 +117,24 @@
                         if(items[i].getPurchased().equals(false)){
                 %>
                 <tr>
-                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
+                    <td style="vertical-align:middle; font-size:120%;"><img align="left" src="resources/images/<%=items[i].getImageName()%>" alt=" "><%=items[i].getName()%>
                     </td>
-                    <td style="vertical-align:middle; font-size:120%;">$<%=numberFormatter.format(items[i].getCost())%>
+                    <td style="vertical-align:middle; font-size:120%;">$<%=numberFormatter.format(items[i].getCost())%> <br> <%if(college.getAvailableCash() > items[i].getCost()){%>
+                            <td style="vertical-align:middle; font-size:120%;">
+                                <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                            </td>
+                            <%
+                            }
+                            else{
+                            %>
+                            <td style="vertical-align:middle; font-size:120%;">
+                                <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
+                            </td>
+                            <%
+                                }
+                            %>
                     </td>
-                    <%
-                        if(college.getAvailableCash() > items[i].getCost()){
-                    %>
-                        <td style="vertical-align:middle; font-size:120%;">
-                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
-                        </td>
-                    <%
-                        }
-                        else{
-                    %>
-                        <td style="vertical-align:middle; font-size:120%;">
-                            <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
-                        </td>
-                    <%
-                        }
-                    %>
+
                 </tr>
                 <%
                         }
