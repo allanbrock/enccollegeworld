@@ -49,7 +49,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             //CollegeManager.updateCollegeMode(collegeId, mode);
         }
 
-        // upgrade button for fire popup sends user to store page
+        // upgrade button for fire and flood popup sends user to store page
         if (request.getParameter("goToStore") != null){
             InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
             RequestDispatcher dispatcher=request.getRequestDispatcher("/viewstore.jsp");

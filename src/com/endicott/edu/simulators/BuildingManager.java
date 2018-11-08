@@ -212,7 +212,7 @@ public class BuildingManager {
     public void floodAlert(int lengthOfFlood, String buildingName, String collegeId) {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         for (BuildingModel b : buildings) {
-            if (b.getName() == buildingName) {
+            if (b.getName().equals(buildingName)) {
                 b.setCurDisaster("Flood");
                 b.setLengthOfDisaster(lengthOfFlood);
             }

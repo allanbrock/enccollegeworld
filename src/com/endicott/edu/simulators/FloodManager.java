@@ -1,7 +1,6 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
-//import com.endicott.edu.datalayer.DormitoryDao;
 import com.endicott.edu.datalayer.FloodDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.FloodModel;
@@ -17,7 +16,7 @@ import java.util.Random;
  * NOTE: THERE CAN ONLY BE ONE FLOOD AT A TIME.
  */
 public class FloodManager {
-    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.05f;
+    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.07f;
     FloodDao floodDao = new FloodDao();
     BuildingDao buildingDao = new BuildingDao();
     BuildingManager buildingManager = new BuildingManager();
@@ -29,27 +28,27 @@ public class FloodManager {
      * Dao - Data Access Object
      * @param collegeId
      * @param hoursAlive number of hours college has been active.
-     * @param popupManager
+     * @param popupManager popup manager instance
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
 
         FloodModel flood = FloodDao.getFlood(collegeId);
-        List<BuildingModel> dorms = buildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
+        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
         //if there is NO flood, possibly start one:
         if (flood == null) {
             possiblyStartFlood(collegeId, hoursAlive, popupManager);
             return;
         }
-        //if there is a flood do the following:
+        //If there is a flood do the following:
         String floodedDorm = flood.getDormName();
 
         for (BuildingModel dorm : dorms) {
             if (dorm.getName().compareTo(floodedDorm) == 0){
-                billCostOfFlood(collegeId, hoursAlive, dorm);
+                billCostOfFlood(collegeId, dorm);
             }
         }
-        // figures out how much times has passed since i updated floods
+        // Figures out how much times has passed since I updated floods
         // currentTime -lastTime
         int elapsedTime = hoursAlive - flood.getHourLastUpdated();
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
@@ -74,7 +73,7 @@ public class FloodManager {
      * @param hoursAlive
      */
     private void possiblyStartFlood(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        List<BuildingModel> dorms = buildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
+        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
         logger.info(" EVARUBIO . possiblyStartFlood() START-OF-METHOD ");
 
@@ -108,17 +107,17 @@ public class FloodManager {
             int randomLength = (int) (Math.random() * 72) + 24;
 
             FloodModel randomFlood = new FloodModel(randomCost, randomLength, randomLength, dorm.getTimeSinceLastRepair(), dorm.getName(), collegeId);
-            //FloodModel flood = new FloodModel(randomCost, randomLength, randomLength, dorm.getTimeSinceLastRepair(), dorm.getName(), collegeId);
+
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
 
             logger.info("EVARUBIO .  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
             popupManager.newPopupEvent("Flood in "+ dorm.getName()+"!", "Oh no! "+dorm.getName() +" has been flooded! Would you like to invest in more drains to reduce the probability of future floods?",
-                    "Invest ($1,000)","investInDrains","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
+                    "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding detected at " + randomFlood.getDormName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
 
-            billCostOfFlood(collegeId, hoursAlive, dorm);
+            billCostOfFlood(collegeId, dorm);
             buildingMgr.floodAlert(hoursAlive , dorm.getName(), collegeId);
             return true;
         }
@@ -128,13 +127,12 @@ public class FloodManager {
     /**
      * Charge the college for flood cleanup costs.
      *         - used in: FloodManager (handleTimeChange)
-     *  @param collegeId
-     * @param hoursAlive
+     * @param collegeId
      * @param dorm
      */
-    private void billCostOfFlood(String collegeId, int hoursAlive, BuildingModel dorm){
+    private void billCostOfFlood(String collegeId, BuildingModel dorm){
         Random rand = new Random();
-        Accountant.payBill(collegeId,"Flood cleanup cost for dorm " + dorm.getName(), rand.nextInt(500) + 500);
+        Accountant.payBill(collegeId,"Flood cleanup cost for " + dorm.getName(), rand.nextInt(500) + 500);
     }
 
     /**

@@ -12,19 +12,19 @@ public class FloodModel implements Serializable {
     private int hoursLeftInFlood = 0;
     private int hourLastUpdated = 0;
     private String note = "no note";
-    private String runId = "unknown";
+    private String collegeId = "unknown";
     private String dormName = "unknown";
 
     public FloodModel() {
     }
 
-    public FloodModel(int costOfFlood, int lengthOfFlood, int hoursLeftInFlood, int hourLastUpdated, String dormName, String runId) {
+    public FloodModel(int costOfFlood, int lengthOfFlood, int hoursLeftInFlood, int hourLastUpdated, String dormName, String collegeId) {
         this.costOfFlood = costOfFlood;
         this.lengthOfFlood = lengthOfFlood;
         this.hoursLeftInFlood = hoursLeftInFlood;
         this.hourLastUpdated = hourLastUpdated;
         this.dormName = dormName;
-        this.runId = runId;
+        this.collegeId = collegeId;
     }
 
     public int getCostOfFlood() { return costOfFlood; }
@@ -55,7 +55,7 @@ public class FloodModel implements Serializable {
 
     public void setNote(String note) { this.note = note; }
 
-    public String getRunId() { return runId; }
+    public String getCollegeId() { return collegeId; }
 
-    public void setRunId(String runId) { this.runId = runId; }
+    public void setCollegeId(String collegeId) { this.collegeId = collegeId; }
 }
