@@ -46,7 +46,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         if(request.getParameter("changeCollegeMode") != null){
             String mode = request.getParameter("collegeMode");
-            CollegeManager.updateCollegeMode(collegeId, mode);
+            //CollegeManager.updateCollegeMode(collegeId, mode);
         }
 
         // upgrade button for fire popup sends user to store page

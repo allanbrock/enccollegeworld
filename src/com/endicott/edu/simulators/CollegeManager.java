@@ -2,10 +2,12 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.NewsLevel;
 import com.endicott.edu.models.NewsType;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -56,7 +58,7 @@ public class CollegeManager {
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         BuildingManager.establishCollege(collegeId, college);
-        FacultyManager.establishCollege(collegeId);
+        FacultyManager.establishCollege(collegeId, college);
 
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
@@ -85,7 +87,7 @@ public class CollegeManager {
         CollegeDao.deleteCollege(collegeId);
         BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
-        FloodDao.deleteFloods(collegeId);
+        FloodDao.deleteFlood(collegeId);
         NewsFeedDao.deleteNotes(collegeId);
         PlagueDao.deletePlagues(collegeId);
         SportsDao.deleteSports(collegeId);

@@ -18,11 +18,6 @@ public class DepartmentModel {
     }
 
     public String getDepartmentName(){ return this.departmentName; }
-
-    public void computeDepartmentRating(List<Integer> facultyPerformances){
-
-    }
-
     public HashMap<String, Integer> getEmployeeCounts(){
         return employeeCounts;
     }
@@ -30,5 +25,8 @@ public class DepartmentModel {
     public void putInEmployeeCounts(String key, int count){
         employeeCounts.put(key, count);
     }
+    public int getOverallEmployeeCount(){ return employeeCounts.get("Dean") + employeeCounts.get("Assistant Dean") + employeeCounts.get("Faculty"); }
+    public int getDepartmentRating(){ return this.departmentRating; }
+    public void setDepartmentRationg(int departmentRating){ this.departmentRating = departmentRating; }
 
 }

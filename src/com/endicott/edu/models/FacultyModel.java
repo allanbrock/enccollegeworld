@@ -16,10 +16,10 @@ public class FacultyModel implements Serializable {
     private String title; //EX: Assoicate prof, Dean, VP...
     private String departmentName; //department of the faculty member EX: Math, Computer Science, Biology
     private int salary;   //private int salary = 115000; //yearly salary
-    private String officeLocation; //office building and number
     private int happiness;
     private int performance;
     private Boolean raiseRecentlyGiven;
+    private Boolean underPerforming;
 
     public FacultyModel(){}
 
@@ -28,22 +28,24 @@ public class FacultyModel implements Serializable {
         this.facultyName = facultyName;
         this.title = title;
         this.departmentName = department;
-        this.officeLocation = officeLocation;
         this.facultyID = facultyID;
     }
 
-    public FacultyModel(String facultyName, String title, String department, String officeLocation, String collegeID, int salary) {
+    public FacultyModel(String facultyName, String title, String department, String collegeID, int salary) {
         this.facultyName = facultyName;
         this.title = title;
         this.departmentName = department;
-        this.officeLocation = officeLocation;
         this.collegeID = collegeID;
         this.salary = salary;
         this.facultyID = FacultyManager.generateFacultyID(this);
         this.performance = 75;
         this.raiseRecentlyGiven = false;
+        this.underPerforming = false;
         FacultyManager.computeFacultyHappiness(this, false);
     }
+
+    public Boolean getUnderPerforming(){ return underPerforming; }
+    public void setUnderPerforming(Boolean underPerforming){ this.underPerforming = underPerforming; }
 
     public String getFacultyName() {
         return facultyName;
@@ -77,13 +79,6 @@ public class FacultyModel implements Serializable {
         this.salary = salary;
     }
 
-    public String getOfficeLocation() {
-        return officeLocation;
-    }
-
-    public void setOfficeLocation(String officeLocation) {
-        this.officeLocation = officeLocation;
-    }
     public String getFacultyID() { return facultyID; }
     public void setFacultyID(String facultyID) { this.facultyID = facultyID;}
 

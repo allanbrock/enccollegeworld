@@ -65,7 +65,7 @@ public class PlagueManager {
         else
         {
             // Use mode to change the odds if you are in DEMO_PLAGUE mode.
-            CollegeMode mode = CollegeManager.getCollegeMode(collegeId);
+            //CollegeMode mode = CollegeManager.getCollegeMode(collegeId);
 
             if (Math.random() <= 0.03) {
                 startNewPlague(plagues);
