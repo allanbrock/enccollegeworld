@@ -202,21 +202,21 @@ public class BuildingManager {
     }
 
     /**
-     * Set the building as either having a Flood disaster or None
-     * and set the number of hours left in the flooding.
+     * Set the building as either having a disaster or None
+     * and set the number of hours left in it.
      *
-     * @param hoursLeftInFlood the number of hours left in the flooding
+     * @param hoursLeftInDisaster the number of hours left in the disaster
      * @param buildingName   name of the building affected
      * @param collegeId
      * @param status  string representing the change of status
      */
     /*Takes in the length of the flood, the building buildingName affected by the flood, and the collegeId of the college. */
-    public void floodStatusChange(int hoursLeftInFlood, String buildingName, String collegeId, String status) {
+    public void disasterStatusChange(int hoursLeftInDisaster, String buildingName, String collegeId, String status) {
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         for (BuildingModel b : buildings) {
             if (b.getName().equals(buildingName)) {
                 b.setCurDisaster(status);
-                b.setLengthOfDisaster(hoursLeftInFlood);
+                b.setLengthOfDisaster(hoursLeftInDisaster);
             }
         }
         dao.saveAllBuildings(collegeId, buildings);

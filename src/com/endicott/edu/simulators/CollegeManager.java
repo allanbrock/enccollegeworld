@@ -94,6 +94,7 @@ public class CollegeManager {
         StudentDao.deleteStudents(collegeId);
         IdNumberGenDao.deleteIDs(collegeId);
         InventoryDao.deleteItem(collegeId);
+        SnowDao.deleteSnowStorm(collegeId);
     }
 
     /**
@@ -137,6 +138,9 @@ public class CollegeManager {
 
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        SnowManager snowManager = new SnowManager();
+        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.

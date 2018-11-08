@@ -1,0 +1,301 @@
+package com.endicott.edu.simulators;
+
+import com.endicott.edu.datalayer.*;
+import com.endicott.edu.models.BuildingModel;
+import com.endicott.edu.models.SnowModel;
+import com.endicott.edu.models.NewsLevel;
+import com.endicott.edu.models.NewsType;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpSession;
+
+import com.endicott.edu.models.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Created by Eva Rubio 11/05/2018
+ *
+ * Responsible for simulating Snow Storms at the college.
+ * NOTE: THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
+ * */
+public class SnowManager {
+    private static final float PROBABILTY_OF_LOW_STORM = 40;
+    private static final float PROBABILTY_OF_MID_STORM = 70;
+    private static final float PROBABILTY_OF_HIGH_STORM = 90;
+
+    SnowDao snowDao = new SnowDao();
+    BuildingDao buildingDao = new BuildingDao();
+    BuildingManager buildingManager = new BuildingManager();
+    StudentDao studentDao = new StudentDao();
+    private Logger logger = Logger.getLogger("SnowManager");
+
+
+    /**
+     * Simulates snow storms and changes in them due to passage of time at college. Called when One day goes by.
+     *          -used in: CollegeManager (advanceTimeByOneDay)
+     *
+     * @param collegeId college name
+     * @param hoursAlive number of hours college has been alive
+     * @param popupManager popup manager instance
+     */
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+
+        SnowModel snowStorm = SnowDao.getSnowStorm(collegeId);
+        //for future use
+        List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
+        List<StudentModel> students = StudentDao.getStudents(collegeId);
+        List<FacultyModel> faculty = FacultyDao.getFaculty(collegeId);
+
+        //if there is NO snow storm occurring, possibly start one:
+        if (snowStorm == null) {
+            possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
+            return;
+        }
+        //if there IS a snow storm happening do the following:
+        // Figures out how much times has passed since I updated floods
+        // currentTime -lastTime
+        int elapsedTime = hoursAlive - snowStorm.getHourLastUpdated();
+        int timeLeft = Math.max(0, snowStorm.getHoursLeftInSnowStorm() - elapsedTime);
+        if (timeLeft <= 0) {
+            logger.info("EVARUBIO . handleTimeChange() Time left is ZERO. Intensity:  "+ snowStorm.getSnowIntensity());
+            logger.info("EVARUBIO . handleTimeChange() about to Delete the storm");
+            if(snowStorm.getSnowIntensity() == 1){
+                buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(),snowStorm.getOneBuildingSnowed().getName(), collegeId, "None");
+                logger.info("EVARUBIO . handleTimeChange() -> LOW-STORM has been DELETED.");
+                NewsManager.createNews(collegeId, hoursAlive, "Low Intensity Snow Storm OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+                popupManager.newPopupEvent("Low Intensity Snow Storm OVER!", "The snow storm is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+". Time to enjoy the great weather!",
+                        "Ok","okSnowStormEnded",
+                        "resources/images/sunny.png","Sun");
+                SnowDao.deleteSnowStorm(collegeId);
+                return;
+            }
+            if(snowStorm.getSnowIntensity() == 3) {
+                for (BuildingModel b : snowStorm.getBuildingsAffectedList()) {
+                    buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(), b.getName(), collegeId, "None");
+                }
+                logger.info("EVARUBIO . handleTimeChange() -> HIGH-STORM has been DELETED.");
+                NewsManager.createNews(collegeId, hoursAlive, "Severe Snow Storm OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+                popupManager.newPopupEvent("Severe Snow Storm OVER!",
+                        "The snow emergency is finally over. Maintenance has successfully removed all snow from affected areas! Time to enjoy this great weather while it lasts!",
+                        "Ok", "okSnowStormEnded",
+                        "resources/images/sunny.png", "Sun");
+                SnowDao.deleteSnowStorm(collegeId);
+
+                return;
+            }
+        } else {
+            snowStorm.setHoursLeftInSnowStorm(timeLeft);
+        }
+        snowDao.saveSnowStorm(collegeId,snowStorm);
+
+    }
+    /**
+     * Creates snow storm between days 90 (aprx 3 months) and 160 (aprox 5 months and a half)
+     * TODO call this method between specific days
+     * @param collegeId
+     * @param hoursAlive
+     *
+     * use play mode.
+     */
+    public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
+
+        Random rand = new Random();
+        int oddsOfStorm = rand.nextInt(100);
+        logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: "+oddsOfStorm);
+
+        if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM) {
+            startLowIntensitySnow(collegeId,hoursAlive,popupManager);
+
+     // }else if(oddsOfStorm > PROBABILTY_OF_LOW_STORM && oddsOfStorm <= PROBABILTY_OF_MID_STORM){
+
+        }else if(oddsOfStorm > PROBABILTY_OF_MID_STORM && oddsOfStorm <= PROBABILTY_OF_HIGH_STORM){
+            startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+        }
+    }
+    private void startMidIntensitySnow(String collegeId, int hoursAlive,  PopupEventManager popupManager) {
+        int intensity = 2;
+    }
+    /**
+     * Starts a Low intensity Snow Storm.
+     * */
+    public void startLowIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager){
+        BuildingManager buildingMgr = new BuildingManager();
+        SnowDao snowDao = new SnowDao();
+        int intensity = 1;
+        List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
+        BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
+        int lengthOfStorm = generateLengthOfSnow(intensity);
+        int lowRandCost = generateCostOfSnow(intensity);
+
+        SnowModel lowSnow = new SnowModel(collegeId,oneBuildingSnowed,intensity,lowRandCost, lengthOfStorm, lengthOfStorm, oneBuildingSnowed.getTimeSinceLastRepair());
+
+        snowDao.saveSnowStorm(collegeId,lowSnow);
+        logger.info("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
+
+        popupManager.newPopupEvent("Weather Alert: Low Intensity Snow Storm", "Oh no! "+oneBuildingSnowed.getName() +" has been snowed in! Would you like to buy more snowplows from the store to prevent this from happening so often?",
+                "Buy Snowplows","goToStore","Do nothing ($0)","doNothing", "resources/images/snowflake.png","snowflake");
+        NewsManager.createNews(collegeId, hoursAlive, "Low Intensity Snow Storm: "+oneBuildingSnowed.getName()+" is currently snowed in.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+
+        billCostOfSnowStorm(collegeId,lowSnow);
+        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuildingSnowed.getName(), collegeId, "Snow Storm");
+
+
+    }
+       /**
+     * Starts a High intensity Snow Storm. Severe Snow Storm. winter storm warning.
+     * */
+    private void startHighIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        BuildingManager buildingMgr = new BuildingManager();
+        SnowDao snowDao = new SnowDao();
+        int intensity = 3;
+        List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
+        List<BuildingModel> buildingsSnowedIn = new ArrayList<>();
+        int lengthOfStorm = generateLengthOfSnow(intensity);
+        int randSevereCost = generateCostOfSnow(intensity);
+        //int randSickSutd = getRandomNumOfSickStudents(collegeId,intensity);
+
+        //To create the List of Affected (snowed in) buildings:
+        BuildingModel oneBuild = getRandCompletedBuilding(buildings);
+        BuildingModel twoBuild = getRandCompletedBuilding(buildings);
+        while (oneBuild == twoBuild){
+            twoBuild = getRandCompletedBuilding(buildings);
+        }
+        buildingsSnowedIn.add(oneBuild);
+        buildingsSnowedIn.add(twoBuild);
+
+        SnowModel intenseSnowStorm = new SnowModel(collegeId, buildingsSnowedIn, intensity, randSevereCost, lengthOfStorm, lengthOfStorm, oneBuild.getTimeSinceLastRepair());
+        snowDao.saveSnowStorm(collegeId,intenseSnowStorm);
+        logger.info("EVARUBIO .  startHighIntensitySnow() SNOW STORM CREATED name of dorms:  " + oneBuild.getName() +" "+twoBuild.getName()+ " Duration: "+ lengthOfStorm );
+
+        popupManager.newPopupEvent("URGENT - WINTER WEATHER MESSAGE", "Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ oneBuild.getName() +" and " +twoBuild.getName()+" have been snowed in! Would you like to buy more snowplows at the store for future use?",
+                "Buy Snowplows","goToStore","Do nothing ($0)","doNothing", "resources/images/dangerSign.png","danger sign");
+        NewsManager.createNews(collegeId, hoursAlive, "Severe Snow Storm. " + intenseSnowStorm.getBuildingsAffectedList().get(0).getName() +" and "+intenseSnowStorm.getBuildingsAffectedList().get(1).getName()+" affected.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+
+        billCostOfSnowStorm(collegeId,intenseSnowStorm);
+        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuild.getName(), collegeId, "Snow Storm");
+        buildingMgr.disasterStatusChange(lengthOfStorm , twoBuild.getName(), collegeId, "Snow Storm");
+        /*
+              4 inches (10 cm) to 7 inches (18 cm) of snow with a large accumulation of ice.
+              ...WINTER STORM WARNING IN EFFECT STARTING TODAY
+             Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow.
+
+        * */
+    }
+    /**
+     * Generates a random cost of the Snow Storm depending on its intensity.
+     *
+     * @param intensity the level of severity of the Snow Storm
+     * @return  a random cost of the Snow
+     * */
+    public int generateCostOfSnow(int intensity){
+        int randCost=0;
+        if (intensity == 1){
+            randCost = (int)(Math.random() * 1000) + 500;
+        }else if(intensity == 2){
+            randCost = (int)(Math.random() * 1500) + 1000;
+        }else if(intensity == 3){
+            randCost = (int)(Math.random() * 2000) + 1500;
+        }
+
+        return randCost;
+    }
+    /**
+     * Generates a random length of the Snow Storm depending on its intensity.
+     *
+     * @param intensity the level of severity of the Snow Storm
+     * @return  the random length of the Snow
+     * */
+    public int generateLengthOfSnow(int intensity){
+        int randLength= 1;
+        if (intensity == 1){
+            randLength = (int)(Math.random() * 48) + 24;
+        }else if(intensity == 2){
+            randLength = (int)(Math.random() * 72) + 48;
+        }else if(intensity == 3){
+            randLength = (int)(Math.random() * 96) + 72;
+        }
+        return randLength;
+    }
+
+
+    /**
+     * Depending on the type of building that was affected by the Snow storm,
+     * update corresponding features.
+     *     >> Class building - classes canceled so: - Student Happiness increases
+     *                                           - Faculty Happiness increases
+     *     >> Sports building
+     *     if there is currently a snow storm it will bump the funHappiness.
+     *
+     * */
+
+
+    /**
+     * Produces a random number of sick people depending on
+     * the intensity of the Snow Storm that is currently happening.
+     * Ranges:
+     * intensity 1: 7-30
+     * intensity 2: 50-100
+     * intensity 3: 100-150
+     *
+     * @param intensity     an int determining the intensity of the snow Storm
+     * @return  the number of sick people
+     * */
+    public int getRandomNumOfSickStudents(String collegeId, int intensity){
+        List<StudentModel> allStudents = StudentDao.getStudents(collegeId);
+        List<FacultyModel> allFaculty = FacultyDao.getFaculty(collegeId);
+        int sick;
+
+        if(intensity == 3){
+            sick = (int)(Math.random() * 90) + 70;
+        }else if (intensity == 2){
+            sick = (int)(Math.random() * 60) + 30;
+        }else{
+            sick = (int)(Math.random() * 20) + 7;
+        }
+        return sick;
+
+    }
+
+    /**
+     * Randomly selects a building for it to be plowed in.
+     * The building is NOT under construction. Note: Building type does NOT matter.
+     *
+     * @param buildings     a List of BuildingModel that currently exist in the college
+     * @return  the building (as a BuildingModel) that will be covered in snow.
+     * */
+    public BuildingModel getRandCompletedBuilding(List<BuildingModel> buildings){
+        List<BuildingModel> buildingsCompleted = new ArrayList<>();
+        for(BuildingModel edif : buildings){
+            if(edif.getHoursToComplete() <= 0){
+                buildingsCompleted.add(edif);
+            }
+        }
+        Random rand = new Random();
+        int index = rand.nextInt(buildingsCompleted.size());
+        BuildingModel randBuilding = buildingsCompleted.get(index);
+
+        return randBuilding;
+    }
+    /**
+     * Charges the college for plowing costs depending on the intensity of the storm..
+     *         - used in: SnowManager (handleTimeChange)
+     * @param collegeId
+     * @param snowStorm
+     */
+    private void billCostOfSnowStorm(String collegeId, SnowModel snowStorm){
+        logger.info("EVARUBIO . billCostOfSnowStorm() Start-Of-Method. Intensity: "+snowStorm.getSnowIntensity());
+        if(snowStorm.getSnowIntensity() == 1){
+            Accountant.payBill(collegeId,"Plowing cost for " + snowStorm.getOneBuildingSnowed().getName(), snowStorm.getCostOfPlowing());
+        }else if(snowStorm.getSnowIntensity() == 2){
+            //do something
+        }else if(snowStorm.getSnowIntensity() == 3){
+            List<BuildingModel> buildings = snowStorm.getBuildingsAffectedList();
+            for (BuildingModel b : buildings) {
+                Accountant.payBill(collegeId,"Plowing cost for " + b.getName(), snowStorm.getCostOfPlowing());
+            }
+        }
+    }
+
+
+}

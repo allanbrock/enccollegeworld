@@ -55,12 +55,13 @@ public class FloodManager {
         int elapsedTime = hoursAlive - flood.getHourLastUpdated();
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
         if (timeLeft <= 0) {
-            FloodDao.deleteFlood(collegeId);
-            buildingManager.floodStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
+
+            buildingManager.disasterStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
             logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding of " + floodedDorm+" has ended! ", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             popupManager.newPopupEvent("Flood Ended!", "The flood in "+floodedDorm+" is finally over!","Ok","okFloodEnded",
                     "resources/images/DORM.png","Unflooded Dorm");
+            FloodDao.deleteFlood(collegeId);
             return;
         } else {
             flood.setHoursLeftInFlood(timeLeft);
@@ -125,7 +126,7 @@ public class FloodManager {
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
 
             billCostOfFlood(collegeId, dorm);
-            buildingMgr.floodStatusChange(randomLength , dorm.getName(), collegeId, "Flood");
+            buildingMgr.disasterStatusChange(randomLength , dorm.getName(), collegeId, "Flood");
             return true;
         }
         return false;
