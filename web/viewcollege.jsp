@@ -327,11 +327,14 @@
                     <div class="well well-sm">
                         <div class="form-group">
                             <select class="form-control" id="collegeMode" name="collegeMode">
-                                <%--<option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>--%>
-                                <%--<option value="Demo" <% if (college.getMode() == CollegeMode.DEMO) {%> selected <% } %> >Demo</option>--%>
-                                <%--<option value="Demo Fire"<% if (college.getMode() == CollegeMode.DEMO_FIRE) {%> selected <% } %> >Demo Fire</option>--%>
-                                <%--<option value="Demo Plague"<% if (college.getMode() == CollegeMode.DEMO_PLAGUE) {%> selected <% } %> >Demo Plague</option>--%>
-                                <%--<option value="Demo Riot"<% if (college.getMode() == CollegeMode.DEMO_RIOT) {%> selected <% } %> >Demo Riot</option>--%>
+                                <option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>
+                                <option value="Demo" <% if (college.getMode() == CollegeMode.DEMO) {%> selected <% } %> >Demo</option>
+                                <option value="Demo Fire"<% if (college.getMode() == CollegeMode.DEMO_FIRE) {%> selected <% } %> >Demo Fire</option>
+                                <option value="Demo Plague"<% if (college.getMode() == CollegeMode.DEMO_PLAGUE) {%> selected <% } %> >Demo Plague</option>
+                                <option value="Demo Riot"<% if (college.getMode() == CollegeMode.DEMO_RIOT) {%> selected <% } %> >Demo Riot</option>
+                                <option value="Demo Snow"<% if (college.getMode() == CollegeMode.DEMO_SNOW) {%> selected <% } %> >Demo Snow</option>
+                                <option value="Demo Flood"<% if (college.getMode() == CollegeMode.DEMO_FLOOD) {%> selected <% } %> >Demo Flood</option>
+                                <option value="Demo Championship"<% if (college.getMode() == CollegeMode.DEMO_CHAMPIONSHIP) {%> selected <% } %> >Demo Championship</option>
                             </select>
                         </div>
                         <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">

@@ -83,12 +83,7 @@ public class PlagueManager {
 
         else
         {
-
-
-            // Use mode to change the odds if you are in DEMO_PLAGUE mode.
-            //CollegeMode mode = CollegeManager.getCollegeMode(collegeId);
-
-            if (Math.random() <= plagueProbablity) {
+            if (Math.random() <= plagueProbablity || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)) {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",

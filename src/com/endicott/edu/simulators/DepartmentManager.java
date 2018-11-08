@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 public class DepartmentManager {
 
-    private static ArrayList<DepartmentModel> departmentOptions;
+    private static ArrayList<DepartmentModel> departmentOptions ;
 
     public static ArrayList<DepartmentModel> establishDepartments(int departmentCount){
-        // departmentCount will deterimine how many departments need to be loaded back in
+        // departmentCount will determine how many departments need to be loaded back in
         departmentOptions = new ArrayList<>();
         departmentOptions.add(new DepartmentModel("Arts and Sciences"));
         departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
@@ -21,7 +21,12 @@ public class DepartmentManager {
         return departmentOptions;
     }
 
-    public static ArrayList<DepartmentModel> getDepartmentOptions(){ return departmentOptions; }
+    public static ArrayList<DepartmentModel> getDepartmentOptions(){
+        if (departmentOptions == null)
+            establishDepartments(0);
+
+        return departmentOptions;
+    }
 
     private static void addToDepartmentOptions(int departmentLevel){
         if(departmentLevel == 2)
@@ -53,6 +58,10 @@ public class DepartmentManager {
 
     public static HashMap<String, Integer> getRatingsForDepartments(String collegeId){
         HashMap<String, Integer> departmentRatings = new HashMap<>();
+
+        if (departmentOptions == null)
+            establishDepartments(0);
+
         for(DepartmentModel d : departmentOptions){
             departmentRatings.put(d.getDepartmentName(), computeDepartmentRating(collegeId, d));
         }

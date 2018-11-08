@@ -2,10 +2,8 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.FloodDao;
-import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.FloodModel;
-import com.endicott.edu.models.NewsLevel;
-import com.endicott.edu.models.NewsType;
+import com.endicott.edu.models.*;
+
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -108,7 +106,7 @@ public class FloodManager {
         if(hasUpgrade){
             oddsOfFlood = oddsOfFlood - 0.02f;
         }
-        if (Math.random() <= oddsOfFlood) {
+        if (Math.random() <= oddsOfFlood || CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD)) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;

@@ -111,6 +111,8 @@ public class SnowManager {
 
         }else if(oddsOfStorm > PROBABILTY_OF_MID_STORM && oddsOfStorm <= PROBABILTY_OF_HIGH_STORM){
             startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+        } else if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW)) {
+            startHighIntensitySnow(collegeId,hoursAlive,popupManager);
         }
     }
     private void startMidIntensitySnow(String collegeId, int hoursAlive,  PopupEventManager popupManager) {

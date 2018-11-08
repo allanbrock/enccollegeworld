@@ -1,10 +1,7 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.DepartmentModel;
-import com.endicott.edu.models.NewsLevel;
-import com.endicott.edu.models.NewsType;
+import com.endicott.edu.models.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -269,5 +266,18 @@ public class CollegeManager {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static void updateCollegeMode(String collegeId, String mode) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setMode(mode);
+        cao.saveCollege(college);
+    }
+
+    static public boolean isMode(String collegeId, CollegeMode mode) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        return (college.getMode() == mode);
     }
 }

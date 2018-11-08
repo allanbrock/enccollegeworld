@@ -325,9 +325,9 @@ public class StudentManager {
            // The overall student happiness is an average of the above.
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
-                             student.getHealthHappinessRating() + student.getMoneyHappinessRating()) +
+                             student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
                              student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
-                             student.getDormHappinessRating() / 7;
+                             student.getDormHappinessRating()) / 7;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);

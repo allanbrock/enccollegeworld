@@ -196,8 +196,8 @@ public class FireManager {
      * @param hoursAlive
      */
     public void possiblyCreateFire(int odds,int regProb,int catProb,String runId, int hoursAlive){
-        if (odds < regProb) {
-            if (odds < catProb) {
+        if (odds < regProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
+            if (odds < catProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
                 boolean isCatastrophic = true;
                 startFireRandomly(runId, hoursAlive, isCatastrophic);
                 return;

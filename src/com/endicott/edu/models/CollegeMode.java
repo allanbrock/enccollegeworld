@@ -5,7 +5,10 @@ public enum  CollegeMode {
     DEMO,
     DEMO_FIRE,
     DEMO_PLAGUE,
-    DEMO_RIOT
+    DEMO_RIOT,
+    DEMO_SNOW,
+    DEMO_FLOOD,
+    DEMO_CHAMPIONSHIP
 }
 
 
