@@ -82,6 +82,7 @@
 //        tutorials = new TutorialModel[0];
 //        msg.setMessage("Attribute for tutorial missing.");
 //    }
+        StudentModel student = students[StudentManager.getStudentIndex()];
         NumberFormat numberFormatter = NumberFormat.getInstance();
         numberFormatter.setGroupingUsed(true);
     %>
@@ -220,29 +221,19 @@
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/student.png">
                 </div>
-                <div class="col-md-5">
-                    <h2><%=students.length%> Students</h2>
-                    <%
-                        int nSick = 0;
-                        int studentGoodCount = 0;
-                        // loop thru students and count sick ones.
-                        for (int i = 0; i < students.length; i++) {
-                            if(students[i].getNumberHoursLeftBeingSick() == 0){
-                                studentGoodCount++;
-                            } else {
-                                nSick++;
-                            }
-                        }
-                    %>
-                    <h3><%=nSick%> Students Sick</h3>
+                <div class="col-md-5" style="padding: 10px">
+                    <h2><%=student.getName()%></h2>
+                    <div class="speech-bubble">
+                        <strong><%=StudentManager.getStudentFeedback(student, college.getRunId())%></strong>
+                    </div>
                 </div>
 
                 <!-- Tips -->
                 <%if (tip != null){%>
-                <div class="col-md-5">
+                <div class="col-md-5" style="float: right; margin-bottom: 10px">
                     <div class="well well-lg" style="background: white">
                         <%if (!tip.getImage().equals("")){%>
-                            <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
+                        <img style="width: 15%; float:left; padding: 5px" class="img-responsive" src="resources/images/<%=tip.getImage()%>">
                         <%}%>
                         <p><%=tip.getBody()%></p>
                     </div>
@@ -254,133 +245,133 @@
                 <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
                 <%}%>
 
+                <div class="col-sm-8">
+                    <div class="well well-sm">
+                        <h4><%=students.length%> Students</h4>
+                        <div class="pre-scrollable" style="max-height: 500px">
+                            <div class="studentContainer">
+                                <%
+                                    for (int i = 0; i < students.length; i++) {
+                                        int happiness = students[i].getHappinessLevel();
+                                %>
+
+                                <div class = "studentElement" id="<%=i%>"
+                                     style = "
+                                         <%if(i == StudentManager.getStudentIndex()) {%>
+                                             background: #666;
+                                         <%}%>
+                                             box-shadow: 0 0 5px 3px rgb(
+                                         <%=scale(happiness, 50, 100, 255,   0)%>,
+                                         <%=scale(happiness,  0,  50,   0, 255)%>,
+                                             0
+                                             );
+                                             "
+                                     onclick="select(this)"
+                                >
+                                    <img src="resources/images/student.png">
+                                    <p><%=students[i].getName().split(" ")[1]%>, <%=students[i].getName().split(" ")[0].charAt(0)%></p>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="well well-sm" >
+                        <div class="pre-scrollable" style="max-height: 539px">
+
+                            <table>
+                                <%--<%student = students[StudentManager.getStudentIndex()];%>--%>
+                                <tr>
+                                    <td>Student: </td>
+                                    <td><%=student.getName()%></td>
+                                </tr>
+                                <tr>
+                                    <td>ID Number: </td>
+                                    <td><%=student.getIdNumber()%></td>
+                                </tr>
+                                <tr>
+                                    <td>Gender: </td>
+                                    <td><%=student.getGender()%></td>
+                                </tr>
+                                <tr>
+                                    <td>Advisor: </td>
+                                    <td><%=student.getAdvisor().getFacultyName()%></td>
+                                </tr>
+                                <% if(!student.getTeam().equals("")){ %>
+                                <tr>
+                                    <td>Team: </td>
+                                    <td> <%= student.getTeam()%> </td>
+                                </tr>
+                                <tr>
+                                    <td> Athletic Ability: </td>
+                                    <td> <%=student.getAthleticAbility()%> </td>
+                                </tr>
+                                <% } %>
+
+                                <tr><td><b>Hidden Attributes</b></td><td></td></tr>
+                                <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
+                                <tr>
+                                    <td>Sick for:</td>
+                                    <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
+                                <tr/>
+                                <% } %>
+                                <tr><td>Overall Happiness</td><td><%=student.getHappinessLevel()%></td></tr>
+                                <tr><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
+                                <tr><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
+                                <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
+                                <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
+                                <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
+                                <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
+                                <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
+                                <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <h4>Student Body Happiness</h4>
-        <% if (college.getStudentBodyHappiness() >= 80) { %>
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar"
-                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                <%=college.getStudentBodyHappiness()%>%
-            </div>
-        </div>
-        <%
-        } else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80 ){
-        %>
-        <div class="progress">
-            <div class="progress-bar progress-bar-warning" role="progressbar"
-                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                <%=college.getStudentBodyHappiness()%>%
-            </div>
-        </div>
-        <% } else if (college.getStudentBodyHappiness() < 50){
-        %>
-        <div class="col-sm-8">
-            <div class="progress">
-                <div class="progress-bar progress-bar-danger" role="progressbar"
-                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">
-                    <%=college.getStudentBodyHappiness()%>%
-                </div>
-            </div>
-        </div>
-        <% } %>
+        <%--<h4>Student Body Happiness</h4>--%>
+        <%--<% if (college.getStudentBodyHappiness() >= 80) { %>--%>
+        <%--<div class="progress">--%>
+            <%--<div class="progress-bar progress-bar-success" role="progressbar"--%>
+                 <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">--%>
+                <%--<%=college.getStudentBodyHappiness()%>%--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<%--%>
+        <%--} else if (college.getStudentBodyHappiness() >= 50 && college.getStudentBodyHappiness() < 80 ){--%>
+        <%--%>--%>
+        <%--<div class="progress">--%>
+            <%--<div class="progress-bar progress-bar-warning" role="progressbar"--%>
+                 <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">--%>
+                <%--<%=college.getStudentBodyHappiness()%>%--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<% } else if (college.getStudentBodyHappiness() < 50){--%>
+        <%--%>--%>
+        <%--<div class="col-sm-8">--%>
+            <%--<div class="progress">--%>
+                <%--<div class="progress-bar progress-bar-danger" role="progressbar"--%>
+                     <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<%=college.getStudentBodyHappiness()%>%">--%>
+                    <%--<%=college.getStudentBodyHappiness()%>%--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<% } %>--%>
         <!-- Display a message if defined -->
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <p></p>
-        <div class="col-sm-8">
-            <div class="well well-sm">
-                <h4>Students</h4>
-                <div class="pre-scrollable">
-                    <div class="studentContainer">
-                        <%
-                            for (int i = 0; i < students.length; i++) {
-                                int happiness = students[i].getHappinessLevel();
-                        %>
-
-                        <div class = "studentElement" id="<%=i%>"
-                             style = "
-                                 <%if(i == StudentManager.getStudentIndex()) {%>
-                                     background: #666;
-                                 <%}%>
-                                     box-shadow: 0 0 5px 3px rgb(
-                                 <%=scale(happiness, 50, 100, 255,   0)%>,
-                                 <%=scale(happiness,  0,  50,   0, 255)%>,
-                                     0
-                                     );
-                                     "
-                             onclick="select(this)"
-                        >
-                            <img src="resources/images/student.png">
-                            <p><%=students[i].getName().split(" ")[1]%>, <%=students[i].getName().split(" ")[0].charAt(0)%></p>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4" >
-            <div class="well well-sm" <%--*style="height: 399px"--%>>
-
-                <table>
-                    <% StudentModel student = students[StudentManager.getStudentIndex()];%>
-                    <tr>
-                        <td>Student: </td>
-                        <td><%=student.getName()%></td>
-                    </tr>
-                    <tr>
-                        <td>ID Number: </td>
-                        <td><%=student.getIdNumber()%></td>
-                    </tr>
-                    <tr>
-                        <td>Gender: </td>
-                        <td><%=student.getGender()%></td>
-                    </tr>
-                    <tr>
-                        <td>Advisor: </td>
-                        <td><%=student.getAdvisor().getFacultyName()%></td>
-                    </tr>
-                    <% if(!student.getTeam().equals("")){ %>
-                    <tr>
-                        <td>Team: </td>
-                        <td> <%= student.getTeam()%> </td>
-                    </tr>
-                    <tr>
-                        <td> Athletic Ability: </td>
-                        <td> <%=student.getAthleticAbility()%> </td>
-                    </tr>
-                    <% } %>
-
-                    <tr><td><b>Hidden Attributes</b></td><td></td></tr>
-                    <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
-                    <tr>
-                        <td>Sick for:</td>
-                        <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
-                    <tr/>
-                    <% } %>
-                    <tr><td>Overall Happiness</td><td><%=student.getHappinessLevel()%></td></tr>
-                    <tr><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
-                    <tr><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
-                    <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
-                    <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
-                    <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
-                    <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
-                    <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
-                    <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
-                </table>
-
-                <div class="speech-bubble">
-                    <strong><%=StudentManager.getStudentFeedback(student, college.getRunId())%></strong>
-                </div>
-            </div>
-        </div>
     </div>
 </form>
-<div class="container">
-    <div class="alert alert-success">
-        <strong>Info</strong> <%=msg.getMessage()%>
-    </div>
-</div>
+<%--<div class="container">--%>
+    <%--<div class="alert alert-success">--%>
+        <%--<strong>Info</strong> <%=msg.getMessage()%>--%>
+    <%--</div>--%>
+<%--</div>--%>
 </div>
 </body>
 

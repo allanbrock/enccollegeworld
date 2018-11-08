@@ -503,8 +503,8 @@ public class StudentManager {
 
         // Positive feedback
         } else if(student.getHappinessLevel() > 70) {
-            Collections.addAll(verbs, "love", "am very pleased with", "am ecstatic about");
-            Collections.addAll(adjectives, "great", "fantastic", "super", "surprisingly well");
+            Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
+            Collections.addAll(adjectives, "great ", "fantastic ", "super ", "surprisingly well ");
 
         // Neutral feedback
         } else {
