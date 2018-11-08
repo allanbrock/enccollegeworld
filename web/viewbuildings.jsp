@@ -67,6 +67,7 @@
     else{
         buildings = BuildingManager.getBuildingListByType(sortByType, college.getRunId());
     }
+
     NewsFeedItemModel news[] = (NewsFeedItemModel[]) request.getAttribute("news");
     if (news == null) {
         news = new NewsFeedItemModel[0];  // This is really bad
@@ -191,7 +192,7 @@
         <div class="well well-sm">
             <div class="col-sm-5" style="margin-top: 30px;">
         <div class="form-group">
-            <label for="buildingType">Sort by Building Type</label>
+            <label for="buildingType">Filter by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
                 <option value="Administrative Building">Administrative Building</option>
@@ -206,17 +207,17 @@
                 <option value="Library">Library</option>
             </select>
             <!-- Button -->
-            <input type="submit" class="btn btn-info" name="SortByBuildingType" value="Sort" style="margin-top: 5px;">
+            <input type="submit" class="btn btn-info" name="startSortByBuildingType" value="Sort" style="margin-top: 5px;">
         </div>
             </div>
             <!--Tips-->
             <%if (tip != null){%>
             <div class="col-sm-5" style="float: right;">
-                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;">
-                    <h4 style="color:blue">Tip</h4>
-
+                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;  background: white;">
+                    <%if (!tip.getImage().equals("")){%>
+                    <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
+                    <%}%>
                     <p><%=tip.getBody()%></p>
-
                     <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                     <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
                 </div>
