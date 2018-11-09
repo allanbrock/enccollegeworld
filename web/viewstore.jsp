@@ -122,9 +122,9 @@
                     if((i+1) < items.length && items[i+1].getPurchased().equals(false)){
                 %>
                 <div align="center"class="col-sm-4">
-                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=items[i+1].getImageName()%>">
                     <h4><%=items[i+1].getName()%></h4>
-                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <p>$<%=numberFormatter.format(items[i+1].getCost())%></p>
                     <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy">
                 </div>
                 <%
@@ -132,9 +132,9 @@
                     if((i+2) < items.length && items[i+2].getPurchased().equals(false)){
                 %>
                 <div align="center" class="col-sm-4">
-                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=items[i+2].getImageName()%>">
                     <h4><%=items[i+2].getName()%></h4>
-                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <p>$<%=numberFormatter.format(items[i+2].getCost())%></p>
                     <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy">
                 </div>
                 <%

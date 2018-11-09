@@ -73,7 +73,7 @@ public class PlagueManager {
                     popupManager.newPopupEvent("Plague Spreads!",
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n" +
-                                    "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
+                                    "Purchase hand sanitizers from the store to reduce the risk of plagues on campus.",
                             "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
                 }
             }
