@@ -18,6 +18,11 @@ import java.util.Random;
  *
  * Responsible for simulating Snow Storms at the college.
  * NOTE: THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
+ *
+ *  startLowIntensitySnow () - Weather Alert: Low Intensity Snow Storm
+ *  startMidIntensitySnow ()
+ *  startHighIntensitySnow() - URGENT - WINTER WEATHER MESSAGE
+ *
  * */
 public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
@@ -66,7 +71,18 @@ public class SnowManager {
                 NewsManager.createNews(collegeId, hoursAlive, "Low Intensity Snow Storm OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
                 popupManager.newPopupEvent("Low Intensity Snow Storm OVER!", "The snow storm is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+". Time to enjoy the great weather!",
                         "Ok","okSnowStormEnded",
-                        "resources/images/sunny.png","Sun");
+                        "resources/images/lowSunny.png","Sun");
+                SnowDao.deleteSnowStorm(collegeId);
+                return;
+            }
+            if(snowStorm.getSnowIntensity() == 2){
+                buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(),snowStorm.getOneBuildingSnowed().getName(), collegeId, "None");
+                logger.info("EVARUBIO . handleTimeChange() -> MID-STORM has been DELETED.");
+                NewsManager.createNews(collegeId, hoursAlive, "Mid-Intensity Blizzard OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+                popupManager.newPopupEvent("Mid-Intensity Blizzard OVER!",
+                        "The snow blizzard is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+" and its pipes are fully functioning now. Temperatures are finally rising! Time to enjoy the great weather!",
+                        "Ok","okSnowStormEnded",
+                        "resources/images/midTempRising.png","Temperatures rising");
                 SnowDao.deleteSnowStorm(collegeId);
                 return;
             }
@@ -79,7 +95,7 @@ public class SnowManager {
                 popupManager.newPopupEvent("Severe Snow Storm OVER!",
                         "The snow emergency is finally over. Maintenance has successfully removed all snow from affected areas! Time to enjoy this great weather while it lasts!",
                         "Ok", "okSnowStormEnded",
-                        "resources/images/sunny.png", "Sun");
+                        "resources/images/highCoolSun.png", "Cool Sun");
                 SnowDao.deleteSnowStorm(collegeId);
 
                 return;
@@ -102,24 +118,28 @@ public class SnowManager {
 
         Random rand = new Random();
         int oddsOfStorm = rand.nextInt(100);
-        logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: "+oddsOfStorm);
+        logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
         if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM) {
             startLowIntensitySnow(collegeId,hoursAlive,popupManager);
 
-     // }else if(oddsOfStorm > PROBABILTY_OF_LOW_STORM && oddsOfStorm <= PROBABILTY_OF_MID_STORM){
+        }else if(oddsOfStorm > PROBABILTY_OF_LOW_STORM && oddsOfStorm <= PROBABILTY_OF_MID_STORM){
+            startMidIntensitySnow(collegeId,hoursAlive,popupManager);
 
         }else if(oddsOfStorm > PROBABILTY_OF_MID_STORM && oddsOfStorm <= PROBABILTY_OF_HIGH_STORM){
             startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+
         } else if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW)) {
             startHighIntensitySnow(collegeId,hoursAlive,popupManager);
         }
     }
-    private void startMidIntensitySnow(String collegeId, int hoursAlive,  PopupEventManager popupManager) {
-        int intensity = 2;
-    }
+
+
     /**
      * Starts a Low intensity Snow Storm.
+     *
+     *      title: Weather Alert: Low Intensity Snow Storm
+     *      item: Snow Pusher
      * */
     public void startLowIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager){
         BuildingManager buildingMgr = new BuildingManager();
@@ -135,17 +155,57 @@ public class SnowManager {
         snowDao.saveSnowStorm(collegeId,lowSnow);
         logger.info("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
 
-        popupManager.newPopupEvent("Weather Alert: Low Intensity Snow Storm", "Oh no! "+oneBuildingSnowed.getName() +" has been snowed in! Would you like to buy more snowplows from the store to prevent this from happening so often?",
-                "Buy Snowplows","goToStore","Do nothing ($0)","doNothing", "resources/images/snowflake.png","snowflake");
-        NewsManager.createNews(collegeId, hoursAlive, "Low Intensity Snow Storm: "+oneBuildingSnowed.getName()+" is currently snowed in.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+        popupManager.newPopupEvent("Weather Alert: Low Intensity Snow Storm",
+                "Oh no! "+oneBuildingSnowed.getName() +
+                        " has been snowed in! Would you like to buy more Snow Pushers from the store to prevent this from happening so often?",
+                "Buy Snow Pushers","goToStore","Do nothing ($0)","doNothing",
+                "resources/images/lowSnowStorm.png","Low Intensity Snow Storm");
+        NewsManager.createNews(collegeId, hoursAlive, "Low-Intensity Snow Storm: "+oneBuildingSnowed.getName()+" currently snowed in.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
 
         billCostOfSnowStorm(collegeId,lowSnow);
-        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuildingSnowed.getName(), collegeId, "Snow Storm");
+        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuildingSnowed.getName(), collegeId, "Snowed In");
+    }
+    /**
+     * Starts a Mid intensity Snow Storm.
+     *
+     *      title: Weather Alert: Mid Intensity Blizzard Warning.
+     *      item: Frozen Pipes
+     *
+     *      Blizzard WARNING: Sustained winds or frequent gusts of 35 miles per hour or greater,
+     *      plus considerable falling or blowing snow reducing visibility to less than a quarter mile.
+     * */
+    private void startMidIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        BuildingManager buildingMgr = new BuildingManager();
+        SnowDao snowDao = new SnowDao();
+        int intensity = 2;
+        List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
+        BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
+        int lengthOfStorm = generateLengthOfSnow(intensity);
+        int lowRandCost = generateCostOfSnow(intensity);
 
+        SnowModel midSnow = new SnowModel(collegeId,oneBuildingSnowed,intensity,lowRandCost, lengthOfStorm, lengthOfStorm, oneBuildingSnowed.getTimeSinceLastRepair());
+
+        logger.info("EVARUBIO .  startMidIntensitySnow() MID-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
+
+        popupManager.newPopupEvent("Weather Alert: Mid-Intensity Blizzard",
+                "Oh no! "+oneBuildingSnowed.getName() +
+                        " has been snowed in! The low temperatures and the amount of fallen snow have caused the pipes to completely freeze. Would you like to buy better and newer pipes from out store? Newer pipes reduce the probability of this happening again, reducing future costs.",
+                "Buy New Pipes","goToStore","Do nothing ($0)","doNothing",
+                "resources/images/midBlizzardThunder.png","Mid Intensity Blizzard Storm");
+        NewsManager.createNews(collegeId, hoursAlive, "Mid-Intensity Blizzard: "+oneBuildingSnowed.getName()+" currently snowed in with frozen pipes.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+
+        billCostOfSnowStorm(collegeId, midSnow);
+        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuildingSnowed.getName(), collegeId, "Snowed In");
 
     }
-       /**
-     * Starts a High intensity Snow Storm. Severe Snow Storm. winter storm warning.
+
+
+    /**
+     * Starts a High intensity Snow Storm.      Severe Snow Storm. Winter Storm Warning.
+     *
+     *       title: URGENT - WINTER WEATHER MESSAGE
+     *       item: Snow Plows
+     *
      * */
     private void startHighIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         BuildingManager buildingMgr = new BuildingManager();
@@ -168,21 +228,32 @@ public class SnowManager {
 
         SnowModel intenseSnowStorm = new SnowModel(collegeId, buildingsSnowedIn, intensity, randSevereCost, lengthOfStorm, lengthOfStorm, oneBuild.getTimeSinceLastRepair());
         snowDao.saveSnowStorm(collegeId,intenseSnowStorm);
-        logger.info("EVARUBIO .  startHighIntensitySnow() SNOW STORM CREATED name of dorms:  " + oneBuild.getName() +" "+twoBuild.getName()+ " Duration: "+ lengthOfStorm );
+        logger.info("EVARUBIO .  startHighIntensitySnow() HIGH-SNOW STORM CREATED name of dorms:  " + oneBuild.getName() +" "+twoBuild.getName()+ " Duration: "+ lengthOfStorm );
 
-        popupManager.newPopupEvent("URGENT - WINTER WEATHER MESSAGE", "Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ oneBuild.getName() +" and " +twoBuild.getName()+" have been snowed in! Would you like to buy more snowplows at the store for future use?",
-                "Buy Snowplows","goToStore","Do nothing ($0)","doNothing", "resources/images/dangerSign.png","danger sign");
-        NewsManager.createNews(collegeId, hoursAlive, "Severe Snow Storm. " + intenseSnowStorm.getBuildingsAffectedList().get(0).getName() +" and "+intenseSnowStorm.getBuildingsAffectedList().get(1).getName()+" affected.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+        popupManager.newPopupEvent("URGENT - WINTER WEATHER MESSAGE",
+                "High Intensity Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ oneBuild.getName() +" and " +twoBuild.getName()+
+                        " have been completely snowed in! Would you like to buy more Snowplows at our store for future use? Buying more Snowplows reduces both the probability of a high-intensity snow storm from happening again and also reduces future snow removal costs.",
+                "Buy Snowplows","goToStore","Do nothing ($0)","doNothing",
+                "resources/images/highHeavySnow.png","Heavy Snow Sign");
+        NewsManager.createNews(collegeId, hoursAlive, "Severe High-Intensity Snow Storm. " + intenseSnowStorm.getBuildingsAffectedList().get(0).getName() +" and "+intenseSnowStorm.getBuildingsAffectedList().get(1).getName()+" affected.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
 
         billCostOfSnowStorm(collegeId,intenseSnowStorm);
-        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuild.getName(), collegeId, "Snow Storm");
-        buildingMgr.disasterStatusChange(lengthOfStorm , twoBuild.getName(), collegeId, "Snow Storm");
-        /*
-              4 inches (10 cm) to 7 inches (18 cm) of snow with a large accumulation of ice.
-              ...WINTER STORM WARNING IN EFFECT STARTING TODAY
-             Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow.
+        buildingMgr.disasterStatusChange(lengthOfStorm , oneBuild.getName(), collegeId, "Snowed In");
+        buildingMgr.disasterStatusChange(lengthOfStorm , twoBuild.getName(), collegeId, "Snowed In");
 
+        /*
+            "High Intensity Winter Storm Warning in effect starting today.
+             Expecting 4 to 7 inches of snow.
+             oneBuild.getName() and twoBuild.getName() have been completely snowed in!
+             Would you like to buy more Snowplows at our store for future use?
+             Buying more Snowplows reduces both the probability of a high-intensity snow storm from happening again
+             and also reduces future snow removal costs.",
+
+             4 inches (10 cm) to 7 inches (18 cm) of snow with a large accumulation of ice.
+                     ...WINTER STORM WARNING IN EFFECT STARTING TODAY
+                    Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow.
         * */
+
     }
     /**
      * Generates a random cost of the Snow Storm depending on its intensity.

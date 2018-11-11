@@ -22,7 +22,7 @@ public class SnowModel implements Serializable {
     private int hoursLeftInSnowStorm = 0;
     private int hourLastUpdated = 0;
 
-    //Intensity 1 storm.
+    //Intensity 1 and 2 storms.
     public SnowModel (String collegeId, BuildingModel oneBuildingSnowed, int snowIntensity, int costOfPlowing, int lengthOfSnowStorm, int hoursLeftInSnowStorm, int hourLastUpdated){
         this.collegeId = collegeId;
         this.oneBuildingSnowed = oneBuildingSnowed;

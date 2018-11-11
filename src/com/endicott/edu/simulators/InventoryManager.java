@@ -38,6 +38,8 @@ public class InventoryManager {
         createItem("Drains",false,"drain.png",2500, collegeId);
         createItem("Hand Sanitizers", false, "handsanitizer.jpg", 10000, collegeId);
         createItem("Snowplows",false, "snowplow.png", 4200, collegeId);
+        createItem("Pipes", false, "pipes.png", 47000, collegeId);
+        createItem("Snow Pushers", false, "snowPusher.png", 2200, collegeId);
     }
 
     public void createItem(String name, Boolean isPurchased, String imageName, int cost, String collegeId){
