@@ -92,7 +92,7 @@ public class SnowManager {
         Boolean hasHighUpgrade = hasSpecificUpgradePurchased(highUpgradeName, collegeId);
 
         Random rand = new Random();
-        int oddsOfStorm = rand.nextInt(170);
+        int oddsOfStorm = rand.nextInt(220);
         logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
             //  ---- LOW SNOW ----      (0 - 40 : 40)
