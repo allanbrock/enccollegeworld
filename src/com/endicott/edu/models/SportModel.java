@@ -59,6 +59,11 @@ public class SportModel implements Serializable {
         this.hoursUntilNextGameReset = resetHours;
     }
 
+    //Just for testing riots
+    public SportModel(String name){
+        this.sportName = name;
+    }
+
     public SportModel(String sportName, String runId){
         this.sportName = sportName;
         this.runId = runId;

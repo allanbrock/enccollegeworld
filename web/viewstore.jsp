@@ -11,6 +11,7 @@
 <%@ page import="com.endicott.edu.models.*" %>
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.ArrayList" %>
 <html>
 <head>
     <title>College World Store</title>
@@ -52,6 +53,18 @@
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
 
+//    ArrayList<ItemModel> purchasedItems = new ArrayList();
+//    ArrayList<ItemModel> availableItems = new ArrayList();
+//
+//    for(int i = 0; i < items.length; i++){
+//        if(items[i].getPurchased()){
+//            purchasedItems.add(items[i]);
+//        }
+//        else{
+//            availableItems.add(items[i]);
+//        }
+//    }
+
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -60,6 +73,7 @@
 <style>
     img{
         width:50px;
+        height: 50px;
     }
 </style>
 
@@ -101,41 +115,99 @@
         </div>
     </nav>
 
-    <div class="well well-sm">
-        <h1 align="center">Available Items</h1>
+    <%--<div class="well well-sm">--%>
         <%
             for (int i = 0; i < items.length; i++){
                 if((i%3) == 0){
         %>
             <div class="row">
-                <%
-                    if(items[i].getPurchased().equals(false)){
-                %>
                 <div align="center" class="col-sm-4">
                     <img src="resources/images/<%=items[i].getImageName()%>">
                     <h4><%=items[i].getName()%></h4>
                     <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <%
+                        if(items[i].getUnlocked().equals(false)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                    <%
+                        }
+                       else if(items[i].getCost() < college.getAvailableCash() && items[i].getPurchased().equals(false)){
+                    %>
                     <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                    <%
+                        }
+                        else if(items[i].getCost() > college.getAvailableCash()){
+                    %>
+                    <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
+                    <%
+                        }
+                        else if(items[i].getPurchased().equals(true)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
+                    <%
+                        }
+                    %>
                 </div>
                 <%
-                    }
-                    if((i+1) < items.length && items[i+1].getPurchased().equals(false)){
+                    if((i+1) < items.length){
                 %>
                 <div align="center"class="col-sm-4">
-                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=items[i+1].getImageName()%>">
                     <h4><%=items[i+1].getName()%></h4>
-                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
-                    <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy">
+                    <p>$<%=numberFormatter.format(items[i+1].getCost())%></p>
+                    <%
+                        if(items[i+1].getUnlocked().equals(false)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                    <%
+                        }
+                        else if(items[i+1].getCost() < college.getAvailableCash() && items[i+1].getPurchased().equals(false)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy">
+                    <%
+                    }
+                        else if(items[i+1].getCost() > college.getAvailableCash()){
+                    %>
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy" disabled>
+                    <%
+                    }
+                        else if(items[i+1].getPurchased().equals(true)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
+                    <%
+                        }
+                    %>
                 </div>
                 <%
                     }
-                    if((i+2) < items.length && items[i+2].getPurchased().equals(false)){
+                    if((i+2) < items.length){
                 %>
                 <div align="center" class="col-sm-4">
-                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=items[i+2].getImageName()%>">
                     <h4><%=items[i+2].getName()%></h4>
-                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
-                    <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy">
+                    <p>$<%=numberFormatter.format(items[i+2].getCost())%></p>
+                    <%
+                        if(items[i+2].getUnlocked().equals(false)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                    <%
+                        }
+                        else if(items[i+2].getCost() < college.getAvailableCash() && items[i+2].getPurchased().equals(false)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy">
+                    <%
+                    }
+                        else if(items[i+2].getCost() > college.getAvailableCash()){
+                    %>
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy" disabled>
+                    <%
+                    }
+                        else if(items[i+2].getPurchased().equals(true)){
+                    %>
+                        <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
+                    <%
+                        }
+                    %>
                 </div>
                 <%
                         }
@@ -145,38 +217,8 @@
         <%
             }
         %>
-    </div>
+    <%--</div>--%>
 
-
-    <div class="well well-sm">
-        <h1 align="center">Purchased Items</h1>
-        <table class="table table-condensed">
-            <thread>
-                <tr>
-                    <th></th>
-                    <th>Item Name</th>
-                    <th></th>
-                </tr>
-            </thread>
-            <tbody>
-                <%
-                    for(int i = 0; i < items.length; i++){
-                        if(items[i].getPurchased()){
-                %>
-                <tr>
-                    <th></th>
-                    <td style="vertical-align:middle; font-size:120%;"><%=items[i].getName()%>
-                    </td>
-                    <th></th>
-                </tr>
-                <%
-                        }
-                    }
-                %>
-            </tbody>
-        </table>
-
-    </div>
 </form>
 </body>
 </html>

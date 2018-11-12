@@ -213,11 +213,11 @@
             <!--Tips-->
             <%if (tip != null){%>
             <div class="col-sm-5" style="float: right;">
-                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;">
-                    <h4 style="color:blue">Tip</h4>
-
+                <div class="well well-lg" style="float: right; vertical-align: top; display: inline-block;  background: white;">
+                    <%if (!tip.getImage().equals("")){%>
+                    <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
+                    <%}%>
                     <p><%=tip.getBody()%></p>
-
                     <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
                     <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
                 </div>

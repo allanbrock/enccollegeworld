@@ -215,7 +215,7 @@ public class StudentManager {
 
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappinessLevel();
-            float odds = (100f - h) * scalingFactor;
+            float odds = Math.min((50f - h), 0) * scalingFactor;
             if (didItHappen(odds)) {
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
