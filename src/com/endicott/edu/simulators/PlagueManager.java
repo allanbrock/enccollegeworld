@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class PlagueManager {
     PlagueDao dao = new PlagueDao();
-    private double plagueProbablity = .03;
+    private double plagueProbablity = .02;
     private boolean purellUpgradePurchased = false;
     private InventoryManager inventoryManager = new InventoryManager();
     private String purellUpgradeName = "Purell Dispensers";
@@ -98,6 +98,7 @@ public class PlagueManager {
     /**
      * Start a plague
      *
+     * 
      * @param plagues
      */
     private void startNewPlague(List<PlagueModel> plagues) {
