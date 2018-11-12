@@ -347,6 +347,8 @@
                         <div class="form-group">
                             <input type="text" class="form-control" id="buildingName" name="buildingName"
                                placeholder="Enter building name.">
+                            <!--random name choosing button-->
+                            <input type="submit" class="btn btn-info" id="randomBuildingName" name="randomBuildingName" value="Random Name" style="margin-top: 5px;">
                         </div>
                         <!-- Button -->
                         <input type="submit" class="btn btn-info" id="purchaseBuilding" name="purchaseBuilding" value="Purchase Building">
