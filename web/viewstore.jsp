@@ -9,9 +9,6 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
-<%@ page import="com.endicott.edu.simulators.CollegeManager" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.ArrayList" %>
 <html>
 <head>
     <title>College World Store</title>
@@ -53,18 +50,6 @@
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
     }
 
-//    ArrayList<ItemModel> purchasedItems = new ArrayList();
-//    ArrayList<ItemModel> availableItems = new ArrayList();
-//
-//    for(int i = 0; i < items.length; i++){
-//        if(items[i].getPurchased()){
-//            purchasedItems.add(items[i]);
-//        }
-//        else{
-//            availableItems.add(items[i]);
-//        }
-//    }
-
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
 %>
@@ -74,6 +59,9 @@
     img{
         width:50px;
         height: 50px;
+    }
+    .disabled{
+        opacity: 0.2;
     }
 </style>
 
@@ -120,9 +108,22 @@
             for (int i = 0; i < items.length; i++){
                 if((i%3) == 0){
         %>
+            <br>
+            <br>
             <div class="row">
                 <div align="center" class="col-sm-4">
+                    <%
+                        if(items[i].getUnlocked() && items[i].getCost() < college.getAvailableCash()){
+                    %>
                     <img src="resources/images/<%=items[i].getImageName()%>">
+                    <%
+                        }
+                        else{
+                    %>
+                    <img class="disabled" src="resources/images/<%=items[i].getImageName()%>">
+                    <%
+                        }
+                    %>
                     <h4><%=items[i].getName()%></h4>
                     <p>$<%=numberFormatter.format(items[i].getCost())%></p>
                     <%
@@ -152,7 +153,18 @@
                     if((i+1) < items.length){
                 %>
                 <div align="center"class="col-sm-4">
+                    <%
+                        if(items[i+1].getUnlocked() && items[i+1].getCost() < college.getAvailableCash()){
+                    %>
                     <img src="resources/images/<%=items[i+1].getImageName()%>">
+                    <%
+                        }
+                    else{
+                    %>
+                    <img class="disabled" src="resources/images/<%=items[i+1].getImageName()%>">
+                    <%
+                        }
+                    %>
                     <h4><%=items[i+1].getName()%></h4>
                     <p>$<%=numberFormatter.format(items[i+1].getCost())%></p>
                     <%
@@ -183,7 +195,18 @@
                     if((i+2) < items.length){
                 %>
                 <div align="center" class="col-sm-4">
+                    <%
+                        if(items[i+2].getUnlocked() && items[i+2].getCost() < college.getAvailableCash()){
+                    %>
                     <img src="resources/images/<%=items[i+2].getImageName()%>">
+                    <%
+                    }
+                    else{
+                    %>
+                    <img class="disabled" src="resources/images/<%=items[i+2].getImageName()%>">
+                    <%
+                        }
+                    %>
                     <h4><%=items[i+2].getName()%></h4>
                     <p>$<%=numberFormatter.format(items[i+2].getCost())%></p>
                     <%

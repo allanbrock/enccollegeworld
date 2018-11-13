@@ -34,9 +34,9 @@ public class InventoryManager {
     }
 
     public void createAllItems(String collegeId){
-        createItem("Smoke Detectors", false, "smokedetector.png", 50000, true,collegeId);
+        createItem("Smoke Detectors", false, "smokedetector.png", 50000, true, collegeId);
         createItem("Drains",false,"drain.png",2500, true, collegeId);
-        createItem("Hand Sanitizers", false, "handsanitizer.jpg", 10000, true, collegeId);
+        createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, true, collegeId);
         createItem("Snowplows",false, "snowplow.png", 4200, true, collegeId);
         createItem("Pipes", false, "pipes.png", 47000, true, collegeId);
         createItem("Snow Pushers", false, "snowPusher.png", 2200, true, collegeId);
@@ -55,6 +55,19 @@ public class InventoryManager {
                 if(items.get(i).getName().equals(name)){
                     items.get(i).setPurchased(true);
                     Accountant.payBill(collegeId,"Upgrade: "+items.get(i).getName()+". Cost: ", items.get(i).getCost());
+                }
+            }
+        }
+        inventory.saveAllItems(collegeId, items);
+    }
+
+    public static void unlockItem(String name, String collegeId){
+        List<ItemModel> items = InventoryDao.getItems(collegeId);
+
+        if(items.size() > 0) {
+            for (int i = 0; i < items.size(); i++){
+                if(items.get(i).getName().equals(name)){
+                    items.get(i).setUnlocked(true);
                 }
             }
         }
