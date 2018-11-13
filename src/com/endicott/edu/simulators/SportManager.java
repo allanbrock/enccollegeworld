@@ -111,6 +111,7 @@ public class SportManager {
 
         //Create Women's Volleyball as default sport
         SportModel default1 = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
+        assignCoach(collegeId, default1);
         addPlayers(collegeId, default1);
         calculateNumberOfPlayersOnTeam(collegeId, default1);
         fillUpTeamAndSetActiveStatus(collegeId, default1);
@@ -253,7 +254,8 @@ public class SportManager {
         } else {
             logger.severe("Could not add sport: '" + sportName + "'");
         }
-        
+
+        assignCoach(collegeId, result);
         addPlayers(collegeId, result);
         calculateNumberOfPlayersOnTeam(collegeId, result);
         fillUpTeamAndSetActiveStatus(collegeId, result);
@@ -530,6 +532,12 @@ public class SportManager {
         else if(team.getDivision() == 1)
             Accountant.receiveIncome(collegeId, "Your " + team.getSportName() + "Won a Championship! You have been awarded $1,000,000", 1000000);
 
+    }
+
+    private static void assignCoach(String collegeId, SportModel team){
+        String coachName = NameGenDao.generateName(false);
+        CoachModel coach = new CoachModel(team.getSportName(), coachName, "Coach", "Athletics", collegeId, 100000);
+        team.setCoachName(coach.getFacultyName());
     }
 
     private static void loadTips(String collegeId) {
