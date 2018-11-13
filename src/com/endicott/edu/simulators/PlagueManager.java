@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class PlagueManager {
     PlagueDao dao = new PlagueDao();
-    private double plagueProbablity = .03;
+    private double plagueProbablity = .02;
     private boolean purellUpgradePurchased = false;
     private InventoryManager inventoryManager = new InventoryManager();
     private String purellUpgradeName = "Purell Dispensers";
@@ -73,7 +73,7 @@ public class PlagueManager {
                     popupManager.newPopupEvent("Plague Spreads!",
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n" +
-                                    "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
+                                    "Purchase hand sanitizers from the store to reduce the risk of plagues on campus.",
                             "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
                 }
             }
@@ -98,6 +98,7 @@ public class PlagueManager {
     /**
      * Start a plague
      *
+     * 
      * @param plagues
      */
     private void startNewPlague(List<PlagueModel> plagues) {

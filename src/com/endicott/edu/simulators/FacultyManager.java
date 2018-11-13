@@ -64,7 +64,7 @@ public class FacultyManager {
      */
     public static void establishCollege(String collegeId, CollegeModel college){
         DepartmentManager.establishDepartments(college.getDepartmentCount());
-        for (int i=0; i<12; i++) {
+        for (int i=0; i<22  ; i++) {
             String department = generateFacultyDepartment();
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
             for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
@@ -349,6 +349,16 @@ public class FacultyManager {
         badFacultyName + " has been failing all of their students!"};
         int rand = r.nextInt(scenarios.length - 0);
         return scenarios[rand];
+    }
+
+    private static ArrayList<String> checkDepartmentsForDeans(String collegeId, String deanPosition){
+        ArrayList<String> deanlessDepartments = new ArrayList<>();
+        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+            if(d.getEmployeeCounts().get(deanPosition) < 1){
+                deanlessDepartments.add(d.getDepartmentName());
+            }
+        }
+        return deanlessDepartments;
     }
 
     private static void loadTips(String collegeId) {

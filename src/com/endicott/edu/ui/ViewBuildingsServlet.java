@@ -7,6 +7,7 @@ import com.endicott.edu.simulators.BuildingManager;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.TutorialManager;
+import com.endicott.edu.datalayer.NameGenDao;
 //import com.endicott.edu.simulators.DormManager;
 
 import javax.servlet.RequestDispatcher;
@@ -38,6 +39,9 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             if (request.getParameter("repairBuilding" + b) != null){
                 doGet(request, response);
             }
+        }
+        if(request.getParameter("randomBuildingName") != null){
+            NameGenDao.generateBuildingName(); // still need to add code handling the parameter
         }
         //handles the sort by button parameter
         if(request.getParameter("startSortByBuildingType") != null){

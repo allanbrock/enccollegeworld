@@ -124,7 +124,7 @@ public class FloodManager {
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
 
             billCostOfFlood(collegeId, dorm);
-            buildingMgr.disasterStatusChange(randomLength , dorm.getName(), collegeId, "Flood");
+            buildingMgr.disasterStatusChange(randomLength , dorm.getName(), collegeId, "Flooded");
             return true;
         }
         return false;

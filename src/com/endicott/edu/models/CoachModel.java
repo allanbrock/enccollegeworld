@@ -1,13 +1,17 @@
 package com.endicott.edu.models;
 
-public class CoachModel extends FacultyModel {
-    private String teamName;
+import com.endicott.edu.simulators.CoachManager;
 
-    public CoachModel(String teamName, String name, String title, String department, String collegeID, int salary){
+public class CoachModel extends FacultyModel {
+    private String sportName;
+
+    public CoachModel(String sportName, String name, String title, String department, String collegeID, int salary){
         super(name, title, department, collegeID, salary);
-        this.teamName = teamName;
+        this.sportName = sportName;
+        CoachManager.addToCollegeCoaches(this);
     }
 
-    public String getTeamName() { return teamName; }
-    public void setTeamName(String teamName) { this.teamName = teamName; }
+    public String getSportName() { return sportName; }
+    public void setSportName(String teamName) { this.sportName = teamName; }
+
 }

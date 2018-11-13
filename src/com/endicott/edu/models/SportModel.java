@@ -29,6 +29,7 @@ public class SportModel implements Serializable {
     private int division;
     private String sportSeason = "unknown";
     private int championshipsWon = 0;
+    private String coachName = "unknown";
 
     public SportModel() {
 
@@ -247,4 +248,8 @@ public class SportModel implements Serializable {
     }
 
     public void addChampionship() {this.championshipsWon += 1;}
+
+    public String getCoachName() { return coachName; }
+
+    public void setCoachName(String coachName) { this.coachName = coachName; }
 }

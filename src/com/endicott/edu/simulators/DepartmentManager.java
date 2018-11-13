@@ -58,13 +58,16 @@ public class DepartmentManager {
 
     public static HashMap<String, Integer> getRatingsForDepartments(String collegeId){
         HashMap<String, Integer> departmentRatings = new HashMap<>();
-
+        int sum = 0;
         if (departmentOptions == null)
             establishDepartments(0);
 
         for(DepartmentModel d : departmentOptions){
-            departmentRatings.put(d.getDepartmentName(), computeDepartmentRating(collegeId, d));
+            int rating = computeDepartmentRating(collegeId, d);
+            departmentRatings.put(d.getDepartmentName(), rating);
+            sum += rating;
         }
+        departmentRatings.put("Overall Academic Happiness", sum / departmentOptions.size());
         return departmentRatings;
     }
 }
