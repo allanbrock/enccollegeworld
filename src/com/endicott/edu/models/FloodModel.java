@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 /**
  * Created by cseidl on 9/29/17.
+ *
+ *
+ *
  */
 public class FloodModel implements Serializable {
-
     private int costOfFlood = 0;
     private int lengthOfFlood = 0;
     private int hoursLeftInFlood = 0;

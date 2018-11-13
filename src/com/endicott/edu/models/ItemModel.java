@@ -10,15 +10,17 @@ public class ItemModel implements Serializable {
     private Boolean isPurchased;
     private String imageName;
     private int cost;
+    private Boolean isUnlocked;
 
     public ItemModel() {
     }
 
-    public ItemModel(String name, Boolean isPurchased, String imageName, int cost) {
+    public ItemModel(String name, Boolean isPurchased, String imageName, int cost, Boolean isUnlocked) {
         this.name = name;
         this.isPurchased = isPurchased;
         this.imageName = imageName;
         this.cost = cost;
+        this.isUnlocked = isUnlocked;
     }
 
     public String getName() {
@@ -51,6 +53,14 @@ public class ItemModel implements Serializable {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Boolean getUnlocked() {
+        return isUnlocked;
+    }
+
+    public void setUnlocked(Boolean unlocked) {
+        isUnlocked = unlocked;
     }
 }
 
