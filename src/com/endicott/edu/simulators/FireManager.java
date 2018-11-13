@@ -120,11 +120,6 @@ public class FireManager {
         NewsManager.createNews(runId, hoursAlive, ("Fire in " + fire.getBuildingBurned().getName() + ", " + numDeaths + " died."), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
     }
 
-    public void removeVictims(FireModel fire,int victims,boolean isCatastrophic){
-        // TODO: remove faculty for every 4 student deaths
-
-    }
-
     /**
      * Starts a major fire that destroys building and kills number of students inside, if there are any
      *
