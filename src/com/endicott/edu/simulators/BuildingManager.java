@@ -39,9 +39,10 @@ public class BuildingManager {
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
             building.updateTimeSinceLastRepair(24); //when a building is upgraded, this should go back to zero
-            billRunningCostOfBuilding(runId, hoursAlive, building);
+            billRunningCostOfBuilding(runId, building);
             workOnBuilding(building, runId);
             buildingDecayForOneDay(runId, building);
+            setNewRepairCost(runId, building);
         }
 
         // Really important the we save the changes to disk.
@@ -52,13 +53,17 @@ public class BuildingManager {
      * Charge the college the cost of running the building.
      *
      * @param collegeId college name
-     * @param hoursAlive number of hours the college has existed
      * @param building the building that's causing the cost
      */
-    private void billRunningCostOfBuilding(String collegeId, int hoursAlive, BuildingModel building) {
+    private void billRunningCostOfBuilding(String collegeId, BuildingModel building) {
         // Multiple the cost per day based on how much the building is decayed
         int newCharge = ((int)(100 - building.getShownQuality())) * building.getCostPerDay();
         Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), newCharge);
+    }
+
+    private void setNewRepairCost(String collegeId, BuildingModel building){
+        int newRepairCost = ((100 - (int)building.getShownQuality()) * 150);
+        building.setRepairCost(newRepairCost);
     }
 
     /**
