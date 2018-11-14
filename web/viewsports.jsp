@@ -197,17 +197,17 @@
                 </div>
             </div>
                 <div class="col-3">
-                    <img class="img-responsive"  src="resources/images/baseballicon.png">
+                    <img class="img-responsive"  src="resources/images/baseball.png">
                     <h4>Baseball Championships Won: <%=college.getBaseballChampionships()%></h4>
                     <h4>Softball Championships Won: <%=college.getSoftballChampionships()%></h4>
                 </div>
                 <div class="col-4">
-                    <img class="img-responsive"  src="resources/images/soccerballicon.png">
+                    <img class="img-responsive"  src="resources/images/soccerball.png">
                     <h4>Men's Soccer Championships Won: <%=college.getMSoccerChampionships()%></h4>
                     <h4>Women's Soccer Championships Won: <%=college.getWSoccerChampionships()%></h4>
                 </div>
                 <div class="col-5">
-                    <img class="img-responsive"  src="resources/images/basketballicon.png">
+                    <img class="img-responsive"  src="resources/images/basketball.png">
                     <h4>Men's Basketball Championships Won: <%=college.getMBasketballChampionships()%></h4>
                     <h4>Women's Basketball Championships Won: <%=college.getWBasketballChampionships()%></h4>
                 </div>
