@@ -26,10 +26,15 @@ public class FireManager {
 
     public FireManager() {
         upgradeName = "Smoke Detectors";
-        upgradedRegFireProb = 8;
-        regFireProb = 10;
-        upgradedCatFireProb = 3;
-        catFireProb = 5;
+        //Old fire values, seemed to high but still want to discuss with CJ  before removing completely
+//        upgradedRegFireProb = 8;
+//        regFireProb = 10;
+//        upgradedCatFireProb = 3;
+//        catFireProb = 5;
+        upgradedRegFireProb = 2;
+        regFireProb = 4;
+        upgradedCatFireProb = 1;
+        catFireProb = 2;
     }
 
     /**
