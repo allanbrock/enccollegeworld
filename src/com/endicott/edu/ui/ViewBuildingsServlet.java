@@ -27,6 +27,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private String buildingToUpgrade;
     private String sortByType;
     private String matchedConstantType;
+    private String randomName;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -40,9 +41,12 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
                 repairBuidling(request, response, BuildingDao.getBuildings(collegeId).get(b));
             }
         }
-        if(request.getParameter("randomBuildingName") != null){
-            NameGenDao.generateBuildingName(); // still need to add code handling the parameter
-        }
+        /*if(request.getParameter("randomBuildingName") != null){
+            // still need to add code handling the parameter
+            String randomName = NameGenDao.generateBuildingName();
+            request.setAttribute("randomName", randomName);
+            doGet(request, response);
+        }*/
         //handles the sort by button parameter
         if(request.getParameter("startSortByBuildingType") != null){
             sortByType = request.getParameter("sortByBuildingType");
@@ -67,11 +71,20 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             request.setAttribute("beginBuildingPurchase", beginStr);
             doGet(request, response);
         }
-        else if(request.getParameter("selectBuildingType") != null){ //if they've selected the building type
+        else if(request.getParameter("randomBuildingName") != null){
+            // still need to add code handling the parameter
+            randomName = NameGenDao.generateBuildingName();
+            request.setAttribute("randomName", randomName);
+            //request.setAttribute("buildingType", buildingType);
+            //doGet(request, response);
+        }
+        if(request.getParameter("selectBuildingType") != null || request.getParameter("randomBuildingName")!= null){ //(was else if) if they've selected the building type
             buildingTypeSelected = true;
             String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
             request.setAttribute("wasBuildingTypeSelected", buildingTypeSelectedStr);
-            buildingType = request.getParameter("buildingType");
+            if(request.getParameter("buildingType") != null){
+                buildingType = request.getParameter("buildingType");
+            }
             request.setAttribute("buildingType", buildingType);
             doGet(request, response);
         }
@@ -203,6 +216,9 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
+        if(buildingName == null){
+            buildingName = randomName;
+        }
         //String buildingType=request.getParameter("buildingType");
         String buildingSize=request.getParameter("buildingSize");
 

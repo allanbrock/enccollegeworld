@@ -16,20 +16,23 @@ import java.util.Random;
  * Created by Eva Rubio 11/05/2018
  *
  * Responsible for simulating Snow Storms at the college.
- * NOTE: THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
  *
- *  startLowIntensitySnow () - Weather Alert: Low Intensity Snow Storm
- *  startMidIntensitySnow ()
- *  startHighIntensitySnow() - URGENT - WINTER WEATHER MESSAGE
+ * NOTES:   - THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
+ *          - SNOW STORMS CAN ONLY HAPPEN DURING WINTER SEASON
+ *          - ONLY HAPPEN ON FULLY BUILT BUILDINGS.
+ *
  *
  * */
 public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
     private static final float PROBABILTY_OF_MID_STORM = 70;
     private static final float PROBABILTY_OF_HIGH_STORM = 100;
+    private static final int START_OF_WINTER = 12;      //must be an int (dealing with whole days)
+    private static final int END_OF_WINTER = 20;        //must be an int (dealing with whole days)
     private static final String lowUpgradeName = "Snow Pushers";
     private static final String midUpgradeName = "Pipes";
     private static final String highUpgradeName = "Snowplows";
+    private static boolean isHappening = false;
 
     SnowDao snowDao = new SnowDao();
     BuildingDao buildingDao = new BuildingDao();
@@ -50,17 +53,22 @@ public class SnowManager {
      * @param popupManager popup manager instance
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        logger.info("EVARUBIO . handleTimeChange() START OF METHOD ");
+        logger.info("EVARUBIO . SNOW .  handleTimeChange() START OF METHOD ");
         SnowModel snowStorm = SnowDao.getSnowStorm(collegeId);
         //for future use
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         List<StudentModel> students = StudentDao.getStudents(collegeId);
         List<FacultyModel> faculty = FacultyDao.getFaculty(collegeId);
 
+        //snowSeasonPopup(hoursAlive,collegeId,popupManager);
         //if there is NO snow storm occurring, possibly start one:
-        if (snowStorm == null) {
-            logger.info("EVARUBIO . handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
-            possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
+        if (snowStorm == null ) {
+            logger.info("EVARUBIO - SNOW handleTimeChange() IT IS WINTER SEASON posiblycreate storm..  ");
+            if(isItWinter(collegeId,hoursAlive,popupManager)){
+                logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
+                possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
+            }
+
             return;
         }
         //if there IS a snow storm happening do the following:
@@ -69,24 +77,68 @@ public class SnowManager {
         int elapsedTime = hoursAlive - snowStorm.getHourLastUpdated();
         int timeLeft = Math.max(0, snowStorm.getHoursLeftInSnowStorm() - elapsedTime);
         if (timeLeft <= 0) {
+            logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is OVER, gonna call deleteSnowStorm()  ");
+            isHappening = false;
+            logger.info("EVARUBIO - SNOW handleTimeChange() just set isHappening to false");
+            logger.info("EVARUBIO - SNOW handleTimeChange() value of isHappening = " + isHappening);
+
             generateCorrectPopup(snowStorm,true,popupManager, collegeId,hoursAlive);
             SnowDao.deleteSnowStorm(collegeId);
             return;
         } else {
+            logger.info("EVARUBIO . handleTimeChange() snow storm is currently happening, gonna call setHoursLeftInSnowStorm()  ");
+
             snowStorm.setHoursLeftInSnowStorm(timeLeft);
         }
         snowDao.saveSnowStorm(collegeId,snowStorm);
 
     }
     /**
+     * Determines whether or not it is winter season to create or not a Snow Storm.
+     * Creates popup to notify user.
+     * TODO maybe create on main page something that shows what the current season is. meybe with cute/cool img.
+     * FOR NOW: winter season between days 12 and 20
+     * @param collegeId
+     * @param hoursAlive
+     * @param popupManager
+     * */
+    public Boolean isItWinter(String collegeId, int hoursAlive,PopupEventManager popupManager){
+        int currentDay = hoursAlive / 24 + 1;
+        logger.info("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
+        System.out.println("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
+        Boolean isCold = false;
+        if(currentDay == START_OF_WINTER){
+            NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+            popupManager.newPopupEvent("Winter is here!", "The Starks were right, Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
+                    "Ok","okWinterStarted",
+                    "resources/images/winterIcon.png","winter season icon");
+        }else if (currentDay == END_OF_WINTER){
+            NewsManager.createNews(collegeId, hoursAlive, "Spring has arrived.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            popupManager.newPopupEvent("Goodbye snow..Spring is here!", "After waiting all winter long, we finally get to feel the sun and warmth of Spring. Don't forget to stop and smell the flowers! ",
+                    "Ok","okSpringStarted",
+                    "resources/images/springIcon.png","spring season icon");
+            logger.info("EVARUBIO SNOW isItWinter() ES EL END_OF_WINTER !!!! popupshould be here. currentDay = " +currentDay);
+        }
+
+        if(currentDay>= START_OF_WINTER && currentDay <= END_OF_WINTER){
+            isCold = true;
+
+        }
+        logger.info("EVARUBIO - SNOW isItWinter() value: "+isCold);
+        return isCold;
+    }
+    /**
      * Creates a low/mid/high intensity snow storm depending on the odds.
-     * TODO call this method between specific days: between days 90 (aprx 3 months) and 160 (aprox 5 months and a half)
+     * Method called between specific days: 90 (aprx 3 months) and 160 (aprox 5 months and a half)
+     *
      * @param collegeId
      * @param hoursAlive
      *
      * use play mode.
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
+
+
         Boolean hasLowUpgrade = hasSpecificUpgradePurchased(lowUpgradeName, collegeId);
         Boolean hasMidUpgrade = hasSpecificUpgradePurchased(midUpgradeName, collegeId);
         Boolean hasHighUpgrade = hasSpecificUpgradePurchased(highUpgradeName, collegeId);
@@ -130,6 +182,9 @@ public class SnowManager {
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 1;
+        isHappening = true;
+        logger.info("EVARUBIO - SNOW startLowIntensitySnow() just set isHappening to true");
+        logger.info("EVARUBIO - SNOW startLowIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
         int lengthOfStorm = generateLengthOfSnow(intensity);
@@ -138,6 +193,7 @@ public class SnowManager {
         SnowModel lowSnow = new SnowModel(collegeId,oneBuildingSnowed,intensity,lowRandCost, lengthOfStorm, lengthOfStorm, oneBuildingSnowed.getTimeSinceLastRepair());
         snowDao.saveSnowStorm(collegeId,lowSnow);
         logger.info("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
+        System.out.println("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
 
         generateCorrectPopup(lowSnow,false, popupManager,collegeId,hoursAlive);
 
@@ -157,6 +213,9 @@ public class SnowManager {
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 2;
+        isHappening = true;
+        logger.info("EVARUBIO - SNOW startMidIntensitySnow() just set isHappening to true");
+        logger.info("EVARUBIO - SNOW startMidIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
         int lengthOfStorm = generateLengthOfSnow(intensity);
@@ -183,6 +242,9 @@ public class SnowManager {
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 3;
+        isHappening = true;
+        logger.info("EVARUBIO - SNOW startHighIntensitySnow() just set isHappening to true");
+        logger.info("EVARUBIO - SNOW startHighIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         List<BuildingModel> buildingsSnowedIn = new ArrayList<>();
         int lengthOfStorm = generateLengthOfSnow(intensity);
@@ -339,10 +401,30 @@ public class SnowManager {
         }
     }
     /**
+     *
+     *
+     *
+    private void snowSeasonPopup(int hoursAlive, String collegeId, PopupEventManager popupManager){
+        int currentDay = hoursAlive / 24 + 1;
+
+        if(currentDay>= 30){
+            popupManager.newPopupEvent("Snow Season!", "The snow season is here !! ",
+                    "Ok","okSnowStormEnded",
+                    "resources/images/lowSunny.png","Sun");
+
+        }else if(currentDay >= 40){
+            popupManager.newPopupEvent("Snow Season OVER!", "The snow season is OOVER !! ",
+                    "Ok","okSnowStormEnded",
+                    "resources/images/lowSunny.png","Sun");
+        }
+
+    }
+     */
+    /**
      * Generates the correct PopupEventManager depending on type of storm and if an upgrade has been purchased.
      * If storm has finished, correctly update the Building's "Current Disaster"
      *
-     * @param snowStorm the snow storm curreclty taking place
+     * @param snowStorm the snow storm currently taking place
      * @param isOver whether the snow storm has finished or not
      * @param popupManager the popupEventManager
      * @param collegeId the college running ID
@@ -432,8 +514,11 @@ public class SnowManager {
         }
     }
 
-
+    /**
+     * Determines whether there is a Snow Storm currently happening or not.
+     * Regardless of the intensity of the storm.
+     * */
     public boolean isEventActive() {
-        return false;
+        return isHappening;
     }
 }
