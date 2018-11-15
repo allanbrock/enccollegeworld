@@ -2,6 +2,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import java.io.Console;
 import java.util.*;
 
 /**
@@ -355,11 +356,17 @@ public class StudentManager {
     }
 
     private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
+
+        // TODO: Bug-fix function to set value that isn't 0.
+
         int rating = college.getYearlyTuitionRating(); // This is rating 0 to 100
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
     private void setStudentAdvisorHappiness(StudentModel s, CollegeModel college, boolean initial) {
+
+        // TODO: Bug-fix function to set value that isn't 0.
+
         Random r = new Random();
         int happinessRating;
         if (initial){
@@ -388,6 +395,9 @@ public class StudentManager {
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
+
+        // TODO: Update function to insure value is accurate and not negative
+
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
 
@@ -395,6 +405,9 @@ public class StudentManager {
     }
 
     private void setStudentHealthHappiness(StudentModel s) {
+
+        // TODO: update to change over time of being sick
+
         s.setHealthHappinessRating(100);
         if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);

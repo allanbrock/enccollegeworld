@@ -433,4 +433,7 @@ public class SnowManager {
     }
 
 
+    public boolean isEventActive() {
+        return false;
+    }
 }

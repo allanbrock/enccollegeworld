@@ -248,7 +248,11 @@
                     <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings.get(b).getName()%>
                     </td>
                     <td>
-                        <img class="img-responsive" src="resources/images/<%=buildings.get(b).getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%if(buildings.get(b).getHoursToComplete() > 0){%>
+                            <img class="img-responsive" src="resources/images/underconstruction.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%}else{%>
+                            <img class="img-responsive" src="resources/images/<%=buildings.get(b).getKindOfBuilding()%>.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
+                        <%}%>
                         <%=buildings.get(b).getKindOfBuilding()%>
                     </td>
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getSize()+ " (" +buildings.get(b).getCapacity() +")"%>
@@ -272,7 +276,10 @@
                                 || buildings.get(b).getHoursToComplete() > 0 || buildings.get(b).getUpgradeCost() > college.getAvailableCash())){%>
                             <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="upgradeBuilding" + b%>" value="Upgrade ($<%=buildings.get(b).getUpgradeCost()%>)">
                         <%}%>
-                        <input style="margin-top: 5px; horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="repairBuilding" + b%>" value="Repair ($<%=buildings.get(b).getRepairCost()%>)">
+                        <%if(buildings.get(b).getRepairCost() > college.getAvailableCash() || buildings.get(b).getRepairCost() > 0
+                                && !(buildings.get(b).getHoursToComplete() > 0) && buildings.get(b).isUpgradeComplete()){%>
+                            <input style="margin-top: 5px; horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="repairBuilding" + b%>" value="Repair ($<%=buildings.get(b).getRepairCost()%>)">
+                        <%}%>
                     </td>
                 </tr>
                 <% } %>

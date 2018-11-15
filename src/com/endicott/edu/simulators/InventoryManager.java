@@ -35,7 +35,7 @@ public class InventoryManager {
 
     public void createAllItems(String collegeId){
         createItem("Smoke Detectors", false, "smokedetector.png", 50000, true, collegeId);
-        createItem("Drains",false,"drain.png",2500, true, collegeId);
+        createItem("Drains",false,"drain.png",15000, true, collegeId);
         createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, true, collegeId);
         createItem("Snowplows",false, "snowplow.png", 4200, true, collegeId);
         createItem("Pipes", false, "pipes.png", 47000, true, collegeId);

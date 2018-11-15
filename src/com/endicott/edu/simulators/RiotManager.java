@@ -50,5 +50,9 @@ public class RiotManager {
 
 
     }
+
+    public boolean isEventActive() {
+        return false;
+    }
 }
 
