@@ -60,9 +60,13 @@ public class SnowManager {
 
         snowSeasonPopup(hoursAlive,collegeId,popupManager);
         //if there is NO snow storm occurring, possibly start one:
-        if (snowStorm == null) {
-            logger.info("EVARUBIO . handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
-            possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
+        if (snowStorm == null ) {
+            logger.info("EVARUBIO - SNOW handleTimeChange() IT IS WINTER SEASON posiblycreate storm..  ");
+            if(isItWinter(collegeId,hoursAlive,popupManager)){
+                logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
+                possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
+            }
+
             return;
         }
         //if there IS a snow storm happening do the following:
@@ -88,8 +92,38 @@ public class SnowManager {
 
     }
     /**
+     * Determines whether or not it is winter season to create or not a Snow Storm.
+     * Creates popup to notify user.
+     * TODO maybe create on main page something that shows what the current season is. meybe with cute/cool img.
+     * FOR NOW: winter season between days 12 and 20
+     * @param collegeId
+     * @param hoursAlive
+     * @param popupManager
+     * */
+    public Boolean isItWinter(String collegeId, int hoursAlive,PopupEventManager popupManager){
+        int currentDay = hoursAlive / 24 + 1;
+        logger.info("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
+        System.out.println("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
+        Boolean isCold = false;
+        if(currentDay == 12){
+            NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            popupManager.newPopupEvent("Winter is here!", "The Starks were right, Winter is officially here, and with it Snow Storms! Stay warm and pay attention to possible weather changes. ",
+                    "Ok","okWinterStarted",
+                    "resources/images/snowflake.png","snowflake");
+        }
+        
+        if(currentDay>= 12 && currentDay <= 20){
+            isCold = true;
+
+
+
+        }
+        logger.info("EVARUBIO - SNOW isItWinter() value: "+isCold);
+        return isCold;
+    }
+    /**
      * Creates a low/mid/high intensity snow storm depending on the odds.
-     * TODO call this method between specific days: between days 90 (aprx 3 months) and 160 (aprox 5 months and a half)
+     * Method called between specific days: 90 (aprx 3 months) and 160 (aprox 5 months and a half)
      *
      * @param collegeId
      * @param hoursAlive
@@ -97,9 +131,7 @@ public class SnowManager {
      * use play mode.
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
-        int currentDay = hoursAlive / 24 + 1;
-        logger.info("EVARUBIO . PossiblyCreateSnowStorm() currentDay: "+currentDay);
-        System.out.println("EVARUBIO . PossiblyCreateSnowStorm() currentDay: "+currentDay);
+
 
         Boolean hasLowUpgrade = hasSpecificUpgradePurchased(lowUpgradeName, collegeId);
         Boolean hasMidUpgrade = hasSpecificUpgradePurchased(midUpgradeName, collegeId);
