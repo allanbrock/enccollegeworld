@@ -80,6 +80,7 @@
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
     String buildingType = (String) request.getAttribute("buildingType");
+    String randomName = (String) request.getAttribute("randomName");
     TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
     GateManager gateManager = new GateManager();
@@ -345,8 +346,13 @@
                         <%}%>
                         <h4>Confirm Purchase of <%=buildingType%></h4>
                         <div class="form-group">
+                            <%if(randomName != null){%>
                             <input type="text" class="form-control" id="buildingName" name="buildingName"
-                               placeholder="Enter building name.">
+                               value="<%=randomName%> Hall">
+                            <%}else{%>
+                            <input type="text" class="form-control" id="buildingName" name="buildingName"
+                                   placeholder="Enter Building Name">
+                            <%}%>
                             <!--random name choosing button-->
                             <input type="submit" class="btn btn-info" id="randomBuildingName" name="randomBuildingName" value="Random Name" style="margin-top: 5px;">
                         </div>
