@@ -1,103 +1,87 @@
 package com.endicott.edu.datalayer;
-
-import com.endicott.edu.models.PlagueModel;
 import com.endicott.edu.models.PlayModel;
-import com.endicott.edu.models.StudentModel;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class PlayDao {
-        private static String getFilePath(String collegeId) {
-            return DaoUtils.getFilePathPrefix(collegeId) +  "play.dat";
-        }
-        private Logger logger = Logger.getLogger("PlayDao");
+    private Logger logger = Logger.getLogger("PlayDao");
 
-        public PlayModel getPlay(String collegeId) {
-            PlayModel play = null;
-            try {
-                File file = new File(getFilePath(collegeId));
+    private static String getFilePath(String collegeId) {
+        return DaoUtils.getFilePathPrefix(collegeId) + "play.dat";
+    }
 
-                if (!file.exists()) {
-                    return play;  // There are no plagues yet.
-                }
-                else{
-                    FileInputStream fis = new FileInputStream(file);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
-                    play = new PlayModel();
-                    ois.readObject();
-                    ois.close();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+    /**
+     * Checks if there is a Flood in the current college and returns it.
+     * If the file does not exist, returns NULL .
+     *      - used in: InterfaceUtils.java (openCollegeAndStoreInRequest(..))
+     *                 FloodManager.java (handleTimeChange(..))
+     *
+     * @param collegeId a String representing the ID of the current college
+     * @return the existing FloodModel, Null if it doesnt exist
+     */
+    public static PlayModel getPlay(String collegeId) {
+
+        PlayModel play = null;
+        try {
+            File file = new File(getFilePath(collegeId));   //Creates a new File instance by converting the given pathname(string) into an abstract pathname.
+
+            if (!file.exists()) {
+                return play;  // There are no floods yet, return Null.
+            } else {
+                FileInputStream fis = new FileInputStream(file);    //creates a FileInputStream by opening a connection to an actual File.
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                play = (PlayModel) ois.readObject();
+                ois.close();
             }
-
-            return play;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        public void saveCurrentPlay(String collegeId, PlayModel notes){
-            logger.info("Saving play...");
-            try {
-                File file = new File(getFilePath(collegeId));
-                file.createNewFile();
-                FileOutputStream fos;
-                fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(notes);
-                oos.close();
-            } catch (FileNotFoundException e) {
-                logger.info("Got file not found when attempting to create: " + getFilePath(collegeId));
-                e.printStackTrace();
-                throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-            } catch (IOException e) {
-                logger.info("Got io exceptionfound when attempting to create: " + getFilePath(collegeId));
-                e.printStackTrace();
-                throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-            }
+        return play;
+    }
 
-            logger.info("Saved plague...");
-        }
-
-//        public void saveNewPlague(String collegeId, PlagueModel plague) {
-//            logger.info("Saving new plague...");
-//            List<PlagueModel> plagues = getPlagues(collegeId);
-//            plague.setRunId(collegeId);
-//            plagues.add(plague);
-//            saveAllPlagues(collegeId, plagues);
-//        }
-
-        public static void deletePlay(String collegeId) {
+    /**
+     * Creates a new file with its appropriate path and saves theFlood in it.
+     *      - used in: FloodManager.java (handleTimeChange(..) & didFloodStartAtThisDorm(..))
+     *
+     * @param collegeId a String representing the ID of the current college
+     * @param thePlay  the PlayModel to save
+     */
+    public void saveThePlay(String collegeId, PlayModel thePlay) {
+        logger.info("Saving one play...");
+        try {
             File file = new File(getFilePath(collegeId));
-            file.delete();
+            file.createNewFile();
+            FileOutputStream fos;
+            fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(thePlay);
+            oos.close();
+
+        } catch (FileNotFoundException e) {
+            logger.info("Got file not found when attempting to create: " + getFilePath(collegeId));
+            e.printStackTrace();
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        } catch (IOException e) {
+            logger.info("Got io exceptionfound when attempting to create: " + getFilePath(collegeId));
+            e.printStackTrace();
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-//        public static void main(String[] args) {
-//            testNotes();
-//        }
-//
-//        private static void testNotes() {
-//            final String collegeId = "testplague001";
-//            com.endicott.edu.datalayer.PlagueDao dao = new com.endicott.edu.datalayer.PlagueDao();
-//            PlagueModel m1 = new PlagueModel(100, 10, "Hampshire Hall", collegeId, 5, 0, 1000, 72, 0 );
-//            PlagueModel m2 = new PlagueModel(200, 20,"Vermont House", collegeId, 5, 0, 1000, 72, 0);
-//            ArrayList<PlagueModel> plagues = new ArrayList<>();
-//            plagues.add(m1);
-//            plagues.add(m2);
-//            dao.saveAllPlagues(collegeId, plagues);
-//
-//            List<PlagueModel> outMsgs = dao.getPlagues(collegeId);
-//
-//            assert(outMsgs.size() == 2);
-//
-//            PlagueModel m3 = new PlagueModel(300, 10,"Maine Manor", collegeId, 5, 0, 0, 72, 0);
-//            dao.saveNewPlague(collegeId, m3);
-//            outMsgs = dao.getPlagues(collegeId);
-//            assert(outMsgs.size() == 3);
-//
-//            System.out.println("Test case name: tests, Result: pass");
-//        }
+        logger.info("Saved one flood...");
+    }
+
+    /**
+     * Deletes the file of the flood.
+     *  - used in: CollegeManager.java (sellCollege(..))
+     *             FloodManager.java (handleTimeChange(..))
+     *
+     * @param collegeId a String representing the ID of the current college
+     */
+    public static void deleteFlood(String collegeId) {
+        File file = new File(getFilePath(collegeId));
+        file.delete();
+    }
 }
