@@ -17,7 +17,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>College World Balance</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="resources/style.css">
     <!-- Latest compiled and minified CSS -->

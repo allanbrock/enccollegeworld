@@ -37,7 +37,8 @@ public class BuildingModel implements Serializable {
     private int hoursToComplete = 0;
     private boolean isBuilt = true;
     private boolean isUpgradeComplete = true;
-    private float repairCost = 0;
+    private int repairCost = 0;
+    private boolean isRepairComplete = true;
 
     // These are necessary qualities to keep everything in line
     private static final int maxHiddenQuality = 10;
@@ -232,8 +233,11 @@ public class BuildingModel implements Serializable {
     public boolean isUpgradeComplete() {return isUpgradeComplete;}
     public void setIsUpgradeComplete(boolean isUpgradeComplete) {this.isUpgradeComplete = isUpgradeComplete;}
 
-    public float getRepairCost() {return repairCost;}
-    public void setRepairCost(float repairCost) {this.repairCost = repairCost;}
+    public int getRepairCost() {return repairCost;}
+    public void setRepairCost(int repairCost) {this.repairCost = repairCost;}
+
+    public boolean isRepairComplete() {return  isRepairComplete;}
+    public void setIsRepairComplete(boolean isRepairComplete){this.isRepairComplete = isRepairComplete;}
 
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}

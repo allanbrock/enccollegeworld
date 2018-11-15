@@ -38,7 +38,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
                 upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
             }
             if (request.getParameter("repairBuilding" + b) != null){
-                doGet(request, response);
+                repairBuidling(request, response, BuildingDao.getBuildings(collegeId).get(b));
             }
         }
         /*if(request.getParameter("randomBuildingName") != null){
@@ -266,6 +266,21 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         BuildingManager.upgradeBuilding(runId, building);
+
+        doGet(request, response);
+
+        //load the request with attributes for the building
+        InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
+
+        // Attempt to fetch the college and load into
+        // request attributes to pass to the jsp page.
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void repairBuidling(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
+        String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        BuildingManager.repairBuilding(runId, building);
 
         doGet(request, response);
 

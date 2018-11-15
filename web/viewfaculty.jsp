@@ -233,22 +233,18 @@
             <%
                 HashMap<String, Integer> departmentRatingsMap = DepartmentManager.getRatingsForDepartments(college.getRunId());
                 for (String s : departmentRatingsMap.keySet()) {
+                    if(!s.equals("Overall Academic Happiness")){
             %>
-            <tr>
-                <td><%=s + ": "%></td>
-                <td><%=departmentRatingsMap.get(s)%></td>
-            </tr>
-            <% }
-            int averageRating = 0;
-                int sum = 0;
-                for(String s : departmentRatingsMap.keySet()){
-                    sum += departmentRatingsMap.get(s);
+                        <tr>
+                            <td><%=s + ": "%></td>
+                            <td><%=departmentRatingsMap.get(s)%></td>
+                        </tr>
+            <%      }
                 }
-                averageRating = sum / departmentRatingsMap.keySet().size();
-                college.setAcademicRating(averageRating);
+                String a = "Overall Academic Happiness";
             %>
-            <td><%="Overall Academic Rating: "%></td>
-            <td><%=averageRating%></td>
+            <td><%=a + ": "%></td>
+            <td><%=departmentRatingsMap.get(a)%></td>
             </tbody>
         </table>
     </div>
