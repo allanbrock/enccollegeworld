@@ -6,6 +6,7 @@ import com.endicott.edu.models.*;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.Date;
 
@@ -121,7 +122,9 @@ public class CollegeManager {
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         BuildingManager buildingManager = new BuildingManager();
+        BuildingDao buildingDao = new BuildingDao();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
 
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
@@ -143,6 +146,16 @@ public class CollegeManager {
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
+
+        for(BuildingModel b: buildings){
+            if(b.getHoursToComplete() == 0 && b.isHasBeenAnnouncedAsComplete() == false){
+                popupManager.newPopupEvent("Building Complete!", "Your new " + b.getKindOfBuilding() + " building, "
+                                + b.getName() + "has finished construction and is now open!", "Close", "ok",
+                        "resources/images/" + b.getKindOfBuilding() + ".png", b.getKindOfBuilding());
+                b.setHasBeenAnnouncedAsComplete(true);
+                BuildingDao.updateSingleBuilding(collegeId, b);
+            }
+        }
 
         if (college.getAvailableCash() <= 0) {
             popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
