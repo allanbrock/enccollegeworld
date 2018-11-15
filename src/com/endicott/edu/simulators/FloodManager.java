@@ -11,7 +11,8 @@ import java.util.Random;
 
 /**
  * Responsible for simulating floods at the college.
- * NOTE: THERE CAN ONLY BE ONE FLOOD AT A TIME.
+ * NOTES:   - THERE CAN ONLY BE ONE FLOOD AT A TIME.
+ *          - FLOODS CAN ONLY HAPPEN IN FULLY BUILT DORMS.
  */
 public class FloodManager {
     private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.04f;

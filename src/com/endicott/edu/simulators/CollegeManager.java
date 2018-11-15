@@ -267,8 +267,8 @@ public class CollegeManager {
 
     static private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Grow your college by attracting new students to come.", true, "LIBRARY.png");
+        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "The college earns money primarily from tuition.", false, "money.jpg");
     }
 
     /**
