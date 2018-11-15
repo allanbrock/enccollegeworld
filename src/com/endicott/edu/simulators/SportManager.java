@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ public class SportManager {
             fillUpTeamAndSetActiveStatus(collegeId, sport);
             billRunningCostofSport(collegeId, hoursAlive, sport);
             sport.setHourLastUpdated(hoursAlive);
-            playGame(sport, hoursAlive, collegeId);
+            playGame(sport, hoursAlive, collegeId, popupManager);
         }
 
         dao.saveAllSports(collegeId, sports);
@@ -289,6 +290,7 @@ public class SportManager {
      * @param sport
      */
     public static void fillUpTeamAndSetActiveStatus(String collegeId, SportModel sport){
+        int oldActiveStatus = sport.getIsActive();
         if (sport.getCurrentPlayers() < sport.getMinPlayers()){
             addPlayers(collegeId, sport);
             if(sport.getCurrentPlayers() < sport.getMinPlayers()){
@@ -301,6 +303,25 @@ public class SportManager {
         }
         else {
             sport.setActive(isSportInSeason(sport, collegeId));
+        }
+        if (sport.getIsActive() == 1 && oldActiveStatus == 0){
+            //TODO: A new sport is now active, make pop up for main page
+
+        }
+    }
+
+    /**
+     *
+     * @param collegeId
+     * @param sport
+     */
+    public static void setSportSeason(String collegeId, SportModel sport){
+        //set iterationDate to the current date, because that is what we will iterate from first
+        Date iterationDate = CollegeManager.getCollegeDate(collegeId);
+        for (int i = 0; i < sport.getNumGames(); i++){
+            //set the random time interval for when the next game will be played
+            //set the iterationDate to itself plus the time interval
+            //add the new iterationDate to this sport's seasonSchedule
         }
     }
 
@@ -448,9 +469,9 @@ public class SportManager {
      * @param hoursAlive
      * @param collegeId
      */
-    public static void playGame(SportModel sport, int hoursAlive, String collegeId ){
+    public static void playGame(SportModel sport, int hoursAlive, String collegeId, PopupEventManager popupManager){
         if (sport.getHoursUntilNextGame() <= 0) {
-            simulateGame(sport, hoursAlive, collegeId);
+            simulateGame(sport, hoursAlive, collegeId, popupManager);
             sport.setHoursUntilNextGame(48);
         } else {
             sport.setHoursUntilNextGame(Math.max(0, hoursAlive - sport.getHourLastUpdated()));
@@ -475,7 +496,13 @@ public class SportManager {
      * @param hoursAlive
      * @param collegeId
      */
-    public static void simulateGame(SportModel sport, int hoursAlive, String collegeId){
+    public static void simulateGame(SportModel sport, int hoursAlive, String collegeId, PopupEventManager popupManager){
+        //has the team won a game yet? (this is so we can send a popup when they win their first game)
+        boolean winless = false;
+        if (sport.getGamesWon() == 0){
+            winless = true;
+        }
+
         StudentDao stuDao = new StudentDao();
         List<StudentModel> students = stuDao.getStudentsOnSport(collegeId,sport.getName());
         int numOfPlayers = sport.getCurrentPlayers();
@@ -494,6 +521,10 @@ public class SportManager {
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just lost a game.", NewsType.SPORTS_NEWS, NewsLevel.BAD_NEWS);
         } else {
             sport.setGamesWon(sport.getGamesWon() + 1);
+            //if winless is still set to true, this team just won their first game. send a popup to main page
+            if (winless){
+                popupManager.newPopupEvent("Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/stadium.png", "Sports");
+            }
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
         }
         SportManager rep = new SportManager();
@@ -544,6 +575,8 @@ public class SportManager {
         // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
         TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);
+        TutorialManager.saveNewTip(collegeId, 2,"viewSports", "Add more sports to make more money!", false);
+        TutorialManager.saveNewTip(collegeId, 3,"viewSports", "The better a team does, the happier students will be!", false);
     }
 }
 

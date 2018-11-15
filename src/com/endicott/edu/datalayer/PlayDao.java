@@ -28,7 +28,8 @@ public class PlayDao {
                 else{
                     FileInputStream fis = new FileInputStream(file);
                     ObjectInputStream ois = new ObjectInputStream(fis);
-                    play = new PlayModel() ois.readObject();
+                    play = new PlayModel();
+                    ois.readObject();
                     ois.close();
                 }
             } catch (IOException | ClassNotFoundException e) {
