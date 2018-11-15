@@ -269,4 +269,8 @@ public class PlagueManager {
     public boolean isPurellUpgradePurchased() {
         return purellUpgradePurchased;
     }
+
+    public boolean isEventActive() {
+        return false;
+    }
 }

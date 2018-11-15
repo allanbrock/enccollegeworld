@@ -176,4 +176,8 @@ public class FloodManager {
      */
     public static void establishCollege(String collegeId){
     }
+
+    public boolean isEventActive() {
+        return false;
+    }
 }

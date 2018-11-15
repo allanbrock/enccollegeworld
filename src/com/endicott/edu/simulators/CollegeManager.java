@@ -74,6 +74,8 @@ public class CollegeManager {
         InventoryManager inventoryManager = new InventoryManager();
         inventoryManager.establishCollege(collegeId);
 
+        //DisasterManager.establishCollege(collegeId);
+
         return college;
     }
 
@@ -118,6 +120,7 @@ public class CollegeManager {
         // Tell all the simulators about the time change.
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
+
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
@@ -142,6 +145,9 @@ public class CollegeManager {
 
         SnowManager snowManager = new SnowManager();
         snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        //DisasterManager disasterManager = new DisasterManager();
+        //disasterManager.handleTimeChange(collegeId,hoursAlive,popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
