@@ -1,9 +1,6 @@
 package com.endicott.edu.simulators;
 
-import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.FacultyDao;
-import com.endicott.edu.datalayer.FireDAO;
-import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
@@ -110,7 +107,7 @@ public class FireManager {
         int cost = getFireCost(numDeaths, buildingToBurn,runId,hasUpgradeBeenPurchased(),isCatastrophic);
 
         FireModel fire = new FireModel(cost, numStudentDeaths,numFacultyDeaths, runId, buildingToBurn);
-        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
+        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire, runId);
         buildingManager.acceleratedDecayAfterDisaster(runId,buildingToBurn.getName());
         fires.add(fire);
         FireDAO.saveNewFire(runId, fire);
@@ -150,7 +147,7 @@ public class FireManager {
 
         int fireCost = getFireCost(numDeaths, buildingToBurn, runId,hasUpgradeBeenPurchased(),isCatastrophic);
         FireModel fire = new FireModel(fireCost, numStudentDeaths, numFacultyDeaths, runId, buildingToBurn);
-        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
+        removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire, runId);
         fire.setDescription(victims, hasUpgradeBeenPurchased());
         fires.add(fire);
         FireDAO.saveNewFire(runId, fire);
@@ -250,7 +247,7 @@ public class FireManager {
     }
 
     public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
-                                     ArrayList<FacultyModel> faculty, String victims, FireModel fire){
+                                     ArrayList<FacultyModel> faculty, String victims, FireModel fire, String runId){
         if (numFacultyDeaths == faculty.size()){
             numFacultyDeaths = numStudentDeaths/2;
         } else if (numStudentDeaths == students.size()){
@@ -264,7 +261,7 @@ public class FireManager {
             }
             for (int j = 0; j <numFacultyDeaths; j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
-                faculty.remove(facultyToRemove);
+                FacultyManager.removeFaculty(runId, faculty.get(facultyToRemove));
             }
             return;
         }

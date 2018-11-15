@@ -75,9 +75,9 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
     private void addFaculty(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String salaryString = request.getParameter("salaryDropdown");
-        String title = "Faculty";
         String department = request.getParameter("departmentDropdown");
         StringBuilder sb = new StringBuilder(salaryString);
+        String title = request.getParameter("positionDropdown");
         salaryString = sb.substring(1);
         int salary = Integer.valueOf(salaryString);
         if (collegeId == null) {

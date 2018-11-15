@@ -28,6 +28,20 @@ public class FacultyManager {
         payFaculty(collegeId, hoursAlive, fao);
         inspectFacultyPerformances(collegeId);
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
+        ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
+        ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
+        if(deanCheck.size() > 0){
+            for(DepartmentModel d : deanCheck){
+                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
+            }
+            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
+        }
+        if(assistantDeanCheck.size() > 0){
+            for(DepartmentModel d : assistantDeanCheck){
+                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
+            }
+            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
+        }
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);
@@ -64,7 +78,7 @@ public class FacultyManager {
      */
     public static void establishCollege(String collegeId, CollegeModel college){
         DepartmentManager.establishDepartments(college.getDepartmentCount());
-        for (int i=0; i<22  ; i++) {
+        for (int i=0; i<22; i++) {
             String department = generateFacultyDepartment();
            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
             for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
@@ -193,7 +207,7 @@ public class FacultyManager {
     }
 
     public static String[] getTitleOptions(){
-        String[] titleOptions = {"Dean", "Assistant Dean", "Professor"};
+        String[] titleOptions = {"Dean", "Assistant Dean", "Faculty"};
         return titleOptions;
     }
 
@@ -272,6 +286,12 @@ public class FacultyManager {
 
     public static void removeFaculty(String collegeID, FacultyModel member){
         FacultyDao fao = new FacultyDao();
+        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+            if(member.getDepartmentName().equals(d.getDepartmentName())){
+                DepartmentManager.removeEmployeeFromDepartment(member, d);
+                break;
+            }
+        }
         fao.removeSingleFaculty(collegeID, member);
     }
 
@@ -351,11 +371,11 @@ public class FacultyManager {
         return scenarios[rand];
     }
 
-    private static ArrayList<String> checkDepartmentsForDeans(String collegeId, String deanPosition){
-        ArrayList<String> deanlessDepartments = new ArrayList<>();
+    private static ArrayList<DepartmentModel> checkDepartmentsForDeans(String deanPosition){
+        ArrayList<DepartmentModel> deanlessDepartments = new ArrayList<>();
         for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
             if(d.getEmployeeCounts().get(deanPosition) < 1){
-                deanlessDepartments.add(d.getDepartmentName());
+                deanlessDepartments.add(d);
             }
         }
         return deanlessDepartments;

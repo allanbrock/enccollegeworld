@@ -8,16 +8,13 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.models.CollegeModel" %>
-<%@ page import="com.endicott.edu.models.FacultyModel" %>
 <%@ page import="com.endicott.edu.datalayer.FacultyDao" %>
-<%@ page import="com.endicott.edu.models.NewsFeedItemModel" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.endicott.edu.models.TutorialModel" %>
 <%@ page import="com.endicott.edu.simulators.*" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="com.endicott.edu.models.*" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -72,7 +69,6 @@
     if (departmentOptions == null) {
         departmentOptions = new String[FacultyManager.getDepartmentOptionStrings().length];
     }
-
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -195,7 +191,7 @@
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
-                    <label id="salaryLabel" style="color: darkblue">Pick an annual salary and a department if you would like to add a new faculty member</label>
+                    <label id="salaryLabel" style="color: darkblue">Pick an annual salary, a department, and a position if you would like to add a new faculty member</label>
                 </div>
                 <div class="form-group">
                     <select class="form-control" id="salaryDropdown" name="salaryDropdown">

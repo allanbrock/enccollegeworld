@@ -8,6 +8,7 @@ public class DepartmentModel {
     private String departmentName;
     private int departmentRating;
     private HashMap<String, Integer> employeeCounts;
+    private Boolean hasDean, hasAssistantDean;
 
     public DepartmentModel(String name){
         this.departmentName = name;
@@ -15,6 +16,8 @@ public class DepartmentModel {
         employeeCounts.put("Dean", 0);
         employeeCounts.put("Assistant Dean", 0);
         employeeCounts.put("Faculty", 0);
+        hasDean = true;
+        hasAssistantDean = true;
     }
 
     public String getDepartmentName(){ return this.departmentName; }
