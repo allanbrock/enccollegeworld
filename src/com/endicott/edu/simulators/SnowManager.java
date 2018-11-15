@@ -16,17 +16,19 @@ import java.util.Random;
  * Created by Eva Rubio 11/05/2018
  *
  * Responsible for simulating Snow Storms at the college.
- * NOTE: THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
  *
- *  startLowIntensitySnow () - Weather Alert: Low Intensity Snow Storm
- *  startMidIntensitySnow ()
- *  startHighIntensitySnow() - URGENT - WINTER WEATHER MESSAGE
+ * NOTES:   - THERE CAN ONLY BE ONE SNOW STORM AT A TIME.
+ *          - SNOW STORMS CAN ONLY HAPPEN DURING WINTER SEASON
+ *          - ONLY HAPPEN ON FULLY BUILT BUILDINGS.
+ *
  *
  * */
 public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
     private static final float PROBABILTY_OF_MID_STORM = 70;
     private static final float PROBABILTY_OF_HIGH_STORM = 100;
+    private static final int START_OF_WINTER = 12;      //must be an int (dealing with whole days)
+    private static final int END_OF_WINTER = 20;        //must be an int (dealing with whole days)
     private static final String lowUpgradeName = "Snow Pushers";
     private static final String midUpgradeName = "Pipes";
     private static final String highUpgradeName = "Snowplows";
@@ -58,7 +60,7 @@ public class SnowManager {
         List<StudentModel> students = StudentDao.getStudents(collegeId);
         List<FacultyModel> faculty = FacultyDao.getFaculty(collegeId);
 
-        snowSeasonPopup(hoursAlive,collegeId,popupManager);
+        //snowSeasonPopup(hoursAlive,collegeId,popupManager);
         //if there is NO snow storm occurring, possibly start one:
         if (snowStorm == null ) {
             logger.info("EVARUBIO - SNOW handleTimeChange() IT IS WINTER SEASON posiblycreate storm..  ");
@@ -105,17 +107,21 @@ public class SnowManager {
         logger.info("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
         System.out.println("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
         Boolean isCold = false;
-        if(currentDay == 12){
-            NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            popupManager.newPopupEvent("Winter is here!", "The Starks were right, Winter is officially here, and with it Snow Storms! Stay warm and pay attention to possible weather changes. ",
+        if(currentDay == START_OF_WINTER){
+            NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+            popupManager.newPopupEvent("Winter is here!", "The Starks were right, Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
                     "Ok","okWinterStarted",
-                    "resources/images/snowflake.png","snowflake");
+                    "resources/images/winterIcon.png","winter season icon");
+        }else if (currentDay == END_OF_WINTER){
+            NewsManager.createNews(collegeId, hoursAlive, "Spring has arrived.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            popupManager.newPopupEvent("Goodbye snow..Spring is here!", "After waiting all winter long, we finally get to feel the sun and warmth of Spring. Don't forget to stop and smell the flowers! ",
+                    "Ok","okSpringStarted",
+                    "resources/images/springIcon.png","spring season icon");
+            logger.info("EVARUBIO SNOW isItWinter() ES EL END_OF_WINTER !!!! popupshould be here. currentDay = " +currentDay);
         }
-        
-        if(currentDay>= 12 && currentDay <= 20){
+
+        if(currentDay>= START_OF_WINTER && currentDay <= END_OF_WINTER){
             isCold = true;
-
-
 
         }
         logger.info("EVARUBIO - SNOW isItWinter() value: "+isCold);
@@ -397,7 +403,7 @@ public class SnowManager {
     /**
      *
      *
-     * */
+     *
     private void snowSeasonPopup(int hoursAlive, String collegeId, PopupEventManager popupManager){
         int currentDay = hoursAlive / 24 + 1;
 
@@ -413,6 +419,7 @@ public class SnowManager {
         }
 
     }
+     */
     /**
      * Generates the correct PopupEventManager depending on type of storm and if an upgrade has been purchased.
      * If storm has finished, correctly update the Building's "Current Disaster"
