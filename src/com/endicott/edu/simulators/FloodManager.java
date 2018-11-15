@@ -14,7 +14,7 @@ import java.util.Random;
  * NOTE: THERE CAN ONLY BE ONE FLOOD AT A TIME.
  */
 public class FloodManager {
-    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.07f;
+    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.04f;
     FloodDao floodDao = new FloodDao();
     BuildingDao buildingDao = new BuildingDao();
     BuildingManager buildingManager = new BuildingManager();

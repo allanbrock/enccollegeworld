@@ -12,6 +12,7 @@ public class ItemModel implements Serializable {
     private int cost;
     private Boolean isUnlocked;
 
+
     public ItemModel() {
     }
 
@@ -47,20 +48,20 @@ public class ItemModel implements Serializable {
         this.cost = cost;
     }
 
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public Boolean getUnlocked() {
         return isUnlocked;
     }
 
     public void setUnlocked(Boolean unlocked) {
         isUnlocked = unlocked;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
 
