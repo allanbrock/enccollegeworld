@@ -20,6 +20,7 @@ public class FloodManager {
     BuildingManager buildingManager = new BuildingManager();
     InventoryManager inventoryManager = new InventoryManager();
     private Logger logger = Logger.getLogger("FloodManager");
+    private static boolean isHappening = false;
 
     /**
      * Simulate changes in floods due to passage of time at college. Called when One day goes by.
@@ -53,6 +54,9 @@ public class FloodManager {
         int elapsedTime = hoursAlive - flood.getHourLastUpdated();
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
         if (timeLeft <= 0) {
+            isHappening = false;
+            logger.info("EVARUBIO - FLOOD handleTimeChange() just set isHappening to false");
+            logger.info("EVARUBIO - FLOOD handleTimeChange() value of isHappening = " + isHappening);
 
             buildingManager.disasterStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
             logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
@@ -115,8 +119,10 @@ public class FloodManager {
 
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
-
-            logger.info("EVARUBIO .  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
+            isHappening = true;
+            logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
+            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);
+            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
 
             generateCorrectPopup(hasUpgrade,randomFlood,popupManager);
 
@@ -176,8 +182,11 @@ public class FloodManager {
      */
     public static void establishCollege(String collegeId){
     }
+    /**
+     * Determines whether there is a Flood currently happening or not.
+     * */
+    public boolean isEventActive( ) {
 
-    public boolean isEventActive() {
-        return false;
+        return isHappening;
     }
 }
