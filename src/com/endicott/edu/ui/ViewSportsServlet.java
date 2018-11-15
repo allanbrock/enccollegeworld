@@ -50,6 +50,8 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
+
+    //TODO: find out why this is here
     private void addSport(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         String sportName=request.getParameter("sportName");
