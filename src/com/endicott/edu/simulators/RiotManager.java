@@ -51,7 +51,7 @@ public class RiotManager {
 
     }
 
-    public boolean isEventActive() {
+    public boolean isEventActive(String collegeId) {
         return false;
     }
 }

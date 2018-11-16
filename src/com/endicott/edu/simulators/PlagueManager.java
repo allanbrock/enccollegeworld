@@ -270,7 +270,12 @@ public class PlagueManager {
         return purellUpgradePurchased;
     }
 
-    public boolean isEventActive() {
+    public boolean isEventActive(String collegeId) {
+        List<PlagueModel> plagues = dao.getPlagues(collegeId);
+        for (PlagueModel plague : plagues) {
+            if (plague.getNumberOfHoursLeftInPlague() > 0)
+                return true;
+        }
         return false;
     }
 }

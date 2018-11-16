@@ -36,12 +36,13 @@ public class FacultyManager {
             }
             popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
         }
-        if(assistantDeanCheck.size() > 0){
-            for(DepartmentModel d : assistantDeanCheck){
-                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
-            }
-            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
-        }
+        // TODO: Alex - this is firing off a lot, commenting out for now - Allan
+//        if(assistantDeanCheck.size() > 0){
+//            for(DepartmentModel d : assistantDeanCheck){
+//                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
+//            }
+//            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
+//        }
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);

@@ -21,7 +21,7 @@ public class FloodManager {
     BuildingManager buildingManager = new BuildingManager();
     InventoryManager inventoryManager = new InventoryManager();
     private Logger logger = Logger.getLogger("FloodManager");
-    private static boolean isHappening = false;
+    private boolean isHappening = false;
 
     /**
      * Simulate changes in floods due to passage of time at college. Called when One day goes by.
@@ -185,9 +185,9 @@ public class FloodManager {
     }
     /**
      * Determines whether there is a Flood currently happening or not.
-     * */
-    public boolean isEventActive( ) {
-
-        return isHappening;
+     *
+     * @param collegeId*/
+    public boolean isEventActive(String collegeId) {
+        return FloodDao.getFlood(collegeId) != null;
     }
 }

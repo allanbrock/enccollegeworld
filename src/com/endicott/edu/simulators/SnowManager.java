@@ -517,8 +517,9 @@ public class SnowManager {
     /**
      * Determines whether there is a Snow Storm currently happening or not.
      * Regardless of the intensity of the storm.
-     * */
-    public boolean isEventActive() {
-        return isHappening;
+     *
+     * @param collegeId*/
+    public boolean isEventActive(String collegeId) {
+        return SnowDao.getSnowStorm(collegeId) != null;
     }
 }

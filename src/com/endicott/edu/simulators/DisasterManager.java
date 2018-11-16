@@ -19,8 +19,6 @@ public class DisasterManager {
     private SnowManager snowManager;
     private RiotManager riotManager;
 
-
-
     public DisasterManager(){
         fireManager = new FireManager();
         plagueManager = new PlagueManager();
@@ -29,32 +27,29 @@ public class DisasterManager {
         riotManager = new RiotManager();
     }
 
-    public static void establishCollege(String collegeId){
-        FloodManager.establishCollege(collegeId);
-        PlagueManager.establishCollege(collegeId);
-    }
-
-
-    public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupEventManager){
-        if (isCurrentDisaster()) return;
-        pickEventAndRunSim(runId,hoursAlive,popupEventManager);
-    }
-
-    private boolean isCurrentDisaster(){
-        boolean isActive = false;
-
-        while (!isActive){
-            if(plagueManager.isEventActive()){
-                isActive = true;
-            } else if (floodManager.isEventActive()){
-                isActive = true;
-            } else if (snowManager.isEventActive()){
-                isActive = true;
-            } else if (riotManager.isEventActive()){
-                isActive = true;
-            }
+    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupEventManager){
+        if (!isCurrentDisaster(collegeId, hoursAlive, popupEventManager)) {
+            pickEventAndRunSim(collegeId, hoursAlive, popupEventManager);
         }
-        return isActive;
+    }
+
+    private boolean isCurrentDisaster(String collegeId, int hoursAlive, PopupEventManager popupEventManager){
+        if (plagueManager.isEventActive(collegeId)) {
+            plagueManager.handleTimeChange(collegeId, hoursAlive, popupEventManager);
+        }
+        else if (floodManager.isEventActive(collegeId)) {
+            floodManager.handleTimeChange(collegeId, hoursAlive, popupEventManager);
+        }
+        else if (snowManager.isEventActive(collegeId)) {
+            snowManager.handleTimeChange(collegeId, hoursAlive, popupEventManager);
+        }
+        else if (riotManager.isEventActive(collegeId)) {
+            //riotManager.handleTimeChange(collegeId, hoursAlive, popupEventManager);
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 
     private void pickEventAndRunSim(String runId, int hoursAlive, PopupEventManager popupEventManager){

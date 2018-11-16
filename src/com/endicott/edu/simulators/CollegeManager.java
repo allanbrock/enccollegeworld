@@ -67,14 +67,13 @@ public class CollegeManager {
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
 
-        EventManager.establishCollege(collegeId);
-
         GateManager.establishCollege(collegeId);
 
         InventoryManager inventoryManager = new InventoryManager();
         inventoryManager.establishCollege(collegeId);
 
-        //DisasterManager.establishCollege(collegeId);
+        FloodManager.establishCollege(collegeId);
+        PlagueManager.establishCollege(collegeId);
 
         return college;
     }
@@ -108,7 +107,6 @@ public class CollegeManager {
     static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 
-
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
@@ -121,13 +119,20 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
-        PlagueManager plagueManager = new PlagueManager();
-        plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+//        PlagueManager plagueManager = new PlagueManager();
+//        plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+//
+//        FloodManager floodManager = new FloodManager();
+//        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+//
+//        FireManager fireManager = new FireManager();
+//        fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+//
+//        SnowManager snowManager = new SnowManager();
+//        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         BuildingManager buildingManager = new BuildingManager();
-        BuildingDao buildingDao = new BuildingDao();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
 
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
@@ -135,23 +140,17 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        FloodManager floodManager = new FloodManager();
-        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        FireManager fireManager = new FireManager();
-        fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
-        SnowManager snowManager = new SnowManager();
-        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
-        //DisasterManager disasterManager = new DisasterManager();
-        //disasterManager.handleTimeChange(collegeId,hoursAlive,popupManager);
+        DisasterManager disasterManager = new DisasterManager();
+        disasterManager.handleTimeChange(collegeId,hoursAlive,popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
+
+        BuildingDao buildingDao = new BuildingDao();
+        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
 
         for(BuildingModel b: buildings){
             if(b.getHoursToComplete() == 0 && b.isHasBeenAnnouncedAsComplete() == false){
@@ -229,22 +228,6 @@ public class CollegeManager {
         calculateStatisticsAndRatings(collegeId);
 
         NewsManager.createNews(collegeId, college.getHoursAlive(),"Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId, false);
-
-        return college;
-    }
-
-    // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
-    public static CollegeModel bankruptCollege(String collegeId){
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
-        college.setAvailableCash(0);
-        cao.saveCollege(college);
-
-        calculateStatisticsAndRatings(collegeId);
 
         StudentManager studentManager = new StudentManager();
         studentManager.calculateStatistics(collegeId, false);
