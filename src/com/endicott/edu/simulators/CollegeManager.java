@@ -179,7 +179,10 @@ public class CollegeManager {
      */
     static public Date getCollegeDate(String collegeId) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
-        int hoursAlive = college.getHoursAlive();
+        int hoursAlive = 0;
+        if (college != null) {
+            hoursAlive =college.getHoursAlive();
+        }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -250,8 +253,10 @@ public class CollegeManager {
 
     static private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Grow your college by attracting new students to come.", true, "LIBRARY.png");
-        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "The college earns money primarily from tuition.", false, "money.jpg");
+        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Unlock features by getting more students to come to your college.", true, "LIBRARY.png");
+        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Grow your college by attracting new students to come.", false, "LIBRARY.png");
+        TutorialManager.saveNewTip(collegeId, 2,"viewCollege", "The college earns money primarily from tuition.", false, "money.jpg");
+        TutorialManager.saveNewTip(collegeId, 3,"viewCollege", "Keep your students happy if you want your college to grow.", false, "smile.png");
     }
 
     /**

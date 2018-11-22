@@ -30,12 +30,14 @@ public class FacultyManager {
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
         ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
-        if(deanCheck.size() > 0){
-            for(DepartmentModel d : deanCheck){
-                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
-            }
-            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
-        }
+
+        // TODO: Alex - this is firing off a lot, commenting out for now - Allan
+//        if(deanCheck.size() > 0){
+//            for(DepartmentModel d : deanCheck){
+//                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
+//            }
+//            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
+//        }
         // TODO: Alex - this is firing off a lot, commenting out for now - Allan
 //        if(assistantDeanCheck.size() > 0){
 //            for(DepartmentModel d : assistantDeanCheck){

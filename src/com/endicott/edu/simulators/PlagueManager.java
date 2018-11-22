@@ -65,7 +65,7 @@ public class PlagueManager {
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n" +
                                     "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
-                            "Ok", "plagueAckCallback2", "Go to store", "goToStore",
+                            "Ok", "plagueAckCallback2", "Visit Store", "goToStore",
                             "resources/images/plague.jpg", "Plague Doctor");
 
                 }
@@ -87,7 +87,7 @@ public class PlagueManager {
                 startNewPlague(plagues);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
-                        "Quarantine the sick students ($5,000)", "quarantineStudents", "Do nothing ($0)", "plagueCallback4",
+                        "Quarantine the sick students ($5,000)", "quarantineStudents", "Do Nothing", "plagueCallback4",
                         "resources/images/plague.jpg", "Plague Doctor");
             }
         }

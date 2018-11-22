@@ -21,8 +21,8 @@ public class CollegeModel implements Serializable {
     private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
     private int departmentCount = 4;
-
     private int academicRating = 0;
+    private int lastPastedGate = 0;
     private CollegeMode mode = CollegeMode.PLAY;
     //public PopupEventModel;
 
@@ -183,5 +183,14 @@ public class CollegeModel implements Serializable {
     public int getSoftballChampionships() { return softballChampionships;}
 
     public int getAcademicRating() { return academicRating; }
+
     public void setAcademicRating(int academicRating) { this.academicRating = academicRating; }
+
+    public int getLastPastedGate() {
+        return lastPastedGate;
+    }
+
+    public void setLastPastedGate(int lastPastedGate) {
+        this.lastPastedGate = lastPastedGate;
+    }
 }

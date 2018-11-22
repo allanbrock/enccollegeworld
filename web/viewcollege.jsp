@@ -303,12 +303,13 @@
                     <div class="text-center">
                         <h2><%=college.getNumberStudentsAccepted()%>
                         </h2>
-                        <h4>Accepted Students</h4>
+                        <h4>Students Thinking About Coming</h4>
                     </div>
                     <br>
                     <a href="#acceptedDetails" class="btn btn-info" data-toggle="collapse">Details</a>
                     <div id="acceptedDetails" class="collapse">
-                        Accepted students enter the college on the first of the month.
+                        New students enter the college on the first of the month. Potential students decide to come
+                        based on how happy the college seems.
                     </div>
                 </div>
             </div>

@@ -421,12 +421,18 @@ public class SportManager {
      * @return
      */
     public static ArrayList<SportModel> checkAvailableSports(String collegeId) {
+        ArrayList<SportModel> availableSports = new ArrayList<>();
         SportsDao dao = new SportsDao();
         CollegeDao cao = new CollegeDao();
         CollegeModel college = cao.getCollege(collegeId);
+
+        if (college == null) {
+            return availableSports;
+        }
+
         int collegeFunds = college.getAvailableCash();
 
-        // Creates a list called availbleSportNames of all sports names a college can make
+        // Creates a list called availableSportNames of all sports names a college can make
         ArrayList<String> availableSportsNames = new ArrayList<>();
         for (int i = 0; i < dao.seeAllSportNames().size(); i++ ){
             availableSportsNames.add(dao.seeAllSportNames().get(i));
@@ -443,7 +449,6 @@ public class SportManager {
 
         // Takes the modified availbleSportsNames array and converts/creates objects of sport model with the left...
         // over names in availblesportsnames and stores them in abvaibleSports
-        ArrayList<SportModel> availableSports = new ArrayList<>();
         for(int yz = 0; yz < availableSportsNames.size(); yz++){
 
             // TODO: we should check if the college has enough money to startup the sport.
@@ -523,7 +528,7 @@ public class SportManager {
             sport.setGamesWon(sport.getGamesWon() + 1);
             //if winless is still set to true, this team just won their first game. send a popup to main page
             if (winless){
-                popupManager.newPopupEvent("Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/stadium.png", "Sports");
+                popupManager.newPopupEvent("Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/award.png", "Sports");
             }
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
         }
