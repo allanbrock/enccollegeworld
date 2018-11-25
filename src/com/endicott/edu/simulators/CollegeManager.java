@@ -137,6 +137,9 @@ public class CollegeManager {
         SnowManager snowManager = new SnowManager();
         snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
+        RiotManager riotManager = new RiotManager();
+        riotManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
         BuildingManager buildingManager = new BuildingManager();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 

@@ -256,6 +256,9 @@ public class SnowManager {
         int randSevereCost = generateCostOfSnow(intensity,hasSpecificUpgradePurchased(highUpgradeName,collegeId));
         //int randSickSutd = getRandomNumOfSickStudents(collegeId,intensity);
 
+        if (buildings.size() <= 0) {
+            return;
+        }
         //To create the List of Affected (snowed in) buildings:
         BuildingModel oneBuild = getRandCompletedBuilding(buildings);
         BuildingModel twoBuild = getRandCompletedBuilding(buildings);

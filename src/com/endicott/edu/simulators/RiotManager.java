@@ -1,22 +1,26 @@
 package com.endicott.edu.simulators;
+
 import java.util.Random;
+
+import com.endicott.edu.models.CollegeMode;
 import com.endicott.edu.models.SportModel;
-import com.endicott.edu.simulators.SportManager;
 import com.endicott.edu.models.RiotModel;
-import com.endicott.edu.models.PopupEventModel;
-import com.endicott.edu.simulators.PopupEventManager;
+
 
 public class RiotManager {
-    RiotModel currentRiot;
+    RiotModel currentRiot = new RiotModel();
 
     //Just to test riot popups
     SportModel testSport = new SportModel("$50,000 - Men's Basketball");
 
 
-//    public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
-//        Random rand = new Random();
-//
-//    }
+    public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
+
+        if (CollegeManager.isMode(runId, CollegeMode.DEMO_RIOT)) {
+            createSportsRiot(testSport, currentRiot, popupManager);
+        }
+
+    }
 
 
     public void createSportsRiot(SportModel sport, RiotModel riot, PopupEventManager popupManager) {
@@ -45,8 +49,7 @@ public class RiotManager {
         }
 
 
-        popupManager.newPopupEvent(riot.getName(), riot.getDescription(), "Break up the Riot", "ok", "Let the Students Be", "ok", "web/resources/images/rioticon.png", "icon");
-
+        popupManager.newPopupEvent(riot.getName(), riot.getDescription(), "Break up the Riot", "ok", "Let it Be", "ok", "resources/images/rioticon.png", "icon");
 
 
     }
