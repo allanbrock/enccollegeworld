@@ -74,5 +74,10 @@ public class InventoryManager {
         }
         inventory.saveAllItems(collegeId, items);
     }
+
+    public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        // Get the gate that we are at an unlock inventory items.
+        // But be careful not to lock an item that was already unlocked.
+    }
 }
 

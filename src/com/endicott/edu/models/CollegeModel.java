@@ -1,7 +1,6 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
@@ -22,8 +21,9 @@ public class CollegeModel implements Serializable {
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
     private int departmentCount = 4;
     private int academicRating = 0;
-    private int lastPastedGate = 0;
+    private int gate = 0;                    // This is the current gate or level that is open.
     private CollegeMode mode = CollegeMode.PLAY;
+    private int daysUntilNextEvent = 3;
     //public PopupEventModel;
 
     //Counts amount of total championships won to be tracked in the trophy case
@@ -186,11 +186,19 @@ public class CollegeModel implements Serializable {
 
     public void setAcademicRating(int academicRating) { this.academicRating = academicRating; }
 
-    public int getLastPastedGate() {
-        return lastPastedGate;
+    public int getGate() {
+        return gate;
     }
 
-    public void setLastPastedGate(int lastPastedGate) {
-        this.lastPastedGate = lastPastedGate;
+    public void setGate(int gate) {
+        this.gate = gate;
+    }
+
+    public int getDaysUntilNextEvent() {
+        return daysUntilNextEvent;
+    }
+
+    public void setDaysUntilNextEvent(int daysUntilNextEvent) {
+        this.daysUntilNextEvent = daysUntilNextEvent;
     }
 }

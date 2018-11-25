@@ -78,4 +78,7 @@ public class GateManager {
 //        createGate(collegeId, "Test gate 2", "test description 2", "resources/images/star.png", 300);
 //        createGate(collegeId, "Test gate 3", "test description 3", "resources/images/star.png", 400);
     }
+
+    public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    }
 }

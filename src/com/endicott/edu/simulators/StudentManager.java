@@ -74,7 +74,7 @@ public class StudentManager {
         Date currDate = CollegeManager.getCollegeDate(collegeId);
 
         if(isNewCollege) {
-            numNewStudents = 150;
+            numNewStudents = 140;
         }
         else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){   // Students admitted 1st of month
             int leastOpenings = Math.min(openBeds, openDesks);

@@ -119,17 +119,23 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
-//        PlagueManager plagueManager = new PlagueManager();
-//        plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-//
-//        FloodManager floodManager = new FloodManager();
-//        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-//
-//        FireManager fireManager = new FireManager();
-//        fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-//
-//        SnowManager snowManager = new SnowManager();
-//        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        DisasterManager disasterManager = new DisasterManager();
+        disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        PlagueManager plagueManager = new PlagueManager();
+        plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        FloodManager floodManager = new FloodManager();
+        floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        FireManager fireManager = new FireManager();
+        fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        SnowManager snowManager = new SnowManager();
+        snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         BuildingManager buildingManager = new BuildingManager();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
@@ -142,8 +148,6 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        DisasterManager disasterManager = new DisasterManager();
-        disasterManager.handleTimeChange(collegeId,hoursAlive,popupManager);
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
@@ -162,11 +166,11 @@ public class CollegeManager {
             }
         }
 
-        if (college.getAvailableCash() <= 0) {
-            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
-                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
-                    "Insert empty Wallet Picture Here");
-        }
+//        if (college.getAvailableCash() <= 0) {
+//            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
+//                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
+//                    "Insert empty Wallet Picture Here");
+//        }
 
         return college;
     }
@@ -287,5 +291,25 @@ public class CollegeManager {
     static public boolean isMode(String collegeId, CollegeMode mode) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
         return (college.getMode() == mode);
+    }
+
+    static public int getGate(String collegeId) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        return (college.getGate());
+    }
+
+    public static int getDaysUntilNextEvent(String collegeId) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        return college.getDaysUntilNextEvent();
+    }
+
+    public static void setDaysUntilNextEvent(String collegeId, int daysUntilNextEvent) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setDaysUntilNextEvent(Math.max(0,daysUntilNextEvent));
+        cao.saveCollege(college);
     }
 }

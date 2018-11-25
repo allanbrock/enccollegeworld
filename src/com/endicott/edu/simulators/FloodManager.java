@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.FloodDao;
 import com.endicott.edu.models.*;
 
+import java.awt.geom.Dimension2D;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Random;
  *          - FLOODS CAN ONLY HAPPEN IN FULLY BUILT DORMS.
  */
 public class FloodManager {
-    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.04f;
+    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.004f;
     FloodDao floodDao = new FloodDao();
     BuildingDao buildingDao = new BuildingDao();
     BuildingManager buildingManager = new BuildingManager();
@@ -106,6 +107,10 @@ public class FloodManager {
      */
 
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
+        if (!DisasterManager.isEventPermitted(collegeId)) {
+            return false;
+        }
+
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         //If a flood upgrade was bought from the store, decrease the probability of floods.
         if(hasUpgrade){
@@ -120,6 +125,7 @@ public class FloodManager {
 
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
+            DisasterManager.isEventPermitted(collegeId);
             isHappening = true;
             logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
             logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);
@@ -149,7 +155,7 @@ public class FloodManager {
                     "resources/images/DORM.png","Unflooded Dorm");
         }else{
             popupManager.newPopupEvent("Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
-                    "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
+                    "Go to Store","goToStore","No Thanks","doNothing", "resources/images/flood.png","flooded Dorm");
         }
 
     }
