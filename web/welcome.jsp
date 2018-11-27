@@ -19,6 +19,35 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+<style>
+
+  body {
+    background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3) ), url("resources/images/largecampus.png");
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .jumbotron {
+    background-color: rgba(238, 238, 238, .9);
+    text-align: center;
+  }
+
+  .form-control {
+    width: 50%;
+    margin: 30px auto 0;
+  }
+
+  .btn {
+    margin: 0 0.5%;
+  }
+
+</style>
+
+
 </head>
 <body>
 <%
@@ -46,7 +75,7 @@
     <div class="container">
       <input type="submit" class="btn btn-info" name="button" value="Open College">
       <input type="submit" class="btn btn-info" name="button" value="Create College">
-      <input type="submit" class="btn btn-info" name="button" value="Delete College">
+      <input type="submit" class="btn btn-danger" name="button" value="Delete College">
     </div>
   </div>
 
