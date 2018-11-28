@@ -63,41 +63,20 @@ public class StudentManager {
      *
      * @param collegeId
      * @param hoursAlive
-     * @param initial
+     * @param isNewCollege
      */
-    public void admitStudents(String collegeId, int hoursAlive, boolean initial) {
+    public void admitStudents(String collegeId, int hoursAlive, boolean isNewCollege) {
         int openBeds = buildingMgr.getOpenBeds(collegeId);
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
-        int numNewStudents;
+        int numNewStudents = 0;
         List<StudentModel> students = dao.getStudents(collegeId);
-
         Date currDate = CollegeManager.getCollegeDate(collegeId);
-        String date = currDate.toString();
 
-        // Are we fully booked?
-        if (openBeds <= 0 || openPlates <= 0 || openDesks <= 0) {
-            return;
+        if(isNewCollege) {
+            numNewStudents = 140;
         }
-
-        if(initial) {
-
-            numNewStudents = 150;
-
-            createStudents(numNewStudents, collegeId, students, initial);
-
-            college = collegeDao.getCollege(collegeId);
-            college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
-            collegeDao.saveCollege(college);
-
-            if (numNewStudents > 0) {
-                NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            }
-        }
-        // For testing purposes, accepting students on the 1st of every month.
-        //else if((CollegeManager.getCollegeCurrentMonth(collegeId) == 9 && CollegeManager.getCollegeCurrentDay(collegeId) == 1) || (CollegeManager.getCollegeCurrentMonth(collegeId) == 1 && CollegeManager.getCollegeCurrentDay(collegeId) == 1)){
-        else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){
-
+        else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){   // Students admitted 1st of month
             int leastOpenings = Math.min(openBeds, openDesks);
             leastOpenings = Math.min(leastOpenings, openPlates);
 
@@ -105,17 +84,16 @@ public class StudentManager {
             if (numNewStudents > leastOpenings) {
                 numNewStudents = leastOpenings;
             }
+        }
 
+        if (numNewStudents > 0) {
             createStudents(numNewStudents, collegeId, students, false);
 
             college = collegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
             college.setNumberStudentsAccepted(0);
             collegeDao.saveCollege(college);
-
-            if (numNewStudents > 0) {
-                NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            }
+            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
         }
     }
 
@@ -127,18 +105,21 @@ public class StudentManager {
         return studentIndex;
     }
 
+    /**
+     * Determine how many students to accept in one day.
+     */
     private void acceptStudents(String collegeId, int hoursAlive){
         int numNewStudents;
 
         // The number of accepted students depends on the happiness of the student body.
-
         college = collegeDao.getCollege(collegeId);
         int happiness = college.getStudentBodyHappiness();
 
         if (happiness <= 50) {
             numNewStudents = 0;
         } else {
-            numNewStudents = rand.nextInt(happiness/10);
+            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
+            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
         }
 
         college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);

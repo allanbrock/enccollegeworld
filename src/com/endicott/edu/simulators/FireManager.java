@@ -26,15 +26,10 @@ public class FireManager {
 
     public FireManager() {
         upgradeName = "Smoke Detectors";
-        //Old fire values, seemed to high but still want to discuss with CJ  before removing completely
-//        upgradedRegFireProb = 8;
-//        regFireProb = 10;
-//        upgradedCatFireProb = 3;
-//        catFireProb = 5;
-        upgradedRegFireProb = 2;
-        regFireProb = 4;
-        upgradedCatFireProb = 1;
-        catFireProb = 2;
+        upgradedRegFireProb = 8;
+        regFireProb = 10;
+        upgradedCatFireProb = 3;
+        catFireProb = 5;
     }
 
     /**
@@ -56,7 +51,7 @@ public class FireManager {
         FireDAO.saveAllFires(runId, fires);
     }
 
-    private void generateCorrectPopUp(boolean isUpgraded, List<FireModel> fires, PopupEventManager popupManager){
+    public void generateCorrectPopUp(boolean isUpgraded, List <FireModel> fires, PopupEventManager popupManager){
         for (FireModel fire : fires) {
             if (isUpgraded) {
                 if (fire.isCatastrophic()) {
@@ -81,7 +76,7 @@ public class FireManager {
      * @param hoursAlive number of hours college has been alive
      * @param isCatastrophic boolean dictating which type of fire to start
      */
-    private void startFireRandomly(String runId, int hoursAlive, boolean isCatastrophic) {
+    public void startFireRandomly(String runId, int hoursAlive, boolean isCatastrophic) {
         if (isCatastrophic) {
             startCatastrophicFire(runId, hoursAlive);
             return;
@@ -91,10 +86,11 @@ public class FireManager {
 
     /**
      * Starts a fire with 0-10 deaths
-     *  @param runId
+     *
+     * @param runId
      * @param hoursAlive
      */
-    private void startNormalFire(String runId, int hoursAlive) {
+    public void startNormalFire(String runId, int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
         ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
         ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
@@ -130,7 +126,7 @@ public class FireManager {
      * @param runId
      * @param hoursAlive
      */
-    private void startCatastrophicFire(String runId, int hoursAlive) {
+    public void startCatastrophicFire(String runId, int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
         ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
         ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
@@ -139,16 +135,11 @@ public class FireManager {
         String victims = "all";
         final boolean isCatastrophic = true;
 
-        /*/ if there are no buildings, there can not be a fire.
-        if (buildings.size() <= 1)
+        // if there are no buildings, there can not be a fire.
+        if (buildings.size() <= 0)
             return;
-        */
 
         BuildingModel buildingToBurn = findBuildingToBurn(buildings);
-
-        // if findbuildingToBurn only found the admin building the method returned this to be null
-        if (buildingToBurn == null) return;
-
         int numStudentDeaths = buildingToBurn.getNumStudents();
 
         // If all students are in fire building, leave some alive
@@ -177,7 +168,11 @@ public class FireManager {
      * @param runId
      * @param hoursAlive
      */
-    private void createFireByOdds(String runId, int hoursAlive, boolean isUpgraded) {
+    public void createFireByOdds(String runId, int hoursAlive, boolean isUpgraded) {
+        if (!DisasterManager.isEventPermitted(runId)) {
+            return;
+        }
+
         Random rand = new Random();
         int odds = rand.nextInt(100);
         if (isUpgraded) {
@@ -196,15 +191,17 @@ public class FireManager {
      * @param runId
      * @param hoursAlive
      */
-    private void possiblyCreateFire(int odds, int regProb, int catProb, String runId, int hoursAlive){
+    public void possiblyCreateFire(int odds,int regProb,int catProb,String runId, int hoursAlive){
         if (odds < regProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
             if (odds < catProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
                 boolean isCatastrophic = true;
                 startFireRandomly(runId, hoursAlive, isCatastrophic);
+                DisasterManager.newEventStart(runId);
                 return;
             }
             boolean isCatastrophic = false;
             startFireRandomly(runId, hoursAlive, isCatastrophic);
+            DisasterManager.newEventStart(runId);
         }
     }
 
@@ -212,7 +209,7 @@ public class FireManager {
         FireDAO.deleteFires(runId);
     }
 
-    private int getFireCost(int victims, BuildingModel buildingToBurn, String runId, boolean isUpgraded, boolean isCatastrophic) {
+    public int getFireCost(int victims, BuildingModel buildingToBurn,String runId, boolean isUpgraded, boolean isCatastrophic) {
         Random rand = new Random();
         int randCost = rand.nextInt(2000);
         int costOfFire;
@@ -244,7 +241,7 @@ public class FireManager {
     }
 
 
-    private int getNumStudentFatalities() {
+    public int getNumStudentFatalities() {
         Random rand = new Random();
         int numDeaths = rand.nextInt(10);
         if (hasUpgradeBeenPurchased()){
@@ -253,13 +250,13 @@ public class FireManager {
         return numDeaths;
     }
 
-    private int getNumFacultyFatalities(int studentVictims){
+    public int getNumFacultyFatalities(int studentVictims){
         if (studentVictims == 0) return studentVictims;
         return studentVictims/4;
     }
 
-    private void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
-                                   ArrayList<FacultyModel> faculty, String victims, FireModel fire){
+    public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
+                                     ArrayList<FacultyModel> faculty, String victims, FireModel fire){
         if (numFacultyDeaths == faculty.size()){
             numFacultyDeaths = numStudentDeaths/2;
         } else if (numStudentDeaths == students.size()){
@@ -298,28 +295,19 @@ public class FireManager {
 
 
 
-    private BuildingModel findBuildingToBurn(ArrayList<BuildingModel> buildings) {
+    public BuildingModel findBuildingToBurn(ArrayList<BuildingModel> buildings) {
         Random rand = new Random();
-        ArrayList<BuildingModel> validBuildings = new ArrayList<>();
-        if (buildings.size() <= 1) return null;
-
-        for (int i = 0; i < buildings.size(); i++){
-            if (!buildings.get(i).getKindOfBuilding().equalsIgnoreCase("ADMIN")){
-                validBuildings.add(buildings.get(i));
-            }else i++;
-        }
-
-        int randomIndex = rand.nextInt(validBuildings.size());
-        return validBuildings.get(randomIndex);
+        int randomIndex = rand.nextInt(buildings.size());
+        return buildings.get(randomIndex);
     }
 
-    private void checkForUpgrade(String runId){
+    public void checkForUpgrade(String runId){
         if (inventoryManager.isPurchased(upgradeName,runId)){
             this.hasBeenUpgraded = true;
         }
     }
 
-    private boolean hasUpgradeBeenPurchased(){
+    public boolean hasUpgradeBeenPurchased(){
         return this.hasBeenUpgraded;
     }
 }

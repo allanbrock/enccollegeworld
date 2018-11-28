@@ -50,6 +50,13 @@ public class StudentDao {
         return students.toArray(new StudentModel[students.size()]);
     }
 
+    public static int getNumberOfStudents(String collegeId) {
+        List<StudentModel> students = getStudents(collegeId);
+        if (students == null)
+            return 0;
+        return students.size();
+    }
+
     public static List<StudentModel> getStudentsOnSport(String runId, String teamName) {
         List<StudentModel> students = new ArrayList<>();
         ArrayList<StudentModel> playerList = new ArrayList<>();
@@ -124,4 +131,6 @@ public class StudentDao {
 //
 //        System.out.println("Test case name: testStudents, Result: pass");
     }
+
+
 }

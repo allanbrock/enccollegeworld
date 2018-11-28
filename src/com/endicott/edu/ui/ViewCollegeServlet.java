@@ -16,6 +16,13 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        // Check if session timed out.
+        if (collegeId == null || !CollegeManager.doesCollegeExist(collegeId)) {
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome");
+            dispatcher.forward(request, response);
+            return;
+        }
+
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
 
@@ -64,7 +71,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
                 plague.setQuarantine(true);
             }
             dao.saveAllPlagues(collegeId, plagues);
-            accountant.payBill(collegeId, "Students are now Quarantined", 5000);
+            accountant.payBill(collegeId, "Students are now quarantined", 5000);
 
         }
 

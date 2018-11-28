@@ -310,7 +310,6 @@
                                 </tr>
                                 <% } %>
 
-                                <tr><td><b>Hidden Attributes</b></td><td></td></tr>
                                 <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
                                 <tr>
                                     <td>Sick for:</td>

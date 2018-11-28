@@ -67,14 +67,13 @@ public class CollegeManager {
         PlagueManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
 
-        EventManager.establishCollege(collegeId);
-
         GateManager.establishCollege(collegeId);
 
         InventoryManager inventoryManager = new InventoryManager();
         inventoryManager.establishCollege(collegeId);
 
-        //DisasterManager.establishCollege(collegeId);
+        FloodManager.establishCollege(collegeId);
+        PlagueManager.establishCollege(collegeId);
 
         return college;
     }
@@ -108,7 +107,6 @@ public class CollegeManager {
     static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
         CollegeDao collegeDao = new CollegeDao();
 
-
         // Advance time college has been alive.
         CollegeModel college = collegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
@@ -121,24 +119,17 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
+        GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        DisasterManager disasterManager = new DisasterManager();
+        disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        BuildingManager buildingManager = new BuildingManager();
-        BuildingDao buildingDao = new BuildingDao();
-        buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
-
-        SportManager sportManager = new SportManager();
-        sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
         FloodManager floodManager = new FloodManager();
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
-        FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
@@ -146,12 +137,27 @@ public class CollegeManager {
         SnowManager snowManager = new SnowManager();
         snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        //DisasterManager disasterManager = new DisasterManager();
-        //disasterManager.handleTimeChange(collegeId,hoursAlive,popupManager);
+        RiotManager riotManager = new RiotManager();
+        riotManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        BuildingManager buildingManager = new BuildingManager();
+        buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        SportManager sportManager = new SportManager();
+        sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        StudentManager studentManager = new StudentManager();
+        studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
+
+        BuildingDao buildingDao = new BuildingDao();
+        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
 
         for(BuildingModel b: buildings){
             if(b.getHoursToComplete() == 0 && b.isHasBeenAnnouncedAsComplete() == false){
@@ -163,11 +169,11 @@ public class CollegeManager {
             }
         }
 
-        if (college.getAvailableCash() <= 0) {
-            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
-                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
-                    "Insert empty Wallet Picture Here");
-        }
+//        if (college.getAvailableCash() <= 0) {
+//            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
+//                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
+//                    "Insert empty Wallet Picture Here");
+//        }
 
         return college;
     }
@@ -180,7 +186,10 @@ public class CollegeManager {
      */
     static public Date getCollegeDate(String collegeId) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
-        int hoursAlive = college.getHoursAlive();
+        int hoursAlive = 0;
+        if (college != null) {
+            hoursAlive =college.getHoursAlive();
+        }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -236,22 +245,6 @@ public class CollegeManager {
         return college;
     }
 
-    // TODO: TEMPORARY FUNCTION, WILL BE REMOVED AFTER TESTING/SPRINT
-    public static CollegeModel bankruptCollege(String collegeId){
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
-        college.setAvailableCash(0);
-        cao.saveCollege(college);
-
-        calculateStatisticsAndRatings(collegeId);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId, false);
-
-        return college;
-    }
-
     private static void calculateStatisticsAndRatings(String collegeId) {
         calculateTuitionRating(collegeId);
     }
@@ -267,8 +260,10 @@ public class CollegeManager {
 
     static private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Welcome to College Simulator!", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Don't spend all your money at once.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewCollege", "Unlock features by getting more students to come to your college.", true, "LIBRARY.png");
+        TutorialManager.saveNewTip(collegeId, 1,"viewCollege", "Grow your college by attracting new students to come.", false, "LIBRARY.png");
+        TutorialManager.saveNewTip(collegeId, 2,"viewCollege", "The college earns money primarily from tuition.", false, "money.jpg");
+        TutorialManager.saveNewTip(collegeId, 3,"viewCollege", "Keep your students happy if you want your college to grow.", false, "smile.png");
     }
 
     /**
@@ -299,5 +294,25 @@ public class CollegeManager {
     static public boolean isMode(String collegeId, CollegeMode mode) {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
         return (college.getMode() == mode);
+    }
+
+    static public int getGate(String collegeId) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        return (college.getGate());
+    }
+
+    public static int getDaysUntilNextEvent(String collegeId) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        return college.getDaysUntilNextEvent();
+    }
+
+    public static void setDaysUntilNextEvent(String collegeId, int daysUntilNextEvent) {
+        CollegeDao cao = new CollegeDao();
+
+        CollegeModel college = cao.getCollege(collegeId);
+        college.setDaysUntilNextEvent(Math.max(0,daysUntilNextEvent));
+        cao.saveCollege(college);
     }
 }

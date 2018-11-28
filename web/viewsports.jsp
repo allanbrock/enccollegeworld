@@ -11,6 +11,8 @@
 <%@ page import="com.endicott.edu.simulators.CollegeManager" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.endicott.edu.simulators.TutorialManager" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.endicott.edu.simulators.CoachManager" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -81,6 +83,8 @@
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
     TutorialModel tip = TutorialManager.getCurrentTip("viewSports", college.getRunId());
+
+    ArrayList<CoachModel> teamCoaches = CoachManager.getCollegeCoaches();
 %>
 
 <% if (!(addSportResultMsg == "success")) { %>
@@ -214,6 +218,24 @@
             }
         </div>
     </div>
+    </div>
+
+    <div>
+        <td>
+            <a href="#<%=-1%>" class="btn btn-info" data-toggle="collapse">View Team Coaches</a>
+            <div id="<%=-1%>" class="collapse">
+                <div class="well well-sm">
+                    <%
+                        for(CoachModel c : teamCoaches){
+                    %>
+                            Coach Name: <%=c.getFacultyName()%><br>
+                            Sport: <%=c.getSportName()%><br>
+                            Salary: <%="$" + c.getSalary()%><br>
+                            <br>
+                        <%}%>
+                </div>
+            </div>
+        </td>
     </div>
 
 

@@ -7,7 +7,7 @@ public class RiotModel {
     private String description;
     private String name;
 
-    public RiotModel(SportModel sport) {
+    public RiotModel() {
 
 
 

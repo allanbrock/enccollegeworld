@@ -1,6 +1,8 @@
 package com.endicott.edu.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by abrocken on 7/10/2017.
@@ -30,6 +32,7 @@ public class SportModel implements Serializable {
     private String sportSeason = "unknown";
     private int championshipsWon = 0;
     private String coachName = "unknown";
+    private ArrayList<Date> seasonSchedule;
 
     public SportModel() {
 
@@ -58,6 +61,7 @@ public class SportModel implements Serializable {
         this.division = division;
         this.sportSeason = sportSeason;
         this.hoursUntilNextGameReset = resetHours;
+        this.seasonSchedule = null;
     }
 
     //Just for testing riots

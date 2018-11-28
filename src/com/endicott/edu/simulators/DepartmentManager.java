@@ -70,4 +70,8 @@ public class DepartmentManager {
         departmentRatings.put("Overall Academic Happiness", sum / departmentOptions.size());
         return departmentRatings;
     }
+
+    public static void removeEmployeeFromDepartment(FacultyModel member, DepartmentModel department){
+        department.putInEmployeeCounts(member.getTitle(), department.getEmployeeCounts().get(member.getTitle()) - 1);
+    }
 }

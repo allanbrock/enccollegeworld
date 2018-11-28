@@ -12,4 +12,6 @@ public class CoachManager {
             collegeCoaches = new ArrayList<>();
         collegeCoaches.add(coach);
     }
+
+    public static ArrayList<CoachModel> getCollegeCoaches(){ return collegeCoaches; }
 }

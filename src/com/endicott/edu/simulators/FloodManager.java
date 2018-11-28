@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.FloodDao;
 import com.endicott.edu.models.*;
 
+import java.awt.geom.Dimension2D;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -11,15 +12,17 @@ import java.util.Random;
 
 /**
  * Responsible for simulating floods at the college.
- * NOTE: THERE CAN ONLY BE ONE FLOOD AT A TIME.
+ * NOTES:   - THERE CAN ONLY BE ONE FLOOD AT A TIME.
+ *          - FLOODS CAN ONLY HAPPEN IN FULLY BUILT DORMS.
  */
 public class FloodManager {
-    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.04f;
+    private static final float PROBABILTY_OF_FLOOD_PER_HOUR = 0.004f;
     FloodDao floodDao = new FloodDao();
     BuildingDao buildingDao = new BuildingDao();
     BuildingManager buildingManager = new BuildingManager();
     InventoryManager inventoryManager = new InventoryManager();
     private Logger logger = Logger.getLogger("FloodManager");
+    private boolean isHappening = false;
 
     /**
      * Simulate changes in floods due to passage of time at college. Called when One day goes by.
@@ -53,6 +56,9 @@ public class FloodManager {
         int elapsedTime = hoursAlive - flood.getHourLastUpdated();
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
         if (timeLeft <= 0) {
+            isHappening = false;
+            logger.info("EVARUBIO - FLOOD handleTimeChange() just set isHappening to false");
+            logger.info("EVARUBIO - FLOOD handleTimeChange() value of isHappening = " + isHappening);
 
             buildingManager.disasterStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
             logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
@@ -101,6 +107,10 @@ public class FloodManager {
      */
 
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
+        if (!DisasterManager.isEventPermitted(collegeId)) {
+            return false;
+        }
+
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         //If a flood upgrade was bought from the store, decrease the probability of floods.
         if(hasUpgrade){
@@ -115,8 +125,11 @@ public class FloodManager {
 
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
-
-            logger.info("EVARUBIO .  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
+            DisasterManager.isEventPermitted(collegeId);
+            isHappening = true;
+            logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
+            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);
+            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
 
             generateCorrectPopup(hasUpgrade,randomFlood,popupManager);
 
@@ -142,7 +155,7 @@ public class FloodManager {
                     "resources/images/DORM.png","Unflooded Dorm");
         }else{
             popupManager.newPopupEvent("Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
-                    "Go to Store","goToStore","Do nothing ($0)","doNothing", "resources/images/flood.png","flooded Dorm");
+                    "Go to Store","goToStore","No Thanks","doNothing", "resources/images/flood.png","flooded Dorm");
         }
 
     }
@@ -176,8 +189,11 @@ public class FloodManager {
      */
     public static void establishCollege(String collegeId){
     }
-
-    public boolean isEventActive() {
-        return false;
+    /**
+     * Determines whether there is a Flood currently happening or not.
+     *
+     * @param collegeId*/
+    public boolean isEventActive(String collegeId) {
+        return FloodDao.getFlood(collegeId) != null;
     }
 }
