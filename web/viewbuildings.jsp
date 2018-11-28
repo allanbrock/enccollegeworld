@@ -273,7 +273,7 @@
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).checkIfBeingBuilt()%>
                     </td>
                     <td style="vertical-align:middle;">
-                        <%if(!(buildings.get(b).getSize().equals("Extra Large") || buildings.get(b).getSize().equals("N/A")
+                        <%if(!( buildings.get(b).getSize().equals("Extra Large") || buildings.get(b).getSize().equals("N/A")
                                 || buildings.get(b).getHoursToComplete() > 0 || buildings.get(b).getUpgradeCost() > college.getAvailableCash())){%>
                             <input style="horiz-align: left; font-size: 75%" type="submit" class="btn btn-info" name="<%="upgradeBuilding" + b%>" value="Upgrade ($<%=buildings.get(b).getUpgradeCost()%>)">
                         <%}%>
@@ -392,6 +392,37 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-2" style="margin-right: 3%">
+                    <h4>Large Size</h4>
+                    <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
+                    <%--<div class="progress-bar progress-bar-info" role="progressbar"--%>
+                         <%--aria-valuemin="0" aria-valuemax="100" style="width:100%; prog:<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>; height:25px">--%>
+                        <%--<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>%--%>
+                    <%--</div>--%>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%">
+                    <h4>Extra Large Size</h4>
+                    <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
+                </div>
+                <div class="col-md-2" style="margin-right: 3%">
+                    <h4>Library</h4>
+                    <img class="img-responsive" src="resources/images/LIBRARY.png">
+                </div>
+                <div class="col-md-2" style="margin-right: 3%">
+                    <h4>Health Center</h4>
+                    <img class="img-responsive" src="resources/images/HEALTH_k.png">
+                </div>
+                <div class="col-md-2" style="margin-right: 3%">
+                    <h4>Entertainment Center</h4>
+                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png">
+                </div>
+            </div>
         </div>
     </div>
 </form>
