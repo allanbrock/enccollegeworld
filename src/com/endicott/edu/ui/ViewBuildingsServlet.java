@@ -38,7 +38,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
                 upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
             }
             if (request.getParameter("repairBuilding" + b) != null){
-                repairBuidling(request, response, BuildingDao.getBuildings(collegeId).get(b));
+                repairBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
             }
         }
         /*if(request.getParameter("randomBuildingName") != null){
@@ -72,11 +72,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             doGet(request, response);
         }
         else if(request.getParameter("randomBuildingName") != null){
-            // still need to add code handling the parameter
             randomName = NameGenDao.generateBuildingName();
             request.setAttribute("randomName", randomName);
-            //request.setAttribute("buildingType", buildingType);
-            //doGet(request, response);
         }
         if(request.getParameter("selectBuildingType") != null || request.getParameter("randomBuildingName")!= null){ //(was else if) if they've selected the building type
             buildingTypeSelected = true;
@@ -278,7 +275,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void repairBuidling(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
+    private void repairBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         BuildingManager.repairBuilding(runId, building);
 

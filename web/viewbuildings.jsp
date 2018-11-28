@@ -83,6 +83,13 @@
     String randomName = (String) request.getAttribute("randomName");
     TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
+    String haveEntertainmentCenter = "false";
+    String haveHealthCenter = "false";
+    String haveLibrary = "false";
+    //request.setAttribute("haveEntertainmentCenter", haveEntertainmentCenter);
+    //request.setAttribute("haveHealthCenter", haveHealthCenter);
+    //request.setAttribute("haveLibrary", haveLibrary);
+
     GateManager gateManager = new GateManager();
 %>
 <form action="viewBuilding" method="post">
@@ -313,11 +320,29 @@
                                 <option value="Football Stadium">Football Stadium</option>
                                 <option value="Hockey Rink">Hockey Rink</option>
                             <%}%>
-                            <%if(college.getAvailableCash() > 250000){%>
+                            <%
+                                if(college.getAvailableCash() > 250000){
+                                for (int b = 0; b < buildings.size(); b++) {
+                                    if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
+                                        haveEntertainmentCenter = "true";
+                                    }
+                                    if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
+                                        haveHealthCenter = "true";
+                                    }
+                                    if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
+                                        haveLibrary = "true";
+                                    }
+                                }
+                                if(haveLibrary.equals("false")){%>
                                 <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
+                            <%}
+                            if(haveHealthCenter.equals("false")){%>
                                 <option value="Health Center" <%if(!gateManager.testGate(college.getRunId(), "Health Center")){%>disabled<%}%>>Health Center</option>
+                            <%}
+                            if(haveEntertainmentCenter.equals("false")){%>
                                 <option value="Entertainment Center" <%if(!gateManager.testGate(college.getRunId(), "Entertainment Center")){%>disabled<%}%>>Entertainment Center</option>
-                            <%}%>
+                            <%}
+                                }%>
                         </select>
                     </div>
                         <!-- Button -->
