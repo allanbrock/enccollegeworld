@@ -71,7 +71,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
                 plague.setQuarantine(true);
             }
             dao.saveAllPlagues(collegeId, plagues);
-            accountant.payBill(collegeId, "Students are now Quarantined", 5000);
+            accountant.payBill(collegeId, "Students are now quarantined", 5000);
 
         }
 

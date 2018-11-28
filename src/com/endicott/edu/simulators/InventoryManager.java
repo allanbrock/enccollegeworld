@@ -19,6 +19,12 @@ public class InventoryManager {
         createAllItems(collegeId);
     }
 
+    /**
+     * Gets the list of all items.
+     * Checks each item till it finds the one with the name provided.
+     * Returns the Bool value of the item's field 'isPurchased'
+     * @return whether or not the item has been purchased.
+     * */
     public boolean isPurchased(String name, String collegeId){
         List<ItemModel> items = inventory.getItems(collegeId);
 
@@ -34,17 +40,20 @@ public class InventoryManager {
     }
 
     public void createAllItems(String collegeId){
-        createItem("Smoke Detectors", false, "smokedetector.png", 50000, true, collegeId);
-        createItem("Drains",false,"drain.png",15000, true, collegeId);
-        createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, true, collegeId);
-        createItem("Snowplows",false, "snowplow.png", 4200, true, collegeId);
-        createItem("Pipes", false, "pipes.png", 47000, true, collegeId);
-        createItem("Snow Pushers", false, "snowPusher.png", 2200, true, collegeId);
-        createItem("Mainstage Production", false, "drama.png", 2000, true, collegeId);
+        createItem("Smoke Detectors", false, "smokedetector.png", 50000, 1, "", collegeId);
+        createItem("Drains",false,"drain.png",15000, 0, "", collegeId);
+        createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, 0, "", collegeId);
+        createItem("Snowplows",false, "snowplow.png", 4200, 2, "Buying Snowplows reduces both future maintenance costs and the probability of a 'Severe High-Intensity Snow Storm' from happening again.", collegeId);
+        createItem("Pipes", false, "pipes.png", 47000, 2, "Investing in better and newer Pipes decreases the chances of 'Mid-Intensity Blizzards' from occurring often and avoids high snow-removals costs.", collegeId);
+        createItem("Snow Pushers", false, "snowPusher.png", 2200, 0, "Purchasing Snow Pushers prevents 'Low-Intensity Snow Storms' from happening so often, as well as reducing future costs of snow removal.", collegeId);
+        createItem("Mainstage Production", false, "drama.png", 2000, 3, "", collegeId);
     }
 
-    public void createItem(String name, Boolean isPurchased, String imageName, int cost, Boolean isUnlocked, String collegeId){
-        ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, isUnlocked);
+
+    public void createItem(String name, Boolean isPurchased, String imageName, int cost, int availableAtGate, String description, String collegeId){
+        ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, availableAtGate <= 0);
+        // TODO: Add description to the model (and to the display page)
+        // TODO: Add gate number to the model
         inventory.saveNewItem(collegeId, newItem);
     }
 
