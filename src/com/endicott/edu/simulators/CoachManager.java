@@ -30,6 +30,9 @@ public class CoachManager {
     }
 
     public static CoachModel getCoachByName(String name){
+        if (collegeCoaches == null)
+            return null;
+
         for(CoachModel c : collegeCoaches){
             if(c.getFacultyName().equals(name))
                 return c;

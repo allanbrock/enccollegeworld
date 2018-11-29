@@ -162,7 +162,7 @@ public class CollegeManager {
         List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
 
         for(BuildingModel b: buildings){
-            if(b.getHoursToComplete() == 0 && b.isHasBeenAnnouncedAsComplete() == false){
+            if(b.getHoursToComplete() == 0 && !b.isHasBeenAnnouncedAsComplete()){
                 popupManager.newPopupEvent("Building Complete!", "Your new " + b.getKindOfBuilding() + " building, "
                                 + b.getName() + "has finished construction and is now open!", "Close", "ok",
                         "resources/images/" + b.getKindOfBuilding() + ".png", b.getKindOfBuilding());
