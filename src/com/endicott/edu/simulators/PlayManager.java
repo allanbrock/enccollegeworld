@@ -24,7 +24,7 @@ public class PlayManager {
             // figure out what happens next.
             // probably case statement based on play state?
             // you'll be looking days since purchased && play state && isProfessional?
-            // decide popup.  
+            // decide popup.
         }
         else {
             // is play bought. Look InventoryManager.
