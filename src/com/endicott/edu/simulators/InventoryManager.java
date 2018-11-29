@@ -47,7 +47,7 @@ public class InventoryManager {
         createItem("Snowplows",false, "snowplow.png", 4200, 2, "Buying Snowplows reduces both future maintenance costs and the probability of a 'Severe High-Intensity Snow Storm' from happening again.", collegeId);
         createItem("Pipes", false, "pipes.png", 47000, 2, "Investing in better and newer Pipes decreases the chances of 'Mid-Intensity Blizzards' from occurring often and avoids high snow-removals costs.", collegeId);
         createItem("Snow Pushers", false, "snowPusher.png", 2200, 0, "Purchasing Snow Pushers prevents 'Low-Intensity Snow Storms' from happening so often, as well as reducing future costs of snow removal.", collegeId);
-        createItem("Mainstage Production", false, "drama.png", 2000, 3, "", collegeId);
+        createItem("Mainstage Production", false, "drama.png", 2000, 3, "Providing funding for a main stage production can provide your college with extra income.", collegeId);
     }
 
 
