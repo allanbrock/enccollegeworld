@@ -3,10 +3,7 @@ package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 import com.endicott.edu.datalayer.PlagueDao;
 import com.endicott.edu.models.PlagueModel;
-import com.endicott.edu.simulators.Accountant;
-import com.endicott.edu.simulators.CollegeManager;
-import com.endicott.edu.simulators.PopupEventManager;
-import com.endicott.edu.simulators.TutorialManager;
+import com.endicott.edu.simulators.*;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -74,6 +71,12 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             accountant.payBill(collegeId, "Students are now quarantined", 5000);
 
         }
+
+        // TODO: Stephen this is where you would check if a left or right button was hit.
+        if(request.getParameter("picked_pro") != null) {
+            PlayManager.handleProfessionalDirectorPicked(collegeId);
+        }
+
 
         // Check if the button pressed was from a popup.  If so clear it.
         popupManager.removePopupIfButtonPressed(request);
