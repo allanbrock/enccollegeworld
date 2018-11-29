@@ -29,6 +29,7 @@ public class StudentModel implements Serializable {
     private int diningHallHappinessRating = 0;
     private int academicCenterHappinessRating = 0;
     private int dormHappinessRating = 0;
+    private int overallBuildingHappinessRating = 0;
     private FacultyModel advisor;
 
 
@@ -208,5 +209,9 @@ public class StudentModel implements Serializable {
     public void setDormHappinessRating(int dormHappinessRating) {
         this.dormHappinessRating = dormHappinessRating;
     }
+
+    public int getOverallBuildingHappinessRating() {return overallBuildingHappinessRating;}
+
+    public  void setOverallBuildingHappinessRating(int overallBuildingHappinessRating) {this.overallBuildingHappinessRating = overallBuildingHappinessRating;}
 }
 

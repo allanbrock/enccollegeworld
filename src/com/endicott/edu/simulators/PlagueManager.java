@@ -16,6 +16,8 @@ public class PlagueManager {
     private boolean purellUpgradePurchased = false;
     private InventoryManager inventoryManager = new InventoryManager();
     private String purellUpgradeName = "Purell Dispensers";
+    private int plagueMutationProb = 15;
+    private boolean didPlagueMutate = false;
 
 
     /**
@@ -32,7 +34,9 @@ public class PlagueManager {
         // First work on the overall health of students.
         makeStudentsBetter(collegeId, hoursAlive);
         randomlyMakeSomeStudentsSicker(collegeId, hoursAlive);
+
         boolean quarantine = false;
+        boolean mutation = false;
 
         int hoursLeftInPlague = 0;
 
@@ -46,6 +50,7 @@ public class PlagueManager {
             plague.setNumberOfHoursLeftInPlague(hoursLeftInPlague);
             didPlagueEnd = (oldHoursLeftInPlague > 0 && hoursLeftInPlague <= 0);
             quarantine = plague.isQuarantine();
+
         }
 
         if (didPlagueEnd) {
@@ -57,6 +62,8 @@ public class PlagueManager {
         if (hoursLeftInPlague > 0) {
             int oldNumberSick = getNumberSick(collegeId);
             plagueSpreadsThroughStudents(collegeId, hoursAlive, hoursLeftInPlague, getNumberSick(collegeId), quarantine);
+            //TODO: Not sure how to go about accessing current plague here
+//            mutation = plague.isMutation();
             int newNumberSick = getNumberSick(collegeId);
             int newVictims = newNumberSick - oldNumberSick;
             if (newVictims > 15) {
@@ -72,10 +79,11 @@ public class PlagueManager {
                 else{
                     popupManager.newPopupEvent("Plague Spreads!",
                             "And the plague continues. " + newVictims +
-                                    " more students are infected.  There are now " + newNumberSick + " ill.\n" +
-                                    "Purchase hand sanitizers from the store to reduce the risk of plagues on campus.",
+                                    " more students are infected.  There are now " + newNumberSick + " ill.\n",
                             "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
                 }
+            }else if(mutation){
+                handlePlagueMutation(popupManager);
             }
         }
 
@@ -109,6 +117,7 @@ public class PlagueManager {
         for (PlagueModel plague : plagues) {
             plague.setNumberOfHoursLeftInPlague(plagueLengthInHours);
             plague.setQuarantine(false);
+            plague.setMutation(false);
         }
     }
 
@@ -173,37 +182,54 @@ public class PlagueManager {
         String someoneSick = "";
 
         if (students.size() <= 0) {
-            return 0;
+            return nSick;
         }
         int probCatchesFromOthers;
-        if(quarantine) {
-            return 0;
-        }else{
-            probCatchesFromOthers = (studentSickCount * 100) / students.size();
-        }
-        int probCatchesFromOutside = 10; // out of 100
-        int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
         Random rand = new Random();
 
-        for (int i = 0; i < students.size(); i++) {
-            StudentModel student = students.get(i);
-            if (student.getNumberHoursLeftBeingSick() <= 0 && rand.nextInt(100) <= totalProb) {
-                student.setNumberHoursLeftBeingSick(hoursLeftInPlague);
-                nSick++;
-                someoneSick = student.getName();
-            } else {
-                student.setNumberHoursLeftBeingSick(0);
+        if(quarantine){
+            int plagueMutationProb = rand.nextInt(100);
+            if(plagueMutationProb >= 15)
+                return nSick;
+            else{
+                PlagueDao plagueDao = new PlagueDao();
+                List<PlagueModel> plagues = plagueDao.getPlagues(collegeId);
+                for (PlagueModel plague : plagues) {
+                    plague.setMutation(true);
+                }
+
+                return nSick;
             }
+
+        }else{
+
+            probCatchesFromOthers = (studentSickCount * 100) / students.size();
+            int probCatchesFromOutside = 10; // out of 100
+            int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
+            for (int i = 0; i < students.size(); i++) {
+                StudentModel student = students.get(i);
+                if (student.getNumberHoursLeftBeingSick() <= 0 && rand.nextInt(100) <= totalProb) {
+                    student.setNumberHoursLeftBeingSick(hoursLeftInPlague);
+                    nSick++;
+                    someoneSick = student.getName();
+                } else {
+                    student.setNumberHoursLeftBeingSick(0);
+                }
+            }
+
+            if (nSick == 1) {
+                NewsManager.createNews(collegeId, currentHour, "Student " + someoneSick + " has fallen ill.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+            } else if (nSick > 1) {
+                NewsManager.createNews(collegeId, currentHour, "Student " + someoneSick + " and " + (nSick - 1) + " others have fallen ill.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+            }
+
+            dao.saveAllStudents(collegeId, students);
+
         }
 
-        if (nSick == 1) {
-            NewsManager.createNews(collegeId, currentHour, "Student " + someoneSick + " has fallen ill.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-        } else if (nSick > 1) {
-            NewsManager.createNews(collegeId, currentHour, "Student " + someoneSick + " and " + (nSick - 1) + " others have fallen ill.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-        }
-
-        dao.saveAllStudents(collegeId, students);
         return nSick;
+
+
     }
 
     /**
@@ -232,7 +258,9 @@ public class PlagueManager {
         }
         dao.saveAllStudents(collegeId, students);
     }
+    private void handlePlagueMutation(PopupEventManager popupMan){
 
+    }
     /**
      * For those students that are sick, reduce the time left in there illness.
      *
@@ -270,6 +298,10 @@ public class PlagueManager {
     public boolean isPurellUpgradePurchased() {
         return purellUpgradePurchased;
     }
+
+    public boolean isPlagueMuated() { return didPlagueMutate; }
+
+
 
     public boolean isEventActive(String collegeId) {
         List<PlagueModel> plagues = dao.getPlagues(collegeId);

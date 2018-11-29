@@ -68,7 +68,7 @@ public class GateDao {
         List<GateModel> gates = getGates(collegeId);
         gate.setRunId(collegeId);
         gates.add(gate);
-        Collections.sort(gates, (o1, o2) -> o1.getGoal() - o2.getGoal());
+        Collections.sort(gates, (o1, o2) -> o1.getLevel() - o2.getLevel());
 //        gates.sort(Comparator.comparingInt(GateModel::getGoal));
         saveAllGates(collegeId, gates);
     }

@@ -8,32 +8,33 @@ import java.util.ArrayList;
 
 public class PlayManager {
     private static PlayDao playDao = new PlayDao();
-    private static ArrayList<StudentModel> cast = new ArrayList<StudentModel>();
+    private static InventoryManager inventoryManager;
 
-    public static void beginPlay(){
-        PlayModel play = new PlayModel(cast.size(), cast);
-    }
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        // Check if play is in production
-        PlayModel play = playDao.getPlay(collegeId);
-
-        if (play != null) {// Is play in production
-            // advance days since purchase by 1
-
-            // figure out what happens next.
-            // probably case statement based on play state?
-            // you'll be looking days since purchased && play state && isProfessional?
-            // decide popup.
-        }
-        else {
-            // is play bought. Look InventoryManager.
-            // if purchased - create a play
-            popupManager.newPopupEvent("Plague!",
-                    "Dir?",
-                    "Student", "picked_student", "Pro", "picked_pro",
-                    "resources/images/plague.jpg", "Plague Doctor");
-        }
+//        // Check if play is in production
+//        PlayModel play = playDao.getPlay(collegeId);
+//
+//        if (play != null) {// Is play in production
+//            // advance days since purchase by 1
+//
+//            // figure out what happens next.
+//            // probably case statement based on play state?
+//            // you'll be looking days since purchased && play state && isProfessional?
+//            // decide popup.
+//        }
+//        else {
+//            // is play bought. Look InventoryManager.
+//            // if purchased - create a play
+//            if(inventoryManager.isPurchased("Mainstage Prodection", collegeId)) {
+//                play = new PlayModel();
+//                playDao.saveThePlay(collegeId, play);
+//                popupManager.newPopupEvent("It Begins!",
+//                        "You need to choose a director to direct the play.  You can either choose a student to run it, or hire a professional.",
+//                        "Student", "picked_student", "Professional", "picked_pro",
+//                        "resources/images/drama.jpg", "Drama Club");
+//            }
+//        }
     }
 
     public static void handleProfessionalDirectorPicked(String collegeId) {

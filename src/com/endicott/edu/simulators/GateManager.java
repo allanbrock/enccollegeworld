@@ -15,12 +15,11 @@ public class GateManager {
      * @param collegeId     unique college string
      * @param key           unique gate string
      * @param description   description for gate
-     * @param gate          number of students till goal is met
+     * @param gateLevel     1 - 5
      */
-    public static void createGate(String collegeId, String key, String description, String iconPath, int gate) {
+    public static void createGate(String collegeId, String key, String description, String iconPath, int gateLevel) {
         GateDao gateDao = new GateDao();
-
-        gateDao.saveNewGate(collegeId, new GateModel(key, description, iconPath, gate));
+        gateDao.saveNewGate(collegeId, new GateModel(key, description, iconPath, gateLevel));
     }
 
     /**
@@ -32,9 +31,32 @@ public class GateManager {
         int studentCount = StudentDao.getStudents(collegeId).size();
         List<GateModel> gates = GateDao.getGates(collegeId);
         for(GateModel gate : gates) {
-            if (gate.getKey().equals(key)) return (gate.getGoal() <= studentCount);
+            return (
+                (gate.getKey().equals(key))                  &&
+                (gate.getLevel() == 1 && studentCount > 150) ||
+                (gate.getLevel() == 2 && studentCount > 175) ||
+                (gate.getLevel() == 3 && studentCount > 200) ||
+                (gate.getLevel() == 4 && studentCount > 300) ||
+                (gate.getLevel() == 5 && studentCount > 400)
+            );
         }
         return false;
+    }
+
+    public static int getGateLevel(String collegeId) {
+        int studentCount = StudentDao.getStudents(collegeId).size();
+        if(studentCount > 400) {
+            return 5;
+        } else if(studentCount > 300) {
+            return 4;
+        } else if(studentCount > 200) {
+            return 3;
+        } else if(studentCount > 175) {
+            return 2;
+        } else if(studentCount > 150) {
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -61,7 +83,7 @@ public class GateManager {
         List<GateModel> gates = GateDao.getGates(collegeId);
         for(GateModel gate : gates) {
             if (key.equals(gate.getKey())){
-                double goal = gate.getGoal();
+                double goal = gate.getLevel();
                 progress = Math.min(100,(int)Math.floor(100*(studentCount / goal)));
                 break;
             }
