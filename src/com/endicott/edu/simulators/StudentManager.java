@@ -303,13 +303,14 @@ public class StudentManager {
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
+           setStudentOverallBuildingHappinessRating(student, college);
 
            // The overall student happiness is an average of the above.
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
                              student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
                              student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
-                             student.getDormHappinessRating()) / 7;
+                             student.getDormHappinessRating() + student.getOverallBuildingHappinessRating()) / 8;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
@@ -320,15 +321,27 @@ public class StudentManager {
 
     // TODO: building happiness ratings
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
-        student.setDiningHallHappinessRating(50);
+        String studentDiningHall = student.getDiningHall();
+        int diningHallQuality = (int)BuildingManager.getBuildingByName(studentDiningHall, college.getRunId()).getShownQuality();
+        int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
+
+        student.setDiningHallHappinessRating(diningHallHappinessLevel);
     }
 
     private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
-        student.setAcademicCenterHappinessRating(50);
+        String studentAcademicCenter = student.getAcademicBuilding();
+        int academicBuildingQuality = (int)BuildingManager.getBuildingByName(studentAcademicCenter, college.getRunId()).getShownQuality();
+        int acadmicBuildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(academicBuildingQuality, 15, 0, 100);
+
+        student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
     }
 
     private void setDormHappinessRating(StudentModel student, CollegeModel college) {
-        student.setDormHappinessRating(50);
+        String studentDorm = student.getDorm();
+        int dormQuality = (int)BuildingManager.getBuildingByName(studentDorm, college.getRunId()).getShownQuality();
+        int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
+
+        student.setDormHappinessRating(dormHappinessLevel);
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
@@ -393,6 +406,60 @@ public class StudentManager {
         if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
         }
+    }
+
+    /**
+     * This controls how the buildings affect the students
+     * Their happiness can go up or down depending on the quality of the buildings
+     *
+     * @param s - Single instance of student
+     * @param college - The college
+     */
+    private void setStudentOverallBuildingHappinessRating(StudentModel s, CollegeModel college){
+        List<BuildingModel> allBuildings = BuildingDao.getBuildings(college.getRunId());
+        String studentDormName = s.getDorm();
+        String studentDiningHallName = s.getDiningHall();
+        String studentAcademicCenterName = s.getAcademicBuilding();
+
+        List<BuildingModel> studentsBuildingsOnly = new ArrayList<>();
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentDormName, college.getRunId())); // Add only the dorm the student is in
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentDiningHallName, college.getRunId())); // Add only the dining hall the student is in
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentAcademicCenterName, college.getRunId())); // Add only the academic center the student is in
+
+        int totalBuildingQuality = 0;
+        int avgBuildingQuality;
+
+        int buildingHappinessLevel;
+
+        for(BuildingModel b : allBuildings){
+            // Certain buildings have to be added to the student no matter what
+            // These include Health Center, Library, Sports Center, Baseball Diamond, Football Stadium, and Hockey Rink
+            if(b.getKindOfBuilding().equals(BuildingModel.getHealthConst()) ||
+                    b.getKindOfBuilding().equals(BuildingModel.getLibraryConst()) ||
+                    b.getKindOfBuilding().equals(BuildingModel.getSportsConst()) ||
+                    b.getKindOfBuilding().equals(BuildingModel.getBaseballDiamondConst()) ||
+                    b.getKindOfBuilding().equals(BuildingModel.getFootballStadiumConst()) ||
+                    b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
+                studentsBuildingsOnly.add(b);
+            }
+            else{
+                continue; // If the student isn't in the building or if it's not one of the ones from above, skip it
+            }
+        }
+
+        for(BuildingModel b : studentsBuildingsOnly){
+            totalBuildingQuality += (int)b.getShownQuality();
+        }
+
+        avgBuildingQuality = totalBuildingQuality/studentsBuildingsOnly.size();
+
+        // This creates a bell-curve average where:
+        // avgBuildingQuality is between 0 and 100
+        // Standard deviation is 15
+        // Min is 0 since that's the lowest possible building quality
+        // Max is 100 since that's the highest possible building quality
+        buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100);
+        s.setOverallBuildingHappinessRating(buildingHappinessLevel);
     }
 
     private void calculateStudentFacultyRatio(String collegeId) {

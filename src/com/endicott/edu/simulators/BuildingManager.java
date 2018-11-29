@@ -495,6 +495,17 @@ public class BuildingManager {
         return buildingsToReturn;
     }
 
+    public static BuildingModel getBuildingByName(String name, String collegeId){
+        List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
+        BuildingModel buildingToReturn = null;
+        for(BuildingModel b : allBuildings){
+            if(b.getName().equals(name)){
+                buildingToReturn = b;
+            }
+        }
+        return buildingToReturn;
+    }
+
     private static void loadTips(String collegeId) {
         // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct more buildings to allow a greater maximum capacity at your college.", true, "ENTERTAINMENT.png");
