@@ -239,7 +239,7 @@
                 }
                 String a = "Overall Academic Happiness";
             %>
-            <td><%=a + ": "%></td>
+            <td><%="Overall Academic Rating: "%></td>
             <td><%=departmentRatingsMap.get(a)%></td>
             </tbody>
         </table>

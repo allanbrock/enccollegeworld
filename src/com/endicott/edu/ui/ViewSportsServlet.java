@@ -1,9 +1,8 @@
 package com.endicott.edu.ui;
 
-import com.endicott.edu.simulators.CollegeManager;
-import com.endicott.edu.simulators.PopupEventManager;
-import com.endicott.edu.simulators.SportManager;
-import com.endicott.edu.simulators.TutorialManager;
+import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.models.CoachModel;
+import com.endicott.edu.simulators.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
@@ -31,6 +30,16 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         }
         if (request.getParameter("showTips") != null){
             TutorialManager.showTips("viewSports", collegeId);
+        }
+
+        for(int i = 0; i < CoachManager.getCollegeCoaches().size(); i++){
+            if (request.getParameter("coachRaise" + i) != null) {
+                FacultyManager.giveFacultyRaise(collegeId, CoachManager.getCollegeCoaches().get(i), true);
+            }
+
+            if (request.getParameter("removeCoach" + i) != null){
+                FacultyManager.removeFaculty(collegeId, CoachManager.getCollegeCoaches().get(i), true);
+            }
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);

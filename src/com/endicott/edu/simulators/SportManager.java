@@ -31,6 +31,12 @@ public class SportManager {
 
         for (SportModel sport : sports) {
             calculateNumberOfPlayersOnTeam(collegeId, sport);
+            if(!sport.getCoachName().equals("noCoach"))
+                updateCoachPerformance(collegeId, sport.getCoachName());
+            else {
+                assignCoach(collegeId, sport);
+                popupManager.newPopupEvent("New Coach", "The " + sport.getSportName() + " team coach has been replaced", "ok", "done", "resources/images/money.jpg", "Coach Replacement");
+            }
             fillUpTeamAndSetActiveStatus(collegeId, sport);
             billRunningCostofSport(collegeId, hoursAlive, sport);
             sport.setHourLastUpdated(hoursAlive);
@@ -574,6 +580,20 @@ public class SportManager {
         String coachName = NameGenDao.generateName(false);
         CoachModel coach = new CoachModel(team.getSportName(), coachName, "Coach", "Athletics", collegeId, 100000);
         team.setCoachName(coach.getFacultyName());
+    }
+
+    public static String generateCoachUnderPerformingScenario(String badCoachName){
+        Random r = new Random();
+        String[] scenarios = {badCoachName + " is not well liked by the team",
+        badCoachName + " Has been gambling on the games"};
+        int rand = r.nextInt(scenarios.length - 0);
+        return scenarios[rand];
+    }
+
+    private static void updateCoachPerformance(String collegeId, String coachName){
+        CoachModel coach = CoachManager.getCoachByName(coachName);
+        FacultyManager.computeFacultyHappiness(coach, true);
+        FacultyManager.computeFacultyPerformance(collegeId, coach);
     }
 
     private static void loadTips(String collegeId) {

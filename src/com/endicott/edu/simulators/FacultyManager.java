@@ -3,10 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.DepartmentModel;
-import com.endicott.edu.models.FacultyModel;
-import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,24 +24,23 @@ public class FacultyManager {
         FacultyDao fao = new FacultyDao();
         payFaculty(collegeId, hoursAlive, fao);
         inspectFacultyPerformances(collegeId);
-        List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
         ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
-
-        // TODO: Alex - this is firing off a lot, commenting out for now - Allan
-//        if(deanCheck.size() > 0){
-//            for(DepartmentModel d : deanCheck){
-//                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
-//            }
-//            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
-//        }
-        // TODO: Alex - this is firing off a lot, commenting out for now - Allan
-//        if(assistantDeanCheck.size() > 0){
-//            for(DepartmentModel d : assistantDeanCheck){
-//                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
-//            }
-//            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
-//        }
+        if(deanCheck.size() > 0){
+            for(DepartmentModel d : deanCheck){
+                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
+                d.setEmployeeCount("Dean", 1);
+            }
+            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
+        }
+        if(assistantDeanCheck.size() > 0){
+            for(DepartmentModel d : assistantDeanCheck){
+                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
+                d.setEmployeeCount("Assistant Dean", 1);
+            }
+            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
+        }
+        List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);
@@ -226,7 +222,7 @@ public class FacultyManager {
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness
-    private static void computeFacultyPerformance(String collegeID, FacultyModel member){
+    public static void computeFacultyPerformance(String collegeID, FacultyModel member){
         Random r = new Random();
         int randGenerator = r.nextInt((4-1) + 1) + 1;
         Boolean increase = computeDirection(member);
@@ -287,15 +283,19 @@ public class FacultyManager {
             return r.nextInt(100 - 90) + 50;
     }
 
-    public static void removeFaculty(String collegeID, FacultyModel member){
+    public static void removeFaculty(String collegeID, FacultyModel member, Boolean coach){
         FacultyDao fao = new FacultyDao();
-        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
-            if(member.getDepartmentName().equals(d.getDepartmentName())){
-                DepartmentManager.removeEmployeeFromDepartment(member, d);
-                break;
+        if(!coach) {
+            for (DepartmentModel d : DepartmentManager.getDepartmentOptions()) {
+                if (member.getDepartmentName().equals(d.getDepartmentName())) {
+                    DepartmentManager.removeEmployeeFromDepartment(member, d);
+                    break;
+                }
             }
+            fao.removeSingleFaculty(collegeID, member);
         }
-        fao.removeSingleFaculty(collegeID, member);
+        else
+            CoachManager.removeCoach(collegeID, (CoachModel) member);
     }
 
     public static String generateFacultyID(FacultyModel member){
@@ -309,9 +309,17 @@ public class FacultyManager {
         return String.valueOf(randID);
     }
 
-    public static Boolean giveFacultyRaise(String collegeID, FacultyModel member){
+    public static Boolean giveFacultyRaise(String collegeID, FacultyModel member, Boolean coach){
         FacultyDao fao = new FacultyDao();
-        List<FacultyModel> newFaculty = FacultyDao.getFaculty(collegeID);
+        ArrayList<FacultyModel> newEmployees;
+        if(!coach)
+            newEmployees = (ArrayList<FacultyModel>) FacultyDao.getFaculty(collegeID);
+        else {
+            newEmployees = new ArrayList<>();
+            for(CoachModel c : CoachManager.getCollegeCoaches()){
+                newEmployees.add((c));
+            }
+        }
         Boolean nextValueRaise = false;
         if(member.getSalary() == 200000) {
             // Max amount message
@@ -320,11 +328,12 @@ public class FacultyManager {
         else{
             for(int i : getSalaryOptions()){
                 if(nextValueRaise){
-                    for(FacultyModel faculty : newFaculty){
+                    for(FacultyModel faculty : newEmployees){
                         if(member.getFacultyID().equals(faculty.getFacultyID())){
                             faculty.setSalary(i);
                             faculty.setRaiseRecentlyGiven(true);
-                            fao.saveAllFaculty(collegeID, newFaculty);
+                            if(!coach)
+                                fao.saveAllFaculty(collegeID, newEmployees);
                             return true;
                         }
                     }

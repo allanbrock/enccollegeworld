@@ -1,6 +1,8 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 
@@ -9,10 +11,12 @@ import java.util.HashMap;
 
 public class DepartmentManager {
 
-    private static ArrayList<DepartmentModel> departmentOptions ;
+    private static ArrayList<DepartmentModel> departmentOptions;
+    private static PopupEventManager popupManager;
 
     public static ArrayList<DepartmentModel> establishDepartments(int departmentCount){
         // departmentCount will determine how many departments need to be loaded back in
+        DepartmentManager.popupManager = popupManager;
         departmentOptions = new ArrayList<>();
         departmentOptions.add(new DepartmentModel("Arts and Sciences"));
         departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
@@ -69,6 +73,23 @@ public class DepartmentManager {
         }
         departmentRatings.put("Overall Academic Happiness", sum / departmentOptions.size());
         return departmentRatings;
+    }
+
+    private static void checkDepartmentRatingsForBonuses(String collegeID, HashMap<String, Integer> departmentRatings){
+        CollegeModel college = CollegeDao.getCollege(collegeID);
+        for(String department : departmentRatings.keySet()){
+            if(!department.equals("Overall Academic Happiness")) {
+                if (departmentRatings.get(department) > 90) {
+                    for (DepartmentModel d : departmentOptions) {
+                        if (department.equals(d.getDepartmentName())) {
+                            if (!d.getBonusGiven()) {
+                                // Give college bonus money
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void removeEmployeeFromDepartment(FacultyModel member, DepartmentModel department){

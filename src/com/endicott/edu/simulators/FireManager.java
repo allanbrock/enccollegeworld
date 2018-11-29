@@ -270,6 +270,13 @@ public class FireManager {
             }
             for (int j = 0; j <numFacultyDeaths; j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
+                if(faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")){
+                    for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+                        if(faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())){
+                            d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
+                        }
+                    }
+                }
                 faculty.remove(facultyToRemove);
             }
             return;
@@ -283,6 +290,13 @@ public class FireManager {
             }
             for (int j = 0; j <numFacultyDeaths && (faculty.size() > 0); j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
+                if(faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")){
+                    for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+                        if(faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())){
+                            d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
+                        }
+                    }
+                }
                 victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
                 faculty.remove(facultyToRemove);
             }

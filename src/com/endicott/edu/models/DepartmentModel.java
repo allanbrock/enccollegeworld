@@ -8,7 +8,7 @@ public class DepartmentModel {
     private String departmentName;
     private int departmentRating;
     private HashMap<String, Integer> employeeCounts;
-    private Boolean hasDean, hasAssistantDean;
+    private Boolean hasDean, hasAssistantDean, bonusGiven;
 
     public DepartmentModel(String name){
         this.departmentName = name;
@@ -18,6 +18,7 @@ public class DepartmentModel {
         employeeCounts.put("Faculty", 0);
         hasDean = true;
         hasAssistantDean = true;
+        bonusGiven = false;
     }
 
     public String getDepartmentName(){ return this.departmentName; }
@@ -31,5 +32,6 @@ public class DepartmentModel {
     public int getOverallEmployeeCount(){ return employeeCounts.get("Dean") + employeeCounts.get("Assistant Dean") + employeeCounts.get("Faculty"); }
     public int getDepartmentRating(){ return this.departmentRating; }
     public void setDepartmentRationg(int departmentRating){ this.departmentRating = departmentRating; }
-
+    public Boolean getBonusGiven() { return bonusGiven; }
+    public void setBonusGiven(Boolean bonusGiven) { this.bonusGiven = bonusGiven; }
 }

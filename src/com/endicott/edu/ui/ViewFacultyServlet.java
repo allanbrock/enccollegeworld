@@ -77,7 +77,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         String salaryString = request.getParameter("salaryDropdown");
         String department = request.getParameter("departmentDropdown");
         StringBuilder sb = new StringBuilder(salaryString);
-        String title = request.getParameter("positionDropdown");
+        String title = "Faculty";
         salaryString = sb.substring(1);
         int salary = Integer.valueOf(salaryString);
         if (collegeId == null) {
@@ -103,7 +103,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
     private void giveFacultyRaise(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, FacultyModel member) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        if(!FacultyManager.giveFacultyRaise(collegeId, member)){
+        if(!FacultyManager.giveFacultyRaise(collegeId, member, false)){
             // Don't give faculty raise
         }
 
@@ -123,7 +123,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         }
         else {
             if(valid)
-                FacultyManager.removeFaculty(collegeId, removedMember);
+                FacultyManager.removeFaculty(collegeId, removedMember, false);
             else {
                 UiMessage message = new UiMessage("Faculty member was not found");
                 request.setAttribute("message", message);
