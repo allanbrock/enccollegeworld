@@ -151,6 +151,8 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
+        PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.

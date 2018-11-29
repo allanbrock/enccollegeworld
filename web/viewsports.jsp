@@ -13,6 +13,7 @@
 <%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.endicott.edu.simulators.CoachManager" %>
+<%@ page import="com.endicott.edu.simulators.SportManager" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -184,24 +185,42 @@
     </div>
 
     <div>
-        <td>
-            <a href="#<%=-1%>" class="btn btn-info" data-toggle="collapse">View Team Coaches</a>
-            <div id="<%=-1%>" class="collapse">
-                <div class="well well-sm">
-                    <%
-                        for(CoachModel c : teamCoaches){
-                    %>
-                            Coach Name: <%=c.getFacultyName()%><br>
-                            Sport: <%=c.getSportName()%><br>
-                            Salary: <%="$" + c.getSalary()%><br>
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th>Coaches</th>
+                </tr>
+            </thread>
+            <tbody>
+            <%
+                for (int j = 0; j < teamCoaches.size(); j++) {
+            %>
+            <tr>
+                <td><%=teamCoaches.get(j).getFacultyName()%>
+                </td>
+                <td>
+                    <a href="#<%=j%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="<%=j%>" class="collapse">
+                        <div class="well well-sm">
+                            Sport: <%=teamCoaches.get(j).getSportName()%><br>
+                            Performance: <%=teamCoaches.get(j).getPerformance()%><br>
                             <br>
-                        <%}%>
-                </div>
-            </div>
-        </td>
+                        </div>
+                    </div>
+                    <label id="facultySalary" style="color: black"><%="Salary: $" + String.valueOf(teamCoaches.get(j).getSalary())%> </label>
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-info" name="<%="coachRaise" + j%>" value="Give Raise" style="text-decoration-color: #000099">
+                    <input type="submit" class="btn btn-info" name="<%="removeCoach" + j%>" value="Fire Coach">
+                    <%if(teamCoaches.get(j).getUnderPerforming()){%>
+                        <label id="underPerformingCoaches"><%=SportManager.generateCoachUnderPerformingScenario(teamCoaches.get(j).getFacultyName())%></label>
+                    <%}%>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
     </div>
-
-
 
 
         <!-- Display a message if defined -->
@@ -259,7 +278,6 @@
                     <% } %>
                 </tbody>
             </table>
-
         </div>
 
         <!-- Add sport -->
