@@ -43,6 +43,14 @@ public class BuildingManager {
             buildingDecayForOneDay(runId, building); //decays the building quality
             workOnBuilding(building, runId); //if the building is under construction for any reason, this advances construction
             setNewRepairCost(runId, building); //sets the repair cost based on the building quality
+
+            if(building.getHoursToComplete() == 0 && !building.isHasBeenAnnouncedAsComplete()){
+                popupManager.newPopupEvent("Building Complete!", "Your new " + building.getKindOfBuilding() + " building, "
+                                + building.getName() + "has finished construction and is now open!", "Close", "ok",
+                        "resources/images/" + building.getKindOfBuilding() + ".png", building.getKindOfBuilding());
+                building.setHasBeenAnnouncedAsComplete(true);
+                BuildingDao.updateSingleBuilding(runId, building);
+            }
         }
 
         // Really important the we save the changes to disk.

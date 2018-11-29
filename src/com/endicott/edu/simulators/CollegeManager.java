@@ -158,19 +158,6 @@ public class CollegeManager {
         // calculation of the college statistics.
         calculateStatisticsAndRatings(collegeId);
 
-        BuildingDao buildingDao = new BuildingDao();
-        List<BuildingModel> buildings = buildingDao.getBuildings(collegeId);
-
-        for(BuildingModel b: buildings){
-            if(b.getHoursToComplete() == 0 && !b.isHasBeenAnnouncedAsComplete()){
-                popupManager.newPopupEvent("Building Complete!", "Your new " + b.getKindOfBuilding() + " building, "
-                                + b.getName() + "has finished construction and is now open!", "Close", "ok",
-                        "resources/images/" + b.getKindOfBuilding() + ".png", b.getKindOfBuilding());
-                b.setHasBeenAnnouncedAsComplete(true);
-                BuildingDao.updateSingleBuilding(collegeId, b);
-            }
-        }
-
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
         TutorialManager.advanceTip("viewFaculty",collegeId);
