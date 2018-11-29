@@ -125,6 +125,7 @@
                         }
                     %>
                     <h4><%=items[i].getName()%></h4>
+                    <h5><%=items[i].getDescription()%></h5>
                     <p>$<%=numberFormatter.format(items[i].getCost())%></p>
                     <%
                         if(items[i].getUnlocked().equals(false)){
@@ -166,6 +167,7 @@
                         }
                     %>
                     <h4><%=items[i+1].getName()%></h4>
+                    <h5><%=items[i+1].getDescription()%></h5>
                     <p>$<%=numberFormatter.format(items[i+1].getCost())%></p>
                     <%
                         if(items[i+1].getUnlocked().equals(false)){
@@ -208,6 +210,7 @@
                         }
                     %>
                     <h4><%=items[i+2].getName()%></h4>
+                    <h5><%=items[i+2].getDescription()%></h5>
                     <p>$<%=numberFormatter.format(items[i+2].getCost())%></p>
                     <%
                         if(items[i+2].getUnlocked().equals(false)){

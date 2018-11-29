@@ -13,6 +13,7 @@
 <%@ page import="com.endicott.edu.simulators.TutorialManager" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.endicott.edu.simulators.CoachManager" %>
+<%@ page import="com.endicott.edu.simulators.SportManager" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -135,7 +136,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Error Adding Team:</h5>
+                    <h5 class="modal-title">Can't Add Team:</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -181,64 +182,45 @@
                 <%}%>
             </div>
         </div>
-
-
-    <!--Define icons for championship wins -->
-    <div class="container">
-        <div class="jumbotron">
-            <h2>Trophy Case</h2>
-            <div class="row-1">
-                <div class="col-1">
-                    <img class="img-responsive"  src="resources/images/footballicon.png">
-                    <h4>Football Championships Won: <%=college.getFootballChampionships()%></h4>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col-2">
-                    <img class="img-responsive"  src="resources/images/hockeyicon.png">
-                    <h4>Men's Hockey Championships Won: <%=college.getMHockeyChampionships()%></h4>
-                    <h4>Women's Hockey Championships Won:<%=college.getWHockeyChampionships()%></h4>
-                </div>
-            </div>
-                <div class="col-3">
-                    <img class="img-responsive"  src="resources/images/baseball.png">
-                    <h4>Baseball Championships Won: <%=college.getBaseballChampionships()%></h4>
-                    <h4>Softball Championships Won: <%=college.getSoftballChampionships()%></h4>
-                </div>
-                <div class="col-4">
-                    <img class="img-responsive"  src="resources/images/soccerball.png">
-                    <h4>Men's Soccer Championships Won: <%=college.getMSoccerChampionships()%></h4>
-                    <h4>Women's Soccer Championships Won: <%=college.getWSoccerChampionships()%></h4>
-                </div>
-                <div class="col-5">
-                    <img class="img-responsive"  src="resources/images/basketball.png">
-                    <h4>Men's Basketball Championships Won: <%=college.getMBasketballChampionships()%></h4>
-                    <h4>Women's Basketball Championships Won: <%=college.getWBasketballChampionships()%></h4>
-                </div>
-            }
-        </div>
-    </div>
     </div>
 
     <div>
-        <td>
-            <a href="#<%=-1%>" class="btn btn-info" data-toggle="collapse">View Team Coaches</a>
-            <div id="<%=-1%>" class="collapse">
-                <div class="well well-sm">
-                    <%
-                        for(CoachModel c : teamCoaches){
-                    %>
-                            Coach Name: <%=c.getFacultyName()%><br>
-                            Sport: <%=c.getSportName()%><br>
-                            Salary: <%="$" + c.getSalary()%><br>
+        <table class="table table-condensed">
+            <thread>
+                <tr>
+                    <th>Coaches</th>
+                </tr>
+            </thread>
+            <tbody>
+            <%
+                for (int j = 0; j < teamCoaches.size(); j++) {
+            %>
+            <tr>
+                <td><%=teamCoaches.get(j).getFacultyName()%>
+                </td>
+                <td>
+                    <a href="#<%=j%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="<%=j%>" class="collapse">
+                        <div class="well well-sm">
+                            Sport: <%=teamCoaches.get(j).getSportName()%><br>
+                            Performance: <%=teamCoaches.get(j).getPerformance()%><br>
                             <br>
-                        <%}%>
-                </div>
-            </div>
-        </td>
+                        </div>
+                    </div>
+                    <label id="facultySalary" style="color: black"><%="Salary: $" + String.valueOf(teamCoaches.get(j).getSalary())%> </label>
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-info" name="<%="coachRaise" + j%>" value="Give Raise" style="text-decoration-color: #000099">
+                    <input type="submit" class="btn btn-info" name="<%="removeCoach" + j%>" value="Fire Coach">
+                    <%if(teamCoaches.get(j).getUnderPerforming()){%>
+                        <label id="underPerformingCoaches"><%=SportManager.generateCoachUnderPerformingScenario(teamCoaches.get(j).getFacultyName())%></label>
+                    <%}%>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
     </div>
-
-
 
 
         <!-- Display a message if defined -->
@@ -296,7 +278,6 @@
                     <% } %>
                 </tbody>
             </table>
-
         </div>
 
         <!-- Add sport -->

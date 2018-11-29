@@ -83,6 +83,10 @@
     String randomName = (String) request.getAttribute("randomName");
     TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
+    String haveEntertainmentCenter = "false";
+    String haveHealthCenter = "false";
+    String haveLibrary = "false";
+
     GateManager gateManager = new GateManager();
 %>
 <form action="viewBuilding" method="post">
@@ -119,7 +123,7 @@
     </nav>
 
     <div class="container">
-        <div class="jumbotron">
+        <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/bed.png">
@@ -190,8 +194,8 @@
         <input type="hidden" name="runid" value="<%=college.getRunId()%>">
         <p></p>
 
-        <div class="well well-sm">
-            <div class="col-sm-5" style="margin-top: 30px;">
+        <div class="well well-sm" style="background: aliceblue;">
+            <div class="col-sm-5" style=" margin-top: 30px;">
         <div class="form-group">
             <label for="buildingType">Filter by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
@@ -290,8 +294,8 @@
         </div>
 
         <!-- Add Dorm -->
-        <div class="col-sm-4">
-            <div class="well well-sm">
+        <div class="col-sm-4" >
+            <div class="well well-sm" style="background: aliceblue;">
                 <div id="purchase">
                     <!-- if they don't have enough money for the cheapest building they can't try to purchase -->
                     <%if(college.getAvailableCash() <= 50000){%>
@@ -313,11 +317,29 @@
                                 <option value="Football Stadium">Football Stadium</option>
                                 <option value="Hockey Rink">Hockey Rink</option>
                             <%}%>
-                            <%if(college.getAvailableCash() > 250000){%>
+                            <%
+                                if(college.getAvailableCash() > 250000){
+                                for (int b = 0; b < buildings.size(); b++) {
+                                    if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
+                                        haveEntertainmentCenter = "true";
+                                    }
+                                    if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
+                                        haveHealthCenter = "true";
+                                    }
+                                    if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
+                                        haveLibrary = "true";
+                                    }
+                                }
+                                if(haveLibrary.equals("false")){%>
                                 <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
+                            <%}
+                            if(haveHealthCenter.equals("false")){%>
                                 <option value="Health Center" <%if(!gateManager.testGate(college.getRunId(), "Health Center")){%>disabled<%}%>>Health Center</option>
+                            <%}
+                            if(haveEntertainmentCenter.equals("false")){%>
                                 <option value="Entertainment Center" <%if(!gateManager.testGate(college.getRunId(), "Entertainment Center")){%>disabled<%}%>>Entertainment Center</option>
-                            <%}%>
+                            <%}
+                                }%>
                         </select>
                     </div>
                         <!-- Button -->
@@ -375,7 +397,7 @@
         <!-- DORM NEWS -->
         <div class="row">
             <div class="col-sm-6" style="margin-left: 150px;">
-                <div class="well well-sm">
+                <div class="well well-sm" style="background: aliceblue;">
                     <h3><p style="color: purple"><%=college.getRunId()%> Resident News</h3>
                     <div class="pre-scrollable">
                         <ul class="list-group">
@@ -396,31 +418,62 @@
     </div>
 
     <div class="container">
-        <div class="jumbotron">
+        <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
-                <div class="col-md-2" style="margin-right: 3%">
+                <div class="col-md-2" style="margin-right: 3%;">
                     <h4>Large Size</h4>
                     <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
-                    <%--<div class="progress-bar progress-bar-info" role="progressbar"--%>
-                         <%--aria-valuemin="0" aria-valuemax="100" style="width:100%; prog:<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>; height:25px">--%>
-                        <%--<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>%--%>
-                    <%--</div>--%>
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                            aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>%
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Extra Large Size</h4>
                     <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Extra Large Size")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Extra Large Size")%>%
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Library</h4>
-                    <img class="img-responsive" src="resources/images/LIBRARY.png">
+                    <img class="img-responsive" src="resources/images/LIBRARY.png" style="margin-top: 37px; margin-bottom: 38px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Library")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Library")%>%
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Health Center</h4>
-                    <img class="img-responsive" src="resources/images/HEALTH_k.png">
+                    <img class="img-responsive" src="resources/images/HEALTH_k.png" style=" margin-top: 37px; margin-bottom: 38.5px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Health Center")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Health Center")%>%
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Entertainment Center</h4>
-                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png">
+                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png" style="margin-bottom: 25px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>%
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

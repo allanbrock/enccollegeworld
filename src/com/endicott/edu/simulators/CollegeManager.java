@@ -151,6 +151,8 @@ public class CollegeManager {
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
+        PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
@@ -168,6 +170,12 @@ public class CollegeManager {
                 BuildingDao.updateSingleBuilding(collegeId, b);
             }
         }
+
+        TutorialManager.advanceTip("viewBuildings",collegeId);
+        TutorialManager.advanceTip("viewCollege",collegeId);
+        TutorialManager.advanceTip("viewFaculty",collegeId);
+        TutorialManager.advanceTip("viewSports",collegeId);
+        TutorialManager.advanceTip("viewStudent",collegeId);
 
 //        if (college.getAvailableCash() <= 0) {
 //            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",

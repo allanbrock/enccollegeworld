@@ -17,6 +17,7 @@ public class InventoryManager {
      */
     public void establishCollege(String collegeId) {
         createAllItems(collegeId);
+        unlockItems(collegeId, 1);
     }
 
     /**
@@ -51,10 +52,13 @@ public class InventoryManager {
 
 
     public void createItem(String name, Boolean isPurchased, String imageName, int cost, int availableAtGate, String description, String collegeId){
-        ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, availableAtGate <= 0);
+        ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, false, availableAtGate, description);
         // TODO: Add description to the model (and to the display page)
         // TODO: Add gate number to the model
         inventory.saveNewItem(collegeId, newItem);
+        if(newItem.getName().equals("Mainstage Production")){
+            PlayManager.beginPlay();
+        }
     }
 
     public static void buyItem(String name, String collegeId){
@@ -70,13 +74,13 @@ public class InventoryManager {
         }
         inventory.saveAllItems(collegeId, items);
     }
-
-    public static void unlockItem(String name, String collegeId){
+    
+    public static void unlockItems(String collegeId, int gate){
         List<ItemModel> items = InventoryDao.getItems(collegeId);
 
         if(items.size() > 0) {
             for (int i = 0; i < items.size(); i++){
-                if(items.get(i).getName().equals(name)){
+                if(items.get(i).getGateNum() <= gate && items.get(i).getUnlocked().equals(false)){
                     items.get(i).setUnlocked(true);
                 }
             }
@@ -87,6 +91,8 @@ public class InventoryManager {
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         // Get the gate that we are at an unlock inventory items.
         // But be careful not to lock an item that was already unlocked.
+        int gate = CollegeManager.getGate(collegeId);
+        unlockItems(collegeId, gate);
     }
 }
 

@@ -11,17 +11,21 @@ public class ItemModel implements Serializable {
     private String imageName;
     private int cost;
     private Boolean isUnlocked;
+    private int gateNum;
+    private String description;
 
 
     public ItemModel() {
     }
 
-    public ItemModel(String name, Boolean isPurchased, String imageName, int cost, Boolean isUnlocked) {
+    public ItemModel(String name, Boolean isPurchased, String imageName, int cost, Boolean isUnlocked, int gateNum, String description) {
         this.name = name;
         this.isPurchased = isPurchased;
         this.imageName = imageName;
         this.cost = cost;
         this.isUnlocked = isUnlocked;
+        this.gateNum = gateNum;
+        this.description = description;
     }
 
     public String getName() {
@@ -62,6 +66,22 @@ public class ItemModel implements Serializable {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public int getGateNum() {
+        return gateNum;
+    }
+
+    public void setGateNum(int gateNum) {
+        this.gateNum = gateNum;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 
