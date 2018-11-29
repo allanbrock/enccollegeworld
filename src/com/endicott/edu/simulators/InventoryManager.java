@@ -56,6 +56,9 @@ public class InventoryManager {
         // TODO: Add description to the model (and to the display page)
         // TODO: Add gate number to the model
         inventory.saveNewItem(collegeId, newItem);
+        if(newItem.getName().equals("Mainstage Production")){
+            PlayManager.beginPlay();
+        }
     }
 
     public static void buyItem(String name, String collegeId){
