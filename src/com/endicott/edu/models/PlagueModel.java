@@ -20,6 +20,7 @@ public class PlagueModel implements Serializable {
     private int hourLastUpdated;  // the time we last updated this record
     private int numberOfHoursLeftInPlague;  // if 0, then plague is over.  No one new can get sick.
     private boolean quarantine = false;
+    private boolean mutation = false;
 
     public PlagueModel() {
     }
@@ -96,5 +97,13 @@ public class PlagueModel implements Serializable {
 
     public void setQuarantine(boolean quarantine) {
         this.quarantine = quarantine;
+    }
+
+    public boolean isMutation() {
+        return mutation;
+    }
+
+    public void setMutation(boolean mutation) {
+        this.mutation = mutation;
     }
 }
