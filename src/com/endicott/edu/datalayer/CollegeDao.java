@@ -2,40 +2,45 @@ package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.CollegeModel;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // Created by abrocken on 7/17/2017.
 
 public class CollegeDao {
-    private static String getFilePath(String collegeId) {
-        return DaoUtils.getFilePathPrefix(collegeId) +  "college.dat";
-    }
+    private  static HashMap<String, CollegeModel> cache = new HashMap<>(); // Cache for CollegeModel read access
 
     public static CollegeModel getCollege(String collegeId) {
-        CollegeModel college = null;
-        try {
-            college = new CollegeModel();
-            college.setRunId(collegeId);
+        if (cache.containsKey(collegeId)){
+            return cache.get(collegeId);
+        } else {
+            CollegeModel college = null;
+            try {
+                college = new CollegeModel();
+                college.setRunId(collegeId);
 
-            File file = new File(getFilePath(collegeId));
+                File file = new File(getFilePath(collegeId));
 
-            if (!file.exists()) {
-                return null;
+                if (!file.exists()) {
+                    return null;
+                }
+
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                college = (CollegeModel) ois.readObject();
+                ois.close();
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            college = (CollegeModel) ois.readObject();
-            ois.close();
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            cache.put(college.getRunId(),college);
+            return college;
         }
+    }
 
-        return college;
+    private static String getFilePath(String collegeId) {
+        return DaoUtils.getFilePathPrefix(collegeId) +  "college.dat";
     }
 
     public static boolean doesCollegeExist(String collegeId) {
@@ -55,7 +60,7 @@ public class CollegeDao {
         StudentDao.deleteStudents(collegeId);
     }
 
-    public void saveCollege(CollegeModel college){
+    public static void saveCollege(CollegeModel college){
         try {
             college.setNote(getFilePath(college.getRunId()));
             File file = new File(getFilePath(college.getRunId()));
@@ -70,9 +75,10 @@ public class CollegeDao {
         }
     }
 
+
+
     public static CollegeModel[] getColleges() {
         ArrayList<CollegeModel> list = new ArrayList<>(); //list to contain all the colleges
-        CollegeDao collegeDao = new CollegeDao();
         String collegeDir = System.getenv("SystemDrive")+ File.separator +"collegesim"; //we must know where they are stored
         File folder = new File(collegeDir);
         File[] listOfFiles = folder.listFiles();//list of all files in directory
@@ -83,7 +89,8 @@ public class CollegeDao {
                 //get the name and chop off the file ending to get the collegeId
                 String tmp = listOfFiles[i].getName();
                 tmp = tmp.substring(0,tmp.length() - 11);
-                list.add(collegeDao.getCollege(tmp)); //grab the college with the collegeId we just discovered and add it to the list
+                list.add(CollegeDao.getCollege(tmp)); //grab the college with the collegeId we just discovered and add it to the list
+                cache.put(tmp,CollegeDao.getCollege(tmp)); //put found college in cache
             }
         }
 

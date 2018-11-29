@@ -105,12 +105,10 @@ public class CollegeManager {
      * @param collegeId college name
      */
     static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
-        CollegeDao collegeDao = new CollegeDao();
-
         // Advance time college has been alive.
-        CollegeModel college = collegeDao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
-        collegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
+        CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
@@ -237,11 +235,9 @@ public class CollegeManager {
      * @return the college
      */
     public static CollegeModel updateCollegeTuition(String collegeId, int amount){
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setYearlyTuitionCost(amount);
-        cao.saveCollege(college);
+        CollegeDao.saveCollege(college);
 
         calculateStatisticsAndRatings(collegeId);
 
@@ -258,12 +254,11 @@ public class CollegeManager {
     }
 
     private static void calculateTuitionRating(String collegeId) {
-        CollegeDao collegeDao = new CollegeDao();
-        CollegeModel college = collegeDao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
 
         int rating = SimulatorUtilities.getRatingZeroToOneHundred(60000, 24000, college.getYearlyTuitionCost());
         college.setYearlyTuitionRating(rating);
-        collegeDao.saveCollege(college);
+        CollegeDao.saveCollege(college);
     }
 
     static private void loadTips(String collegeId) {
@@ -281,10 +276,8 @@ public class CollegeManager {
      * @return true if exists.
      */
     static public boolean doesCollegeExist(String collegeId) {
-        CollegeDao collegeDao = new CollegeDao();
-
         try {
-            collegeDao.getCollege(collegeId);
+            CollegeDao.getCollege(collegeId);
             return true;
         } catch (Exception e) {
             return false;
@@ -292,11 +285,9 @@ public class CollegeManager {
     }
 
     public static void updateCollegeMode(String collegeId, String mode) {
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setMode(mode);
-        cao.saveCollege(college);
+        CollegeDao.saveCollege(college);
     }
 
     static public boolean isMode(String collegeId, CollegeMode mode) {
@@ -310,17 +301,13 @@ public class CollegeManager {
     }
 
     public static int getDaysUntilNextEvent(String collegeId) {
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         return college.getDaysUntilNextEvent();
     }
 
     public static void setDaysUntilNextEvent(String collegeId, int daysUntilNextEvent) {
-        CollegeDao cao = new CollegeDao();
-
-        CollegeModel college = cao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setDaysUntilNextEvent(Math.max(0,daysUntilNextEvent));
-        cao.saveCollege(college);
+        CollegeDao.saveCollege(college);
     }
 }

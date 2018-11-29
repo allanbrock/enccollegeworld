@@ -18,12 +18,10 @@ public class Accountant {
      * @param amount bill amount
      */
     static public void payBill(String collegeId, String message, int amount) {
-        CollegeDao collegeDao = new CollegeDao();
-
-        CollegeModel college = collegeDao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         int newBalance = Math.max(college.getAvailableCash() - amount, MINIMUM_BALANCE);
         college.setAvailableCash(newBalance);
-        collegeDao.saveCollege(college);
+        CollegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId,college.getHoursAlive(), message, - amount);
     }
 
@@ -35,11 +33,10 @@ public class Accountant {
      * @param amount
      */
     static public void receiveIncome(String collegeId, String message, int amount) {
-        CollegeDao collegeDao = new CollegeDao();
 
-        CollegeModel college = collegeDao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setAvailableCash(college.getAvailableCash() + amount);
-        collegeDao.saveCollege(college);
+        CollegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId, college.getHoursAlive(),message, + amount);
     }
 
@@ -50,8 +47,7 @@ public class Accountant {
      * @return
      */
     public static int getAvailableCash(String collegeId) {
-        CollegeDao collegeDao = new CollegeDao();
-        CollegeModel college = collegeDao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         return college.getAvailableCash();
     }
 }

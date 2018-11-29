@@ -51,7 +51,7 @@ public class FireManager {
         FireDAO.saveAllFires(runId, fires);
     }
 
-    public void generateCorrectPopUp(boolean isUpgraded, List <FireModel> fires, PopupEventManager popupManager){
+    private void generateCorrectPopUp(boolean isUpgraded, List<FireModel> fires, PopupEventManager popupManager){
         for (FireModel fire : fires) {
             if (isUpgraded) {
                 if (fire.isCatastrophic()) {
@@ -110,6 +110,7 @@ public class FireManager {
         int cost = getFireCost(numDeaths, buildingToBurn,runId,hasUpgradeBeenPurchased(),isCatastrophic);
 
         FireModel fire = new FireModel(cost, numStudentDeaths,numFacultyDeaths, runId, buildingToBurn);
+        //fire.setCatastrophicStatus();
         removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
         buildingManager.acceleratedDecayAfterDisaster(runId,buildingToBurn.getName());
         fires.add(fire);
@@ -150,6 +151,7 @@ public class FireManager {
 
         int fireCost = getFireCost(numDeaths, buildingToBurn, runId,hasUpgradeBeenPurchased(),isCatastrophic);
         FireModel fire = new FireModel(fireCost, numStudentDeaths, numFacultyDeaths, runId, buildingToBurn);
+        fire.setCatastrophicStatus();
         removeFireVictims(numStudentDeaths,numFacultyDeaths,students,faculty,victims,fire);
         fire.setDescription(victims, hasUpgradeBeenPurchased());
         fires.add(fire);

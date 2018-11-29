@@ -429,8 +429,7 @@ public class SportManager {
     public static ArrayList<SportModel> checkAvailableSports(String collegeId) {
         ArrayList<SportModel> availableSports = new ArrayList<>();
         SportsDao dao = new SportsDao();
-        CollegeDao cao = new CollegeDao();
-        CollegeModel college = cao.getCollege(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
 
         if (college == null) {
             return availableSports;

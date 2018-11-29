@@ -21,6 +21,7 @@ public class FireModel implements Serializable {
         this.costOfFire = costOfFire;
         this.buildingBurned = buildingBurned;
         this.description = "";
+        this.isCatastrophic = false;
     }
 
     public String getDescription(){
@@ -32,26 +33,20 @@ public class FireModel implements Serializable {
         return costOfFire;
     }
 
-    public void setCostOfFire(int costOfFire) {
-        this.costOfFire = costOfFire;
-    }
-
-
-    public int getNumOfStudentFatalities() {
-        return this.numOfStudentFatalities;
-    }
-
-    public int getNumOfFacultyFatalities(){
-        return this.numOfFacultyFatalities;
-    }
-
     public String getRunId() {
         return runId;
+    }
+
+    public void setCatastrophicStatus(){
+        if (costOfFire >= buildingBurned.getTotalBuildCost()){
+            isCatastrophic = true;
+        }
     }
 
     public void setRunId(String runId) {
         this.runId = runId;
     }
+
     public BuildingModel getBuildingBurned(){
         return this.buildingBurned;
     }

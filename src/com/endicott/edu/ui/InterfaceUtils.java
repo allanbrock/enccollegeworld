@@ -17,8 +17,7 @@ public class InterfaceUtils {
     public static void openCollegeAndStoreInRequest(String collegeId, HttpServletRequest request) {
         CollegeModel college;
         UiMessage msg = new UiMessage();
-        CollegeDao collegeDao = new CollegeDao();
-        college = collegeDao.getCollege(collegeId);
+        college = CollegeDao.getCollege(collegeId);
         if (college == null) {
             msg.setMessage("Failed to find college.");
             logger.info(msg.getMessage());
