@@ -80,7 +80,7 @@ public class PlayDao {
      *
      * @param collegeId a String representing the ID of the current college
      */
-    public static void deleteFlood(String collegeId) {
+    public static void deletePlay(String collegeId) {
         File file = new File(getFilePath(collegeId));
         file.delete();
     }

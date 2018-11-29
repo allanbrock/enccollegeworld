@@ -11,8 +11,9 @@ public class PlayModel {
 
     }
 
-    public PlayModel(int castSize){
+    public PlayModel(int castSize, ArrayList<StudentModel> cast){
         this.castSize = castSize;
+        this.cast = cast;
     }
 
     public int getCastSize() {

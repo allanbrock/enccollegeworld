@@ -169,6 +169,12 @@ public class CollegeManager {
             }
         }
 
+        TutorialManager.advanceTip("viewBuildings",collegeId);
+        TutorialManager.advanceTip("viewCollege",collegeId);
+        TutorialManager.advanceTip("viewFaculty",collegeId);
+        TutorialManager.advanceTip("viewSports",collegeId);
+        TutorialManager.advanceTip("viewStudent",collegeId);
+
 //        if (college.getAvailableCash() <= 0) {
 //            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
 //                    "Return to Main Menu", "returnToWelcome", "resources/images/bankrupt.jpg",
