@@ -523,14 +523,19 @@ public class SportManager {
 
         if (numberBetween5and9 > aveAbilityOnTeam) {
             sport.setGamesLost(sport.getGamesLost() + 1);
+            popupManager.newPopupEvent("Sports", sport.getName() + " lost a game.", "OK", "ok", "resources/images/award.png", "Sports");
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just lost a game.", NewsType.SPORTS_NEWS, NewsLevel.BAD_NEWS);
         } else {
             sport.setGamesWon(sport.getGamesWon() + 1);
             //if winless is still set to true, this team just won their first game. send a popup to main page
             if (winless){
                 popupManager.newPopupEvent("Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/award.png", "Sports");
+                NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
             }
-            NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
+            else {
+                popupManager.newPopupEvent("Sports", sport.getName() + " won a game!", "OK", "ok", "resources/images/award.png", "Sports");
+                NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
+            }
         }
         SportManager rep = new SportManager();
         rep.sportRep(sport, collegeId);

@@ -135,7 +135,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Error Adding Team:</h5>
+                    <h5 class="modal-title">Can't Add Team:</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -181,43 +181,6 @@
                 <%}%>
             </div>
         </div>
-
-
-    <!--Define icons for championship wins -->
-    <div class="container">
-        <div class="jumbotron">
-            <h2>Trophy Case</h2>
-            <div class="row-1">
-                <div class="col-1">
-                    <img class="img-responsive"  src="resources/images/footballicon.png">
-                    <h4>Football Championships Won: <%=college.getFootballChampionships()%></h4>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col-2">
-                    <img class="img-responsive"  src="resources/images/hockeyicon.png">
-                    <h4>Men's Hockey Championships Won: <%=college.getMHockeyChampionships()%></h4>
-                    <h4>Women's Hockey Championships Won:<%=college.getWHockeyChampionships()%></h4>
-                </div>
-            </div>
-                <div class="col-3">
-                    <img class="img-responsive"  src="resources/images/baseball.png">
-                    <h4>Baseball Championships Won: <%=college.getBaseballChampionships()%></h4>
-                    <h4>Softball Championships Won: <%=college.getSoftballChampionships()%></h4>
-                </div>
-                <div class="col-4">
-                    <img class="img-responsive"  src="resources/images/soccerball.png">
-                    <h4>Men's Soccer Championships Won: <%=college.getMSoccerChampionships()%></h4>
-                    <h4>Women's Soccer Championships Won: <%=college.getWSoccerChampionships()%></h4>
-                </div>
-                <div class="col-5">
-                    <img class="img-responsive"  src="resources/images/basketball.png">
-                    <h4>Men's Basketball Championships Won: <%=college.getMBasketballChampionships()%></h4>
-                    <h4>Women's Basketball Championships Won: <%=college.getWBasketballChampionships()%></h4>
-                </div>
-            }
-        </div>
-    </div>
     </div>
 
     <div>
