@@ -325,6 +325,7 @@
                                 <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
                                 <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
                                 <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
+                                <tr><td>Overall Building Happiness</td><td><%=student.getOverallBuildingHappinessRating()%></td></tr>
                             </table>
                         </div>
                     </div>
