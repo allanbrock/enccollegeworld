@@ -62,18 +62,13 @@ public class CollegeManager {
         studentManager.establishCollege(collegeId);
 
         SportManager.establishCollege(collegeId);
-        SportManager.establishDefaultSportsTeams(collegeId);
-
-        PlagueManager.establishCollege(collegeId);
-        FloodManager.establishCollege(collegeId);
-
         GateManager.establishCollege(collegeId);
-
-        InventoryManager inventoryManager = new InventoryManager();
-        inventoryManager.establishCollege(collegeId);
-
         FloodManager.establishCollege(collegeId);
+        SnowManager.establishCollege(collegeId);
         PlagueManager.establishCollege(collegeId);
+        FireManager.establishCollege(collegeId);
+        PlayManager.establishCollege(collegeId);
+        InventoryManager.establishCollege(collegeId);
 
         return college;
     }

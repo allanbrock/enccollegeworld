@@ -86,6 +86,8 @@
     TutorialModel tip = TutorialManager.getCurrentTip("viewSports", college.getRunId());
 
     ArrayList<CoachModel> teamCoaches = CoachManager.getCollegeCoaches();
+    if (teamCoaches == null)
+        teamCoaches = new ArrayList<CoachModel>();
 %>
 
 <% if (!(addSportResultMsg == "success")) { %>

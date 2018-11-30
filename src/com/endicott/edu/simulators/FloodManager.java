@@ -73,6 +73,16 @@ public class FloodManager {
         floodDao.saveTheFlood(collegeId, flood);
     }
 
+
+    /**
+     * Take care of any initial flood set up when college is first created.
+     * @param collegeId
+     */
+    public static void establishCollege(String collegeId){
+        InventoryManager.createItem("Drains",false,"drain.png",15000, 0, "Adding drains to your campus might get help when it rains.", collegeId);
+        InventoryManager.createItem("Pipes", false, "pipes.png", 47000, 2, "Buying new underground pipes might help your college in the case of heavy rains.", collegeId);
+    }
+
     /**
      * Possibly start a flood at one of the dorms at the college.
      * The dorm must be fully built.
@@ -167,9 +177,7 @@ public class FloodManager {
      * @return the Bool indicating if upgrade was bought or not
      * */
     private Boolean hasUpgradeBeenPurchased(String collegeId){
-
         return inventoryManager.isPurchased("Drains investment", collegeId);
-
     }
 
     /**
@@ -183,12 +191,6 @@ public class FloodManager {
         Accountant.payBill(collegeId,"Flood cleanup cost for " + dorm.getName(), rand.nextInt(500) + 500);
     }
 
-    /**
-     * Take care of any initial flood set up when college is first created.
-     * @param collegeId
-     */
-    public static void establishCollege(String collegeId){
-    }
     /**
      * Determines whether there is a Flood currently happening or not.
      *

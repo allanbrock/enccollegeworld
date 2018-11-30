@@ -147,6 +147,7 @@ public class PlagueManager {
      */
     static public void establishCollege(String collegeId){
         int hoursInPlague = createInitialPlague(collegeId);
+        InventoryManager.createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, 0, "Helps stop the spread of disease. Who knows what weird disease might develop otherwise?", collegeId);
 //        plagueSpreadsThroughStudents(collegeId, 0, hoursInPlague, 0);
     }
 

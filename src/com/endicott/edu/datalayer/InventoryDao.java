@@ -15,7 +15,7 @@ public class InventoryDao {
     private static String getFilePath(String runId) {
         return DaoUtils.getFilePathPrefix(runId) +  "inventory.dat";
     }
-    private Logger logger = Logger.getLogger("InventoryDao");
+    private static Logger logger = Logger.getLogger("InventoryDao");
 
     public static List<ItemModel> getItems(String runId) {
         ArrayList<ItemModel> inventory = new ArrayList<>();
@@ -53,7 +53,7 @@ public class InventoryDao {
         return inventory.toArray(new ItemModel[inventory.size()]);
     }
 
-    public void saveAllItems(String item, List<ItemModel> inventory){
+    public static void saveAllItems(String item, List<ItemModel> inventory){
         logger.info("Saving all students...");
         try {
             File file = new File(getFilePath(item));
@@ -76,7 +76,7 @@ public class InventoryDao {
         logger.info("Saved items...");
     }
 
-    public void saveNewItem(String runId, ItemModel item) {
+    public static void saveNewItem(String runId, ItemModel item) {
         logger.info("Saving new item...");
         List<ItemModel> inventory = getItems(runId);
         inventory.add(item);

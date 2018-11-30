@@ -51,6 +51,10 @@ public class FireManager {
         FireDAO.saveAllFires(runId, fires);
     }
 
+    public static void establishCollege(String collegeId) {
+        InventoryManager.createItem("Smoke Detectors", false, "smokedetector.png", 50000, 1, "Some smoke detectors might decrease the odds of a raging fire from breaking out.", collegeId);
+    }
+
     private void generateCorrectPopUp(boolean isUpgraded, List<FireModel> fires, PopupEventManager popupManager){
         for (FireModel fire : fires) {
             if (isUpgraded) {
@@ -326,5 +330,6 @@ public class FireManager {
     public boolean hasUpgradeBeenPurchased(){
         return this.hasBeenUpgraded;
     }
+
 }
 

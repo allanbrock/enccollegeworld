@@ -530,4 +530,10 @@ public class SnowManager {
     public boolean isEventActive(String collegeId) {
         return SnowDao.getSnowStorm(collegeId) != null;
     }
+
+    public static void establishCollege(String collegeId) {
+        InventoryManager.createItem("Snowplows",false, "snowplow.png", 4200, 2, "Buying Snowplows reduces both future maintenance costs and the probability of a 'Severe High-Intensity Snow Storm' from happening again.", collegeId);
+        InventoryManager.createItem("Snow Pushers", false, "snowPusher.png", 2200, 0, "Purchasing Snow Pushers prevents 'Low-Intensity Snow Storms' from happening so often, as well as reducing future costs of snow removal.", collegeId);
+    }
+
 }

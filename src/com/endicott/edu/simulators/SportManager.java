@@ -18,6 +18,7 @@ public class SportManager {
 
     public static void establishCollege(String collegeId) {
         loadTips(collegeId);
+        establishDefaultSportsTeams(collegeId);
     }
 
     /**

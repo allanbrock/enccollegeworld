@@ -112,6 +112,7 @@
             <br>
             <div class="row">
                 <div align="center" class="col-sm-4">
+                    <div class="well">
                     <%
                         if(items[i].getUnlocked() && items[i].getCost() < college.getAvailableCash()){
                     %>
@@ -149,11 +150,13 @@
                     <%
                         }
                     %>
+                    </div>
                 </div>
                 <%
                     if((i+1) < items.length){
                 %>
                 <div align="center"class="col-sm-4">
+                    <div class="well">
                     <%
                         if(items[i+1].getUnlocked() && items[i+1].getCost() < college.getAvailableCash()){
                     %>
@@ -191,12 +194,14 @@
                     <%
                         }
                     %>
+                    </div>
                 </div>
                 <%
                     }
                     if((i+2) < items.length){
                 %>
                 <div align="center" class="col-sm-4">
+                    <div class="well">
                     <%
                         if(items[i+2].getUnlocked() && items[i+2].getCost() < college.getAvailableCash()){
                     %>
@@ -234,6 +239,7 @@
                     <%
                         }
                     %>
+                    </div>
                 </div>
                 <%
                         }
