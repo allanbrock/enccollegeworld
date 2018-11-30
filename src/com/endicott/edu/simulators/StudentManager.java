@@ -76,7 +76,7 @@ public class StudentManager {
         if(isNewCollege) {
             numNewStudents = 140;
         }
-        else if(CollegeManager.getCollegeCurrentDay(collegeId) == 1){   // Students admitted 1st of month
+        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
             int leastOpenings = Math.min(openBeds, openDesks);
             leastOpenings = Math.min(leastOpenings, openPlates);
 

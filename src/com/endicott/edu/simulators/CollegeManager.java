@@ -188,6 +188,15 @@ public class CollegeManager {
         return cal.getTime();
     }
 
+    static public int getDaysOpen(String collegeId) {
+        CollegeModel college = new CollegeDao().getCollege(collegeId);
+        int hoursAlive = 0;
+        if (college != null) {
+            hoursAlive =college.getHoursAlive();
+        }
+        return hoursAlive/24;
+    }
+
     /**
      * Returns the current month (1 based) of the date in the college.
      */

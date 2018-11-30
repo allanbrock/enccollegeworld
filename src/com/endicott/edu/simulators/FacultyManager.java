@@ -167,6 +167,9 @@ public class FacultyManager {
     }
 
     public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
+        if (faculty == null)  // This is defensive programming.  Very important in public methods.
+            return;
+
         if(!daileyComputation) {
             int tempHappiness = computeTemporaryHappiness(faculty.getSalary());
             for (int i = 0; i < FacultyManager.getSalaryOptions().size(); i++) {
@@ -250,6 +253,9 @@ public class FacultyManager {
 
     private static Boolean computeDirection(FacultyModel member){
         double direction = Math.random();
+        if (member == null)
+            return false;
+
         if(member.getHappiness() >= 75) {
             if(direction <= 0.75)
                 return true;

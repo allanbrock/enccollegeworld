@@ -597,6 +597,8 @@ public class SportManager {
 
     private static void updateCoachPerformance(String collegeId, String coachName){
         CoachModel coach = CoachManager.getCoachByName(coachName);
+        if (coach == null)
+            return;
         FacultyManager.computeFacultyHappiness(coach, true);
         FacultyManager.computeFacultyPerformance(collegeId, coach);
     }
