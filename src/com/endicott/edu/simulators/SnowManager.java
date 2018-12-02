@@ -109,7 +109,7 @@ public class SnowManager {
         Boolean isCold = false;
         if(currentDay == START_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            popupManager.newPopupEvent("Winter is here!", "The Starks were right, Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
+            popupManager.newPopupEvent("Winter is here!", "Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
                     "Ok","okWinterStarted",
                     "resources/images/winterIcon.png","winter season icon");
         }else if (currentDay == END_OF_WINTER){

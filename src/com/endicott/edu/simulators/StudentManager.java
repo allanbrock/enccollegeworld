@@ -504,8 +504,9 @@ public class StudentManager {
 
     private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "This is a student tip.", true, "student.png");
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Keep students happy to keep them in school.", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "If the students aren't happy they might leave.", true, "student.png");
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Click on different students to see how they feel.", false);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "There are many different things that makes a student happy.", false);
     }
 
     /**

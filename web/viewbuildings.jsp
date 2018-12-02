@@ -444,7 +444,7 @@
                 </div>
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Library</h4>
-                    <img class="img-responsive" src="resources/images/LIBRARY.png" style="margin-top: 37px; margin-bottom: 38px;">
+                    <img class="img-responsive" src="resources/images/LIBRARY_k.png" style="margin-top: 37px; margin-bottom: 38px;">
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"

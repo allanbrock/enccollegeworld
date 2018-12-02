@@ -284,27 +284,33 @@
                             <table>
                                 <%--<%student = students[StudentManager.getStudentIndex()];%>--%>
                                 <tr>
+                                    <td></td>
                                     <td>Student: </td>
                                     <td><%=student.getName()%></td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td>ID Number: </td>
                                     <td><%=student.getIdNumber()%></td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td>Gender: </td>
                                     <td><%=student.getGender()%></td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td>Advisor: </td>
                                     <td><%=student.getAdvisor().getFacultyName()%></td>
                                 </tr>
                                 <% if(!student.getTeam().equals("")){ %>
                                 <tr>
+                                    <td></td>
                                     <td>Team: </td>
                                     <td> <%= student.getTeam()%> </td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td> Athletic Ability: </td>
                                     <td> <%=student.getAthleticAbility()%> </td>
                                 </tr>
@@ -312,20 +318,21 @@
 
                                 <% if (student.getNumberHoursLeftBeingSick() > 0) { %>
                                 <tr>
+                                    <td></td>
                                     <td>Sick for:</td>
                                     <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
                                 <tr/>
                                 <% } %>
-                                <tr><td>Overall Happiness</td><td><%=student.getHappinessLevel()%></td></tr>
-                                <tr><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
-                                <tr><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
-                                <tr><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
-                                <tr><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
-                                <tr><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
-                                <tr><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
-                                <tr><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
-                                <tr><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
-                                <tr><td>Overall Building Happiness</td><td><%=student.getOverallBuildingHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/fun.png"</td><td><b>Overall Happiness</b></td><td><%=student.getHappinessLevel()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/books.png"></td></td><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
+                                    <!-- <tr><td><img class="img-responsive" src="resources/images/advisor.png"></td><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr> -->
+                                    <tr><td><img class="img-responsive" src="resources/images/HEALTH.png"></td><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/money.jpg"></td><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/smile.png"></td><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/campus.png"></td><td>Overall Building Happiness</td><td><%=student.getOverallBuildingHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/DINING.png"></td><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/ACADEMIC.png"></td><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/DORM.png"></td><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
                             </table>
                         </div>
                     </div>

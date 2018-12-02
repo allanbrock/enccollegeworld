@@ -19,6 +19,7 @@ public class SportManager {
     public static void establishCollege(String collegeId) {
         loadTips(collegeId);
         establishDefaultSportsTeams(collegeId);
+        InventoryManager.createItem("Volley Ball Net",false,"volleyballnet.png",500, 0, "For a volleyball team, you need a net.", collegeId);
     }
 
     /**
@@ -29,6 +30,11 @@ public class SportManager {
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<SportModel> sports = dao.getSports(collegeId);
+
+        // The default women's volleyball team is created on day 10.
+        if (CollegeManager.getDaysOpen(collegeId) == 10) {
+            createWomenVolleyball(collegeId);
+        }
 
         for (SportModel sport : sports) {
             calculateNumberOfPlayersOnTeam(collegeId, sport);
@@ -115,14 +121,16 @@ public class SportManager {
      * @param collegeId
      */
     public static void establishDefaultSportsTeams(String collegeId){
-        SportsDao newSportDao = new SportsDao();
+        createWomenVolleyball(collegeId);
+    }
 
-        //Create Women's Volleyball as default sport
+    private static void createWomenVolleyball(String collegeId) {
         SportModel default1 = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
         assignCoach(collegeId, default1);
         addPlayers(collegeId, default1);
         calculateNumberOfPlayersOnTeam(collegeId, default1);
         fillUpTeamAndSetActiveStatus(collegeId, default1);
+        SportsDao newSportDao = new SportsDao();
         newSportDao.saveNewSport(collegeId, default1);
     }
 
@@ -604,11 +612,9 @@ public class SportManager {
     }
 
     private static void loadTips(String collegeId) {
-        // Only the first tip should be set to true.
-        TutorialManager.saveNewTip(collegeId, 0,"viewSports", "GOOOOOOOAAAAAL!!", true);
-        TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Sports makes students happy.", false);
-        TutorialManager.saveNewTip(collegeId, 2,"viewSports", "Add more sports to make more money!", false);
-        TutorialManager.saveNewTip(collegeId, 3,"viewSports", "The better a team does, the happier students will be!", false);
+        TutorialManager.saveNewTip(collegeId, 0,"viewSports", "Sports makes students happy.", true, "trophy.png");
+        TutorialManager.saveNewTip(collegeId, 1,"viewSports", "Add more sports to make more money!", false, "money.jpg");
+        TutorialManager.saveNewTip(collegeId, 2,"viewSports", "The better a team does, the happier students will be!", false, "smile.png");
     }
 }
 
