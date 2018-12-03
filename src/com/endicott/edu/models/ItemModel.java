@@ -64,6 +64,13 @@ public class ItemModel implements Serializable {
         return imageName;
     }
 
+    public String getLockedImageName() {
+        if (imageName.length() <= 4 || !imageName.contains("."))
+            return imageName;
+
+        return imageName.replace(".","_k.");
+    }
+
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
@@ -82,6 +89,12 @@ public class ItemModel implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static void main(String[] args) {
+        ItemModel i = new ItemModel();
+        i.setImageName("abc.png");
+        System.out.println(" " + i.getLockedImageName());
     }
 }
 

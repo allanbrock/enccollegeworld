@@ -121,7 +121,7 @@
                         }
                         else{
                     %>
-                    <img class="disabled" src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=items[i].getLockedImageName()%>">
                     <%
                         }
                     %>
@@ -165,7 +165,7 @@
                         }
                     else{
                     %>
-                    <img class="disabled" src="resources/images/<%=items[i+1].getImageName()%>">
+                    <img src="resources/images/<%=items[i+1].getLockedImageName()%>">
                     <%
                         }
                     %>
@@ -210,7 +210,7 @@
                     }
                     else{
                     %>
-                    <img class="disabled" src="resources/images/<%=items[i+2].getImageName()%>">
+                    <img src="resources/images/<%=items[i+2].getLockedImageName()%>">
                     <%
                         }
                     %>
