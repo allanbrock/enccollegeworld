@@ -108,8 +108,14 @@
 
                 <h2>Objectives</h2>
                 <h3><%=gates.length%> Objectives</h3>
-                <h3><%=students.length%> Enrolled Students</h3>
                 <h3>Level <%=GateManager.getGateLevel(college.getRunId())%></h3>
+                <div class="progress" style="margin-bottom:0">
+                    <div class="progress-bar progress-bar-success" role="progressbar"
+                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                        style="width:<%=GateManager.getGateProgress(college.getRunId())%>%">
+                        <%=students.length%> / <%=GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1)%> students
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -122,7 +128,7 @@
             <div class="pre-scrollable" style="max-height: 750px">
                 <ul class="list-group">
                     <%
-                        for(int i = 0; i <= 5; i++) {
+                        for(int i = 1; i <= 5; i++) {
                     %>
                         <h3> Level <%=i%> objectives:</h3>
                     <%
@@ -145,31 +151,6 @@
                     </li>
                     <%
                                 }
-                            }
-                        }
-                    %>
-                        <h3>Other Objectives: </h3>
-                    <%
-                        for(GateModel gate: gates) {
-                            if(!GateManager.testGate(college.getRunId(), gate.getKey()) && gate.getLevel() > 5) {
-
-
-                    %>
-                    <li class="list-group-item">
-                        <div class="col-md-2" style="width: 100px">
-                            <img class="img-responsive" style="" src=<%=gate.getIconPath()%>>
-                        </div>
-                        <h4><strong><%=gate.getKey()%></strong> </h4>
-                        <p><%=gate.getDescription()%></p>
-                        <%--<div class="progress" style="margin-bottom:0">--%>
-                        <%--<div class="progress-bar progress-bar-success" role="progressbar"--%>
-                        <%--aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"--%>
-                        <%--style="width:<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%">--%>
-                        <%--<%=GateManager.getGateProgress(college.getRunId(),gate.getKey())%>%--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                    </li>
-                    <%
                             }
                         }
                     %>
