@@ -9,6 +9,8 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="com.endicott.edu.ui.UiMessage" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <html>
 <head>
     <title>College World Store</title>
@@ -48,6 +50,20 @@
     if (items == null) {
         items  = new ItemModel[0];  // This is really bad
         msg.setMessage(msg.getMessage() + " Attribute for students missing.");
+    }
+
+    ArrayList<ItemModel> sortedItems = new ArrayList<ItemModel>();
+
+    for(int i = 0; i < items.length; i++){
+        if(items[i].getUnlocked()){
+            sortedItems.add(items[i]);
+        }
+    }
+
+    for(int i = 0; i < items.length; i++){
+        if(items[i].getUnlocked().equals(false)){
+            sortedItems.add(items[i]);
+        }
     }
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
@@ -105,7 +121,7 @@
 
     <%--<div class="well well-sm">--%>
         <%
-            for (int i = 0; i < items.length; i++){
+            for (int i = 0; i < sortedItems.size(); i++){
                 if((i%3) == 0){
         %>
             <br>
@@ -114,37 +130,37 @@
                 <div align="center" class="col-sm-4">
                     <div class="well">
                     <%
-                        if(items[i].getUnlocked() && items[i].getCost() < college.getAvailableCash()){
+                        if(sortedItems.get(i).getUnlocked() && sortedItems.get(i).getCost() < college.getAvailableCash()){
                     %>
-                    <img src="resources/images/<%=items[i].getImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i).getImageName()%>">
                     <%
                         }
                         else{
                     %>
-                    <img src="resources/images/<%=items[i].getLockedImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i).getLockedImageName()%>">
                     <%
                         }
                     %>
-                    <h4><%=items[i].getName()%></h4>
-                    <h5><%=items[i].getDescription()%></h5>
-                    <p>$<%=numberFormatter.format(items[i].getCost())%></p>
+                    <h4><%=sortedItems.get(i).getName()%></h4>
+                    <h5><%=sortedItems.get(i).getDescription()%></h5>
+                    <p>$<%=numberFormatter.format(sortedItems.get(i).getCost())%></p>
                     <%
-                        if(items[i].getUnlocked().equals(false)){
+                        if(sortedItems.get(i).getUnlocked().equals(false)){
                     %>
                         <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
                     <%
                         }
-                       else if(items[i].getCost() < college.getAvailableCash() && items[i].getPurchased().equals(false)){
+                       else if(sortedItems.get(i).getCost() < college.getAvailableCash() && sortedItems.get(i).getPurchased().equals(false)){
                     %>
-                    <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy">
                     <%
                         }
-                        else if(items[i].getCost() > college.getAvailableCash()){
+                        else if(sortedItems.get(i).getCost() > college.getAvailableCash()){
                     %>
-                    <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
+                        <input type="submit" class="btn btn-info" name="<%="buyItem" + i%>" value="Buy" disabled>
                     <%
                         }
-                        else if(items[i].getPurchased().equals(true)){
+                        else if(sortedItems.get(i).getPurchased().equals(true)){
                     %>
                         <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
                     <%
@@ -153,42 +169,42 @@
                     </div>
                 </div>
                 <%
-                    if((i+1) < items.length){
+                    if((i+1) < sortedItems.size()){
                 %>
                 <div align="center"class="col-sm-4">
                     <div class="well">
                     <%
-                        if(items[i+1].getUnlocked() && items[i+1].getCost() < college.getAvailableCash()){
+                        if(sortedItems.get(i+1).getUnlocked() && sortedItems.get(i+1).getCost() < college.getAvailableCash()){
                     %>
-                    <img src="resources/images/<%=items[i+1].getImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i+1).getImageName()%>">
                     <%
                         }
                     else{
                     %>
-                    <img src="resources/images/<%=items[i+1].getLockedImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i+1).getLockedImageName()%>">
                     <%
                         }
                     %>
-                    <h4><%=items[i+1].getName()%></h4>
-                    <h5><%=items[i+1].getDescription()%></h5>
-                    <p>$<%=numberFormatter.format(items[i+1].getCost())%></p>
+                    <h4><%=sortedItems.get(i+1).getName()%></h4>
+                    <h5><%=sortedItems.get(i+1).getDescription()%></h5>
+                    <p>$<%=numberFormatter.format(sortedItems.get(i+1).getCost())%></p>
                     <%
-                        if(items[i+1].getUnlocked().equals(false)){
+                        if(sortedItems.get(i+1).getUnlocked().equals(false)){
                     %>
                         <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
                     <%
                         }
-                        else if(items[i+1].getCost() < college.getAvailableCash() && items[i+1].getPurchased().equals(false)){
+                        else if(sortedItems.get(i+1).getCost() < college.getAvailableCash() && sortedItems.get(i+1).getPurchased().equals(false)){
                     %>
                         <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy">
                     <%
                     }
-                        else if(items[i+1].getCost() > college.getAvailableCash()){
+                        else if(sortedItems.get(i+1).getCost() > college.getAvailableCash()){
                     %>
                         <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+1)%>" value="Buy" disabled>
                     <%
                     }
-                        else if(items[i+1].getPurchased().equals(true)){
+                        else if(sortedItems.get(i+1).getPurchased().equals(true)){
                     %>
                         <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
                     <%
@@ -198,42 +214,42 @@
                 </div>
                 <%
                     }
-                    if((i+2) < items.length){
+                    if((i+2) < sortedItems.size()){
                 %>
                 <div align="center" class="col-sm-4">
                     <div class="well">
                     <%
-                        if(items[i+2].getUnlocked() && items[i+2].getCost() < college.getAvailableCash()){
+                        if(sortedItems.get(i+2).getUnlocked() && sortedItems.get(i+2).getCost() < college.getAvailableCash()){
                     %>
-                    <img src="resources/images/<%=items[i+2].getImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i+2).getImageName()%>">
                     <%
                     }
                     else{
                     %>
-                    <img src="resources/images/<%=items[i+2].getLockedImageName()%>">
+                    <img src="resources/images/<%=sortedItems.get(i+2).getLockedImageName()%>">
                     <%
                         }
                     %>
-                    <h4><%=items[i+2].getName()%></h4>
-                    <h5><%=items[i+2].getDescription()%></h5>
-                    <p>$<%=numberFormatter.format(items[i+2].getCost())%></p>
+                    <h4><%=sortedItems.get(i+2).getName()%></h4>
+                    <h5><%=sortedItems.get(i+2).getDescription()%></h5>
+                    <p>$<%=numberFormatter.format(sortedItems.get(i+2).getCost())%></p>
                     <%
-                        if(items[i+2].getUnlocked().equals(false)){
+                        if(sortedItems.get(i+2).getUnlocked().equals(false)){
                     %>
                         <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
                     <%
                         }
-                        else if(items[i+2].getCost() < college.getAvailableCash() && items[i+2].getPurchased().equals(false)){
+                        else if(sortedItems.get(i+2).getCost() < college.getAvailableCash() && sortedItems.get(i+2).getPurchased().equals(false)){
                     %>
                         <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy">
                     <%
                     }
-                        else if(items[i+2].getCost() > college.getAvailableCash()){
+                        else if(sortedItems.get(i+2).getCost() > college.getAvailableCash()){
                     %>
                         <input type="submit" class="btn btn-info" name="<%="buyItem" + (i+2)%>" value="Buy" disabled>
                     <%
                     }
-                        else if(items[i+2].getPurchased().equals(true)){
+                        else if(sortedItems.get(i+2).getPurchased().equals(true)){
                     %>
                         <input type="submit" class="btn btn-info" name="purchased" value="Purchased" disabled>
                     <%
