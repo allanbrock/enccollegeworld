@@ -4,12 +4,25 @@ import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.GateModel;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Responsible for handling the games Gate mechanic.
  */
 public class GateManager {
+
+    public static final Map GATE_LEVELS = new HashMap();
+
+    public GateManager() {
+        GATE_LEVELS.put(0,   0);
+        GATE_LEVELS.put(1, 150);
+        GATE_LEVELS.put(2, 175);
+        GATE_LEVELS.put(3, 200);
+        GATE_LEVELS.put(4, 300);
+        GATE_LEVELS.put(5, 400);
+    }
 
     /**
      * @param collegeId     unique college string
@@ -30,33 +43,26 @@ public class GateManager {
     public static boolean testGate(String collegeId, String key) {
         int studentCount = StudentDao.getStudents(collegeId).size();
         List<GateModel> gates = GateDao.getGates(collegeId);
-        for(GateModel gate : gates) {
-            return (
-                (gate.getKey().equals(key))                  &&
-                (gate.getLevel() == 1 && studentCount > 150) ||
-                (gate.getLevel() == 2 && studentCount > 175) ||
-                (gate.getLevel() == 3 && studentCount > 200) ||
-                (gate.getLevel() == 4 && studentCount > 300) ||
-                (gate.getLevel() == 5 && studentCount > 400)
-            );
-        }
+        for(GateModel gate : gates)
+            if (gate.getKey().equals(key) && studentCount > (int)GATE_LEVELS.get(gate.getLevel()))
+                return true;
         return false;
+    }
+
+    public static int getGateGoal(int gateLevel) {
+        return (int)GATE_LEVELS.get(gateLevel);
     }
 
     public static int getGateLevel(String collegeId) {
         int studentCount = StudentDao.getStudents(collegeId).size();
-        if(studentCount > 400) {
-            return 5;
-        } else if(studentCount > 300) {
-            return 4;
-        } else if(studentCount > 200) {
-            return 3;
-        } else if(studentCount > 175) {
-            return 2;
-        } else if(studentCount > 150) {
-            return 1;
-        }
+        for(int i = GATE_LEVELS.size()-1; i > 0; i--)
+            if(studentCount > (int)GATE_LEVELS.get(i))
+                return i;
         return 0;
+    }
+
+    public static int getGateProgress(String collegeId) {
+        return 100 * StudentDao.getStudents(collegeId).size() / (int)GATE_LEVELS.get(getGateLevel(collegeId)+1);
     }
 
     /**

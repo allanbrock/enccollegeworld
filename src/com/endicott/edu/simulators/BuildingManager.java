@@ -483,11 +483,14 @@ public class BuildingManager {
         SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
-        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 700);
-        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",1500);
-        gateManager.createGate(collegeId, "Library", "Gate until library is unlocked.", "resources/images/LIBRARY.png", 2000);
-        gateManager.createGate(collegeId, "Health Center", "Gate until health center is unlocked.", "resources/images/HEALTH.png", 3500);
-        gateManager.createGate(collegeId, "Entertainment Center", "Gate until entertainment center is unlocked.", "resources/images/ENTERTAINMENT.png", 5000);
+        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 1);
+        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",2);
+        gateManager.createGate(collegeId, "Library", "Gate until library is unlocked.", "resources/images/LIBRARY.png", 3);
+        gateManager.createGate(collegeId, "Health Center", "Gate until health center is unlocked.", "resources/images/HEALTH.png", 4);
+        gateManager.createGate(collegeId, "Entertainment Center", "Gate until entertainment center is unlocked.", "resources/images/ENTERTAINMENT.png", 5);
+        gateManager.createGate(collegeId, "Football stadium", "Gate until football stadium center is unlocked.", "resources/images/FOOTBALL%20STADIUM.png", 2);
+        gateManager.createGate(collegeId, "Baseball diamond", "Gate until baseball diamond is unlocked.", "resources/images/BASEBALL%20DIAMOND.png", 3);
+        gateManager.createGate(collegeId, "Hockey rink", "Gate until hockey rink is unlocked.", "resources/images/HOCKEY%20RINK.png", 4);
     }
 
     public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
