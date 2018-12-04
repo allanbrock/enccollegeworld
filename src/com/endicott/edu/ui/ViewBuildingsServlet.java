@@ -33,7 +33,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
-        // For loop to check if the repair or upgrade buttons were hit on one of the buildings
+        // For loop to check if the repair or upgrade buttons were hit on one of the buildings.
         for(int b = 0; b < BuildingDao.getBuildings(collegeId).size(); b++) {
             if (request.getParameter("upgradeBuilding" + b) != null) {
                 upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));

@@ -16,7 +16,7 @@ public class BuildingModel implements Serializable {
     private final static String footballStadium = "FOOTBALL STADIUM";
     private final static String hockeyRink = "HOCKEY RINK";
 
-    // These are all changed when the building is made (in the order they're set)
+    // These are all changed when the building is made (in the order they're set).
     private String runId = "unknown";
     private String name = "unknown";
     private String size = "";

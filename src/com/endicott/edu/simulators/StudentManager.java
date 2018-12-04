@@ -19,7 +19,7 @@ public class StudentManager {
     private Random rand = new Random();
 
     /**
-     * The college has just been created.  Add initial students and calculate
+     * The college has just been created. Add initial students and calculate
      * student statistics.
      *
      * @param collegeId

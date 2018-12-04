@@ -33,7 +33,7 @@ public class BuildingManager {
      * @param hoursAlive number of hours college has been alive
      */
     public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
-        // Read in all the buildings
+        // Read in all the buildings.
         List<BuildingModel> buildings = dao.getBuildings(runId);
 
         // Go through the buildings making changes based on elapsed time.
