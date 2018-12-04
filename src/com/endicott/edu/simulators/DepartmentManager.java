@@ -16,7 +16,6 @@ public class DepartmentManager {
 
     public static ArrayList<DepartmentModel> establishDepartments(int departmentCount){
         // departmentCount will determine how many departments need to be loaded back in
-        DepartmentManager.popupManager = popupManager;
         departmentOptions = new ArrayList<>();
         departmentOptions.add(new DepartmentModel("Arts and Sciences"));
         departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
@@ -24,6 +23,8 @@ public class DepartmentManager {
         departmentOptions.add(new DepartmentModel("Nursing"));
         return departmentOptions;
     }
+
+    public static void setPopupManager(PopupEventManager popupManager){ DepartmentManager.popupManager = popupManager; }
 
     public static ArrayList<DepartmentModel> getDepartmentOptions(){
         if (departmentOptions == null)
@@ -83,7 +84,8 @@ public class DepartmentManager {
                     for (DepartmentModel d : departmentOptions) {
                         if (department.equals(d.getDepartmentName())) {
                             if (!d.getBonusGiven()) {
-                                // Give college bonus money
+
+                                d.setBonusGiven(true);
                             }
                         }
                     }

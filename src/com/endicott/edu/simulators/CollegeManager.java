@@ -298,4 +298,9 @@ public class CollegeManager {
         college.setDaysUntilNextEvent(Math.max(0,daysUntilNextEvent));
         CollegeDao.saveCollege(college);
     }
+
+    public static void recieveDepartmentPerformanceBonus(CollegeModel college, String departmentName, PopupEventManager popupManager){
+        college.setAvailableCash(college.getAvailableCash() + 5000);
+        popupManager.newPopupEvent("Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
+    }
 }
