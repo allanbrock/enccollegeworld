@@ -27,8 +27,8 @@ public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
     private static final float PROBABILTY_OF_MID_STORM = 70;
     private static final float PROBABILTY_OF_HIGH_STORM = 100;
-    private static final int START_OF_WINTER = 12;      //must be an int (dealing with whole days)
-    private static final int END_OF_WINTER = 20;        //must be an int (dealing with whole days)
+    private static final int START_OF_WINTER = 30;      //must be an int (dealing with whole days)
+    private static final int END_OF_WINTER = 40;        //must be an int (dealing with whole days)
     private static final String lowUpgradeName = "Snow Pushers";
     private static final String midUpgradeName = "Pipes";
     private static final String highUpgradeName = "Snowplows";
@@ -109,7 +109,7 @@ public class SnowManager {
         Boolean isCold = false;
         if(currentDay == START_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            popupManager.newPopupEvent("Winter is here!", "Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
+            popupManager.newPopupEvent("Winter is here!", "Winter is here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
                     "Ok","okWinterStarted",
                     "resources/images/winterIcon.png","winter season icon");
         }else if (currentDay == END_OF_WINTER){
@@ -137,7 +137,7 @@ public class SnowManager {
      * use play mode.
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
-        if (!DisasterManager.isEventPermitted(collegeId)) {
+        if (!EventManager.isEventPermitted(collegeId)) {
             return;
         }
 
@@ -149,29 +149,36 @@ public class SnowManager {
         int oddsOfStorm = rand.nextInt(220);
         logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
+        EventManager eventManager = new EventManager(collegeId);
+        if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW) || eventManager.doesEventStart(collegeId, EventType.SNOW)) {
+            // We are going to have a snow storm.  It's just a question of which one.
+            // This logic probably needs to be adjusted.  It creates a high intensity snow
+            // storm as a last resort.
+
             //  ---- LOW SNOW ----      (0 - 40 : 40)
-        if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM && !hasLowUpgrade) {
-            startLowIntensitySnow(collegeId,hoursAlive,popupManager);
-            // 0 - 30 : 30
-        }else if ((oddsOfStorm <= (PROBABILTY_OF_LOW_STORM - 10)) && hasLowUpgrade){
-            startLowIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
-            //  ---- MID SNOW ----      (40 - 70 : 30)
-        }else if((oddsOfStorm > PROBABILTY_OF_LOW_STORM) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && !hasMidUpgrade) {
-            startMidIntensitySnow(collegeId, hoursAlive, popupManager);
+            if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM && !hasLowUpgrade) {
+                startLowIntensitySnow(collegeId,hoursAlive,popupManager);
+                // 0 - 30 : 30
+            }else if ((oddsOfStorm <= (PROBABILTY_OF_LOW_STORM - 10)) && hasLowUpgrade){
+                startLowIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
+                //  ---- MID SNOW ----      (40 - 70 : 30)
+            }else if((oddsOfStorm > PROBABILTY_OF_LOW_STORM) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && !hasMidUpgrade) {
+                startMidIntensitySnow(collegeId, hoursAlive, popupManager);
 
-        }else if ((oddsOfStorm > (PROBABILTY_OF_LOW_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && hasMidUpgrade){
-            startMidIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
-            //  ---- HIGH SNOW ----     (70 - 100 : 30)
-        }else if((oddsOfStorm > PROBABILTY_OF_MID_STORM) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && !hasHighUpgrade) {
-            startHighIntensitySnow(collegeId, hoursAlive, popupManager);
-        }else if ((oddsOfStorm > (PROBABILTY_OF_MID_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && hasHighUpgrade){
-            startHighIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
+            }else if ((oddsOfStorm > (PROBABILTY_OF_LOW_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && hasMidUpgrade){
+                startMidIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
+                //  ---- HIGH SNOW ----     (70 - 100 : 30)
+            }else if((oddsOfStorm > PROBABILTY_OF_MID_STORM) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && !hasHighUpgrade) {
+                startHighIntensitySnow(collegeId, hoursAlive, popupManager);
+            }else if ((oddsOfStorm > (PROBABILTY_OF_MID_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && hasHighUpgrade){
+                startHighIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
 
-        } else if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW)) {
-            startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+            } else {
+                startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+            }
         }
     }
     /**
@@ -181,7 +188,7 @@ public class SnowManager {
      *      item: Snow Pusher
      * */
     public void startLowIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager){
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 1;
@@ -213,7 +220,7 @@ public class SnowManager {
      *      plus considerable falling or blowing snow reducing visibility to less than a quarter mile.
      * */
     private void startMidIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 2;
@@ -243,7 +250,7 @@ public class SnowManager {
      *
      * */
     private void startHighIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 3;

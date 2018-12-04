@@ -91,9 +91,11 @@ public class PlagueManager {
 
         else
         {
-            if (DisasterManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)) {
+ //           if (EventManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)) {
+              EventManager eventManager = new EventManager(collegeId);
+              if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE) || eventManager.doesEventStart(collegeId, EventType.PLAGUE)) {
                 startNewPlague(plagues);
-                DisasterManager.newEventStart(collegeId);
+                EventManager.newEventStart(collegeId);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
                         "Quarantine the sick students ($5,000)", "quarantineStudents", "Do Nothing", "plagueCallback4",

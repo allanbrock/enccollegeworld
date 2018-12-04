@@ -77,6 +77,7 @@ public class StudentManager {
             numNewStudents = 140;
         }
         else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
+            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             int leastOpenings = Math.min(openBeds, openDesks);
             leastOpenings = Math.min(leastOpenings, openPlates);
 
@@ -321,8 +322,16 @@ public class StudentManager {
 
     // TODO: building happiness ratings
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
+        if (student == null || college == null)
+            return;
+
         String studentDiningHall = student.getDiningHall();
-        int diningHallQuality = (int)BuildingManager.getBuildingByName(studentDiningHall, college.getRunId()).getShownQuality();
+        BuildingModel building = BuildingManager.getBuildingByName(studentDiningHall, college.getRunId());
+
+        if (building == null)
+            return;
+
+        int diningHallQuality = (int) building.getShownQuality();
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
@@ -452,8 +461,10 @@ public class StudentManager {
             }
         }
 
-        for(BuildingModel b : studentsBuildingsOnly){
-            totalBuildingQuality += (int)b.getShownQuality();
+        for (BuildingModel b : studentsBuildingsOnly){
+            if (b != null) {
+                totalBuildingQuality += (int) b.getShownQuality();
+            }
         }
 
         avgBuildingQuality = totalBuildingQuality/studentsBuildingsOnly.size();
