@@ -137,7 +137,7 @@ public class SnowManager {
      * use play mode.
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
-        if (!DisasterManager.isEventPermitted(collegeId)) {
+        if (!EventManager.isEventPermitted(collegeId)) {
             return;
         }
 
@@ -181,7 +181,7 @@ public class SnowManager {
      *      item: Snow Pusher
      * */
     public void startLowIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager){
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 1;
@@ -213,7 +213,7 @@ public class SnowManager {
      *      plus considerable falling or blowing snow reducing visibility to less than a quarter mile.
      * */
     private void startMidIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 2;
@@ -243,7 +243,7 @@ public class SnowManager {
      *
      * */
     private void startHighIntensitySnow(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        DisasterManager.newEventStart(collegeId);
+        EventManager.newEventStart(collegeId);
         BuildingManager buildingMgr = new BuildingManager();
         SnowDao snowDao = new SnowDao();
         int intensity = 3;

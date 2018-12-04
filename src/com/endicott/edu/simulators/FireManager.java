@@ -175,7 +175,7 @@ public class FireManager {
      * @param hoursAlive
      */
     public void createFireByOdds(String runId, int hoursAlive, boolean isUpgraded) {
-        if (!DisasterManager.isEventPermitted(runId)) {
+        if (!EventManager.isEventPermitted(runId)) {
             return;
         }
 
@@ -202,12 +202,12 @@ public class FireManager {
             if (odds < catProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
                 boolean isCatastrophic = true;
                 startFireRandomly(runId, hoursAlive, isCatastrophic);
-                DisasterManager.newEventStart(runId);
+                EventManager.newEventStart(runId);
                 return;
             }
             boolean isCatastrophic = false;
             startFireRandomly(runId, hoursAlive, isCatastrophic);
-            DisasterManager.newEventStart(runId);
+            EventManager.newEventStart(runId);
         }
     }
 

@@ -3,10 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.Date;
 
@@ -115,7 +112,7 @@ public class CollegeManager {
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        DisasterManager disasterManager = new DisasterManager();
+        EventManager disasterManager = new EventManager();
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         PlagueManager plagueManager = new PlagueManager();

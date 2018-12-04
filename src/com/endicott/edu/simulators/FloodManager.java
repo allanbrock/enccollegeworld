@@ -4,9 +4,7 @@ import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.FloodDao;
 import com.endicott.edu.models.*;
 
-import java.awt.geom.Dimension2D;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Random;
 
@@ -117,7 +115,7 @@ public class FloodManager {
      */
 
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
-        if (!DisasterManager.isEventPermitted(collegeId)) {
+        if (!EventManager.isEventPermitted(collegeId)) {
             return false;
         }
 
@@ -135,7 +133,7 @@ public class FloodManager {
 
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
-            DisasterManager.isEventPermitted(collegeId);
+            EventManager.isEventPermitted(collegeId);
             isHappening = true;
             logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
             logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);

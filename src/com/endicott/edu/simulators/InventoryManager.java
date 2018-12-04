@@ -49,6 +49,8 @@ public class InventoryManager {
     public static void createItem(String name, Boolean isPurchased, String imageName, int cost, int availableAtGate, String description, String collegeId){
         ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, false, availableAtGate, description);
         InventoryDao.saveNewItem(collegeId, newItem);
+        if (availableAtGate > 0)
+            GateManager.createGate(collegeId, name, description, "resources/images/" + imageName, availableAtGate);
     }
 
     public static void buyItem(String name, String collegeId){

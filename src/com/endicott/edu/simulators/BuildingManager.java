@@ -483,14 +483,14 @@ public class BuildingManager {
         SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
-        gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 1);
-        gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",2);
-        gateManager.createGate(collegeId, "Library", "Gate until library is unlocked.", "resources/images/LIBRARY.png", 3);
-        gateManager.createGate(collegeId, "Health Center", "Gate until health center is unlocked.", "resources/images/HEALTH.png", 4);
-        gateManager.createGate(collegeId, "Entertainment Center", "Gate until entertainment center is unlocked.", "resources/images/ENTERTAINMENT.png", 5);
-        gateManager.createGate(collegeId, "Football stadium", "Gate until football stadium center is unlocked.", "resources/images/FOOTBALL%20STADIUM.png", 2);
-        gateManager.createGate(collegeId, "Baseball diamond", "Gate until baseball diamond is unlocked.", "resources/images/BASEBALL%20DIAMOND.png", 3);
-        gateManager.createGate(collegeId, "Hockey rink", "Gate until hockey rink is unlocked.", "resources/images/HOCKEY%20RINK.png", 4);
+        gateManager.createGate(collegeId, "Large Size", "With Large Size you can house more students!", "resources/images/DORM.png", 1);
+        gateManager.createGate(collegeId, "Extra Large Size", "Need room for even more students?  Extra Large Size dorms can help.", "resources/images/DORM.png",2);
+        gateManager.createGate(collegeId, "Library", "The library helps students academics.", "resources/images/LIBRARY.png", 3);
+        gateManager.createGate(collegeId, "Health Center", "With the Health Center on campus students don't get sick as often.", "resources/images/HEALTH.png", 4);
+        gateManager.createGate(collegeId, "Entertainment Center", "You're students would have more fun at the Entertainment Center.", "resources/images/ENTERTAINMENT.png", 5);
+        gateManager.createGate(collegeId, "Football stadium", "To have a football team you need a football stadium.", "resources/images/FOOTBALL%20STADIUM.png", 2);
+        gateManager.createGate(collegeId, "Baseball diamond", "To have a baseball team you need a football stadium.", "resources/images/BASEBALL%20DIAMOND.png", 3);
+        gateManager.createGate(collegeId, "Hockey rink", "To have a hockey team you need a rink.", "resources/images/HOCKEY%20RINK.png", 4);
     }
 
     public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){

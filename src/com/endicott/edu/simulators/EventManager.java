@@ -1,8 +1,18 @@
 package com.endicott.edu.simulators;
 
-public class DisasterManager {
+import com.endicott.edu.models.EventType;
 
-    public DisasterManager(){
+import java.util.HashMap;
+
+public class EventManager {
+    HashMap<Integer, EventType> eventCalendar = new HashMap<Integer, EventType>();
+
+    public EventManager(){
+        eventCalendar.put(5, EventType.PLAGUE);
+        eventCalendar.put(7, EventType.FIRE);
+        eventCalendar.put(9, EventType.SNOW);
+        eventCalendar.put(11, EventType.FLOOD);
+        eventCalendar.put(13, EventType.RIOT);
     }
 
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupEventManager){
