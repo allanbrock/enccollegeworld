@@ -149,29 +149,36 @@ public class SnowManager {
         int oddsOfStorm = rand.nextInt(220);
         logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
+        EventManager eventManager = new EventManager(collegeId);
+        if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW) || eventManager.doesEventStart(collegeId, EventType.SNOW)) {
+            // We are going to have a snow storm.  It's just a question of which one.
+            // This logic probably needs to be adjusted.  It creates a high intensity snow
+            // storm as a last resort.
+
             //  ---- LOW SNOW ----      (0 - 40 : 40)
-        if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM && !hasLowUpgrade) {
-            startLowIntensitySnow(collegeId,hoursAlive,popupManager);
-            // 0 - 30 : 30
-        }else if ((oddsOfStorm <= (PROBABILTY_OF_LOW_STORM - 10)) && hasLowUpgrade){
-            startLowIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
-            //  ---- MID SNOW ----      (40 - 70 : 30)
-        }else if((oddsOfStorm > PROBABILTY_OF_LOW_STORM) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && !hasMidUpgrade) {
-            startMidIntensitySnow(collegeId, hoursAlive, popupManager);
+            if (oddsOfStorm <= PROBABILTY_OF_LOW_STORM && !hasLowUpgrade) {
+                startLowIntensitySnow(collegeId,hoursAlive,popupManager);
+                // 0 - 30 : 30
+            }else if ((oddsOfStorm <= (PROBABILTY_OF_LOW_STORM - 10)) && hasLowUpgrade){
+                startLowIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
+                //  ---- MID SNOW ----      (40 - 70 : 30)
+            }else if((oddsOfStorm > PROBABILTY_OF_LOW_STORM) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && !hasMidUpgrade) {
+                startMidIntensitySnow(collegeId, hoursAlive, popupManager);
 
-        }else if ((oddsOfStorm > (PROBABILTY_OF_LOW_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && hasMidUpgrade){
-            startMidIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
-            //  ---- HIGH SNOW ----     (70 - 100 : 30)
-        }else if((oddsOfStorm > PROBABILTY_OF_MID_STORM) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && !hasHighUpgrade) {
-            startHighIntensitySnow(collegeId, hoursAlive, popupManager);
-        }else if ((oddsOfStorm > (PROBABILTY_OF_MID_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && hasHighUpgrade){
-            startHighIntensitySnow(collegeId, hoursAlive, popupManager);
-            logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
+            }else if ((oddsOfStorm > (PROBABILTY_OF_LOW_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && hasMidUpgrade){
+                startMidIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
+                //  ---- HIGH SNOW ----     (70 - 100 : 30)
+            }else if((oddsOfStorm > PROBABILTY_OF_MID_STORM) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && !hasHighUpgrade) {
+                startHighIntensitySnow(collegeId, hoursAlive, popupManager);
+            }else if ((oddsOfStorm > (PROBABILTY_OF_MID_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && hasHighUpgrade){
+                startHighIntensitySnow(collegeId, hoursAlive, popupManager);
+                logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
 
-        } else if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW)) {
-            startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+            } else {
+                startHighIntensitySnow(collegeId,hoursAlive,popupManager);
+            }
         }
     }
     /**

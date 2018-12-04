@@ -115,16 +115,16 @@ public class FloodManager {
      */
 
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
-        if (!EventManager.isEventPermitted(collegeId)) {
-            return false;
-        }
-
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         //If a flood upgrade was bought from the store, decrease the probability of floods.
         if(hasUpgrade){
             oddsOfFlood = oddsOfFlood - 0.02f;
         }
-        if (Math.random() <= oddsOfFlood || CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD)) {
+
+        EventManager eventManager = new EventManager(collegeId);
+        if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD) || eventManager.doesEventStart(collegeId, EventType.FLOOD)) {
+
+            //       if (Math.random() <= oddsOfFlood || CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD)) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;

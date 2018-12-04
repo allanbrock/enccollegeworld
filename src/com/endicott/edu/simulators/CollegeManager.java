@@ -112,7 +112,7 @@ public class CollegeManager {
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        EventManager disasterManager = new EventManager();
+        EventManager disasterManager = new EventManager(collegeId);
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         PlagueManager plagueManager = new PlagueManager();
