@@ -242,6 +242,7 @@ public class BuildingModel implements Serializable {
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
 
+    // Building consts
     public static String getAcademicConst() {return academicConst;}
     public static String getAdminConst() {return adminConst;}
     public static String getDiningConst() {return diningConst;}

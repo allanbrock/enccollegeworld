@@ -54,11 +54,6 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-//    BuildingModel buildings[] = (BuildingModel[]) request.getAttribute("buildings");
-//    if (buildings == null) {
-//        buildings = new BuildingModel[0];  // This is really bad
-//        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
-//    }
     String sortByType = (String) request.getAttribute("sortByType");
     List<BuildingModel> buildings;
     if(sortByType == null  || sortByType.equals("All Buildings")){
@@ -122,6 +117,8 @@
         </div>
     </nav>
 
+    <%--This shows the user if they have enough spots for the students.
+        It shows if there are enough beds, plates, and desks at the college.--%>
     <div class="container">
         <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
@@ -197,6 +194,7 @@
         <div class="well well-sm" style="background: aliceblue;">
             <div class="col-sm-5" style=" margin-top: 30px;">
         <div class="form-group">
+            <%--Sorting dropdown--%>
             <label for="buildingType">Filter by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
@@ -232,9 +230,11 @@
             <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
             <%}%>
 
+            <%--Table where all the buildings are displayed with their stats.--%>
             <table class="table table-condensed">
                 <thread>
                     <tr>
+                        <%--Column headers--%>
                         <th>Building Name</th>
                         <th>Building Type</th>
                         <th>Size</th>
@@ -250,8 +250,10 @@
                     for (int b = 0; b < buildings.size(); b++) {
                 %>
                 <tr>
+                    <%--This is each ROW in the table--%>
                     <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings.get(b).getName()%>
                     </td>
+                    <%--Picture--%>
                     <td>
                         <%if(buildings.get(b).getHoursToComplete() > 0){%>
                             <img class="img-responsive" src="resources/images/underconstruction.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
@@ -264,6 +266,7 @@
                     </td>
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getCapacity() - buildings.get(b).getNumStudents()%>
                     </td>
+                    <%--Progress bar for quality--%>
                     <td style="vertical-align:middle;">
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
@@ -276,6 +279,12 @@
                     </td>
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).checkIfBeingBuilt()%>
                     </td>
+                    <%--Upgrade and repair buttons.
+                        They should only show when:
+                        - The building ISN'T maximum size
+                        - The building has a size parameter
+                        - The buiding ISN'T under construction
+                        - The college has enough money to purchase the building--%>
                     <td style="vertical-align:middle;">
                         <%if(!( buildings.get(b).getSize().equals("Extra Large") || buildings.get(b).getSize().equals("N/A")
                                 || buildings.get(b).getHoursToComplete() > 0 || buildings.get(b).getUpgradeCost() > college.getAvailableCash())){%>
@@ -318,19 +327,19 @@
                                 <option value="Hockey Rink">Hockey Rink</option>
                             <%}%>
                             <%
-                                if(college.getAvailableCash() > 250000){
-                                for (int b = 0; b < buildings.size(); b++) {
-                                    if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
-                                        haveEntertainmentCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
-                                        haveHealthCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
-                                        haveLibrary = "true";
-                                    }
+                            if(college.getAvailableCash() > 250000){
+                            for (int b = 0; b < buildings.size(); b++) {
+                                if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
+                                    haveEntertainmentCenter = "true";
                                 }
-                                if(haveLibrary.equals("false")){%>
+                                if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
+                                    haveHealthCenter = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
+                                    haveLibrary = "true";
+                                }
+                            }
+                            if(haveLibrary.equals("false")){%>
                                 <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
                             <%}
                             if(haveHealthCenter.equals("false")){%>
@@ -339,7 +348,7 @@
                             if(haveEntertainmentCenter.equals("false")){%>
                                 <option value="Entertainment Center" <%if(!gateManager.testGate(college.getRunId(), "Entertainment Center")){%>disabled<%}%>>Entertainment Center</option>
                             <%}
-                                }%>
+                            }%>
                         </select>
                     </div>
                         <!-- Button -->
@@ -417,6 +426,7 @@
         </div>
     </div>
 
+    <%--Gate progress Jumbotron--%>
     <div class="container">
         <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">

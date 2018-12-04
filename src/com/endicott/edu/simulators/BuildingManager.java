@@ -143,6 +143,16 @@ public class BuildingManager {
         }
     }
 
+    /**
+     * Called by the servlet to add the building.
+     * Sets all the initial stats, charges the college, and saves the building.
+     *
+     * @param collegeId
+     * @param buildingName
+     * @param buildingType
+     * @param buildingSize
+     * @return
+     */
     static public BuildingModel addBuilding(String collegeId, String buildingName, String buildingType, String buildingSize) {
         if (!CollegeManager.doesCollegeExist(collegeId)) {
             return null;
@@ -160,8 +170,8 @@ public class BuildingManager {
             newBuilding.setNote("Not enough money to build it.");
             return newBuilding;
         }
-
         Accountant.payBill(collegeId, "Charge of new building", newBuilding.getTotalBuildCost());
+
         CollegeModel college = CollegeDao.getCollege(collegeId);
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
         newBuilding.setNote("A new building has been created.");
@@ -170,11 +180,10 @@ public class BuildingManager {
         BuildingDao buildingDao = new BuildingDao();
         buildingDao.saveNewBuilding(collegeId, newBuilding);
         return newBuilding;
-        // Override some fields
     }
 
     /**
-     * Creates the desired type of building
+     * Creates the desired type of building.
      *
      * @param buildingType type of building
      * @param buildingName name of building
@@ -220,7 +229,7 @@ public class BuildingManager {
     }
 
     /**
-     * Begins the upgrade process for the building
+     * Begins the upgrade process for the building.
      *
      * @param collegeId
      * @param building
@@ -234,13 +243,13 @@ public class BuildingManager {
     }
 
     /**
-     * Repairs the quality of the building based on how damaged it is
+     * Repairs the quality of the building based on how damaged it is.
      *
      * @param collegeId
      * @param building
      */
     public static void repairBuilding(String collegeId, BuildingModel building){
-        float qualityDecayed = 100 - building.getShownQuality(); //100 is starting quality, take away the current building qaulity
+        float qualityDecayed = 100 - building.getShownQuality(); //100 is starting quality, take away the current building quality
         int numDays;
 
         Accountant.payBill(collegeId, "Repair to " + building.getName(), building.getRepairCost());//pay for repair
@@ -250,12 +259,11 @@ public class BuildingManager {
             building.setIsRepairComplete(false);
             building.setHoursToComplete(numDays * 24); //needs to be in hours, multiply by 24
         }
-        else{
+        else{ // If building quality is greater than 90% it should be immediately repaired
             building.setIsRepairComplete(true);
             building.setHiddenQuality(10); //10 is the max hidden quality
             setNewRepairCost(collegeId, building);
         }
-
         BuildingDao.updateSingleBuilding(collegeId, building);
     }
 
@@ -280,8 +288,15 @@ public class BuildingManager {
         dao.saveAllBuildings(collegeId, buildings);
     }
 
-
+    /**
+     * Handles decaying certain buildings every day.
+     *
+     * @param collegeId
+     * @param b
+     */
     public void buildingDecayForOneDay(String collegeId, BuildingModel b){
+        // Only decay buildings that aren't under construction
+        // AND aren't the Library, Health Center, or Entertainment Center
         if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(buildingModel.getLibraryConst()) ||
         b.getKindOfBuilding().equals(buildingModel.getHealthConst()) || b.getKindOfBuilding().equals(buildingModel.getEntertainmentConst()))
         || b.isUpgradeComplete() == false || b.isRepairComplete() == false)) {
@@ -295,16 +310,31 @@ public class BuildingManager {
         dao.updateSingleBuilding(collegeId, b);
     }
 
+    /**
+     * Destroys a building in the case of a catastrophic fire/other disaster.
+     *
+     * @param buildings
+     * @param collegeId
+     * @param buildingName
+     */
     public void destroyBuildingInCaseOfDisaster(List<BuildingModel> buildings, String collegeId, String buildingName){
         for (BuildingModel b : buildings) {
             if (b.getName().equals(buildingName)) {
                 buildings.remove(b);
+                // The students need to move to a new building
                 studentManager.removeFromBuildingAndReassignAfterDisaster(collegeId, buildingName, b.getKindOfBuilding());
                 return;
             }
         }
     }
 
+    /**
+     * After a bad disaster, the building quality should drop significantly.
+     * This will only drop the building quality up to 20% and only ONCE (not every day after the disaster).
+     *
+     * @param collegeId
+     * @param buildingName
+     */
     public void acceleratedDecayAfterDisaster(String collegeId, String buildingName){
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
         for (BuildingModel b : buildings) {
@@ -447,6 +477,13 @@ public class BuildingManager {
         return getOpenSpots(collegeID, BuildingModel.getDiningConst());
     }
 
+    /**
+     * Helper function for establishCollege to making saving the newly constructed buildings easier.
+     *
+     * @param building
+     * @param collegeId
+     * @param college
+     */
     private static void saveBuildingHelper(BuildingModel building, String collegeId, CollegeModel college){
         building.setHoursToComplete(0);
         building.setCurDisaster("None");
@@ -465,9 +502,15 @@ public class BuildingManager {
     static public void establishCollege(String collegeId, CollegeModel college) {
         loadTips(collegeId);
 
-        //pre-loaded buildings
+        // Pre-loaded buildings
+        // Every college should start with:
+        // - One Dorm
+        // - One Dining Hall
+        // - One Academic Center
+        // - Once Admin Building
+        // - Once Sports Center
         DormModel startingDorm = new DormModel(NameGenDao.generateBuildingName()+" Hall",  0, "Medium");
-        saveBuildingHelper(startingDorm, collegeId, college);
+        saveBuildingHelper(startingDorm, collegeId, college); // See above function
 
         DiningHallModel startingDiningHall = new DiningHallModel(NameGenDao.generateBuildingName()+" Dining Hall",
                  0, "Medium");
@@ -483,16 +526,27 @@ public class BuildingManager {
         SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
+        // Necessary gates for buildings
+        // Sizes
         gateManager.createGate(collegeId, "Large Size", "Gate until large buildings are unlocked.", "resources/images/DORM.png", 1);
         gateManager.createGate(collegeId, "Extra Large Size", "Gate until extra large buildings are unlocked.", "resources/images/DORM.png",2);
+        // Special Buildings
         gateManager.createGate(collegeId, "Library", "Gate until library is unlocked.", "resources/images/LIBRARY.png", 3);
         gateManager.createGate(collegeId, "Health Center", "Gate until health center is unlocked.", "resources/images/HEALTH.png", 4);
         gateManager.createGate(collegeId, "Entertainment Center", "Gate until entertainment center is unlocked.", "resources/images/ENTERTAINMENT.png", 5);
+        // Sports Buildings
         gateManager.createGate(collegeId, "Football stadium", "Gate until football stadium center is unlocked.", "resources/images/FOOTBALL%20STADIUM.png", 2);
         gateManager.createGate(collegeId, "Baseball diamond", "Gate until baseball diamond is unlocked.", "resources/images/BASEBALL%20DIAMOND.png", 3);
         gateManager.createGate(collegeId, "Hockey rink", "Gate until hockey rink is unlocked.", "resources/images/HOCKEY%20RINK.png", 4);
     }
 
+    /**
+     * Pass in a building type, get a list of all the buildings of that type in the college.
+     *
+     * @param buildingType
+     * @param collegeId
+     * @return
+     */
     public static List<BuildingModel> getBuildingListByType(String buildingType, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         List<BuildingModel> buildingsToReturn = new ArrayList<>();
@@ -505,6 +559,13 @@ public class BuildingManager {
         return buildingsToReturn;
     }
 
+    /**
+     * Pass in a building name, get the BuildingModel of the building with that name.
+     *
+     * @param name
+     * @param collegeId
+     * @return
+     */
     public static BuildingModel getBuildingByName(String name, String collegeId){
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         BuildingModel buildingToReturn = null;
@@ -516,6 +577,11 @@ public class BuildingManager {
         return buildingToReturn;
     }
 
+    /**
+     * Make all the tips that show on the page.
+     *
+     * @param collegeId
+     */
     private static void loadTips(String collegeId) {
         // Only the first tip should be set to true.
         TutorialManager.saveNewTip(collegeId, 0,"viewBuildings", "Construct more buildings to allow a greater maximum capacity at your college.", true, "ENTERTAINMENT.png");
