@@ -9,11 +9,11 @@ public class EventManager {
 
     public EventManager(String collegeId) {
         // Calendar of number of days open / event type
-        eventCalendar.put(5, EventType.PLAGUE);
-        eventCalendar.put(7, EventType.FIRE);
-        eventCalendar.put(13, EventType.FLOOD);
-        eventCalendar.put(16, EventType.RIOT);
-        eventCalendar.put(18, EventType.SNOW);
+        eventCalendar.put(11, EventType.PLAGUE);
+        eventCalendar.put(22, EventType.RIOT);
+        eventCalendar.put(27, EventType.FLOOD);
+        eventCalendar.put(32, EventType.SNOW);
+        eventCalendar.put(38, EventType.FIRE);
     }
 
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupEventManager){

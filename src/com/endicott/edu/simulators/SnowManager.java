@@ -27,8 +27,8 @@ public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
     private static final float PROBABILTY_OF_MID_STORM = 70;
     private static final float PROBABILTY_OF_HIGH_STORM = 100;
-    private static final int START_OF_WINTER = 12;      //must be an int (dealing with whole days)
-    private static final int END_OF_WINTER = 20;        //must be an int (dealing with whole days)
+    private static final int START_OF_WINTER = 30;      //must be an int (dealing with whole days)
+    private static final int END_OF_WINTER = 40;        //must be an int (dealing with whole days)
     private static final String lowUpgradeName = "Snow Pushers";
     private static final String midUpgradeName = "Pipes";
     private static final String highUpgradeName = "Snowplows";
@@ -109,7 +109,7 @@ public class SnowManager {
         Boolean isCold = false;
         if(currentDay == START_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            popupManager.newPopupEvent("Winter is here!", "Winter is officially here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
+            popupManager.newPopupEvent("Winter is here!", "Winter is here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
                     "Ok","okWinterStarted",
                     "resources/images/winterIcon.png","winter season icon");
         }else if (currentDay == END_OF_WINTER){
