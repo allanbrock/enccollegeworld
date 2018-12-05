@@ -376,7 +376,6 @@
                     <div class="form-group">
                         <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
                                 buildingType.equals("Academic Center")){%>
-                            <!--form group used to be here -->
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
