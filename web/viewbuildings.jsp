@@ -233,7 +233,7 @@
             <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
             <%}%>
 
-            <%--Table where all the buildings are displayed with their stats.--%>
+            <%--Table where all the buildings are displayed with their stats--%>
             <table class="table table-condensed">
                 <thread>
                     <tr>
