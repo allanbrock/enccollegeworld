@@ -4,9 +4,7 @@ import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.FloodDao;
 import com.endicott.edu.models.*;
 
-import java.awt.geom.Dimension2D;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Random;
 
@@ -117,16 +115,16 @@ public class FloodManager {
      */
 
     private boolean didFloodStartAtThisDorm(String collegeId, int hoursAlive, BuildingModel dorm, PopupEventManager popupManager, Boolean hasUpgrade) {
-        if (!DisasterManager.isEventPermitted(collegeId)) {
-            return false;
-        }
-
         float oddsOfFlood = (hoursAlive - dorm.getTimeSinceLastRepair()) * PROBABILTY_OF_FLOOD_PER_HOUR;
         //If a flood upgrade was bought from the store, decrease the probability of floods.
         if(hasUpgrade){
             oddsOfFlood = oddsOfFlood - 0.02f;
         }
-        if (Math.random() <= oddsOfFlood || CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD)) {
+
+        EventManager eventManager = new EventManager(collegeId);
+        if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD) || eventManager.doesEventStart(collegeId, EventType.FLOOD)) {
+
+            //       if (Math.random() <= oddsOfFlood || CollegeManager.isMode(collegeId, CollegeMode.DEMO_FLOOD)) {
             BuildingManager buildingMgr = new BuildingManager();
             int randomCost = (int)(Math.random()*1500) + 1000 ;
             int randomLength = (int) (Math.random() * 72) + 24;
@@ -135,7 +133,7 @@ public class FloodManager {
 
             FloodDao floodDao = new FloodDao();
             floodDao.saveTheFlood(collegeId, randomFlood);
-            DisasterManager.isEventPermitted(collegeId);
+            EventManager.isEventPermitted(collegeId);
             isHappening = true;
             logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
             logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);

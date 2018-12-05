@@ -28,27 +28,26 @@ public class FacultyManager {
         ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
 
         // TODO: Alex,  once a college has deans, wouldn't this always been true?  Message appears on day 1 of the college.
-//        if(deanCheck.size() > 0){
-//            for(DepartmentModel d : deanCheck){
-//                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
-//                d.setEmployeeCount("Dean", 1);
-//            }
-//            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
-//        }
-//        if(assistantDeanCheck.size() > 0){
-//            for(DepartmentModel d : assistantDeanCheck){
-//                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
-//                d.setEmployeeCount("Assistant Dean", 1);
-//            }
-//            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
-//        }
+        if(deanCheck.size() > 0){
+            for(DepartmentModel d : deanCheck){
+                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
+                d.setEmployeeCount("Dean", 1);
+            }
+            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
+        }
+        if(assistantDeanCheck.size() > 0){
+            for(DepartmentModel d : assistantDeanCheck){
+                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
+                d.setEmployeeCount("Assistant Dean", 1);
+            }
+            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
+        }
 
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         for(FacultyModel member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);
             if(member.getRaiseRecentlyGiven()){
-                popupManager.newPopupEvent("Employee Raise", "A raise was given to " + member.getFacultyName(), "ok", "done", "resources/images/money.jpg", "Employee Raise");
                 member.setRaiseRecentlyGiven(false);
                 fao.saveAllFaculty(collegeId, editableFaculty);
             }

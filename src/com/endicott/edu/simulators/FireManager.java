@@ -80,7 +80,7 @@ public class FireManager {
      * @param hoursAlive number of hours college has been alive
      * @param isCatastrophic boolean dictating which type of fire to start
      */
-    public void startFireRandomly(String runId, int hoursAlive, boolean isCatastrophic) {
+    public void startFire(String runId, int hoursAlive, boolean isCatastrophic) {
         if (isCatastrophic) {
             startCatastrophicFire(runId, hoursAlive);
             return;
@@ -175,39 +175,12 @@ public class FireManager {
      * @param hoursAlive
      */
     public void createFireByOdds(String runId, int hoursAlive, boolean isUpgraded) {
-        if (!DisasterManager.isEventPermitted(runId)) {
-            return;
-        }
+        EventManager eventManager = new EventManager(runId);
 
-        Random rand = new Random();
-        int odds = rand.nextInt(100);
-        if (isUpgraded) {
-            possiblyCreateFire(odds, upgradedRegFireProb, upgradedCatFireProb, runId, hoursAlive);
-        } else {
-            possiblyCreateFire(odds, regFireProb, catFireProb, runId, hoursAlive);
-        }
-    }
-
-    /**
-     * Starts either type of fire based on the type of probability it receives
-     *
-     * @param odds random number generated
-     * @param regProb probability of a regular fire starting
-     * @param catProb probability of a catastrophic fire happening
-     * @param runId
-     * @param hoursAlive
-     */
-    public void possiblyCreateFire(int odds,int regProb,int catProb,String runId, int hoursAlive){
-        if (odds < regProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
-            if (odds < catProb || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE)) {
-                boolean isCatastrophic = true;
-                startFireRandomly(runId, hoursAlive, isCatastrophic);
-                DisasterManager.newEventStart(runId);
-                return;
-            }
-            boolean isCatastrophic = false;
-            startFireRandomly(runId, hoursAlive, isCatastrophic);
-            DisasterManager.newEventStart(runId);
+        if (CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE) || eventManager.doesEventStart(runId, EventType.FIRE)) {
+            // If you don't have smoke detectors, the fire is catastrophic.
+            startFire(runId, hoursAlive, !isUpgraded);
+            EventManager.newEventStart(runId);
         }
     }
 
@@ -271,19 +244,25 @@ public class FireManager {
 
         if (fire.isCatastrophic()){
             for (int i = 0; i < numStudentDeaths; ++i) {
-                int studentToRemove = new Random().nextInt(students.size());
-                students.remove(studentToRemove);
+                int nStudents = students.size();
+                if (nStudents > 0) {
+                    int studentToRemove = new Random().nextInt(students.size());
+                    students.remove(studentToRemove);
+                }
             }
             for (int j = 0; j <numFacultyDeaths; j++){
-                int facultyToRemove = new Random().nextInt(faculty.size());
-                if(faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")){
-                    for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
-                        if(faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())){
-                            d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
+                int nFaculty = faculty.size();
+                if (nFaculty > 0) {
+                    int facultyToRemove = new Random().nextInt(faculty.size());
+                    if (faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")) {
+                        for (DepartmentModel d : DepartmentManager.getDepartmentOptions()) {
+                            if (faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())) {
+                                d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
+                            }
                         }
                     }
+                    faculty.remove(facultyToRemove);
                 }
-                faculty.remove(facultyToRemove);
             }
             return;
         }
