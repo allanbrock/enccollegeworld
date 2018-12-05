@@ -86,6 +86,9 @@
     String haveEntertainmentCenter = "false";
     String haveHealthCenter = "false";
     String haveLibrary = "false";
+    String haveBaseballDiamond = "false";
+    String haveFootballStadium = "false";
+    String haveHockeyRink = "false";
 
     GateManager gateManager = new GateManager();
 %>
@@ -312,24 +315,39 @@
                             <option value="Academic Center">Academic Center</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
-                            <%if(college.getAvailableCash() > 150000){%>
-                                <option value="Baseball Diamond">Baseball Diamond</option>
-                                <option value="Football Stadium">Football Stadium</option>
-                                <option value="Hockey Rink">Hockey Rink</option>
-                            <%}%>
+                            <%for (int b = 0; b < buildings.size(); b++) {
+                                if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
+                                    haveEntertainmentCenter = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
+                                    haveHealthCenter = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
+                                    haveLibrary = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("BASEBALL DIAMOND")){
+                                    haveBaseballDiamond = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("FOOTBALL STADIUM")){
+                                    haveFootballStadium = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("HOCKEY RINK")){
+                                    haveHockeyRink = "true";
+                                }
+                            }
+                                if(college.getAvailableCash() > 150000){
+                                if(haveBaseballDiamond.equals("false")){%>
+                                <option value="Baseball Diamond" <%if(!gateManager.testGate(college.getRunId(), "Baseball diamond")){%>disabled<%}%>>Baseball Diamond</option>
+                            <%}
+                            if(haveFootballStadium.equals("false")){%>
+                                <option value="Football Stadium" <%if(!gateManager.testGate(college.getRunId(), "Football stadium")){%>disabled<%}%>>Football Stadium</option>
+                            <%}
+                            if(haveHockeyRink.equals("false")){%>
+                                <option value="Hockey Rink" <%if(!gateManager.testGate(college.getRunId(), "Hockey rink")){%>disabled<%}%>>Hockey Rink</option>
+                            <%}
+                                }%>
                             <%
                                 if(college.getAvailableCash() > 250000){
-                                for (int b = 0; b < buildings.size(); b++) {
-                                    if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
-                                        haveEntertainmentCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
-                                        haveHealthCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
-                                        haveLibrary = "true";
-                                    }
-                                }
                                 if(haveLibrary.equals("false")){%>
                                 <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
                             <%}
@@ -420,6 +438,7 @@
     <div class="container">
         <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
+                <div class="col-md-12">
                 <div class="col-md-2" style="margin-right: 3%;">
                     <h4>Large Size</h4>
                     <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
@@ -464,9 +483,11 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                <div class="col-md-12">
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Entertainment Center</h4>
-                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png" style="margin-bottom: 25px;">
+                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png" style="margin-bottom: 28px;">
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
@@ -474,6 +495,40 @@
                             <%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>%
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Football Stadium</h4>
+                    <img class="img-responsive" src="resources/images/FOOTBALL%20STADIUM_k.png">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Baseball Diamond</h4>
+                    <img class="img-responsive" src="resources/images/BASEBALL%20DIAMOND_k.png" style="margin-top: 33px; margin-bottom: 34px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Hockey Rink</h4>
+                    <img class="img-responsive" src="resources/images/HOCKEY%20RINK_k.png" style="margin-top: 41px; margin-bottom: 47px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>%
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
