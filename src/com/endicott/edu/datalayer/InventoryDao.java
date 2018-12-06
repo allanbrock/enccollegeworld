@@ -40,7 +40,7 @@ public class InventoryDao {
             @Override
             public int compare(ItemModel lhs, ItemModel rhs) {
                 // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                return lhs.getName().compareTo(rhs.getName());
+                return rhs.getUnlocked().compareTo(lhs.getUnlocked());
             }
         });
 

@@ -58,13 +58,13 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
+        SportManager.establishCollege(collegeId);
         GateManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
         SnowManager.establishCollege(collegeId);
         PlagueManager.establishCollege(collegeId);
         FireManager.establishCollege(collegeId);
         PlayManager.establishCollege(collegeId);
-        SportManager.establishCollege(collegeId);
         InventoryManager.establishCollege(collegeId);
 
         return college;
