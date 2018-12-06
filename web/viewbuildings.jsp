@@ -454,7 +454,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                            aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>; height:25px">
+                            aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Large Size")%>%
                         </div>
                     </div>
@@ -465,7 +465,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Extra Large Size")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Extra Large Size")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Extra Large Size")%>%
                         </div>
                     </div>
@@ -476,7 +476,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Library")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Library")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Library")%>%
                         </div>
                     </div>
@@ -487,7 +487,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Health Center")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Health Center")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Health Center")%>%
                         </div>
                     </div>
@@ -500,7 +500,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>%
                         </div>
                     </div>
@@ -511,7 +511,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>%
                         </div>
                     </div>
@@ -522,7 +522,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>%
                         </div>
                     </div>
@@ -533,7 +533,7 @@
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>; height:25px">
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>%; height:25px">
                             <%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>%
                         </div>
                     </div>
