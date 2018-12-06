@@ -65,6 +65,7 @@ public class CollegeManager {
         FireManager.establishCollege(collegeId);
         PlayManager.establishCollege(collegeId);
         InventoryManager.establishCollege(collegeId);
+        SportManager.establishCollege(collegeId);
 
         return college;
     }
