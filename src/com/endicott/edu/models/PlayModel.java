@@ -1,20 +1,38 @@
 package com.endicott.edu.models;
 
-import java.util.ArrayList;
-
 public class PlayModel {
-    enum PlayState {
+    public int getPayout() {
+        return payout;
+    }
+
+    public void setPayout(int payout) {
+        this.payout = payout;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public enum PlayState {
         JUST_STARTED,
         DIRECTOR_PICKED,
         PLAY_IN_PERFORMANCE
     }
 
     private PlayState state;
+    private String director;
     private int daysSincePurchase;
+    private int payout;
 
     public PlayModel(){
+        this.setDirector("");
         this.state = PlayState.JUST_STARTED;
         this.daysSincePurchase = 0;
+        this.payout = 2000;
     }
 
     public PlayState getState() {
