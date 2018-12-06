@@ -61,7 +61,7 @@ public class GateManager {
         return 0;
     }
 
-    public static int getGateProgress(String collegeId) {
+    public static int getOverallGateProgress(String collegeId) {
         return 100 * StudentDao.getStudents(collegeId).size() / (int)GATE_LEVELS.get(getGateLevel(collegeId)+1);
     }
 
@@ -89,7 +89,7 @@ public class GateManager {
         List<GateModel> gates = GateDao.getGates(collegeId);
         for(GateModel gate : gates) {
             if (key.equals(gate.getKey())){
-                double goal = gate.getLevel();
+                double goal = getGateGoal(gate.getLevel());
                 progress = Math.min(100,(int)Math.floor(100*(studentCount / goal)));
                 break;
             }
