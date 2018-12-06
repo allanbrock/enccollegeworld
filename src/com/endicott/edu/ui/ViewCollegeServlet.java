@@ -76,6 +76,9 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         if(request.getParameter("picked_pro") != null) {
             PlayManager.handleProfessionalDirectorPicked(collegeId);
         }
+        else if(request.getParameter("picked_student") != null){
+            PlayManager.handleStudentDirectorPicked(collegeId);
+        }
 
 
         // Check if the button pressed was from a popup.  If so clear it.
