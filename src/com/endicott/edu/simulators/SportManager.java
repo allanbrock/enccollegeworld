@@ -106,7 +106,9 @@ public class SportManager {
                         //make a popup
                         popupManager.newPopupEvent("Champions!", recentSport.getName() + " have won a championship!", "OK","ok", "resources/images/trophy.png", "Sports");
                         NewsManager.createNews(collegeId, hoursAlive, recentSport.getName() + " has won a championship!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
-                        //cause riot?
+                        //cause riot
+                        RiotModel riot = new RiotModel();
+                        RiotManager.createSportsRiot(recentSport, riot, popupManager);
                     }
                     //set recent season sports to inactive even if they didn't win
                     recentSport.setIsActive(0);
@@ -224,13 +226,13 @@ public class SportManager {
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         if (buildings != null) {
             for (BuildingModel b : buildings) {
-                if (b.getName().equalsIgnoreCase("FOOTBALL STADIUM")) {
+                if (b.getKindOfBuilding().equals("FOOTBALL STADIUM")) {
                     stadiumBuilt = true;
-                } else if (b.getName().equalsIgnoreCase("HOCKEY RINK")) {
+                } else if (b.getKindOfBuilding().equals("HOCKEY RINK")) {
                     rinkBuilt = true;
-                } else if (b.getName().equalsIgnoreCase("SPORTS CENTER")) {
+                } else if (b.getKindOfBuilding().equals("SPORTS")) {
                     sportCenterBuilt = true;
-                } else if (b.getName().equalsIgnoreCase("BASEBALL DIAMOND")) {
+                } else if (b.getKindOfBuilding().equals("BASEBALL DIAMOND")) {
                     diamondBuilt = true;
                 }
             }
