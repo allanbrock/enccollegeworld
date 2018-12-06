@@ -21,12 +21,14 @@ import java.util.Random;
  *          - SNOW STORMS CAN ONLY HAPPEN DURING WINTER SEASON
  *          - ONLY HAPPEN ON FULLY BUILT BUILDINGS.
  *
- *
  * */
 public class SnowManager {
     private static final float PROBABILTY_OF_LOW_STORM = 40;
     private static final float PROBABILTY_OF_MID_STORM = 70;
     private static final float PROBABILTY_OF_HIGH_STORM = 100;
+    private static final double PROBABILTY_OF_SNOWBALL_FIGTH_FOR_HIGH = 0.75;
+    private static final double PROBABILTY_OF_SNOWBALL_FIGTH_FOR_MID = 0.50;
+    private static final double PROBABILTY_OF_SNOWBALL_FIGTH_FOR_LOW = 0.25;
     private static final int START_OF_WINTER = 30;      //must be an int (dealing with whole days)
     private static final int END_OF_WINTER = 40;        //must be an int (dealing with whole days)
     private static final String lowUpgradeName = "Snow Pushers";
@@ -88,6 +90,7 @@ public class SnowManager {
         } else {
             logger.info("EVARUBIO . handleTimeChange() snow storm is currently happening, gonna call setHoursLeftInSnowStorm()  ");
 
+            possiblyStartSnowballFight(snowStorm.getSnowIntensity(),collegeId,popupManager);
             snowStorm.setHoursLeftInSnowStorm(timeLeft);
         }
         snowDao.saveSnowStorm(collegeId,snowStorm);
@@ -96,8 +99,7 @@ public class SnowManager {
     /**
      * Determines whether or not it is winter season to create or not a Snow Storm.
      * Creates popup to notify user.
-     * TODO maybe create on main page something that shows what the current season is. meybe with cute/cool img.
-     * FOR NOW: winter season between days 12 and 20
+     * FOR NOW: winter season between days 30 and 40
      * @param collegeId
      * @param hoursAlive
      * @param popupManager
@@ -129,7 +131,7 @@ public class SnowManager {
     }
     /**
      * Creates a low/mid/high intensity snow storm depending on the odds.
-     * Method called between specific days: 90 (aprx 3 months) and 160 (aprox 5 months and a half)
+     * Method called between specific days: 30 and 40.
      *
      * @param collegeId
      * @param hoursAlive
@@ -138,6 +140,7 @@ public class SnowManager {
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
         if (!EventManager.isEventPermitted(collegeId)) {
+            logger.info("EVARUBIO . SNOW . possiblyCreateSnowStorm() - the Event was NOT permitted. ");
             return;
         }
 
@@ -147,7 +150,7 @@ public class SnowManager {
 
         Random rand = new Random();
         int oddsOfStorm = rand.nextInt(220);
-        logger.info("EVARUBIO . possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
+        logger.info("EVARUBIO . SNOW. possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
         EventManager eventManager = new EventManager(collegeId);
         if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW) || eventManager.doesEventStart(collegeId, EventType.SNOW)) {
@@ -182,6 +185,45 @@ public class SnowManager {
         }
     }
     /**
+     * If a snow storm is currently happening, and the upgrade was NOT bought,
+     * create a snowball fight:
+     *      - intensity 1: 25% chance of snowball fight happening
+     *      - intensity 2: 50% chance of snowball fight happening
+     *      - intensity 3: 75% chance of snowball fight happening
+     * */
+    public void possiblyStartSnowballFight(int stormIntensity, String collegeId, PopupEventManager popupManager){
+        Random rand = new Random();
+        double fightChance = rand.nextDouble();
+
+        if((stormIntensity == 1) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_LOW)){
+            generateFightPopup(popupManager);
+            Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 1500 );
+        } else if((stormIntensity == 2) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_MID)){
+            generateFightPopup(popupManager);
+            Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 2500 );
+        } else if((stormIntensity == 3) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_HIGH)){
+            generateFightPopup(popupManager);
+            Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 3700 );
+        }
+
+
+    }
+
+    /**
+     * Generates the correct popup in the event that a snowball fight is happening
+     * @param popupManager The popupEventManager
+     * */
+    public void generateFightPopup(PopupEventManager popupManager){
+        // for future use (alternating them)
+        String grinchImgPath = "resources/images/grinch-snowball-fight.png";
+        String handsImgPath ="resources/images/hands-snowball-fight.png";
+        popupManager.newPopupEvent("Snowball Fight Outburst!",
+                "Oh no! The un-plowed amount of snow was too tempting for students.. A campus-wide Snowball Fight is in progress, Maintenance won't be happy.",
+                "Ok","okSnowballFight",
+                "resources/images/grinch-snowball-fight.png","grinch snowball fight");
+        logger.info("EVARUBIO SNOW . possiblyStartSnowballFight() - snowball fight happening! ");
+    }
+    /**
      * Starts a Low intensity Snow Storm.
      *
      *      title: Weather Alert: Low Intensity Snow Storm
@@ -212,6 +254,7 @@ public class SnowManager {
     }
     /**
      * Starts a Mid intensity Snow Storm.
+     * Accelerates the decay of the snowed in building.
      *
      *      title: Weather Alert: Mid Intensity Blizzard Warning.
      *      item: Frozen Pipes
@@ -229,6 +272,7 @@ public class SnowManager {
         logger.info("EVARUBIO - SNOW startMidIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
+        buildingMgr.acceleratedDecayAfterDisaster(collegeId, oneBuildingSnowed.getName());
         int lengthOfStorm = generateLengthOfSnow(intensity);
         int midRandCost = generateCostOfSnow(intensity,hasSpecificUpgradePurchased(midUpgradeName,collegeId));
 
@@ -244,6 +288,7 @@ public class SnowManager {
 
     /**
      * Starts a High intensity Snow Storm.      Severe Snow Storm. Winter Storm Warning.
+     * Accelerates the decay of the snowed in buildings.
      *
      *       title: URGENT - WINTER WEATHER MESSAGE
      *       item: Snow Plows
@@ -273,6 +318,8 @@ public class SnowManager {
             twoBuild = getRandCompletedBuilding(buildings);
         }
         buildingsSnowedIn.add(oneBuild);
+        buildingMgr.acceleratedDecayAfterDisaster(collegeId, oneBuild.getName());
+        buildingMgr.acceleratedDecayAfterDisaster(collegeId, twoBuild.getName());
         buildingsSnowedIn.add(twoBuild);
 
         SnowModel intenseSnowStorm = new SnowModel(collegeId, buildingsSnowedIn, intensity, randSevereCost, lengthOfStorm, lengthOfStorm, oneBuild.getTimeSinceLastRepair());
@@ -341,17 +388,6 @@ public class SnowManager {
 
 
     /**
-     * Depending on the type of building that was affected by the Snow storm,
-     * update corresponding features.
-     *     >> Class building - classes canceled so: - Student Happiness increases
-     *                                           - Faculty Happiness increases
-     *     >> Sports building
-     *     if there is currently a snow storm it will bump the funHappiness.
-     *
-     * */
-
-
-    /**
      * Produces a random number of sick people depending on
      * the intensity of the Snow Storm that is currently happening.
      * Ranges:
@@ -390,6 +426,7 @@ public class SnowManager {
                 buildingsCompleted.add(edif);
             }
         }
+
         Random rand = new Random();
         int index = rand.nextInt(buildingsCompleted.size());
         BuildingModel randBuilding = buildingsCompleted.get(index);
@@ -415,26 +452,7 @@ public class SnowManager {
             }
         }
     }
-    /**
-     *
-     *
-     *
-    private void snowSeasonPopup(int hoursAlive, String collegeId, PopupEventManager popupManager){
-        int currentDay = hoursAlive / 24 + 1;
 
-        if(currentDay>= 30){
-            popupManager.newPopupEvent("Snow Season!", "The snow season is here !! ",
-                    "Ok","okSnowStormEnded",
-                    "resources/images/lowSunny.png","Sun");
-
-        }else if(currentDay >= 40){
-            popupManager.newPopupEvent("Snow Season OVER!", "The snow season is OOVER !! ",
-                    "Ok","okSnowStormEnded",
-                    "resources/images/lowSunny.png","Sun");
-        }
-
-    }
-     */
     /**
      * Generates the correct PopupEventManager depending on type of storm and if an upgrade has been purchased.
      * If storm has finished, correctly update the Building's "Current Disaster"

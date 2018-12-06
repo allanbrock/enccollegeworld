@@ -24,23 +24,24 @@ public class FacultyManager {
         FacultyDao fao = new FacultyDao();
         payFaculty(collegeId, hoursAlive, fao);
         inspectFacultyPerformances(collegeId);
+        // Haven't tested this line yet
+        //DepartmentManager.checkDepartmentRatingsForBonuses(collegeId, DepartmentManager.getRatingsForDepartments(collegeId));
         ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
         ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
 
-        // TODO: Alex,  once a college has deans, wouldn't this always been true?  Message appears on day 1 of the college.
         if(deanCheck.size() > 0){
             for(DepartmentModel d : deanCheck){
                 addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
                 d.setEmployeeCount("Dean", 1);
             }
-            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Dean Replacement");
+            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/student.png", "Dean Replacement");
         }
         if(assistantDeanCheck.size() > 0){
             for(DepartmentModel d : assistantDeanCheck){
                 addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
                 d.setEmployeeCount("Assistant Dean", 1);
             }
-            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/money.jpg", "Assistant Dean Replacement");
+            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/student.png", "Assistant Dean Replacement");
         }
 
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
@@ -399,6 +400,14 @@ public class FacultyManager {
             }
         }
         return deanlessDepartments;
+    }
+
+    public static int getAverageFacultyPerformance(String collegeId){
+        int sum = 0;
+        for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
+            sum += f.getPerformance();
+        }
+        return sum / FacultyDao.getFaculty(collegeId).size();
     }
 
     private static void loadTips(String collegeId) {

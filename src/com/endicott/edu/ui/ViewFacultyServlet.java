@@ -5,10 +5,7 @@ import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
-import com.endicott.edu.simulators.CollegeManager;
-import com.endicott.edu.simulators.FacultyManager;
-import com.endicott.edu.simulators.PopupEventManager;
-import com.endicott.edu.simulators.TutorialManager;
+import com.endicott.edu.simulators.*;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -26,6 +23,10 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
 
         if (request.getParameter("addFaculty") != null) {  // addFaculty is present if addFaculty button was pressed
             addFaculty(request, response);
+        }
+
+        if(request.getParameter("addDepartment") != null){
+            addDepartment(request, response);
         }
 
         for(int i = 0; i < FacultyDao.getFaculty(collegeId).size(); i++) {
@@ -128,6 +129,31 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
                 UiMessage message = new UiMessage("Faculty member was not found");
                 request.setAttribute("message", message);
                 logger.severe("Parameters bad for finding faculty.");
+            }
+        }
+
+        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewfaculty.jsp");
+        dispatcher.forward(request,response);
+    }
+
+    private static void addDepartment(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException{
+        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        if (collegeId == null) {
+            UiMessage message = new UiMessage("Can't add a department because missing information");
+            request.setAttribute("message", message);
+            logger.severe("Parameters bad for adding department");
+        }
+        else {
+            String addedDepartmentName = request.getParameter("newDepartmentDropdown");
+            if(DepartmentManager.addToDepartmentOptions(collegeId, addedDepartmentName)){
+                // It worked
+            }
+            else{
+                UiMessage message = new UiMessage("Can't add a department because name is invalid");
+                request.setAttribute("message", message);
+                logger.severe("Parameters bad for adding department");
             }
         }
 

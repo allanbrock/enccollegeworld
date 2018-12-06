@@ -61,20 +61,21 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         }
 
         if(request.getParameter("quarantineStudents") != null){
-            Accountant accountant = new Accountant();
-            PlagueDao dao = new PlagueDao();
-            List<PlagueModel> plagues = dao.getPlagues(collegeId);
-            for (PlagueModel plague : plagues) {
-                plague.setQuarantine(true);
-            }
-            dao.saveAllPlagues(collegeId, plagues);
-            accountant.payBill(collegeId, "Students are now quarantined", 5000);
-
+            PlagueManager.quarantineStudents(collegeId);
+        }
+        if(request.getParameter("outSourceHelp") != null){
+            PlagueManager.govHandlesPlagueMutation(collegeId, request, popupManager);
+        }
+        if(request.getParameter("inHouseHelp") != null){
+            PlagueManager.schoolHandlesPlagueMutation(collegeId, request, popupManager);
         }
 
         // TODO: Stephen this is where you would check if a left or right button was hit.
         if(request.getParameter("picked_pro") != null) {
             PlayManager.handleProfessionalDirectorPicked(collegeId);
+        }
+        else if(request.getParameter("picked_student") != null){
+            PlayManager.handleStudentDirectorPicked(collegeId);
         }
 
 

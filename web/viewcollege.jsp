@@ -336,6 +336,7 @@
                                 <option value="Demo Snow"<% if (college.getMode() == CollegeMode.DEMO_SNOW) {%> selected <% } %> >Demo Snow</option>
                                 <option value="Demo Flood"<% if (college.getMode() == CollegeMode.DEMO_FLOOD) {%> selected <% } %> >Demo Flood</option>
                                 <option value="Demo Championship"<% if (college.getMode() == CollegeMode.DEMO_CHAMPIONSHIP) {%> selected <% } %> >Demo Championship</option>
+                                <option value="Demo Plague Mutation"<% if (college.getMode() == CollegeMode.DEMO_ZOMBIE_MUTATION) {%> selected <% } %> >Demo Plague Mutation</option>
                             </select>
                         </div>
                         <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">
