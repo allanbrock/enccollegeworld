@@ -23,6 +23,7 @@ public class StudentModel implements Serializable {
     private int hourLastUpdated = 0;
     private int healthHappinessRating = 0; // 0 if ill, 100 if health
     private int academicHappinessRating = 0; // 0 to 100
+    private int professorHappinessRating = 0;
     private int moneyHappinessRating = 0; // 0 to 100, determined from college tuition.
     private int funHappinessRating = 0;   // 0 to 100
     private int advisorHappinessRating = 0;
@@ -213,5 +214,9 @@ public class StudentModel implements Serializable {
     public int getOverallBuildingHappinessRating() {return overallBuildingHappinessRating;}
 
     public  void setOverallBuildingHappinessRating(int overallBuildingHappinessRating) {this.overallBuildingHappinessRating = overallBuildingHappinessRating;}
+
+    public int getProfessorHappinessRating() { return professorHappinessRating; }
+    public void setProfessorHappinessRating(int professorHappinessRating) { this.professorHappinessRating = professorHappinessRating; }
 }
+
 
