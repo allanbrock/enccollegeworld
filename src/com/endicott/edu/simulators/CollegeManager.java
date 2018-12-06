@@ -64,8 +64,8 @@ public class CollegeManager {
         PlagueManager.establishCollege(collegeId);
         FireManager.establishCollege(collegeId);
         PlayManager.establishCollege(collegeId);
-        InventoryManager.establishCollege(collegeId);
         SportManager.establishCollege(collegeId);
+        InventoryManager.establishCollege(collegeId);
 
         return college;
     }
