@@ -137,7 +137,7 @@ public class DepartmentManager {
         CollegeModel college = CollegeDao.getCollege(collegeID);
         for(String department : departmentRatings.keySet()){
             if(!department.equals("Overall Academic Happiness")) {
-                if (departmentRatings.get(department) > 60) { // 60 a test value
+                if (departmentRatings.get(department) > 92) {
                     for (DepartmentModel d : departmentOptions) {
                         if (department.equals(d.getDepartmentName())) {
                             if (!d.getBonusGiven()) {
