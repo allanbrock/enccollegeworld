@@ -13,12 +13,13 @@ import java.util.logging.Logger;
  * Responsible for simulating everything sports related.
  */
 public class SportManager {
+    private static String season = null;
     SportsDao dao = new SportsDao();
     static private Logger logger = Logger.getLogger("SportManager");
 
     public static void establishCollege(String collegeId) {
+        season = "Fall";
         loadTips(collegeId);
-        establishDefaultSportsTeams(collegeId);
         InventoryManager.createItem("Volley Ball Net",false,"volleyballnet.png",500, 0, "For a volleyball team, you need a net.", collegeId);
     }
 
@@ -31,8 +32,35 @@ public class SportManager {
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         List<SportModel> sports = dao.getSports(collegeId);
 
-        // The default women's volleyball team is created on day 10.
-        if (CollegeManager.getDaysOpen(collegeId) == 10) {
+        //has the sport season changed?
+        int thisMonth = CollegeManager.getCollegeCurrentMonth(collegeId);
+        //if thisMonth is in fall and season is still summer
+        if (thisMonth >= 9 && thisMonth <= 11){
+           if (season.equalsIgnoreCase("Summer")){
+               handleSeasonChange(collegeId, hoursAlive, popupManager);
+           }
+        }
+        //if thisMonth is in winter and season is still fall
+        else if (thisMonth == 12 || thisMonth == 1 || thisMonth == 2){
+            if (season.equalsIgnoreCase("Fall")){
+                handleSeasonChange(collegeId, hoursAlive, popupManager);
+            }
+        }
+        //if thisMonth is in spring season is still winter
+        else if (thisMonth >= 3 && thisMonth <= 5){
+            if (season.equalsIgnoreCase("Winter")){
+                handleSeasonChange(collegeId, hoursAlive, popupManager);
+            }
+        }
+        //if thisMonth is in summer and season is still spring
+        else if (thisMonth >= 6 && thisMonth <= 8){
+            if (season.equalsIgnoreCase("Spring")){
+                handleSeasonChange(collegeId, hoursAlive, popupManager);
+            }
+        }
+
+        // If the net has been bought, create women's volleyball
+        if (InventoryManager.isPurchased("Volley Ball Net", collegeId)) {
             createWomenVolleyball(collegeId);
         }
 
@@ -51,6 +79,55 @@ public class SportManager {
         }
 
         dao.saveAllSports(collegeId, sports);
+    }
+
+    public void handleSeasonChange(String collegeId, int hoursAlive, PopupEventManager popupManager){
+        List<SportModel> sports = dao.getSports(collegeId);
+
+        //ONLY DO THE FOLLOWING IF sports IS NOT EMPTY:
+        if (!(sports == null)){
+
+            List<SportModel> recentSeasonSports = null;
+            //get all sports from recent season, if they were active
+            for (SportModel s: sports){
+                if ((s.getSportSeason().equalsIgnoreCase(season)) && s.getIsActive() == 1){
+                    recentSeasonSports.add(s);
+                }
+            }
+
+            //ONLY DO THE FOLLOWING IF recentSeasonSports IS NOT EMPTY:
+            if (!(recentSeasonSports == null)){
+                //Check for championship
+                for (SportModel recentSport: recentSeasonSports){
+                    //If they win 80% or more of their games, they're a champion
+                    if ((recentSport.getGamesWon()/recentSport.getNumGames()) >= 0.8){
+                        //this sport is a champ
+                        recentSport.addChampionship();
+                        //make a popup
+                        popupManager.newPopupEvent("Champions!", recentSport.getName() + " have won a championship!", "OK","ok", "resources/images/trophy.png", "Sports");
+                        NewsManager.createNews(collegeId, hoursAlive, recentSport.getName() + " has won a championship!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
+                        //cause riot?
+                    }
+                    //set recent season sports to inactive even if they didn't win
+                    recentSport.setIsActive(0);
+                }
+            }
+
+            //next season sports will be set later in handleTimeChange
+        }
+        //change season variable
+        if (season.equalsIgnoreCase("Summer")){
+            season = "Fall";
+        }
+        else if (season.equalsIgnoreCase("Fall")){
+            season = "Winter";
+        }
+        else if (season.equalsIgnoreCase("Winter")){
+            season = "Spring";
+        }
+        else {
+            season = "Summer";
+        }
     }
 
 
@@ -112,16 +189,6 @@ public class SportManager {
         {
             Accountant.payBill(collegeId,"Charge for " + sport.getName(), newCharge);
         }
-    }
-
-    /**
-     * Called by CollegeManager when the college is initially created.
-     * Creates Men's and Women's Basketball as the initial sports teams.
-     *
-     * @param collegeId
-     */
-    public static void establishDefaultSportsTeams(String collegeId){
-        createWomenVolleyball(collegeId);
     }
 
     private static void createWomenVolleyball(String collegeId) {
@@ -537,7 +604,7 @@ public class SportManager {
 
         if (numberBetween5and9 > aveAbilityOnTeam) {
             sport.setGamesLost(sport.getGamesLost() + 1);
-            popupManager.newPopupEvent("Sports", sport.getName() + " lost a game.", "OK", "ok", "resources/images/award.png", "Sports");
+            popupManager.newPopupEvent("Sports", sport.getName() + " lost a game.", "OK", "ok", "resources/images/dangerSign.png", "Sports");
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just lost a game.", NewsType.SPORTS_NEWS, NewsLevel.BAD_NEWS);
         } else {
             sport.setGamesWon(sport.getGamesWon() + 1);

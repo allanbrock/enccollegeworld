@@ -58,7 +58,6 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
-        SportManager.establishCollege(collegeId);
         GateManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
         SnowManager.establishCollege(collegeId);

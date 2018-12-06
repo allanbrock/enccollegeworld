@@ -29,7 +29,7 @@ public class InventoryManager {
      * Returns the Bool value of the item's field 'isPurchased'
      * @return whether or not the item has been purchased.
      * */
-    public boolean isPurchased(String name, String collegeId){
+    public static boolean isPurchased(String name, String collegeId){
         List<ItemModel> items = getItems(collegeId);
 
         if(items.size() > 0) {
