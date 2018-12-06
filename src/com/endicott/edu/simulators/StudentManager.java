@@ -70,6 +70,8 @@ public class StudentManager {
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents = 0;
+        //Get the administrative building quality
+        int adminBuildingQuality = (int)BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
         List<StudentModel> students = dao.getStudents(collegeId);
         Date currDate = CollegeManager.getCollegeDate(collegeId);
 
@@ -78,12 +80,25 @@ public class StudentManager {
         }
         else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
             NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            int leastOpenings = Math.min(openBeds, openDesks);
+            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
             leastOpenings = Math.min(leastOpenings, openPlates);
 
             numNewStudents = college.getNumberStudentsAccepted();
             if (numNewStudents > leastOpenings) {
                 numNewStudents = leastOpenings;
+            }
+
+            if(adminBuildingQuality <= 90) {
+                // This will produce a number 1-10, representing every 10% BELOW 100%
+                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
+                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
+                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
+                // Take the students away
+                numNewStudents = numNewStudents - lostStudents;
+                // Notify the player that some students didn't end up coming due to admin office quality
+                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
+                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
+                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             }
         }
 
@@ -310,8 +325,11 @@ public class StudentManager {
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
                              student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
-                             student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
-                             student.getDormHappinessRating() + student.getOverallBuildingHappinessRating()) / 8;
+                             // The next three shouldn't weigh as heavy since they make up the overall building happiness
+                             (int)(student.getDiningHallHappinessRating() * 0.25) +
+                             (int)(student.getAcademicCenterHappinessRating() * 0.25) +
+                             (int)(student.getDormHappinessRating() * 0.25) +
+                             student.getOverallBuildingHappinessRating()) / 8;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
@@ -320,7 +338,6 @@ public class StudentManager {
         dao.saveAllStudents(collegeId, students);
     }
 
-    // TODO: building happiness ratings
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
         if (student == null || college == null)
             return;
