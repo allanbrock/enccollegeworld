@@ -39,6 +39,14 @@ public class PlagueDao {
 
         return plagues;
     }
+    public PlagueModel getPlague(String collegeId){
+        List<PlagueModel> plagues;
+        plagues = getPlagues(collegeId);
+        logger.info(plagues.toString());
+        return plagues.get(0);
+
+
+    }
 
     public void saveAllPlagues(String collegeId, List<PlagueModel> notes){
         logger.info("Saving plague...");
@@ -61,6 +69,13 @@ public class PlagueDao {
         }
 
         logger.info("Saved plague...");
+    }
+
+    public void savePlague(String collegeId, PlagueModel plague){
+        List<PlagueModel> plagues = new ArrayList<>();
+        plagues.add(plague);
+        saveAllPlagues(collegeId, plagues);
+
     }
 
     public void saveNewPlague(String collegeId, PlagueModel plague) {
