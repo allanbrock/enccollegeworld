@@ -4,6 +4,8 @@ import com.endicott.edu.datalayer.PlagueDao;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +20,8 @@ public class PlagueManager {
     private String purellUpgradeName = "Purell Dispensers";
     private int plagueMutationProb = 15;
     private boolean didPlagueMutate = false;
+    private static int probMostStudentsDie = 70;
+    private static int probGovCausesRiot = 30;
 
 
     /**
@@ -53,17 +57,17 @@ public class PlagueManager {
 
         }
 
-        if (didPlagueEnd) {
+        if (didPlagueEnd && !didPlagueMutate) {
             popupManager.newPopupEvent("Plague Ends",
                     "It seems like the plague is ending.",
                     "Ok", "plagueAckCallback1", "resources/images/plague.jpg", "Plague Doctor");
         }
         // Spread the plague
-        if (hoursLeftInPlague > 0) {
+        if (hoursLeftInPlague > 0 || didPlagueMutate) {
             int oldNumberSick = getNumberSick(collegeId);
             plagueSpreadsThroughStudents(collegeId, hoursAlive, hoursLeftInPlague, getNumberSick(collegeId), quarantine);
-            //TODO: Not sure how to go about accessing current plague here
-//            mutation = plague.isMutation();
+            PlagueModel plague = dao.getPlague(collegeId);
+            didPlagueMutate = plague.isMutation();
             int newNumberSick = getNumberSick(collegeId);
             int newVictims = newNumberSick - oldNumberSick;
             if (newVictims > 15) {
@@ -82,7 +86,11 @@ public class PlagueManager {
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n",
                             "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
                 }
-            }else if(mutation){
+            }else if(didPlagueMutate){
+                popupManager.newPopupEvent("Plague Mutates!", "It appears the plague has mutated and the quarantined students are displaying zombie like symptoms." +
+                        " You could contact the government for assistance, but it could be a PR disaster. You could also leave it to your Science department.",
+                        "Government", "outSourceHelp", "Science Department", "inHouseHelp",
+                        "resources/images/zombie.png", "Zombie");
                 handlePlagueMutation(popupManager);
             }
         }
@@ -91,9 +99,10 @@ public class PlagueManager {
 
         else
         {
-            if (DisasterManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)) {
+            if ((EventManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity) || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)
+                    || CollegeManager.isMode(collegeId, CollegeMode.DEMO_ZOMBIE_MUTATION)) {
                 startNewPlague(plagues);
-                DisasterManager.newEventStart(collegeId);
+                EventManager.newEventStart(collegeId);
                 popupManager.newPopupEvent("Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
                         "Quarantine the sick students ($5,000)", "quarantineStudents", "Do Nothing", "plagueCallback4",
@@ -105,9 +114,127 @@ public class PlagueManager {
     }
 
     /**
-     * Start a plague
+     * Quarantine Students
      *
-     * 
+     *
+     * @param collegeId
+     */
+    public static void quarantineStudents(String collegeId){
+        Accountant accountant = new Accountant();
+        PlagueDao dao = new PlagueDao();
+        PlagueModel plague = dao.getPlague(collegeId);
+        plague.setQuarantine(true);
+        dao.savePlague(collegeId, plague);
+        accountant.payBill(collegeId, "Students are now quarantined", 5000);
+    }
+
+    public static void govHandlesPlagueMutation(String collegeId, javax.servlet.http.HttpServletRequest request, PopupEventManager popupMan){
+        Random rand = new Random();
+        int riotProb = rand.nextInt(100);
+
+        Accountant accountant = new Accountant();
+        PlagueDao dao = new PlagueDao();
+        PlagueModel plague = dao.getPlague(collegeId);
+        //Reset plague values as plague is over
+        plague.setMutation(false);
+        plague.setQuarantine(false);
+        plague.setNumberOfHoursLeftInPlague(0);
+        dao.savePlague(collegeId, plague);
+
+        if(riotProb < probGovCausesRiot){
+            //Cause Riot
+        }else{
+
+
+            //save plague
+            dao.savePlague(collegeId, plague);
+            int billFromGov = ((int)(accountant.getAvailableCash(collegeId)*.25));
+            accountant.payBill(collegeId, "The Government charged you $"+billFromGov+".00 for their assistance.", billFromGov);
+
+            StudentDao studentDao = new StudentDao();
+            List<StudentModel> students = studentDao.getStudents(collegeId);
+            int studentSickCount = 0;
+            String studentString = "The Government was able to stop the infection from spreading, but needed to charge you for their assistance." +
+                    "They also were not able to save the infected students. The students who passed due to the outbreak are: ";
+            for(int i = 0; i < students.size(); i++){
+                StudentModel student = students.get(i);
+                if(students.get(i).getNumberHoursLeftBeingSick() > 0){
+                    studentString = studentString + students.get(i).getName() + ", ";
+                    students.remove(i);
+
+                }
+            }
+            StudentDao.saveAllStudents(collegeId, students);
+            popupMan.newPopupEvent("Zombie Outbreak Over!", studentString, "Ok", "N/A", "N/A", " ");
+
+
+
+
+        }
+//        request.getSession().setAttribute("popupMan", popupMan);
+    }
+    public static void schoolHandlesPlagueMutation(String collegeId, javax.servlet.http.HttpServletRequest request, PopupEventManager popupMan){
+        Random rand = new Random();
+        int nobelProb = rand.nextInt(100);
+        Accountant accountant = new Accountant();
+        PlagueDao dao = new PlagueDao();
+        PlagueModel plague = dao.getPlague(collegeId);
+
+        //Reset plague values as plague is over
+        plague.setMutation(false);
+        plague.setQuarantine(false);
+        plague.setNumberOfHoursLeftInPlague(0);
+
+        dao.savePlague(collegeId, plague);
+        if(nobelProb > probMostStudentsDie){
+
+            popupMan.newPopupEvent("Zombie Outbreak Over!", "Your science department was able to find a cure! " +
+                    "Not only does it look like all the infected students are going to recover, but your school won an international award" +
+                    "and has received $300,000!", "Ok", "N/A", "N/A", " ");
+
+            accountant.receiveIncome(collegeId, "Congraulations on the award!", 300000);
+
+
+
+        }else{
+
+            StudentDao studentDao = new StudentDao();
+            List<StudentModel> students = studentDao.getStudents(collegeId);
+            int probOfStudentDeath = 90;
+            double startingNumStudents = students.size();
+            double endingNumStudents = students.size();
+
+
+            int numDeaths = 0;
+            for(int i = 0; i < students.size(); i++){
+                int randProb = SimulatorUtilities.getRandomNumberWithNormalDistribution(80, 5,60, 95);
+                StudentModel student = students.get(i);
+                if(randProb < probOfStudentDeath){
+                    numDeaths++;
+                    students.remove(i);
+                    endingNumStudents--;
+
+                }
+            }
+            double percentStudentsDead = (endingNumStudents/startingNumStudents)*100;
+            String percentStudentsDeadFormatted = new DecimalFormat("##.##").format(percentStudentsDead);
+            popupMan.newPopupEvent("Zombie Outbreak Over...", "Your science department was unable to find a cure in time. As a result, " +
+                    "the infection spread and infected "+percentStudentsDeadFormatted+"% of the student body. The Government had to be called in to handle the situation, " +
+                    "resulting in a large financial loss as well as the loss of "+numDeaths+" students lives.",
+                    "Ok", "N/A", "N/A", " ");
+
+            int billFromGov = ((int)(accountant.getAvailableCash(collegeId)*.35));
+
+            accountant.payBill(collegeId, "The Government charged you $"+billFromGov+".00 for their assistance.", billFromGov);
+            StudentDao.saveAllStudents(collegeId, students);
+
+
+        }
+//        request.getSession().setAttribute("popupMan", popupMan);
+    }
+    /**
+     * Start a plague*
+     *
      * @param plagues
      */
     private void startNewPlague(List<PlagueModel> plagues) {
@@ -120,6 +247,7 @@ public class PlagueManager {
             plague.setMutation(false);
         }
     }
+
 
     /**
      * Return the number of students that are sick at the college.
@@ -189,15 +317,20 @@ public class PlagueManager {
         Random rand = new Random();
 
         if(quarantine){
-            int plagueMutationProb = rand.nextInt(100);
-            if(plagueMutationProb >= 15)
+            int plagueMutationProb;
+            if(CollegeManager.isMode(collegeId, CollegeMode.DEMO_ZOMBIE_MUTATION)){
+                plagueMutationProb = 100;
+            }else{
+                plagueMutationProb = rand.nextInt(100);
+            }
+            if(plagueMutationProb <= 85)
                 return nSick;
             else{
                 PlagueDao plagueDao = new PlagueDao();
-                List<PlagueModel> plagues = plagueDao.getPlagues(collegeId);
-                for (PlagueModel plague : plagues) {
-                    plague.setMutation(true);
-                }
+                PlagueModel plague = plagueDao.getPlague(collegeId);
+                plague.setMutation(true);
+                plagueDao.savePlague(collegeId, plague);
+
 
                 return nSick;
             }

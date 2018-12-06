@@ -97,14 +97,7 @@ public class GateManager {
         return progress;
     }
 
-    /**
-     * Take care of initial gate set up when college is first created.
-     * @param collegeId
-     */
     public static void establishCollege(String collegeId){
-//        createGate(collegeId, "Test gate 1", "test description 1", "resources/images/star.png", 50);
-//        createGate(collegeId, "Test gate 2", "test description 2", "resources/images/star.png", 300);
-//        createGate(collegeId, "Test gate 3", "test description 3", "resources/images/star.png", 400);
     }
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {

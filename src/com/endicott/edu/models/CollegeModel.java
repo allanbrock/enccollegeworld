@@ -161,6 +161,7 @@ public class CollegeModel implements Serializable {
         else if (mode.equals("Demo Snow")) this.mode = CollegeMode.DEMO_SNOW;
         else if (mode.equals("Demo Flood")) this.mode = CollegeMode.DEMO_FLOOD;
         else if (mode.equals("Demo Championship")) this.mode = CollegeMode.DEMO_CHAMPIONSHIP;
+        else if (mode.equals("Demo Plague Mutation")) this.mode = CollegeMode.DEMO_ZOMBIE_MUTATION;
     }
 
     //Getters for Championships Won

@@ -19,7 +19,8 @@ public class InventoryManager {
      */
     public static void establishCollege(String collegeId) {
         // Note that each manager is responsible for creating items in the store.
-        unlockItems(collegeId, 0);
+        int gate = CollegeManager.getGate(collegeId);
+        unlockItems(collegeId, gate);
     }
 
     /**
@@ -28,7 +29,7 @@ public class InventoryManager {
      * Returns the Bool value of the item's field 'isPurchased'
      * @return whether or not the item has been purchased.
      * */
-    public boolean isPurchased(String name, String collegeId){
+    public static boolean isPurchased(String name, String collegeId){
         List<ItemModel> items = getItems(collegeId);
 
         if(items.size() > 0) {
@@ -49,6 +50,8 @@ public class InventoryManager {
     public static void createItem(String name, Boolean isPurchased, String imageName, int cost, int availableAtGate, String description, String collegeId){
         ItemModel newItem = new ItemModel(name, isPurchased, imageName, cost, false, availableAtGate, description);
         InventoryDao.saveNewItem(collegeId, newItem);
+        if (availableAtGate > 0)
+            GateManager.createGate(collegeId, name, description, "resources/images/" + imageName, availableAtGate);
     }
 
     public static void buyItem(String name, String collegeId){
@@ -81,7 +84,8 @@ public class InventoryManager {
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         // Get the gate that we are at an unlock inventory items.
         // But be careful not to lock an item that was already unlocked.
-        int gate = CollegeManager.getGate(collegeId);
+//        int gate = CollegeManager.getGate(collegeId);
+        int gate = GateManager.getGateLevel(collegeId);
         unlockItems(collegeId, gate);
     }
 }

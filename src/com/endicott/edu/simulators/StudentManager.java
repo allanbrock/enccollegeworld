@@ -19,7 +19,7 @@ public class StudentManager {
     private Random rand = new Random();
 
     /**
-     * The college has just been created.  Add initial students and calculate
+     * The college has just been created. Add initial students and calculate
      * student statistics.
      *
      * @param collegeId
@@ -70,6 +70,8 @@ public class StudentManager {
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents = 0;
+        //Get the administrative building quality
+        int adminBuildingQuality = (int)BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
         List<StudentModel> students = dao.getStudents(collegeId);
         Date currDate = CollegeManager.getCollegeDate(collegeId);
 
@@ -77,12 +79,26 @@ public class StudentManager {
             numNewStudents = 140;
         }
         else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
-            int leastOpenings = Math.min(openBeds, openDesks);
+            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
             leastOpenings = Math.min(leastOpenings, openPlates);
 
             numNewStudents = college.getNumberStudentsAccepted();
             if (numNewStudents > leastOpenings) {
                 numNewStudents = leastOpenings;
+            }
+
+            if(adminBuildingQuality <= 90) {
+                // This will produce a number 1-10, representing every 10% BELOW 100%
+                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
+                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
+                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
+                // Take the students away
+                numNewStudents = numNewStudents - lostStudents;
+                // Notify the player that some students didn't end up coming due to admin office quality
+                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
+                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
+                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             }
         }
 
@@ -303,14 +319,19 @@ public class StudentManager {
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
+           setStudentProfessorHappiness(collegeId, student);
            setStudentOverallBuildingHappinessRating(student, college);
 
            // The overall student happiness is an average of the above.
 
             int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
                              student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
-                             student.getDiningHallHappinessRating() + student.getAcademicCenterHappinessRating() +
-                             student.getDormHappinessRating() + student.getOverallBuildingHappinessRating()) / 8;
+                             // The next three shouldn't weigh as heavy since they make up the overall building happiness
+                             (int)(student.getDiningHallHappinessRating() * 0.25) +
+                             (int)(student.getAcademicCenterHappinessRating() * 0.25) +
+                             (int)(student.getDormHappinessRating() * 0.25) +
+                             student.getOverallBuildingHappinessRating()) +
+                             student.getProfessorHappinessRating() / 9;
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
@@ -319,10 +340,17 @@ public class StudentManager {
         dao.saveAllStudents(collegeId, students);
     }
 
-    // TODO: building happiness ratings
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
+        if (student == null || college == null)
+            return;
+
         String studentDiningHall = student.getDiningHall();
-        int diningHallQuality = (int)BuildingManager.getBuildingByName(studentDiningHall, college.getRunId()).getShownQuality();
+        BuildingModel building = BuildingManager.getBuildingByName(studentDiningHall, college.getRunId());
+
+        if (building == null)
+            return;
+
+        int diningHallQuality = (int) building.getShownQuality();
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
@@ -394,8 +422,14 @@ public class StudentManager {
 
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
-
+        
         s.setAcademicHappinessRating(happinessRating);
+    }
+
+    private void setStudentProfessorHappiness(String collegeId, StudentModel s){
+        int rating = FacultyManager.getAverageFacultyPerformance(collegeId);
+        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100);
+        s.setProfessorHappinessRating(happinessRating);
     }
 
     private void setStudentHealthHappiness(StudentModel s) {
@@ -428,6 +462,7 @@ public class StudentManager {
 
         int totalBuildingQuality = 0;
         int avgBuildingQuality;
+        int entertainmentHappiness = 0;
 
         int buildingHappinessLevel;
 
@@ -442,23 +477,32 @@ public class StudentManager {
                     b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
                 studentsBuildingsOnly.add(b);
             }
+            else if(b.getKindOfBuilding().equals(BuildingModel.getEntertainmentConst())){
+                // The entertainment center always adds happiness, but will add more for a higher quality center
+                entertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
+            }
             else{
                 continue; // If the student isn't in the building or if it's not one of the ones from above, skip it
             }
         }
 
-        for(BuildingModel b : studentsBuildingsOnly){
-            totalBuildingQuality += (int)b.getShownQuality();
+        for (BuildingModel b : studentsBuildingsOnly){
+            if (b != null) {
+                totalBuildingQuality += (int) b.getShownQuality();
+            }
         }
 
         avgBuildingQuality = totalBuildingQuality/studentsBuildingsOnly.size();
+
 
         // This creates a bell-curve average where:
         // avgBuildingQuality is between 0 and 100
         // Standard deviation is 15
         // Min is 0 since that's the lowest possible building quality
         // Max is 100 since that's the highest possible building quality
-        buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100);
+        // The entertainment happiness is added at the end since it should ALWAYS add happiness
+        buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
+        buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
     }
 

@@ -16,7 +16,7 @@ public class BuildingModel implements Serializable {
     private final static String footballStadium = "FOOTBALL STADIUM";
     private final static String hockeyRink = "HOCKEY RINK";
 
-    // These are all changed when the building is made (in the order they're set)
+    // These are all changed when the building is made (in the order they're set).
     private String runId = "unknown";
     private String name = "unknown";
     private String size = "";
@@ -242,6 +242,7 @@ public class BuildingModel implements Serializable {
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
 
+    // Building consts
     public static String getAcademicConst() {return academicConst;}
     public static String getAdminConst() {return adminConst;}
     public static String getDiningConst() {return diningConst;}

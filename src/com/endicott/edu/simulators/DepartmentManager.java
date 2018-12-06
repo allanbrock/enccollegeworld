@@ -12,17 +12,61 @@ import java.util.HashMap;
 public class DepartmentManager {
 
     private static ArrayList<DepartmentModel> departmentOptions;
+    private static ArrayList<DepartmentModel> lockedDepartments;
     private static PopupEventManager popupManager;
+    private static Boolean newDepartmentReady;
 
     public static ArrayList<DepartmentModel> establishDepartments(int departmentCount){
         // departmentCount will determine how many departments need to be loaded back in
-        DepartmentManager.popupManager = popupManager;
+        newDepartmentReady = false;
         departmentOptions = new ArrayList<>();
         departmentOptions.add(new DepartmentModel("Arts and Sciences"));
         departmentOptions.add(new DepartmentModel("Sports Science and Fitness"));
         departmentOptions.add(new DepartmentModel("Business"));
         departmentOptions.add(new DepartmentModel("Nursing"));
+        lockedDepartments = new ArrayList<>();
+        lockedDepartments.add(new DepartmentModel("Communications"));
+        lockedDepartments.add(new DepartmentModel("Performing Arts"));
         return departmentOptions;
+    }
+
+    public static void handleTimeChange(String collegeId, PopupEventManager popupManager){
+        DepartmentManager.popupManager = popupManager;
+        HashMap<String, Integer> departmentRatings = computeEachDepartmentRating(collegeId);
+        checkDepartmentRatingsForBonuses(collegeId, departmentRatings);
+        if(eligibleToAddDepartment() && newDepartmentReady == false){
+            newDepartmentReady = true;
+            popupManager.newPopupEvent("Eligible to add a new Academic Department!", "Due to the College's academic success, a new department can be added! Go to the faculty page to add a department", "ok", "done", "resources/images/books.png", "Eligible for new department");
+        }
+    }
+
+    private static void establishNewDepartment(String collegeId, DepartmentModel department){
+        String title;
+        int numNewDepartmentEmployees = 6;
+        for(int i = 0; i < numNewDepartmentEmployees; i++){
+            title = FacultyManager.generateFacultyTile(department.getDepartmentName());
+            FacultyModel faculty = FacultyManager.addFaculty(collegeId, 100000, title, department.getDepartmentName());
+            if(faculty.getTitle().equals("Dean") || faculty.getTitle().equals("Assistant Dean"))
+                department.putInEmployeeCounts(faculty.getTitle(), 1);
+            else
+                department.putInEmployeeCounts(faculty.getTitle(), department.getOverallEmployeeCount() - 1);
+        }
+    }
+
+    public static Boolean getNewDepartmentReady(){ return newDepartmentReady; }
+
+    public static String[] getLockedDepartmentNames(){
+        ArrayList<String> tempNames = new ArrayList<>();
+        if (lockedDepartments == null)
+            establishDepartments(0);
+        for(DepartmentModel d : lockedDepartments){
+            tempNames.add(d.getDepartmentName());
+        }
+        String[] names = new String[tempNames.size()];
+        for(int i = 0; i < tempNames.size(); i++){
+            names[i] = tempNames.get(i);
+        }
+        return names;
     }
 
     public static ArrayList<DepartmentModel> getDepartmentOptions(){
@@ -32,11 +76,25 @@ public class DepartmentManager {
         return departmentOptions;
     }
 
-    private static void addToDepartmentOptions(int departmentLevel){
-        if(departmentLevel == 2)
-            departmentOptions.add(new DepartmentModel("Communications"));
-        else if(departmentLevel == 3)
-            departmentOptions.add(new DepartmentModel("Performing Arts"));
+    public static Boolean addToDepartmentOptions(String collegeId, String departmentName){
+        for(DepartmentModel d : lockedDepartments){
+            if(departmentName.equals(d.getDepartmentName())){
+                lockedDepartments.remove(d);
+                departmentOptions.add(d);
+                establishNewDepartment(collegeId, d);
+                newDepartmentReady = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static HashMap<String, Integer> computeEachDepartmentRating(String collegeId){
+        HashMap<String, Integer> departmentRatings = new HashMap<>();
+        for(DepartmentModel d : departmentOptions){
+            departmentRatings.put((d.getDepartmentName()), computeDepartmentRating(collegeId, d));
+        }
+        return departmentRatings;
     }
 
     private static int computeDepartmentRating(String collegeId, DepartmentModel department){
@@ -79,17 +137,29 @@ public class DepartmentManager {
         CollegeModel college = CollegeDao.getCollege(collegeID);
         for(String department : departmentRatings.keySet()){
             if(!department.equals("Overall Academic Happiness")) {
-                if (departmentRatings.get(department) > 90) {
+                if (departmentRatings.get(department) > 60) { // 60 a test value
                     for (DepartmentModel d : departmentOptions) {
                         if (department.equals(d.getDepartmentName())) {
                             if (!d.getBonusGiven()) {
-                                // Give college bonus money
+                                CollegeManager.recieveDepartmentPerformanceBonus(college, d.getDepartmentName(), popupManager);
+                                d.setBonusGiven(true);
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private static Boolean eligibleToAddDepartment(){
+        Boolean allBonuses = true;
+        for(DepartmentModel d : departmentOptions){
+            if(!d.getBonusGiven()){
+                allBonuses = false;
+                break;
+            }
+        }
+        return allBonuses;
     }
 
     public static void removeEmployeeFromDepartment(FacultyModel member, DepartmentModel department){

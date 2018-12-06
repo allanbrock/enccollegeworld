@@ -33,6 +33,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
+        // For loop to check if the repair or upgrade buttons were hit on one of the buildings.
         for(int b = 0; b < BuildingDao.getBuildings(collegeId).size(); b++) {
             if (request.getParameter("upgradeBuilding" + b) != null) {
                 upgradeBuilding(request, response, BuildingDao.getBuildings(collegeId).get(b));
@@ -86,28 +87,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
             doGet(request, response);
         }
 
-        else {
-            // Might be selling a dorm.
-            Enumeration<String> params = request.getParameterNames();
-
-            while(params.hasMoreElements()) {
-                // We're looking for a parameter whose value is "Sell" and whose name is BASE64 encoded dorm name.
-                // We're doing this BASE64 encoding to handle issues caused by single quotes that could
-                // appear in the name.
-                String paramName = params.nextElement();
-                String paramValue = request.getParameter(paramName);
-                logger.info("Parameter Name - "+paramName+", Value - "+paramValue);
-//                if (request.getParameter(paramName).equals("Sell")) {
-//                    Base64.Decoder decoder = Base64.getDecoder();
-//                    String dormName = new String(decoder.decode(paramName));
-//                    logger.info("Selling dorm: " + dormName + " Encoded name: " + paramName);
-//
-//                    sellDorm(request, response, dormName);
-//                }
-            }
-            String i = request.getParameter("sellDorm");
-        }
-
+        // Handling the tips
         if (request.getParameter("nextTip") != null) {
             TutorialManager.advanceTip("viewBuildings", collegeId);
             doGet(request, response);
@@ -127,6 +107,13 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
 
     }
+
+    /**
+     * Converts the sort-by types in the dropdown to building constants
+     *
+     * @param sortByType
+     * @return The correct const string
+     */
     private String convertToConsts(String sortByType){
         if(sortByType.equals("Academic Center")){
             matchedConstantType = "ACADEMIC";
@@ -163,33 +150,6 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         }
         return matchedConstantType;
     }
-//    private void sellDorm(HttpServletRequest request, HttpServletResponse response, String dormName) throws ServletException, IOException {
-//        String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-//
-//        logger.info("In ViewBuildingsServlet.sellDorm()");
-//        InterfaceUtils.logRequestParameters(request);
-//
-//        if(collegeId == null || dormName == null){
-//            UiMessage message = new UiMessage("Cannot delete dorm, information is missing");
-//            request.setAttribute("message", message);
-//            logger.info("Bad parameters for deleting a dorm");
-//        }
-//        else {
-//            // Need to do the work here.
-//            DormManager.sellDorm(collegeId, dormName);
-//         }
-//
-//
-//        //load the request with attributes for the dorm
-//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-//
-//
-//        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewbuildings.jsp");
-//        dispatcher.forward(request, response);
-//        // Attempt to fetch the college and load into
-//        // request attributes to pass to the jsp page.
-//        InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);
-//    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
@@ -210,6 +170,14 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         }
     }
 
+    /**
+     * Handles when a building is purchased.
+     *
+     * @param request
+     * @param response
+     * @throws javax.servlet.ServletException
+     * @throws IOException
+     */
     private void addBuilding(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         String buildingName=request.getParameter("buildingName");
@@ -260,6 +228,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         InterfaceUtils.openCollegeAndStoreInRequest(runId, request);
     }
 
+    /**
+     * Handles when a building is upgraded.
+     *
+     * @param request
+     * @param response
+     * @param building
+     * @throws javax.servlet.ServletException
+     * @throws IOException
+     */
     private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         BuildingManager.upgradeBuilding(runId, building);
@@ -275,6 +252,15 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Handles when a building is repaired.
+     *
+     * @param request
+     * @param response
+     * @param building
+     * @throws javax.servlet.ServletException
+     * @throws IOException
+     */
     private void repairBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         BuildingManager.repairBuilding(runId, building);

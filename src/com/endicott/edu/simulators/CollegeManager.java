@@ -3,10 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.Date;
 
@@ -61,13 +58,13 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.establishCollege(collegeId);
 
-        SportManager.establishCollege(collegeId);
         GateManager.establishCollege(collegeId);
         FloodManager.establishCollege(collegeId);
         SnowManager.establishCollege(collegeId);
         PlagueManager.establishCollege(collegeId);
         FireManager.establishCollege(collegeId);
         PlayManager.establishCollege(collegeId);
+        SportManager.establishCollege(collegeId);
         InventoryManager.establishCollege(collegeId);
 
         return college;
@@ -115,7 +112,7 @@ public class CollegeManager {
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        DisasterManager disasterManager = new DisasterManager();
+        EventManager disasterManager = new EventManager(collegeId);
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         PlagueManager plagueManager = new PlagueManager();
@@ -143,6 +140,8 @@ public class CollegeManager {
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        DepartmentManager.handleTimeChange(collegeId, popupManager);
 
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
@@ -300,5 +299,10 @@ public class CollegeManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setDaysUntilNextEvent(Math.max(0,daysUntilNextEvent));
         CollegeDao.saveCollege(college);
+    }
+
+    public static void recieveDepartmentPerformanceBonus(CollegeModel college, String departmentName, PopupEventManager popupManager){
+        college.setAvailableCash(college.getAvailableCash() + 10000);
+        popupManager.newPopupEvent("Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
     }
 }

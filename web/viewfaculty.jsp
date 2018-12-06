@@ -70,6 +70,11 @@
         departmentOptions = new String[FacultyManager.getDepartmentOptionStrings().length];
     }
 
+    String[] lockedDepartmentNames = DepartmentManager.getLockedDepartmentNames();
+    if(lockedDepartmentNames == null){
+        lockedDepartmentNames = new String[DepartmentManager.getLockedDepartmentNames().length];
+    }
+
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
     TutorialModel tip = TutorialManager.getCurrentTip("viewFaculty", college.getRunId());
@@ -210,7 +215,20 @@
                         <% } %>
                     </select>
                     <br>
-                    <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty">
+                    <input type="submit" class="btn btn-info" name="addFaculty" value="Add Faculty"><br>
+                    <br>
+                </div>
+                <div class="form-group">
+                    <%if(DepartmentManager.getNewDepartmentReady()){%>
+                        <select class="form-control" id="newDepartmentDropdown" name="newDepartmentDropdown">
+                            <% for(int i = 0; i < lockedDepartmentNames.length; i++) { %>
+                            <tr>
+                                <option><%= lockedDepartmentNames[i] %></option>
+                            </tr>
+                            <% } %>
+                        </select><br>
+                        <input type="submit" class="btn btn-info" name="addDepartment" value="Add Department"><br>
+                    <%}%>
                 </div>
             </div>
         </div>

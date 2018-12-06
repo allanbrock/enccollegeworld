@@ -35,7 +35,7 @@
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
 
-<!-- solution from https://www.experts-exchange.com/questions/20683436/Using-anchors-in-JSP-code.html -->
+<!-- solution from https://www.experts-exchange.com/questions/20683436/Using-anchors-in-JSP-code.html-->
 <% if( request.getParameter("hash") != null ) { %>
 <script>
     location.hash = "<%=request.getParameter("hash")%>";
@@ -54,11 +54,6 @@
         college = new CollegeModel();
         msg.setMessage("Attribute for college missing.");
     }
-//    BuildingModel buildings[] = (BuildingModel[]) request.getAttribute("buildings");
-//    if (buildings == null) {
-//        buildings = new BuildingModel[0];  // This is really bad
-//        msg.setMessage(msg.getMessage() + " Attribute for buildings missing.");
-//    }
     String sortByType = (String) request.getAttribute("sortByType");
     List<BuildingModel> buildings;
     if(sortByType == null  || sortByType.equals("All Buildings")){
@@ -86,6 +81,9 @@
     String haveEntertainmentCenter = "false";
     String haveHealthCenter = "false";
     String haveLibrary = "false";
+    String haveBaseballDiamond = "false";
+    String haveFootballStadium = "false";
+    String haveHockeyRink = "false";
 
     GateManager gateManager = new GateManager();
 %>
@@ -122,6 +120,8 @@
         </div>
     </nav>
 
+    <%--This shows the user if they have enough spots for the students.
+        It shows if there are enough beds, plates, and desks at the college.--%>
     <div class="container">
         <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
@@ -197,6 +197,7 @@
         <div class="well well-sm" style="background: aliceblue;">
             <div class="col-sm-5" style=" margin-top: 30px;">
         <div class="form-group">
+            <%--Sorting dropdown--%>
             <label for="buildingType">Filter by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
@@ -232,9 +233,11 @@
             <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
             <%}%>
 
+            <%--Table where all the buildings are displayed with their stats--%>
             <table class="table table-condensed">
                 <thread>
                     <tr>
+                        <%--Column headers--%>
                         <th>Building Name</th>
                         <th>Building Type</th>
                         <th>Size</th>
@@ -250,8 +253,10 @@
                     for (int b = 0; b < buildings.size(); b++) {
                 %>
                 <tr>
+                    <%--This is each ROW in the table--%>
                     <td style="vertical-align:middle; font-size:110%; max-width:60px; word-wrap:break-word;"><%=buildings.get(b).getName()%>
                     </td>
+                    <%--Picture--%>
                     <td>
                         <%if(buildings.get(b).getHoursToComplete() > 0){%>
                             <img class="img-responsive" src="resources/images/underconstruction.png" style="width:60px; height:60px; display: block; margin: 0 auto;">
@@ -264,6 +269,7 @@
                     </td>
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).getCapacity() - buildings.get(b).getNumStudents()%>
                     </td>
+                    <%--Progress bar for quality--%>
                     <td style="vertical-align:middle;">
                         <div class="progress">
                             <div class="progress-bar progress-bar-info" role="progressbar"
@@ -276,6 +282,12 @@
                     </td>
                     <td style="vertical-align:middle; font-size:110%;"><%=buildings.get(b).checkIfBeingBuilt()%>
                     </td>
+                    <%--Upgrade and repair buttons.
+                        They should only show when:
+                        - The building ISN'T maximum size
+                        - The building has a size parameter
+                        - The buiding ISN'T under construction
+                        - The college has enough money to purchase the building--%>
                     <td style="vertical-align:middle;">
                         <%if(!( buildings.get(b).getSize().equals("Extra Large") || buildings.get(b).getSize().equals("N/A")
                                 || buildings.get(b).getHoursToComplete() > 0 || buildings.get(b).getUpgradeCost() > college.getAvailableCash())){%>
@@ -312,24 +324,39 @@
                             <option value="Academic Center">Academic Center</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
-                            <%if(college.getAvailableCash() > 150000){%>
-                                <option value="Baseball Diamond">Baseball Diamond</option>
-                                <option value="Football Stadium">Football Stadium</option>
-                                <option value="Hockey Rink">Hockey Rink</option>
-                            <%}%>
+                            <%for (int b = 0; b < buildings.size(); b++) {
+                                if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
+                                    haveEntertainmentCenter = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
+                                    haveHealthCenter = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
+                                    haveLibrary = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("BASEBALL DIAMOND")){
+                                    haveBaseballDiamond = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("FOOTBALL STADIUM")){
+                                    haveFootballStadium = "true";
+                                }
+                                if(buildings.get(b).getKindOfBuilding().equals("HOCKEY RINK")){
+                                    haveHockeyRink = "true";
+                                }
+                            }
+                                if(college.getAvailableCash() > 150000){
+                                if(haveBaseballDiamond.equals("false")){%>
+                                <option value="Baseball Diamond" <%if(!gateManager.testGate(college.getRunId(), "Baseball diamond")){%>disabled<%}%>>Baseball Diamond</option>
+                            <%}
+                            if(haveFootballStadium.equals("false")){%>
+                                <option value="Football Stadium" <%if(!gateManager.testGate(college.getRunId(), "Football stadium")){%>disabled<%}%>>Football Stadium</option>
+                            <%}
+                            if(haveHockeyRink.equals("false")){%>
+                                <option value="Hockey Rink" <%if(!gateManager.testGate(college.getRunId(), "Hockey rink")){%>disabled<%}%>>Hockey Rink</option>
+                            <%}
+                                }%>
                             <%
                                 if(college.getAvailableCash() > 250000){
-                                for (int b = 0; b < buildings.size(); b++) {
-                                    if(buildings.get(b).getKindOfBuilding().equals("ENTERTAINMENT")){
-                                        haveEntertainmentCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("HEALTH")){
-                                        haveHealthCenter = "true";
-                                    }
-                                    if(buildings.get(b).getKindOfBuilding().equals("LIBRARY")){
-                                        haveLibrary = "true";
-                                    }
-                                }
                                 if(haveLibrary.equals("false")){%>
                                 <option value="Library" <%if(!gateManager.testGate(college.getRunId(), "Library")){%>disabled<%}%>>Library</option>
                             <%}
@@ -339,7 +366,7 @@
                             if(haveEntertainmentCenter.equals("false")){%>
                                 <option value="Entertainment Center" <%if(!gateManager.testGate(college.getRunId(), "Entertainment Center")){%>disabled<%}%>>Entertainment Center</option>
                             <%}
-                                }%>
+                            }%>
                         </select>
                     </div>
                         <!-- Button -->
@@ -349,7 +376,6 @@
                     <div class="form-group">
                         <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
                                 buildingType.equals("Academic Center")){%>
-                            <!--form group used to be here -->
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
@@ -417,9 +443,11 @@
         </div>
     </div>
 
+    <%--Gate progress Jumbotron--%>
     <div class="container">
         <div class="jumbotron" style="background-color: aliceblue">
             <div class="row">
+                <div class="col-md-12">
                 <div class="col-md-2" style="margin-right: 3%;">
                     <h4>Large Size</h4>
                     <img class="img-responsive" src="resources/images/EXTRA_LARGE_DORM_k.png">
@@ -464,9 +492,11 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                <div class="col-md-12">
                 <div class="col-md-2" style="margin-right: 3%">
                     <h4>Entertainment Center</h4>
-                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png" style="margin-bottom: 25px;">
+                    <img class="img-responsive" src="resources/images/ENTERTAINMENT_k.png" style="margin-bottom: 28px;">
                     <h5>Total progress:</h5>
                     <div class="progress">
                         <div class="progress-bar progress-bar-info" role="progressbar"
@@ -474,6 +504,40 @@
                             <%=gateManager.getGateProgress(college.getRunId(), "Entertainment Center")%>%
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Football Stadium</h4>
+                    <img class="img-responsive" src="resources/images/FOOTBALL%20STADIUM_k.png">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Football stadium")%>%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Baseball Diamond</h4>
+                    <img class="img-responsive" src="resources/images/BASEBALL%20DIAMOND_k.png" style="margin-top: 33px; margin-bottom: 34px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Baseball diamond")%>%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-right: 3%;">
+                    <h4>Hockey Rink</h4>
+                    <img class="img-responsive" src="resources/images/HOCKEY%20RINK_k.png" style="margin-top: 41px; margin-bottom: 47px;">
+                    <h5>Total progress:</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="border-radius: 5px; width:<%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>; height:25px">
+                            <%=gateManager.getGateProgress(college.getRunId(), "Hockey rink")%>%
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

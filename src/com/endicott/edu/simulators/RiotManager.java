@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import java.util.Random;
 
 import com.endicott.edu.models.CollegeMode;
+import com.endicott.edu.models.EventType;
 import com.endicott.edu.models.SportModel;
 import com.endicott.edu.models.RiotModel;
 
@@ -15,8 +16,9 @@ public class RiotManager {
 
 
     public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
+        EventManager eventManager = new EventManager(runId);
 
-        if (CollegeManager.isMode(runId, CollegeMode.DEMO_RIOT)) {
+        if (CollegeManager.isMode(runId, CollegeMode.DEMO_RIOT) || eventManager.doesEventStart(runId, EventType.RIOT)) {
             createSportsRiot(testSport, currentRiot, popupManager);
         }
 
