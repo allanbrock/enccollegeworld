@@ -25,7 +25,7 @@ public class RiotManager {
     }
 
 
-    public void createSportsRiot(SportModel sport, RiotModel riot, PopupEventManager popupManager) {
+    public static void createSportsRiot(SportModel sport, RiotModel riot, PopupEventManager popupManager) {
 
         if (sport.getSportName().equals("$50,000 - Men's Basketball")) {
             riot.setName("Men's Basketball Riot");
