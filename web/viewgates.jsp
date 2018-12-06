@@ -112,7 +112,7 @@
                 <div class="progress" style="margin-bottom:0">
                     <div class="progress-bar progress-bar-success" role="progressbar"
                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                        style="width:<%=GateManager.getGateProgress(college.getRunId())%>%">
+                        style="width:<%=GateManager.getOverallGateProgress(college.getRunId())%>%">
                         <%=students.length%> / <%=GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1)%> students
                     </div>
                 </div>
