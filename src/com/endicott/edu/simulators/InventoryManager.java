@@ -19,7 +19,8 @@ public class InventoryManager {
      */
     public static void establishCollege(String collegeId) {
         // Note that each manager is responsible for creating items in the store.
-        unlockItems(collegeId, 0);
+        int gate = CollegeManager.getGate(collegeId);
+        unlockItems(collegeId, gate);
     }
 
     /**
@@ -83,7 +84,8 @@ public class InventoryManager {
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         // Get the gate that we are at an unlock inventory items.
         // But be careful not to lock an item that was already unlocked.
-        int gate = CollegeManager.getGate(collegeId);
+//        int gate = CollegeManager.getGate(collegeId);
+        int gate = GateManager.getGateLevel(collegeId);
         unlockItems(collegeId, gate);
     }
 }

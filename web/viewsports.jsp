@@ -201,8 +201,8 @@
                 <td><%=teamCoaches.get(j).getFacultyName()%>
                 </td>
                 <td>
-                    <a href="#<%=j%>" class="btn btn-info" data-toggle="collapse">Details</a>
-                    <div id="<%=j%>" class="collapse">
+                    <a href="#<%="coachDropdown"%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <div id="<%="coachDropdown"%>" class="collapse">
                         <div class="well well-sm">
                             Sport: <%=teamCoaches.get(j).getSportName()%><br>
                             Performance: <%=teamCoaches.get(j).getPerformance()%><br>

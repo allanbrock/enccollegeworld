@@ -147,7 +147,7 @@
                     <%
                         if(sortedItems.get(i).getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=sortedItems.get(i).getGateNum()%>" disabled>
                     <%
                         }
                        else if(sortedItems.get(i).getCost() < college.getAvailableCash() && sortedItems.get(i).getPurchased().equals(false)){
@@ -191,7 +191,7 @@
                     <%
                         if(sortedItems.get(i+1).getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=sortedItems.get(i+1).getGateNum()%>" disabled>
                     <%
                         }
                         else if(sortedItems.get(i+1).getCost() < college.getAvailableCash() && sortedItems.get(i+1).getPurchased().equals(false)){
@@ -236,7 +236,7 @@
                     <%
                         if(sortedItems.get(i+2).getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=sortedItems.get(i+2).getGateNum()%>" disabled>
                     <%
                         }
                         else if(sortedItems.get(i+2).getCost() < college.getAvailableCash() && sortedItems.get(i+2).getPurchased().equals(false)){
