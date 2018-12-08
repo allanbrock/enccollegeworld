@@ -99,7 +99,10 @@ public class PlagueManager {
 
         else
         {
-            if ((EventManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity) || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)
+            //if ((EventManager.isEventPermitted(collegeId) && Math.random() <= plagueProbablity) ||
+            EventManager eventManager = new EventManager(collegeId);
+            if (eventManager.doesEventStart(collegeId, EventType.PLAGUE)
+                    || CollegeManager.isMode(collegeId, CollegeMode.DEMO_PLAGUE)
                     || CollegeManager.isMode(collegeId, CollegeMode.DEMO_ZOMBIE_MUTATION)) {
                 startNewPlague(plagues);
                 EventManager.newEventStart(collegeId);

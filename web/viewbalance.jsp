@@ -85,7 +85,9 @@
 
     <div class="col-sm-6 col-sm-offset-3" align="center">
         <div class="well well-sm">
-            <h3><p class="text-success">Financial News</h3>
+            <table>
+            <tr><td><img class="img-responsive" src="resources/images/newspaper.png"></td><td> <h3><p class="text-success">Financial News</h3></td>
+            </table>
             <div class="pre-scrollable">
                 <ul class="list-group">
                     <%

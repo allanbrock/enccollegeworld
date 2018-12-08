@@ -2,7 +2,6 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.io.Console;
 import java.util.*;
 
 /**
@@ -26,7 +25,7 @@ public class StudentManager {
      */
     public void establishCollege(String collegeId) {
         loadTips(collegeId);
-        admitStudents(collegeId, college.getCurrentDay()/24, true);
+        admitStudents(collegeId, college.getCurrentDay()/24, true, null);
         calculateStatistics(collegeId, true);
     }
 
@@ -39,7 +38,7 @@ public class StudentManager {
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
-        admitStudents(collegeId, hoursAlive, false);
+        admitStudents(collegeId, hoursAlive, false, popupManager);
         receiveStudentTuition(collegeId);
         withdrawStudents(collegeId, hoursAlive);
         calculateStatistics(collegeId, false);
@@ -60,12 +59,12 @@ public class StudentManager {
 
     /**
      * Admit new students to the college.
-     *
-     * @param collegeId
+     *  @param collegeId
      * @param hoursAlive
      * @param isNewCollege
+     * @param popupManager
      */
-    public void admitStudents(String collegeId, int hoursAlive, boolean isNewCollege) {
+    public void admitStudents(String collegeId, int hoursAlive, boolean isNewCollege, PopupEventManager popupManager) {
         int openBeds = buildingMgr.getOpenBeds(collegeId);
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
@@ -109,7 +108,13 @@ public class StudentManager {
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
             college.setNumberStudentsAccepted(0);
             CollegeDao.saveCollege(college);
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) +
+                    " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            if (popupManager != null)
+                popupManager.newPopupEvent("Admissions Day",
+                    "" + numNewStudents +" new students joined!","Ok",
+                    "ok", "resources/images/students.png", "Admissions");
+
         }
     }
 
@@ -322,16 +327,15 @@ public class StudentManager {
            setStudentProfessorHappiness(collegeId, student);
            setStudentOverallBuildingHappinessRating(student, college);
 
-           // The overall student happiness is an average of the above.
+           // Below if you add up the factors on happiness, they sum to 1.0
 
-            int happiness = (student.getAcademicHappinessRating() + student.getFunHappinessRating() +
-                             student.getHealthHappinessRating() + student.getMoneyHappinessRating() +
-                             // The next three shouldn't weigh as heavy since they make up the overall building happiness
-                             (int)(student.getDiningHallHappinessRating() * 0.25) +
-                             (int)(student.getAcademicCenterHappinessRating() * 0.25) +
-                             (int)(student.getDormHappinessRating() * 0.25) +
-                             student.getOverallBuildingHappinessRating()) +
-                             student.getProfessorHappinessRating() / 9;
+           int happiness =
+                   (int) (0.125 * student.getAcademicHappinessRating() +
+                          0.125 * student.getHealthHappinessRating() +
+                          0.25 * student.getMoneyHappinessRating() +
+                          0.125 * student.getFunHappinessRating() +
+                          0.125 * student.getOverallBuildingHappinessRating() +
+                          0.125 * student.getProfessorHappinessRating());
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
@@ -413,7 +417,9 @@ public class StudentManager {
                 happinessRating -= happinessDecrease;
             }
         }
-        s.setAcademicHappinessRating(happinessRating);
+        happinessRating = Math.max(happinessRating, 0);
+        happinessRating = Math.min(happinessRating, 100);
+        s.setAdvisorHappinessHappinessRating(happinessRating);
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
@@ -422,7 +428,10 @@ public class StudentManager {
 
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
-        
+
+        happinessRating = Math.max(happinessRating, 0);
+        happinessRating = Math.min(happinessRating, 100);
+
         s.setAcademicHappinessRating(happinessRating);
     }
 

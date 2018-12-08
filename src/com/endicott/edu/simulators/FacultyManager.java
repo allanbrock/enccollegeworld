@@ -29,20 +29,20 @@ public class FacultyManager {
         ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
         ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
 
-        if(deanCheck.size() > 0){
-            for(DepartmentModel d : deanCheck){
-                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
-                d.setEmployeeCount("Dean", 1);
-            }
-            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/student.png", "Dean Replacement");
-        }
-        if(assistantDeanCheck.size() > 0){
-            for(DepartmentModel d : assistantDeanCheck){
-                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
-                d.setEmployeeCount("Assistant Dean", 1);
-            }
-            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/student.png", "Assistant Dean Replacement");
-        }
+//        if(deanCheck.size() > 0){
+//            for(DepartmentModel d : deanCheck){
+//                addFaculty(collegeId, 100000, "Dean", d.getDepartmentName());
+//                d.setEmployeeCount("Dean", 1);
+//            }
+//            popupManager.newPopupEvent("New Deans", deanCheck.size() + " departments Deans have been replaced", "ok", "done", "resources/images/student.png", "Dean Replacement");
+//        }
+//        if(assistantDeanCheck.size() > 0){
+//            for(DepartmentModel d : assistantDeanCheck){
+//                addFaculty(collegeId, 100000, "Assistant Dean", d.getDepartmentName());
+//                d.setEmployeeCount("Assistant Dean", 1);
+//            }
+//            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/student.png", "Assistant Dean Replacement");
+//        }
 
         List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
         for(FacultyModel member : editableFaculty){

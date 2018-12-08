@@ -52,7 +52,9 @@ public class StudentModel implements Serializable {
         this.hourLastUpdated = hourLastUpdated;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public int getIdNumber() {
         return idNumber;
@@ -74,13 +76,21 @@ public class StudentModel implements Serializable {
         return team;
     }
 
-    public String getDorm() { return dorm; }
+    public String getDorm() {
+        return dorm;
+    }
 
-    public String getDiningHall() { return  diningHall; }
+    public String getDiningHall() {
+        return diningHall;
+    }
 
-    public String getAcademicBuilding() { return  academicBuilding; }
+    public String getAcademicBuilding() {
+        return academicBuilding;
+    }
 
-    public String getNote() { return note; }
+    public String getNote() {
+        return note;
+    }
 
     public String getGender() {
         return gender;
@@ -90,7 +100,9 @@ public class StudentModel implements Serializable {
         return runId;
     }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public void setIdNumber(int idNumber) {
         this.idNumber = idNumber;
@@ -128,21 +140,37 @@ public class StudentModel implements Serializable {
         this.gender = gender;
     }
 
-    public void setRunId(String runId) { this.runId = runId; }
+    public void setRunId(String runId) {
+        this.runId = runId;
+    }
 
-    public void setNote(String note) { this.note = note; }
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-    public int getNumberHoursBeenSick() { return numberHoursBeenSick; }
+    public int getNumberHoursBeenSick() {
+        return numberHoursBeenSick;
+    }
 
-    public void setNumberHoursBeenSick(int numberHoursBeenSick) { this.numberHoursBeenSick = numberHoursBeenSick; }
+    public void setNumberHoursBeenSick(int numberHoursBeenSick) {
+        this.numberHoursBeenSick = numberHoursBeenSick;
+    }
 
-    public int getNumberHoursLeftBeingSick() {  return numberHoursLeftBeingSick; }
+    public int getNumberHoursLeftBeingSick() {
+        return numberHoursLeftBeingSick;
+    }
 
-    public void setNumberHoursLeftBeingSick(int numberHoursLeftBeingSick) { this.numberHoursLeftBeingSick = numberHoursLeftBeingSick; }
+    public void setNumberHoursLeftBeingSick(int numberHoursLeftBeingSick) {
+        this.numberHoursLeftBeingSick = numberHoursLeftBeingSick;
+    }
 
-    public int getHourLastUpdated() { return hourLastUpdated; }
+    public int getHourLastUpdated() {
+        return hourLastUpdated;
+    }
 
-    public void setHourLastUpdated(int hourLastUpdated) { this.hourLastUpdated = hourLastUpdated; }
+    public void setHourLastUpdated(int hourLastUpdated) {
+        this.hourLastUpdated = hourLastUpdated;
+    }
 
     public int getHealthHappinessRating() {
         return healthHappinessRating;
@@ -184,8 +212,13 @@ public class StudentModel implements Serializable {
         this.advisorHappinessRating = advisorHappinessRating;
     }
 
-    public void setAdvisor(FacultyModel advisor) { this.advisor = advisor; }
-    public FacultyModel getAdvisor() { return this.advisor; }
+    public void setAdvisor(FacultyModel advisor) {
+        this.advisor = advisor;
+    }
+
+    public FacultyModel getAdvisor() {
+        return this.advisor;
+    }
 
     public int getDiningHallHappinessRating() {
         return diningHallHappinessRating;
@@ -211,12 +244,21 @@ public class StudentModel implements Serializable {
         this.dormHappinessRating = dormHappinessRating;
     }
 
-    public int getOverallBuildingHappinessRating() {return overallBuildingHappinessRating;}
+    public int getOverallBuildingHappinessRating() {
+        return overallBuildingHappinessRating;
+    }
 
-    public  void setOverallBuildingHappinessRating(int overallBuildingHappinessRating) {this.overallBuildingHappinessRating = overallBuildingHappinessRating;}
+    public void setOverallBuildingHappinessRating(int overallBuildingHappinessRating) {
+        this.overallBuildingHappinessRating = overallBuildingHappinessRating;
+    }
 
-    public int getProfessorHappinessRating() { return professorHappinessRating; }
-    public void setProfessorHappinessRating(int professorHappinessRating) { this.professorHappinessRating = professorHappinessRating; }
+    public int getProfessorHappinessRating() {
+        return professorHappinessRating;
+    }
+
+    public void setProfessorHappinessRating(int professorHappinessRating) {
+        this.professorHappinessRating = professorHappinessRating;
+    }
 }
 
 

@@ -76,6 +76,6 @@ public class PlayManager {
     }
 
     public static void establishCollege(String collegeId) {
-        InventoryManager.createItem("Mainstage Production", false, "drama.png", 2000, 3, "Providing funding for a main stage production can provide your college with extra income.", collegeId);
+        InventoryManager.createItem("Mainstage Production", false, "drama.png", 2000, 0, "Providing funding for a main stage production can provide your college with extra income.", collegeId);
     }
 }

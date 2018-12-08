@@ -325,15 +325,15 @@
                                 <% } %>
                                     <tr><td><img class="img-responsive" src="resources/images/fun.png"><td><td><b>Overall Happiness</b></td><td><%=student.getHappinessLevel()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/books.png"></td></td><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
-                                    <!-- <tr><td><img class="img-responsive" src="resources/images/advisor.png"></td><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr> -->
+                                    <tr><td><img class="img-responsive" src="resources/images/advisor.png"></td><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/HEALTH.png"></td><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/money.jpg"></td><td>Money Happiness</td><td><%=student.getMoneyHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/smile.png"></td><td>Fun Happiness</td><td><%=student.getFunHappinessRating()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/science_dept.png"></td></td><td>Professor Happiness</td><td><%=student.getProfessorHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/campus.png"></td><td>Overall Building Happiness</td><td><%=student.getOverallBuildingHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/DINING.png"></td><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/ACADEMIC.png"></td><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/DORM.png"></td><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
-                                    <tr><td><img class="img-responsive" src="resources/images/books.png"></td></td><td>Professor Happiness</td><td><%=student.getProfessorHappinessRating()%></td></tr>
 
                             </table>
                         </div>

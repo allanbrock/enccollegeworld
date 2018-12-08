@@ -22,7 +22,6 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
-
         // Advance Time
         int advanceTimeDays = 0;
         if (request.getParameter("nextDayButton") != null) {
@@ -31,10 +30,6 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         }
         if (request.getParameter("nextWeekButton") != null) {
             advanceTimeDays = 7;
-            popupManager.clearPopupManager();
-        }
-        if (request.getParameter("nextMonthButton") != null) {
-            advanceTimeDays = 30;
             popupManager.clearPopupManager();
         }
 

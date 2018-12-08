@@ -148,7 +148,7 @@
                     <%
                         if(items[i].getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=items[i].getGateNum()%>" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked Level <%=items[i].getGateNum()%>" disabled>
                     <%
                         }
                        else if(items[i].getCost() < college.getAvailableCash() && items[i].getPurchased().equals(false)){
@@ -192,7 +192,7 @@
                     <%
                         if(items[i+1].getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=items[i+1].getGateNum()%>" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked Level <%=items[i+1].getGateNum()%>" disabled>
                     <%
                         }
                         else if(items[i+1].getCost() < college.getAvailableCash() && items[i+1].getPurchased().equals(false)){
@@ -237,7 +237,7 @@
                     <%
                         if(items[i+2].getUnlocked().equals(false)){
                     %>
-                        <input type="submit" class="btn btn-info" name="locked" value="Locked-Level <%=items[i+2].getGateNum()%>" disabled>
+                        <input type="submit" class="btn btn-info" name="locked" value="Locked Level <%=items[i+2].getGateNum()%>" disabled>
                     <%
                         }
                         else if(items[i+2].getCost() < college.getAvailableCash() && items[i+2].getPurchased().equals(false)){

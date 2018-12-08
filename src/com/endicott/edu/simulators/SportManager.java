@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Responsible for simulating everything sports related.
  */
 public class SportManager {
-    private static String season = null;
+    private static String season = "Fall";
     SportsDao dao = new SportsDao();
     static private Logger logger = Logger.getLogger("SportManager");
 
@@ -34,6 +34,7 @@ public class SportManager {
 
         //has the sport season changed?
         int thisMonth = CollegeManager.getCollegeCurrentMonth(collegeId);
+
         //if thisMonth is in fall and season is still summer
         if (thisMonth >= 9 && thisMonth <= 11){
            if (season.equalsIgnoreCase("Summer")){
