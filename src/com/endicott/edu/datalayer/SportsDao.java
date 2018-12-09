@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.SportModel;
+import com.endicott.edu.simulators.SportManager;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -105,10 +106,11 @@ public class SportsDao {
         sports.add(m1);
         sports.add(m2);
         dao.saveAllSports(collegeId, sports);
-
+        SportModel m4 = new SportModel(20, 0, 30, 500, 0, 0, 10, 30, 1500, 3, 0, "Hockey", collegeId, 0, 48, "unknown", 3, "Fall",72);
+        dao.saveNewSport(collegeId, m4);
         List<SportModel> outMsgs = dao.getSports(collegeId);
 
-        assert(outMsgs.size() == 2);
+        assert(outMsgs.size() == 3);
         assert(outMsgs.get(1).getCapacity() == 100);
 
         SportModel m3 = new SportModel(10,0, 20, 100, 0, 0, 10, 20, 200, 2, 0, "Test Team", collegeId,0, 48, "unknown", 3, "Fall", 24);

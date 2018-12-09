@@ -50,7 +50,7 @@ public class PlayManager {
                 popupManager.newPopupEvent("It Begins!",
                         "You need to choose a director to direct the play.  You can either choose a student to run it, or hire a professional.",
                         "Student", "picked_student", "Professional", "picked_pro",
-                        "resources/images/drama.jpg", "Drama Club");
+                        "resources/images/drama.png", "Drama Club");
             }
         }
     }

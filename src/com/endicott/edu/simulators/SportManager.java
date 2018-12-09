@@ -62,7 +62,7 @@ public class SportManager {
 
         // If the net has been bought, create women's volleyball
         if (InventoryManager.isPurchased("Volley Ball Net", collegeId)) {
-            createWomenVolleyball(collegeId);
+            createWomenVolleyball(collegeId, sports, popupManager);
         }
 
         for (SportModel sport : sports) {
@@ -194,14 +194,28 @@ public class SportManager {
         }
     }
 
-    private static void createWomenVolleyball(String collegeId) {
-        SportModel default1 = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
-        assignCoach(collegeId, default1);
-        addPlayers(collegeId, default1);
-        calculateNumberOfPlayersOnTeam(collegeId, default1);
-        fillUpTeamAndSetActiveStatus(collegeId, default1);
-        SportsDao newSportDao = new SportsDao();
-        newSportDao.saveNewSport(collegeId, default1);
+    private static void createWomenVolleyball(String collegeId, List<SportModel> sports, PopupEventManager popupManager) {
+        if (!isSportAlreadyThere("Women's Volleyball", sports)) {
+            SportModel team = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
+            assignCoach(collegeId, team);
+            addPlayers(collegeId, team);
+            calculateNumberOfPlayersOnTeam(collegeId, team);
+            fillUpTeamAndSetActiveStatus(collegeId, team);
+            sports.add(team);   // We've added a new sport to our list.
+            popupManager.newPopupEvent(team.getName(), "The " + team.getName() + " just formed. " +
+                    " " + team.getCoachName() + " is the coach. Go team!",
+                    "OK", "ok",
+                    "resources/images/volleyballnet.png", "Sports");
+
+        }
+    }
+
+    private static boolean isSportAlreadyThere(String sportName, List<SportModel> sports) {
+        for (SportModel sport : sports) {
+            if (sportName.equalsIgnoreCase(sport.getName()))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -601,7 +615,10 @@ public class SportManager {
             totalAthleticAbility = totalAthleticAbility + student.getAthleticAbility();
         }
 
-        int aveAbilityOnTeam = totalAthleticAbility / numOfPlayers;
+        int aveAbilityOnTeam = 0;
+        if (numOfPlayers > 0)
+            aveAbilityOnTeam = totalAthleticAbility / numOfPlayers;
+
         Random rand = new Random();
         int numberBetween5and9 = rand.nextInt(5) + 5;
 

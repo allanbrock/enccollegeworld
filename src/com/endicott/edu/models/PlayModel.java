@@ -1,6 +1,8 @@
 package com.endicott.edu.models;
 
-public class PlayModel {
+import java.io.Serializable;
+
+public class PlayModel implements Serializable {
     public int getPayout() {
         return payout;
     }

@@ -1,7 +1,9 @@
 package com.endicott.edu.models;
 
+import java.io.Serializable;
+
 //Ryan Gallagher
-public class RiotModel {
+public class RiotModel implements Serializable {
     private int riotCost = 0;
     private String runId = "unknown";
     private String description;

@@ -70,6 +70,8 @@ public class CollegeDao {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(college);
             oos.close();
+
+            cache.put(college.getRunId(),college);  // We need to update the cache so that next we get the up to date college.
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,7 +92,6 @@ public class CollegeDao {
                 String tmp = listOfFiles[i].getName();
                 tmp = tmp.substring(0,tmp.length() - 11);
                 list.add(CollegeDao.getCollege(tmp)); //grab the college with the collegeId we just discovered and add it to the list
-                cache.put(tmp,CollegeDao.getCollege(tmp)); //put found college in cache
             }
         }
 

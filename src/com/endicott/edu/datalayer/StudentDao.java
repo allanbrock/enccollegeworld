@@ -1,14 +1,12 @@
 package com.endicott.edu.datalayer;
 
+import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.StudentModel;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -19,8 +17,12 @@ public class StudentDao {
         return DaoUtils.getFilePathPrefix(runId) +  "student.dat";
     }
     private static Logger logger = Logger.getLogger("StudentDao");
+    private  static HashMap<String, List<StudentModel>> cache = new HashMap<>();
 
     public static List<StudentModel> getStudents(String runId) {
+        if (cache.containsKey(runId))
+            return cache.get(runId);
+
         ArrayList<StudentModel> students = new ArrayList<>();
         StudentModel studentModel = null;
         try {
@@ -40,6 +42,7 @@ public class StudentDao {
         }
 
         Collections.sort(students, (o1, o2) -> o2.getHappinessLevel() - o1.getHappinessLevel());
+        cache.put(runId,students);
 
         return students;
     }
@@ -88,7 +91,7 @@ public class StudentDao {
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
-
+        cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
         logger.info("Saved students...");
     }
 
