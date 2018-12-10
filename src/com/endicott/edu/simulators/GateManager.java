@@ -14,6 +14,7 @@ import java.util.Map;
 public class GateManager {
 
     public static final Map GATE_LEVELS = new HashMap();
+    private static int gateLevel;
 
     public GateManager() {
         GATE_LEVELS.put(0,   0);
@@ -98,8 +99,13 @@ public class GateManager {
     }
 
     public static void establishCollege(String collegeId){
+        gateLevel = 0;
     }
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        int oldGateLevel = gateLevel;
+        gateLevel = getGateLevel(collegeId);
+        if(oldGateLevel != gateLevel)
+            popupManager.newPopupEvent("Level Up!", "Congrats you've reached enough students for level " + gateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
     }
 }
