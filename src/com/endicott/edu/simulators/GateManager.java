@@ -13,16 +13,19 @@ import java.util.Map;
  */
 public class GateManager {
 
-    public static final Map GATE_LEVELS = new HashMap();
+    public static final Map GATE_LEVELS = new HashMap() {
+        {
+        put(0,0);
+        put(1, 150);
+        put(2, 175);
+        put(3, 200);
+        put(4, 300);
+        put(5, 400);
+        }
+    };
     private static int gateLevel;
 
     public GateManager() {
-        GATE_LEVELS.put(0,   0);
-        GATE_LEVELS.put(1, 150);
-        GATE_LEVELS.put(2, 175);
-        GATE_LEVELS.put(3, 200);
-        GATE_LEVELS.put(4, 300);
-        GATE_LEVELS.put(5, 400);
     }
 
     /**

@@ -147,7 +147,9 @@ public class StudentManager {
         CollegeDao.saveCollege(college);
 
         if (numNewStudents > 0) {
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+            NewsManager.createNews(collegeId, hoursAlive,
+                    Integer.toString(numNewStudents) + " students have been accepted to the college.",
+                    NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
         }
     }
 
@@ -261,23 +263,7 @@ public class StudentManager {
         dao.saveAllStudents(collegeId, students);
     }
 
-    /**
-     * Recalculate all the statistics that are being maintained involving students.
-     * @param collegeId
-     */
-    public void calculateStatistics(String collegeId, boolean initial) {
-        calculaterOverallStudentHealth(collegeId);
-        calculateStudentFacultyRatio(collegeId);
-        calculateStudentFacultyRatioRating(collegeId);
-
-        setHappinessForEachStudent(collegeId, initial);
-
-        calculateOverallStudentHappiness(collegeId);
-
-        //calculateRetentionRate(collegeId);
-    }
-
-    private void calculaterOverallStudentHealth(String collegeId) {
+    private void calculaterStudentHealthHappiness(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(collegeId);
 
@@ -295,25 +281,12 @@ public class StudentManager {
         CollegeDao.saveCollege(college);
     }
 
-    private void calculateOverallStudentHappiness(String collegeId) {
-        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+    public void calculateStatistics(String collegeId, boolean initial){
         List<StudentModel> students = dao.getStudents(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
 
         int happinessSum = 0;
-        for (int i = 0; i < students.size(); i++) {
-            happinessSum += students.get(i).getHappinessLevel();
-        }
-
-        int aveHappiness = happinessSum/Math.max(1,students.size());
-
-        college.setStudentBodyHappiness(aveHappiness);
-        CollegeDao.saveCollege(college);
-    }
-
-    private void setHappinessForEachStudent(String collegeId, boolean initial){
-        List<StudentModel> students = dao.getStudents(collegeId);
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
        for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student);
@@ -339,9 +312,23 @@ public class StudentManager {
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
+            happinessSum += happiness;
         }
 
+        setCollegeStudentFacultyStatistics(college, students);
+        college.setStudentBodyHappiness(happinessSum/Math.max(1,students.size()));
+
+        CollegeDao.saveCollege(college);
         dao.saveAllStudents(collegeId, students);
+    }
+
+    private void setCollegeStudentFacultyStatistics(CollegeModel college, List<StudentModel> students) {
+        List<FacultyModel> faculty = facultyDao.getFaculty(college.getRunId());
+        int ratio = students.size() / Math.max(faculty.size(),1);
+        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, ratio);
+
+        college.setStudentFacultyRatio(ratio);
+        college.setStudentFacultyRatioRating(rating);
     }
 
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
@@ -519,16 +506,12 @@ public class StudentManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(college.getRunId());
         List<FacultyModel> faculty = facultyDao.getFaculty(college.getRunId());
+        int ratio = students.size() / Math.max(faculty.size(),1);
+        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, ratio);
 
-        college.setStudentFacultyRatio(students.size() / Math.max(faculty.size(),1));
-
-        CollegeDao.saveCollege(college);
-    }
-
-    private void calculateStudentFacultyRatioRating(String collegeId) {
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, college.getStudentFacultyRatio());
+        college.setStudentFacultyRatio(ratio);
         college.setStudentFacultyRatioRating(rating);
+
         CollegeDao.saveCollege(college);
     }
 

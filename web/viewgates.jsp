@@ -106,9 +106,9 @@
             </div>
             <div class="col-md-10">
 
-                <h2>Objectives</h2>
-                <h3><%=gates.length%> Objectives</h3>
-                <h3>Level <%=GateManager.getGateLevel(college.getRunId())%></h3>
+                <h2>You are on Level <%=GateManager.getGateLevel(college.getRunId())%></h2>
+                <% int studentsNeeded = Math.max(GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1) - students.length, 0); %>
+                <h3>You need <%=studentsNeeded%> students to get to the next level.</h3>
                 <div class="progress" style="margin-bottom:0">
                     <div class="progress-bar progress-bar-success" role="progressbar"
                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <h3> Current Objectives: </h3>
+    <h3> Upcoming Objectives: </h3>
 
     <div class="well well-sm">
         <div class="gateList">
@@ -130,7 +130,7 @@
                     <%
                         for(int i = 1; i <= 5; i++) {
                     %>
-                        <h3> Level <%=i%> objectives:</h3>
+                        <h3> Level <%=i%>&nbsp;&nbsp;&nbsp;&nbsp;<%=GateManager.getGateGoal(i)%> Students </h3>
                     <%
                             for(GateModel gate : gates) {
                                 if(!GateManager.testGate(college.getRunId(), gate.getKey()) && gate.getLevel() == i) {
