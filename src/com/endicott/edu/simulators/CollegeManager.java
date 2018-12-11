@@ -109,7 +109,6 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
-        GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         EventManager disasterManager = new EventManager(collegeId);
@@ -140,10 +139,9 @@ public class CollegeManager {
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
         DepartmentManager.handleTimeChange(collegeId, popupManager);
-
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
 
         // After all the simulators are run, there is a final

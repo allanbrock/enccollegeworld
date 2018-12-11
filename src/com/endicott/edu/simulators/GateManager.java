@@ -17,10 +17,10 @@ public class GateManager {
         {
         put(0,0);
         put(1, 150);
-        put(2, 175);
-        put(3, 200);
-        put(4, 300);
-        put(5, 400);
+        put(2, 200);
+        put(3, 300);
+        put(4, 400);
+        put(5, 500);
         }
     };
     private static int gateLevel;

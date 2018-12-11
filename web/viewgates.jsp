@@ -129,6 +129,7 @@
                 <ul class="list-group">
                     <%
                         for(int i = 1; i <= 5; i++) {
+                            if (i <= GateManager.getGateLevel(college.getRunId())) continue;
                     %>
                         <h3> Level <%=i%>&nbsp;&nbsp;&nbsp;&nbsp;<%=GateManager.getGateGoal(i)%> Students </h3>
                     <%
