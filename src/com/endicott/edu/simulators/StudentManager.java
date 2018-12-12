@@ -72,8 +72,13 @@ public class StudentManager {
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents = 0;
-        //Get the administrative building quality
-        int adminBuildingQuality = (int)BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
+
+        //Attempt to get the administrative building and associated quality.
+        List<BuildingModel> adminBuildings = BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId);
+        if (adminBuildings == null || adminBuildings.size() <= 0)
+            return;   // There's no admin building!
+
+        int adminBuildingQuality = (int)adminBuildings.get(0).getShownQuality();
         List<StudentModel> students = dao.getStudents(collegeId);
         Date currDate = CollegeManager.getCollegeDate(collegeId);
 

@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Eva Rubio 11/05/2018
  *
 */
-public class SnowModel  {
+public class SnowModel implements Serializable {
 
 
     private String collegeId = "unknown";
