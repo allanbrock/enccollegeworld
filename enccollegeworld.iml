@@ -28,7 +28,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/glassfish-5.0/glassfish5/glassfish/modules/javax.servlet-api.jar!/" />
+          <root url="jar://C:/glassfish5/glassfish/modules/javax.servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
