@@ -11,6 +11,7 @@ public class PlayManager {
     private static InventoryManager inventoryManager = new InventoryManager();
     private static PlayModel play;
     private static double chanceNumber;
+    private static boolean isDone = false;
 
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
@@ -29,14 +30,14 @@ public class PlayManager {
                     play.setPayout(play.getPayout() + 1000);
                     Accountant.receiveIncome(collegeId, "Drama Club Performance", play.getPayout());
                     playDao.deletePlay(collegeId);
-                    play.setDone(true);
+                    isDone = true;
                 }
                 else {
                     popupManager.newPopupEvent("Oh no!", "Right before the show started, your lead actor broke his leg.  His understudy was forced to step in.  The show did not do so well...", "oof", "broken_leg", "HEALTH", "hospital visit required");
                     play.setPayout(play.getPayout() - 1000);
                     Accountant.receiveIncome(collegeId, "Drama Club Performance", play.getPayout());
                     playDao.deletePlay(collegeId);
-                    play.setDone(true);
+                    isDone = true;
                 }
             }
             // probably case statement based on play state?
@@ -46,7 +47,7 @@ public class PlayManager {
         else {
             // is play bought. Look InventoryManager.
             // if purchased - create a play
-            if(inventoryManager.isPurchased("Mainstage Production", collegeId) && !play.isDone()) {
+            if(inventoryManager.isPurchased("Mainstage Production", collegeId) && !isDone) {
                 play = new PlayModel();
                 playDao.saveThePlay(collegeId, play);
                 popupManager.newPopupEvent("It Begins!",

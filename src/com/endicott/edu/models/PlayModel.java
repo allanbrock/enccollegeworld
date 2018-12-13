@@ -19,14 +19,6 @@ public class PlayModel implements Serializable {
         this.director = director;
     }
 
-    public boolean isDone() {
-        return isDone;
-    }
-
-    public void setDone(boolean done) {
-        isDone = done;
-    }
-
     public enum PlayState {
         JUST_STARTED,
         DIRECTOR_PICKED,
@@ -37,14 +29,12 @@ public class PlayModel implements Serializable {
     private String director;
     private int daysSincePurchase;
     private int payout;
-    private boolean isDone;
 
     public PlayModel(){
         this.setDirector("");
         this.state = PlayState.JUST_STARTED;
         this.daysSincePurchase = 0;
         this.payout = 2000;
-        this.isDone = false;
     }
 
     public PlayState getState() {
