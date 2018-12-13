@@ -9,7 +9,7 @@ import java.util.HashMap;
 // Created by abrocken on 7/17/2017.
 
 public class CollegeDao {
-    private  static HashMap<String, CollegeModel> cache = new HashMap<>(); // Cache for CollegeModel read access
+    private  static HashMap<String, CollegeModel> cache = new HashMap<>(); // Cache for CollegeModel
 
     public static CollegeModel getCollege(String collegeId) {
         if (cache.containsKey(collegeId)){
@@ -60,7 +60,14 @@ public class CollegeDao {
         StudentDao.deleteStudents(collegeId);
     }
 
+
     public static void saveCollege(CollegeModel college){
+        // deal with logic for first time college...see establishCollege()
+        if (cache.containsValue(college)){
+            cache.replace(college.getRunId(),cache.get(college.getRunId()), college);
+        } else {
+            cache.put(college.getRunId(),college);
+        }
         try {
             college.setNote(getFilePath(college.getRunId()));
             File file = new File(getFilePath(college.getRunId()));

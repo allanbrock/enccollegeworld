@@ -24,7 +24,6 @@ public class CollegeManager {
      */
     static public CollegeModel establishCollege(String collegeId) {
         loadTips(collegeId);
-        CollegeDao collegeDao = new CollegeDao();
         Logger logger = Logger.getLogger("CollegeManager");
         logger.info("Establishing the college");
         CollegeModel college = null;
@@ -32,7 +31,7 @@ public class CollegeManager {
         // See if there already is a college for this run.
         // We don't expect this, but if so, just return it.
         try {
-            college = collegeDao.getCollege(collegeId);
+            college = CollegeDao.getCollege(collegeId);
         } catch (Exception ignored) {
             return null;
         }
@@ -45,7 +44,7 @@ public class CollegeManager {
         college.setRunId(collegeId);
         college.setHoursAlive(1);
         college.setAvailableCash(STARTUP_FUNDING);
-        collegeDao.saveCollege(college);
+        CollegeDao.saveCollege(college);
 
         // Each functional area/simulator in the college gets called to
         // take care of its start-the-college needs.

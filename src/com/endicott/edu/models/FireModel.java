@@ -14,11 +14,10 @@ public class FireModel implements Serializable {
     private BuildingModel buildingBurned;
     private boolean isCatastrophic;
 
-    public FireModel(int costOfFire, int numOfStudentFatalities, int numOfFacultyFatalities, String runId, BuildingModel buildingBurned){
+    public FireModel(int numOfStudentFatalities, int numOfFacultyFatalities, String runId, BuildingModel buildingBurned){
         this.runId = runId;
         this.numOfStudentFatalities = numOfStudentFatalities;
         this.numOfFacultyFatalities = numOfFacultyFatalities;
-        this.costOfFire = costOfFire;
         this.buildingBurned = buildingBurned;
         this.description = "";
         this.isCatastrophic = false;
@@ -28,7 +27,22 @@ public class FireModel implements Serializable {
         return this.description;
     }
 
+    public int getNumOfStudentFatalities(){
+        return numOfStudentFatalities;
+    }
 
+    public int getNumOfFacultyFatalities(){
+        return numOfFacultyFatalities;
+    }
+
+    public int getNumTotalFatalities(){
+        return numOfFacultyFatalities + numOfStudentFatalities;
+    }
+
+
+    public void setCostOfFire(int cost){
+        costOfFire = cost;
+    }
     public int getCostOfFire() {
         return costOfFire;
     }
@@ -37,10 +51,8 @@ public class FireModel implements Serializable {
         return runId;
     }
 
-    public void setCatastrophicStatus(){
-        if (costOfFire >= buildingBurned.getTotalBuildCost()){
-            isCatastrophic = true;
-        }
+    public void setCatastrophicStatus(Boolean isThisCatastrophic){
+        isCatastrophic = isThisCatastrophic;
     }
 
     public void setRunId(String runId) {
@@ -53,23 +65,23 @@ public class FireModel implements Serializable {
 
     public void setDescription(String victims, boolean isUpgraded) {
         if (isUpgraded){
-            if (victims.equalsIgnoreCase("No one")) {
+            if (victims.equalsIgnoreCase("")) {
                 this.description = this.buildingBurned.getName() + " caught fire! Everyone made it out safe.";
-            } else if (victims.equalsIgnoreCase("all")){
+            } else if (isCatastrophic){
                 this.description = "Catastrophic fire occurred in " + this.buildingBurned.getName() + ". If anyone was inside they didn't survive."+
                         "Visit the Buildings page to rebuild.";
             } else {
                 this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire.";
             }
         } else {
-            if (victims.equalsIgnoreCase("No one")) {
+            if (victims.equalsIgnoreCase("")) {
                 this.description = this.buildingBurned.getName() + " caught fire! Everyone made it out safe.";
-            } else if (victims.equalsIgnoreCase("all")) {
+            } else if (isCatastrophic) {
                 this.description = "Catastrophic fire occurred in " + this.buildingBurned.getName() + ". If anyone was inside they didn't survive." +
                         "Visit the Buildings page to rebuild. Don't forget you can purchase an upgrade to reduce the chance of these major fires from happening.";
             } else {
                 this.description = this.buildingBurned.getName() + " caught fire! " + victims + " died in the fire. Upgrading " +
-                        "the college's fire detection at the store will reduce the chance of losing students to fires.";
+                        "the college's Smoke Detectors at the store will reduce the chance of losing students to fires.";
             }
         }
     }

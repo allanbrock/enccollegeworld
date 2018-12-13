@@ -16,9 +16,6 @@ public class StudentManager {
     private CollegeModel college = new CollegeModel();
     private static int studentIndex = 0;
     private Random rand = new Random();
-    private int commonBuildingsQualityTotal;
-    private int commonBuildingCount;
-    private int commonEntertainmentHappiness;
 
     /**
      * The college has just been created. Add initial students and calculate
@@ -72,13 +69,8 @@ public class StudentManager {
         int openPlates = buildingMgr.getOpenPlates(collegeId);
         int openDesks = buildingMgr.getOpenDesks(collegeId);
         int numNewStudents = 0;
-
-        //Attempt to get the administrative building and associated quality.
-        List<BuildingModel> adminBuildings = BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId);
-        if (adminBuildings == null || adminBuildings.size() <= 0)
-            return;   // There's no admin building!
-
-        int adminBuildingQuality = (int)adminBuildings.get(0).getShownQuality();
+        //Get the administrative building quality
+        int adminBuildingQuality = (int)BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
         List<StudentModel> students = dao.getStudents(collegeId);
         Date currDate = CollegeManager.getCollegeDate(collegeId);
 
@@ -144,21 +136,18 @@ public class StudentManager {
         college = CollegeDao.getCollege(collegeId);
         int happiness = college.getStudentBodyHappiness();
 
-        int newNumberOfAcceptedStudents = 0;
-        int newlyAdmitted = 0;
-        if (happiness > 50) {
+        if (happiness <= 50) {
+            numNewStudents = 0;
+        } else {
             int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
-            newlyAdmitted =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
-            newNumberOfAcceptedStudents = newlyAdmitted + college.getNumberStudentsAccepted();
+            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
         }
 
-        college.setNumberStudentsAccepted(newNumberOfAcceptedStudents);
+        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
         CollegeDao.saveCollege(college);
 
-        if (newlyAdmitted > 0) {
-            NewsManager.createNews(collegeId, hoursAlive,
-                    Integer.toString(newlyAdmitted) + " students have been accepted to the college.",
-                    NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+        if (numNewStudents > 0) {
+            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
         }
     }
 
@@ -272,7 +261,23 @@ public class StudentManager {
         dao.saveAllStudents(collegeId, students);
     }
 
-    private void calculaterStudentHealthHappiness(String collegeId) {
+    /**
+     * Recalculate all the statistics that are being maintained involving students.
+     * @param collegeId
+     */
+    public void calculateStatistics(String collegeId, boolean initial) {
+        calculaterOverallStudentHealth(collegeId);
+        calculateStudentFacultyRatio(collegeId);
+        calculateStudentFacultyRatioRating(collegeId);
+
+        setHappinessForEachStudent(collegeId, initial);
+
+        calculateOverallStudentHappiness(collegeId);
+
+        //calculateRetentionRate(collegeId);
+    }
+
+    private void calculaterOverallStudentHealth(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(collegeId);
 
@@ -290,12 +295,25 @@ public class StudentManager {
         CollegeDao.saveCollege(college);
     }
 
+    private void calculateOverallStudentHappiness(String collegeId) {
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        List<StudentModel> students = dao.getStudents(collegeId);
 
-    public void calculateStatistics(String collegeId, boolean initial){
+        int happinessSum = 0;
+        for (int i = 0; i < students.size(); i++) {
+            happinessSum += students.get(i).getHappinessLevel();
+        }
+
+        int aveHappiness = happinessSum/Math.max(1,students.size());
+
+        college.setStudentBodyHappiness(aveHappiness);
+        CollegeDao.saveCollege(college);
+    }
+
+    private void setHappinessForEachStudent(String collegeId, boolean initial){
         List<StudentModel> students = dao.getStudents(collegeId);
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
-        int happinessSum = 0;
        for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student);
@@ -307,38 +325,23 @@ public class StudentManager {
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
            setStudentProfessorHappiness(collegeId, student);
-           setCommonBuildingHappinessFields(college);
            setStudentOverallBuildingHappinessRating(student, college);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
            int happiness =
-                   (int) (0.1 * student.getAcademicHappinessRating() +
-                          0.1 * student.getHealthHappinessRating() +
-                          0.5 * student.getMoneyHappinessRating() +
-                          0.1 * student.getFunHappinessRating() +
-                          0.1 * student.getOverallBuildingHappinessRating() +
-                          0.1 * student.getProfessorHappinessRating());
+                   (int) (0.125 * student.getAcademicHappinessRating() +
+                          0.125 * student.getHealthHappinessRating() +
+                          0.25 * student.getMoneyHappinessRating() +
+                          0.125 * student.getFunHappinessRating() +
+                          0.125 * student.getOverallBuildingHappinessRating() +
+                          0.125 * student.getProfessorHappinessRating());
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);
-            happinessSum += happiness;
         }
 
-        setCollegeStudentFacultyStatistics(college, students);
-        college.setStudentBodyHappiness(happinessSum/Math.max(1,students.size()));
-
-        CollegeDao.saveCollege(college);
         dao.saveAllStudents(collegeId, students);
-    }
-
-    private void setCollegeStudentFacultyStatistics(CollegeModel college, List<StudentModel> students) {
-        List<FacultyModel> faculty = facultyDao.getFaculty(college.getRunId());
-        int ratio = students.size() / Math.max(faculty.size(),1);
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, ratio);
-
-        college.setStudentFacultyRatio(ratio);
-        college.setStudentFacultyRatioRating(rating);
     }
 
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
@@ -365,7 +368,7 @@ public class StudentManager {
         student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
     }
 
-    private void setDormHappinessRating(StudentModel student, CollegeModel college) {
+    private void setDormHappinessRating(StudentModel student,CollegeModel college){
         String studentDorm = student.getDorm();
         int dormQuality = (int)BuildingManager.getBuildingByName(studentDorm, college.getRunId()).getShownQuality();
         int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
@@ -448,9 +451,29 @@ public class StudentManager {
         }
     }
 
-    private void setCommonBuildingHappinessFields(CollegeModel college){
+    /**
+     * This controls how the buildings affect the students
+     * Their happiness can go up or down depending on the quality of the buildings
+     *
+     * @param s - Single instance of student
+     * @param college - The college
+     */
+    private void setStudentOverallBuildingHappinessRating(StudentModel s, CollegeModel college){
         List<BuildingModel> allBuildings = BuildingDao.getBuildings(college.getRunId());
-        commonEntertainmentHappiness = 0;
+        String studentDormName = s.getDorm();
+        String studentDiningHallName = s.getDiningHall();
+        String studentAcademicCenterName = s.getAcademicBuilding();
+
+        List<BuildingModel> studentsBuildingsOnly = new ArrayList<>();
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentDormName, college.getRunId())); // Add only the dorm the student is in
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentDiningHallName, college.getRunId())); // Add only the dining hall the student is in
+        studentsBuildingsOnly.add(BuildingManager.getBuildingByName(studentAcademicCenterName, college.getRunId())); // Add only the academic center the student is in
+
+        int totalBuildingQuality = 0;
+        int avgBuildingQuality;
+        int entertainmentHappiness = 0;
+
+        int buildingHappinessLevel;
 
         for(BuildingModel b : allBuildings){
             // Certain buildings have to be added to the student no matter what
@@ -461,57 +484,25 @@ public class StudentManager {
                     b.getKindOfBuilding().equals(BuildingModel.getBaseballDiamondConst()) ||
                     b.getKindOfBuilding().equals(BuildingModel.getFootballStadiumConst()) ||
                     b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
-                commonBuildingCount++;
-                commonBuildingsQualityTotal += (int) b.getShownQuality();
+                studentsBuildingsOnly.add(b);
             }
             else if(b.getKindOfBuilding().equals(BuildingModel.getEntertainmentConst())){
                 // The entertainment center always adds happiness, but will add more for a higher quality center
-                commonEntertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
+                entertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
+            }
+            else{
+                continue; // If the student isn't in the building or if it's not one of the ones from above, skip it
             }
         }
-    }
 
-    /**
-     * This controls how the buildings affect the students
-     * Their happiness can go up or down depending on the quality of the buildings
-     *
-     * @param s - Single instance of student
-     * @param college - The college
-     */
-    private void setStudentOverallBuildingHappinessRating(StudentModel s, CollegeModel college){
-        String studentDormName = s.getDorm();
-        String studentDiningHallName = s.getDiningHall();
-        String studentAcademicCenterName = s.getAcademicBuilding();
-        int assignedBuildingQuality = 0;
-        int assignedBuildingCount = 0;
-
-        BuildingModel b = BuildingManager.getBuildingByName(studentDormName, college.getRunId()); // Add only the dorm the student is in
-        if (b != null) {
-            assignedBuildingQuality += b.getShownQuality();
-            assignedBuildingCount++;
+        for (BuildingModel b : studentsBuildingsOnly){
+            if (b != null) {
+                totalBuildingQuality += (int) b.getShownQuality();
+            }
         }
 
-        b = BuildingManager.getBuildingByName(studentDiningHallName, college.getRunId());
-        if (b != null) {
-            assignedBuildingQuality += b.getShownQuality();
-            assignedBuildingCount++;
-        }
+        avgBuildingQuality = totalBuildingQuality/studentsBuildingsOnly.size();
 
-        b = BuildingManager.getBuildingByName(studentAcademicCenterName, college.getRunId());
-        if (b != null) {
-            assignedBuildingQuality += b.getShownQuality();
-            assignedBuildingCount++;
-        }
-
-        if (assignedBuildingCount <= 0)
-            assignedBuildingCount = 1;
-
-        if (commonBuildingCount <= 0)
-            commonBuildingCount = 1;
-
-        // Quality is average or assigned buildings quality and all other building qualities.
-        int avgBuildingQuality = (assignedBuildingQuality/assignedBuildingCount +
-                                  commonBuildingsQualityTotal/commonBuildingCount) / 2;
 
         // This creates a bell-curve average where:
         // avgBuildingQuality is between 0 and 100
@@ -519,7 +510,7 @@ public class StudentManager {
         // Min is 0 since that's the lowest possible building quality
         // Max is 100 since that's the highest possible building quality
         // The entertainment happiness is added at the end since it should ALWAYS add happiness
-        int buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + commonEntertainmentHappiness;
+        buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
         buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
     }
@@ -528,12 +519,16 @@ public class StudentManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         List<StudentModel> students = dao.getStudents(college.getRunId());
         List<FacultyModel> faculty = facultyDao.getFaculty(college.getRunId());
-        int ratio = students.size() / Math.max(faculty.size(),1);
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, ratio);
 
-        college.setStudentFacultyRatio(ratio);
+        college.setStudentFacultyRatio(students.size() / Math.max(faculty.size(),1));
+
+        CollegeDao.saveCollege(college);
+    }
+
+    private void calculateStudentFacultyRatioRating(String collegeId) {
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        int rating = SimulatorUtilities.getRatingZeroToOneHundred(20, 5, college.getStudentFacultyRatio());
         college.setStudentFacultyRatioRating(rating);
-
         CollegeDao.saveCollege(college);
     }
 
