@@ -330,12 +330,12 @@ public class StudentManager {
            // Below if you add up the factors on happiness, they sum to 1.0
 
            int happiness =
-                   (int) (0.125 * student.getAcademicHappinessRating() +
-                          0.125 * student.getHealthHappinessRating() +
-                          0.25 * student.getMoneyHappinessRating() +
-                          0.125 * student.getFunHappinessRating() +
-                          0.125 * student.getOverallBuildingHappinessRating() +
-                          0.125 * student.getProfessorHappinessRating());
+                   (int) (0.1 * student.getAcademicHappinessRating() +
+                          0.1 * student.getHealthHappinessRating() +
+                          0.5 * student.getMoneyHappinessRating() +
+                          0.1 * student.getFunHappinessRating() +
+                          0.1 * student.getOverallBuildingHappinessRating() +
+                          0.1 * student.getProfessorHappinessRating());
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
             students.get(i).setHappinessLevel(happiness);

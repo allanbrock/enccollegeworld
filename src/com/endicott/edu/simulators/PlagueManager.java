@@ -89,7 +89,7 @@ public class PlagueManager {
             }else if(didPlagueMutate){
                 popupManager.newPopupEvent("Plague Mutates!", "It appears the plague has mutated and the quarantined students are displaying zombie like symptoms." +
                         " You could contact the government for assistance, but it could be a PR disaster. You could also leave it to your Science department.",
-                        "Government", "outSourceHelp", "Science Department", "inHouseHelp",
+                        "Government", "outSourceHelp", "Science Dept", "inHouseHelp",
                         "resources/images/zombie.png", "Zombie");
                 handlePlagueMutation(popupManager);
             }
@@ -167,8 +167,10 @@ public class PlagueManager {
 
                 }
             }
+
+
             StudentDao.saveAllStudents(collegeId, students);
-            popupMan.newPopupEvent("Zombie Outbreak Over!", studentString, "Ok", "N/A", "N/A", " ");
+            popupMan.newPopupEvent("Zombie Outbreak Over!", studentString, "Ok", "N/A", "resources/images/fun.png", " ");
 
 
 
@@ -193,7 +195,7 @@ public class PlagueManager {
 
             popupMan.newPopupEvent("Zombie Outbreak Over!", "Your science department was able to find a cure! " +
                     "Not only does it look like all the infected students are going to recover, but your school won an international award" +
-                    "and has received $300,000!", "Ok", "N/A", "N/A", " ");
+                    "and has received $300,000!", "Ok", "N/A", "resources/images/fun.png", " ");
 
             accountant.receiveIncome(collegeId, "Congraulations on the award!", 300000);
 
@@ -224,7 +226,7 @@ public class PlagueManager {
             popupMan.newPopupEvent("Zombie Outbreak Over...", "Your science department was unable to find a cure in time. As a result, " +
                     "the infection spread and infected "+percentStudentsDeadFormatted+"% of the student body. The Government had to be called in to handle the situation, " +
                     "resulting in a large financial loss as well as the loss of "+numDeaths+" students lives.",
-                    "Ok", "N/A", "N/A", " ");
+                    "Ok", "N/A", "resources/images/fun.png", " ");
 
             int billFromGov = ((int)(accountant.getAvailableCash(collegeId)*.35));
 
