@@ -94,4 +94,14 @@
         <servlet-name>viewStoreServlet</servlet-name>
         <url-pattern>/viewStore</url-pattern>
     </servlet-mapping>
+
+    <!-- Restful Servlets -->
+    <servlet>
+        <servlet-name>restCollegeServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.RestCollegeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>restCollegeServlet</servlet-name>
+        <url-pattern>/restCollege/*</url-pattern>
+    </servlet-mapping>
 </web-app>
