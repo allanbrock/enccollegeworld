@@ -13,7 +13,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid");
+        String collegeId=request.getParameter("runId");
 
 
         //struggled with two forms problem, this is a temporary solution
@@ -66,7 +66,7 @@ public class WelcomeServlet extends javax.servlet.http.HttpServlet {
 
 
     protected void doDelete(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        String collegeId=request.getParameter("runid");
+        String collegeId=request.getParameter("runId");
 
         String buttonValue = request.getParameter("button");
 

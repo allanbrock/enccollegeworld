@@ -12,14 +12,14 @@ import java.util.Enumeration;
 import java.util.logging.Logger;
 
 public class InterfaceUtils {
-    private  static Logger logger = Logger.getLogger("CollegeSimTalker");
+    private  static Logger logger = Logger.getLogger("InterfaceUtils");
 
     public static void openCollegeAndStoreInRequest(String collegeId, HttpServletRequest request) {
         CollegeModel college;
         UiMessage msg = new UiMessage();
         college = CollegeDao.getCollege(collegeId);
         if (college == null) {
-            msg.setMessage("Failed to find college.");
+            msg.setMessage("Failed to find college: " + collegeId);
             logger.info(msg.getMessage());
         } else {
             msg.setMessage("Found college: " + college.getRunId());
@@ -46,7 +46,7 @@ public class InterfaceUtils {
         //CollegeModel[] colleges = CollegeDao.getColleges();
         CollegeModel[] colleges = null;
 
-        logger.info("Setting attribute college: " + college);
+        logger.info("Setting attribute college: " + college.getRunId());
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("colleges",colleges);

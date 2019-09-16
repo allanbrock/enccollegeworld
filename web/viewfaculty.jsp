@@ -90,7 +90,7 @@
 
 <form action="viewFaculty" method="post">
 
-    <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+    <input type="hidden" name="runId" value="<%=college.getRunId()%>">
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">

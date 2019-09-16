@@ -70,7 +70,7 @@
     <h1>Endicott College World</h1>
     <p>A simulation of college life: students, buildings, sporting events, financials, unexpected events and more.</p>
     <div class="form-group">
-      <input type="text" name="runid" class="form-control" id="runid" placeholder="Enter college ID">
+      <input type="text" name="runId" class="form-control" id="runId" placeholder="Enter college ID">
     </div>
     <div class="container">
       <input type="submit" class="btn btn-info" name="button" value="Open College">

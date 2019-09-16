@@ -380,7 +380,7 @@
         </div>
 
         <!-- Hidden Parameters That Will Be Passed in Request! -->
-        <input type="hidden" name="runid" value="<%=college.getRunId()%>">
+        <input type="hidden" name="runId" value="<%=college.getRunId()%>">
 
         <!-- Newsfeed -->
         <p></p>
