@@ -63,6 +63,7 @@ public class InterfaceUtils {
         request.getSession().setAttribute("popupMan", popupManager);
         request.setAttribute("tutorials", tutorials);
         request.setAttribute("snowStorm", snowStorm);
+        request.setAttribute("runId", collegeId);
     }
 
 
@@ -81,9 +82,9 @@ public class InterfaceUtils {
     public static String getCollegeIdFromSession(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
-        String collegeId = (String) session.getAttribute("runid");
+        String collegeId = (String) session.getAttribute("runId");
         if (collegeId == null)
-            collegeId = request.getParameter("runid");
+            collegeId = request.getParameter("runId");
         return collegeId;
     }
 
