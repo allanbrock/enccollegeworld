@@ -8,19 +8,26 @@ import com.endicott.edu.simulators.*;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
+    private  static Logger logger = Logger.getLogger("ViewCollegeServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
+        logger.info("Got college servlet request.");
+        InterfaceUtils.logRequestParameters(request);
         // Check if session timed out.
         if (collegeId == null || !CollegeManager.doesCollegeExist(collegeId)) {
+            logger.info("No college id.  Going to welcome.");
             RequestDispatcher dispatcher=request.getRequestDispatcher("/welcome");
             dispatcher.forward(request, response);
             return;
         }
 
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
+        if (popupManager == null)
+            popupManager = new PopupEventManager();
 
         // Advance Time
         int advanceTimeDays = 0;
@@ -32,8 +39,10 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
             advanceTimeDays = 7;
             popupManager.clearPopupManager();
         }
+        logger.info("Advance time days " + advanceTimeDays);
 
         for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(); i++) {
+            logger.info("Advancing time.");
             CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
 

@@ -42,7 +42,9 @@ public class InterfaceUtils {
 
 
         // Load the name of all colleges.
-        CollegeModel[] colleges = CollegeDao.getColleges();
+        // This is commented out because it is so slow. Maybe used by Admin tab?
+        //CollegeModel[] colleges = CollegeDao.getColleges();
+        CollegeModel[] colleges = null;
 
         logger.info("Setting attribute college: " + college);
         request.setAttribute("message",msg);
@@ -79,7 +81,10 @@ public class InterfaceUtils {
     public static String getCollegeIdFromSession(HttpServletRequest request)
     {
         HttpSession session = request.getSession();
-        return (String) session.getAttribute("runId");
+        String collegeId = (String) session.getAttribute("runid");
+        if (collegeId == null)
+            collegeId = request.getParameter("runid");
+        return collegeId;
     }
 
 

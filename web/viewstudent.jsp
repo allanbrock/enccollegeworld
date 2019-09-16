@@ -73,6 +73,7 @@
         StudentModel students[] = (StudentModel[]) request.getAttribute("students");
         if (students == null) {
             students  = new StudentModel[0];  // This is really bad
+            StudentManager.setStudentIndex(0);
             msg.setMessage(msg.getMessage() + " Attribute for students missing.");
         }
 
@@ -82,7 +83,10 @@
 //        tutorials = new TutorialModel[0];
 //        msg.setMessage("Attribute for tutorial missing.");
 //    }
-        StudentModel student = students[StudentManager.getStudentIndex()];
+        StudentModel student = null;
+        if (StudentManager.getStudentIndex() < students.length)
+            student = students[StudentManager.getStudentIndex()];
+
         NumberFormat numberFormatter = NumberFormat.getInstance();
         numberFormatter.setGroupingUsed(true);
     %>
