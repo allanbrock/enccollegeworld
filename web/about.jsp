@@ -76,6 +76,7 @@
                 <li class="list-group-item">Timothy Amello</li>
                 <li class="list-group-item">Makennah Henry</li>
                 <li class="list-group-item">Eli Bawmann</li>
+                <li class="list-group-item">Ran Ben David</li>
             </ul>
 
             <h2>Fall 2018</h2>
