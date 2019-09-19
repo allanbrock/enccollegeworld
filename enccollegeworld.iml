@@ -35,5 +35,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="javax.servlet-api" level="project" />
+    <orderEntry type="library" name="javax.servlet-api1" level="project" />
   </component>
 </module>
