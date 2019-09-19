@@ -72,8 +72,10 @@
         <div class="container">
             <h2>Fall 2019</h2>
             <ul class="list-group">
-                <li class="list-group-item">Ran Ben David</li>
+                <li class="list-group-item">Allan</li>
                 <li class="list-group-item">Timothy Amello</li>
+                <li class="list-group-item">Makennah Henry</li>
+                <li class="list-group-item">Eli Bawmann</li>
             </ul>
 
             <h2>Fall 2018</h2>
