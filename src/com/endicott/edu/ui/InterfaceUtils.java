@@ -46,7 +46,7 @@ public class InterfaceUtils {
         //CollegeModel[] colleges = CollegeDao.getColleges();
         CollegeModel[] colleges = null;
 
-        logger.info("Setting attribute college: " + college.getRunId());
+        logger.info("Setting attribute college.");
         request.setAttribute("message",msg);
         request.setAttribute("college",college);
         request.setAttribute("colleges",colleges);
@@ -83,14 +83,18 @@ public class InterfaceUtils {
     {
         HttpSession session = request.getSession();
         String collegeId = (String) session.getAttribute("runId");
-        if (collegeId == null)
+        if (collegeId == null) {
+            logger.info("Failed to get collegeId from session");
             collegeId = request.getParameter("runId");
+        }
+        logger.info("College id" + collegeId);
         return collegeId;
     }
 
 
     public static void logRequestParameters(javax.servlet.http.HttpServletRequest request) {
         Enumeration<String> params = request.getParameterNames();
+        logger.info("Logging parameters from request.  They should follow unless empty.");
         while(params.hasMoreElements()){
             String paramName = params.nextElement();
             logger.info("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));

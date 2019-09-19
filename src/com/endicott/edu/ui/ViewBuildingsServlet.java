@@ -153,8 +153,10 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        logger.info("In doGet.");
         InterfaceUtils.logRequestParameters(request);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
+        logger.info("College id is " + runId);
         String beginStr = String.valueOf(beginPurchase);
         request.setAttribute("beginBuildingPurchase", beginStr); //begin attribute is originally false
         String buildingTypeSelectedStr = String.valueOf(buildingTypeSelected);
