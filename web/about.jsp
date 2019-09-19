@@ -72,6 +72,7 @@
         <div class="container">
             <h2>Fall 2019</h2>
             <ul class="list-group">
+                <li class="list-group-item">Allan</li>
                 <li class="list-group-item">Elijah Andrew Kennedy Bawmann</li>
             </ul>
 
