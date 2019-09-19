@@ -70,6 +70,10 @@
 
     <div class="container">
         <div class="container">
+            <h2>Fall 2019</h2>
+            <ul class="list-group">
+            </ul>
+
             <h2>Fall 2018</h2>
             <ul class="list-group">
                 <li class="list-group-item">Steven Suchcicki</li>
