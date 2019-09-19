@@ -77,7 +77,7 @@
                 <li class="list-group-item">Makennah Henry</li>
                 <li class="list-group-item">Eli Bawmann</li>
                 <li class="list-group-item">Ran Ben David</li>
-                <li class="list-group-item">Will Haller</li>
+                <li class="list-group-item">Will Waller</li>
             </ul>
 
             <h2>Fall 2018</h2>
