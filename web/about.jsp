@@ -72,6 +72,7 @@
         <div class="container">
             <h2>Fall 2019</h2>
             <ul class="list-group">
+                <li class="list-group-item">Will Haller (winner)</li>
             </ul>
 
             <h2>Fall 2018</h2>
