@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="javax.servlet-api">
     <CLASSES>
-      <root url="jar://C:/payara5/glassfish/modules/javax.servlet-api.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/School/Payara/payara5/glassfish/modules/javax.servlet-api.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

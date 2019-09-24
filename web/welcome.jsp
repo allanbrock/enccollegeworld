@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<title>Great College World</title>
+<title>Super College Simulator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href = "resources/style.css">
 <!-- Latest compiled and minified CSS -->
@@ -70,10 +70,10 @@
     <h1>Endicott College World</h1>
     <p>A simulation of college life: students, buildings, sporting events, financials, unexpected events and more.</p>
     <div class="form-group">
-      <input type="text" name="runId" class="form-control" id="runId" placeholder="Enter college ID">
+      <input type="text" name="runId" class="form-control" id="runId" placeholder="Enter College Name">
     </div>
     <div class="container">
-      <input type="submit" class="btn btn-info" name="button" value="Open College">
+      <input type="submit" class="btn btn-info" name="button" value="Load College">
       <input type="submit" class="btn btn-info" name="button" value="Create College">
       <input type="submit" class="btn btn-danger" name="button" value="Delete College">
     </div>
