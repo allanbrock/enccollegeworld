@@ -13,6 +13,7 @@
 
 # Generated files
 **/contentModel.xml
+**/encollegeworld.iml
 
 # Sensitive or high-churn files
 **/dataSources/
