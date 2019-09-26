@@ -30,7 +30,7 @@ public class StudentManager {
     }
 
     /**
-     * Simulate the changes in students and stutdent finances
+     * Simulate the changes in students and student finances
      * due to passage of time at the college.
      *
      * @param collegeId
