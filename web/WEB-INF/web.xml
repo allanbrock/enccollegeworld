@@ -104,4 +104,41 @@
         <servlet-name>restCollegeServlet</servlet-name>
         <url-pattern>/restCollege/*</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>buildingServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.BuildingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>buildingServlet</servlet-name>
+        <url-pattern>/building/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>eventsCalendarServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.EventsCalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>eventsCalendarServlet</servlet-name>
+        <url-pattern>/eventsCalendar/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>eventsServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.EventsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>eventsServlet</servlet-name>
+        <url-pattern>/events/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>facultyServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.FacultyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>facultyServlet</servlet-name>
+        <url-pattern>/faculty/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
