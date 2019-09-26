@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Logger;
 
+/**
+ * Created by Ran Ben David on 09/25/2019.
+ */
+
 public class EventsCalendarServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 

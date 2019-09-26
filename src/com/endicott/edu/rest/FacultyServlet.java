@@ -12,6 +12,10 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Created by Ran Ben David on 09/25/2019.
+ */
+
 public class FacultyServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
