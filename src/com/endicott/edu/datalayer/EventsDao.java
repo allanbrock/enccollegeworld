@@ -22,7 +22,7 @@ public class EventsDao {
      * @param collegeId sim id
      * @return ArrayList<EventsModel> events
      */
-    public List<EventsModel> getEvents(String collegeId) {
+    public static List<EventsModel> getEvents(String collegeId) {
         ArrayList<EventsModel> events = new ArrayList<>();
         EventsModel eventsModel = null; //not sure why this is defined and not used.....
         try {
