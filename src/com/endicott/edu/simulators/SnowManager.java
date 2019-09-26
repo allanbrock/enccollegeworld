@@ -109,6 +109,7 @@ public class SnowManager {
         logger.info("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
         System.out.println("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
         Boolean isCold = false;
+
         if(currentDay == START_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             popupManager.newPopupEvent("Winter is here!", "Winter is here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",

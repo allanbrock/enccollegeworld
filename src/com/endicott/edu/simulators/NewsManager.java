@@ -20,21 +20,15 @@ public class NewsManager {
      * @param newsLevel
      */
     public static void createNews(String collegeId, int newsHour, String message, NewsType newsType, NewsLevel newsLevel) {
-        NewsFeedItemModel note = new NewsFeedItemModel();
-        note.setHour(newsHour);
-        note.setMessage(message);
-        note.setNoteType(newsType);
-        note.setNoteLevel(newsLevel);
+        NewsFeedItemModel note = new NewsFeedItemModel(newsHour, message, newsType, newsLevel);
+
         NewsFeedDao noteDao = new NewsFeedDao();
         noteDao.saveNote(collegeId, note);
     }
 
     public static void createFinancialNews(String collegeId, int newsHour, String message, int amount) {
-        NewsFeedItemModel note = new NewsFeedItemModel();
-        note.setHour(newsHour);
-        note.setMessage(message);
-        note.setAmount(amount);
-        note.setNoteType(NewsType.FINANCIAL_NEWS);
+        NewsFeedItemModel note = new NewsFeedItemModel(newsHour, message, amount, NewsType.FINANCIAL_NEWS);
+
         NewsFeedDao noteDao = new NewsFeedDao();
         noteDao.saveNote(collegeId, note);
     }
