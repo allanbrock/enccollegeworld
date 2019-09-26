@@ -143,12 +143,12 @@
     </nav>
 
     <div class="modal fade" id="eventPopUp" role="dialog">
+    <input type="submit" class="btn btn-info" style="position: absolute; right: 1em; bottom: 1em;" name="clearAll" value="Clear">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <!-- Creates a modal body for each event in the list-->
-            <% for (PopupEventModel event:popupManager.getEventsList()) {%>
+            <% for (PopupEventModel event : popupManager.getEventsList()) {%>
                 <div class="modal-body">
                     <h3><%=event.getTitle()%></h3>
                     <div>
