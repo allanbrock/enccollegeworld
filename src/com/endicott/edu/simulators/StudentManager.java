@@ -599,6 +599,7 @@ public class StudentManager {
         Boolean usesVerb        = (Math.random() >= 0.5);
         Boolean useNoun         = true;
         String feedback         = (usesVerb ? "I " : "The ");
+        int useNeutralIntro;
 
         List<String> verbs      = new ArrayList<>();
         List<String> adjectives = new ArrayList<>();
@@ -613,7 +614,7 @@ public class StudentManager {
 
         // Negative feedback
         if(student.getHappinessLevel() < 50) {
-            Collections.addAll(verbs, "hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
+            Collections.addAll(verbs,"hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
             Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
 
         // Positive feedback
@@ -626,11 +627,18 @@ public class StudentManager {
             useNoun                 = false;
             String[] neutralIntro   = {"All things considered, ", "All together, ", ""};
             String[] neutralMidro   = {"Everything is ", "All is ", "Things are "};
-            String[] neutralOutro   = {"okay ", "alright ", "going well ", "not bad "};
+            String[] neutralOutro   = {"okay", "alright", "in order", "not bad", "fine", "reasonable", "average"};
 
-            feedback =  neutralIntro[new Random().nextInt(neutralIntro.length)] +
-                        neutralMidro[new Random().nextInt(neutralMidro.length)] +
-                        neutralOutro[new Random().nextInt(neutralOutro.length)];
+            useNeutralIntro = new Random().nextInt(neutralIntro.length);
+
+            if(useNeutralIntro==neutralIntro.length-1) {
+                feedback = neutralMidro[new Random().nextInt(neutralMidro.length)];
+            } else {
+                feedback =  neutralIntro[useNeutralIntro] +
+                            neutralMidro[new Random().nextInt(neutralMidro.length)].toLowerCase();
+            }
+                feedback += neutralOutro[new Random().nextInt(neutralOutro.length)];
+
         }
 
         if(useNoun)
@@ -642,10 +650,17 @@ public class StudentManager {
                             adjectives.get(new Random().nextInt(adjectives.size()));
 
         // Conclusion
-        String[] conclusion =  {"here", "at this school", "at "+collegeId, ""};
+        String[] conclusion =  {" here", " at this school", " at "+collegeId, ""};
         feedback += conclusion[new Random().nextInt(conclusion.length)];
-        String[] punctuation = {".", "!", "...", "!!!"};
-        feedback += punctuation[new Random().nextInt(punctuation.length)];
+        String[] positivePunctuation = {"!", "!!", "!!!"};
+        String[] negativePunctuation = {".", "..", "..."};
+        if(student.getHappinessLevel() < 50) {
+            feedback += negativePunctuation[new Random().nextInt(negativePunctuation.length)];
+        } else if (student.getHappinessLevel() > 70) {
+            feedback += positivePunctuation[new Random().nextInt(positivePunctuation.length)];
+        } else {
+            feedback += ".";
+        }
 
         return feedback;
     }
