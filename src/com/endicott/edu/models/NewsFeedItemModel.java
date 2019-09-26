@@ -25,6 +25,20 @@ public class NewsFeedItemModel implements Serializable {
         this.noteLevel = message_level;
     }
 
+    public NewsFeedItemModel(int dayNumber, String message, NewsType message_type, NewsLevel message_level) {
+        this.hour = dayNumber;
+        this.message = message;
+        this.noteType = message_type;
+        this.noteLevel = message_level;
+    }
+
+    public NewsFeedItemModel(int dayNumber, String message, int amount, NewsType message_type) {
+        this.hour = dayNumber;
+        this.message = message;
+        this.amount = amount;
+        this.noteType = message_type;
+    }
+
     public int getAmount() {
         return amount;
     }
