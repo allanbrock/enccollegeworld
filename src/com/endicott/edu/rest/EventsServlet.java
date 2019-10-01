@@ -33,10 +33,14 @@ public class EventsServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        List<EventsModel> college;
-        college = EventsDao.getEvents(collegeId);
+        List<EventsModel> events;
+        events = EventsDao.getEvents(collegeId);
 
-        sendAsJson(response, college);
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+
+        sendAsJson(response, events);
     }
 
     //a utility method to send object

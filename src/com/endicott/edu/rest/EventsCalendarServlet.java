@@ -31,10 +31,14 @@ public class EventsCalendarServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        EventCalendarModel[] college;
-        college = EventCalendarDao.getEventCalendarArray(collegeId);
+        EventCalendarModel[] calendar;
+        calendar = EventCalendarDao.getEventCalendarArray(collegeId);
 
-        sendAsJson(response, college);
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+
+        sendAsJson(response, calendar);
     }
 
     //a utility method to send object

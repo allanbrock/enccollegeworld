@@ -102,7 +102,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>restCollegeServlet</servlet-name>
-        <url-pattern>/restCollege/*</url-pattern>
+        <url-pattern>/rest/college/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -111,7 +111,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>buildingServlet</servlet-name>
-        <url-pattern>/building/*</url-pattern>
+        <url-pattern>/rest/building/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -120,7 +120,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>eventsCalendarServlet</servlet-name>
-        <url-pattern>/eventsCalendar/*</url-pattern>
+        <url-pattern>/rest/eventsCalendar/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -129,7 +129,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>eventsServlet</servlet-name>
-        <url-pattern>/events/*</url-pattern>
+        <url-pattern>/rest/events/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
