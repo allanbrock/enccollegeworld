@@ -49,7 +49,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         if(request.getParameter("updateTuitionButton") != null){
             String tuitionValue = request.getParameter("tuitionValue");
             int tuition = Integer.parseInt(tuitionValue);
-            CollegeManager.updateCollegeTuition(collegeId, tuition);
+            CollegeManager.updateCollegeTuition(collegeId, tuition, popupManager);
         }
 
         if(request.getParameter("changeCollegeMode") != null){

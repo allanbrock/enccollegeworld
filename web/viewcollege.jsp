@@ -188,7 +188,25 @@
         <!-- jumbotron -->
         <div class="jumbotron">
             <div class="row">
-                <div class="col-md-3">
+<%--                <div class="col-md-2">--%>
+<%--                    <img class="img-responsive" src="resources/images/star.png">--%>
+<%--                </div>--%>
+                <div class="col-md-12">
+
+                    <h2>You are on Level <%=GateManager.getGateLevel(college.getRunId())%></h2>
+                    <% int studentsNeeded = Math.max(GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1) - students.length, 0); %>
+                    <h3>You need <%=studentsNeeded%> students to get to the next level.</h3>
+                    <div class="progress" style="margin-bottom:0">
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                             style="width:<%=GateManager.getOverallGateProgress(college.getRunId())%>%">
+                            <%=students.length%> / <%=GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1)%> students
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
                     </h2>
 
@@ -208,19 +226,19 @@
 
                 <!-- Tips -->
                 <%if (tip != null){%>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class="well well-lg" style="background: white">
                         <%if (!tip.getImage().equals("")){%>
                         <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
                         <%}%>
                         <p><%=tip.getBody()%></p>
                     </div>
-                    <input type="submit" class="btn btn-info" name="nextTip" value="Next Tip">
-                    <input type="submit" class="btn btn-info" name="hideTips" value="Hide Tips">
+                    <input type="submit" class="btn btn-light" name="nextTip" value="Next Tip">
+                    <input type="submit" class="btn btn-light" name="hideTips" value="Hide Tips">
                 </div>
                 <%}%>
                 <%if (tip == null){%>
-                <input type="submit" class="btn btn-info" name="showTips" value="Show Tips">
+                <input type="submit" class="btn btn-light" name="showTips" value="Show Tips">
                 <%}%>
 
                 <!-- Flood -->
@@ -240,36 +258,36 @@
         <div class="row">
             <!-- Happiness -->
             <div class="col-sm-2">
-                <div class="well well-sm">
-                    <%
-                        String barType = "progress-bar-success";
-                    %>
-                    <h2><small>Happiness</small></h2>
-                    <!-- progress circle -->
-                    <div id="happinessCircle"
-                         data-dimension="250"
-                         data-text=""
-                         data-info="Happiness"
-                         data-width="12"
-                         data-fontsize="12"
-                         data-percent="<%=college.getStudentBodyHappiness()%>"
-                         data-fgcolor="#61a9dc"
-                         data-bgcolor="#eee"
-                         data-fill="#ddd">
+                    <div class="well well-sm">
+                        <%
+                            String barType = "progress-bar-success";
+                        %>
+                        <h3>Happiness</h3>
+                        <!-- progress circle -->
+                        <div id="happinessCircle"
+                             data-dimension="250"
+                             data-text=""
+                             data-info="Happiness"
+                             data-width="12"
+                             data-fontsize="12"
+                             data-percent="<%=college.getStudentBodyHappiness()%>"
+                             data-fgcolor="#61a9dc"
+                             data-bgcolor="#eee"
+                             data-fill="#ddd">
+                        </div>
+                        <br>
+                        <button type="button" href="#happinessDetails" class="btn btn-light" data-toggle="collapse">Details</button>
+                        <div id="happinessDetails" class="collapse">
+                            The happiness of the students depends on their health, academic success,
+                            tuition bills, and how much fun they are having.
+                        </div>
                     </div>
-                    <br>
-                    <a href="#happinessDetails" class="btn btn-info" data-toggle="collapse">Details</a>
-                    <div id="happinessDetails" class="collapse">
-                        The happiness of the students depends on their health, academic success,
-                        tuition bills, and how much fun they are having.
-                    </div>
-                </div>
             </div>
 
-            <!-- Retention Rate -->
             <div class="col-sm-2">
+                <!-- Retention Rate -->
                 <div class="well well-sm">
-                    <h2><small>Retention Rate</small></h2>
+                    <h3>Retention</h3>
                     <!-- progress circle: retention rate -->
                     <div id="retentionCircle"
                          data-dimension="250"
@@ -283,7 +301,7 @@
                          data-fill="#ddd">
                     </div>
                     <br>
-                    <a href="#retentionDetails" class="btn btn-info" data-toggle="collapse">Details</a>
+                    <button href="#retentionDetails" type="button" class="btn btn-light" data-toggle="collapse">Details</button>
                     <div id="retentionDetails" class="collapse">
                         The rate is the percentage of students that remained at the college during the last week.
                     </div>
@@ -291,41 +309,55 @@
             </div>
 
             <!-- Number of Students -->
-            <div class="col-sm-2">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h2><%=students.length%>
-                        </h2>
-                        <h4>Students</h4>
+            <div class="col-sm-4">
+                    <div class="well well-sm">
+                        <div class="text">
+                            <h3><strong>Students:</strong> <%=students.length%></h3>
+                            <h3><strong>Student/Faculty Ratio:</strong> <%=college.getStudentFacultyRatio()%></h3>
+                            <h3><strong>Students Considering:</strong> <%=college.getNumberStudentsAccepted()%></h3>
+                        </div>
+                        <button href="#acceptedDetails" type="button" class="btn btn-light" data-toggle="collapse">Details</button>
+                        <div id="acceptedDetails" class="collapse">
+                            New students enter the college on the first of the month. Potential students decide to come
+                            based on how happy the college seems.
+                        </div>
                     </div>
-                </div>
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h2><%=college.getNumberStudentsAccepted()%>
-                        </h2>
-                        <h4>Students Thinking About Coming</h4>
-                    </div>
-                    <br>
-                    <a href="#acceptedDetails" class="btn btn-info" data-toggle="collapse">Details</a>
-                    <div id="acceptedDetails" class="collapse">
-                        New students enter the college on the first of the month. Potential students decide to come
-                        based on how happy the college seems.
-                    </div>
-                </div>
             </div>
 
+            <!-- Tuition -->
+            <div class="col-sm-4">
+                    <form id = "tuitionForm">
+                        <div class="well well-sm">
+                            <h3><strong>Tuition:</strong> $<%=college.getYearlyTuitionCost()%></h3>
+                            <form class="form-inline">
+                                <div class="form-group">
 
-            <!-- Student Faculty Ratio -->
-            <div class="col-sm-2">
-                <div class="well well-sm">
-                    <div class="text-center">
-                        <h2><%=college.getStudentFacultyRatio()%>
-                        </h2>
-                        <h4>Student Faculty Ratio</h4>
-                    </div>
-                </div>
+                                    <label class="sr-only" >Amount (in dollars)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
+                                        <div class="input-group-addon">.00</div>
+                                    </div>
+                                </div>
+                                <!--This bit of css hides the arrows on the above text box
+                                    these are called spin boxes. If this causes problems
+                                    just remove the code in the <style> tag!-->
+                                <style>
+                                    input::-webkit-outer-spin-button,
+                                    input::-webkit-inner-spin-button {
+                                        /* display: none; <- Crashes Chrome on hover */
+                                        -webkit-appearance: none;
+                                        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+                                    }
+                                </style>
 
+                                <input type="submit" class="btn btn-primary" name="updateTuitionButton" value="Update Tuition">
+                            </form>
+                        </div>
+                    </form>
+                <!-- Mode -->
                     <div class="well well-sm">
+                        <h3>Change Mode</h3>
                         <div class="form-group">
                             <select class="form-control" id="collegeMode" name="collegeMode">
                                 <option value="Play"<% if (college.getMode() == CollegeMode.PLAY) {%> selected <% } %> >Play</option>
@@ -339,43 +371,8 @@
                                 <option value="Demo Plague Mutation"<% if (college.getMode() == CollegeMode.DEMO_ZOMBIE_MUTATION) {%> selected <% } %> >Demo Plague Mutation</option>
                             </select>
                         </div>
-                        <input type="submit" class="btn btn-info" name="changeCollegeMode" value="Change Mode">
+                        <input type="submit" class="btn btn-primary" name="changeCollegeMode" value="Change Mode">
                     </div>
-
-            </div>
-
-
-            <!-- Tuition -->
-            <div class="col-sm-3">
-                <form id = "tuitionForm">
-                    <div class="well well-sm">
-                        <h3>Tuition is $<%=college.getYearlyTuitionCost()%></h3>
-                        <form class="form-inline">
-                            <div class="form-group">
-
-                                <label class="sr-only" >Amount (in dollars)</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">$</div>
-                                    <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
-                                    <div class="input-group-addon">.00</div>
-                                </div>
-                            </div>
-                            <!--This bit of css hides the arrows on the above text box
-                                these are called spin boxes. If this causes problems
-                                just remove the code in the <style> tag!-->
-                            <style>
-                                input::-webkit-outer-spin-button,
-                                input::-webkit-inner-spin-button {
-                                    /* display: none; <- Crashes Chrome on hover */
-                                    -webkit-appearance: none;
-                                    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-                                }
-                            </style>
-
-                            <input type="submit" class="btn btn-primary\" name="updateTuitionButton" value="Update Tuition">
-                        </form>
-                    </div>
-                </form>
             </div>
         </div>
 

@@ -1,9 +1,11 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.EventsDao;
+import com.endicott.edu.datalayer.CollegeDao;
+import com.endicott.edu.datalayer.SportsDao;
 import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.EventsModel;
+import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.SportModel;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +18,7 @@ import java.util.logging.Logger;
  * Created by Ran Ben David on 09/25/2019.
  */
 
-public class EventsServlet extends javax.servlet.http.HttpServlet {
+public class SportsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -33,14 +35,14 @@ public class EventsServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        List<EventsModel> events;
-        events = EventsDao.getEvents(collegeId);
+        List<SportModel> buildings;
+        buildings = SportsDao.getSports(collegeId);
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, events);
+        sendAsJson(response, buildings);
     }
 
     //a utility method to send object

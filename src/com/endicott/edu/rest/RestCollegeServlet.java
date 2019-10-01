@@ -28,7 +28,9 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
         String collegeId = splits[1];
         CollegeModel college;
         college = CollegeDao.getCollege(collegeId);
-
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
         sendAsJson(response, college);
     }
 

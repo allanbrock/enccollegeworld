@@ -33,10 +33,14 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        List<FacultyModel> college;
-        college = FacultyDao.getFaculty(collegeId);
+        List<FacultyModel> faculty;
+        faculty = FacultyDao.getFaculty(collegeId);
 
-        sendAsJson(response, college);
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+
+        sendAsJson(response, faculty);
     }
 
     //a utility method to send object
