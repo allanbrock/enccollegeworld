@@ -143,7 +143,7 @@
     </nav>
 
     <div class="modal fade" id="eventPopUp" role="dialog">
-    <input type="submit" class="btn btn-info" style="position: absolute; right: 1em; bottom: 1em;" name="clearAll" value="Clear">
+    <input type="submit" class="btn btn-info" style="position: absolute; right: 1em; bottom: 1em;" name="readAll" value="Read All">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">

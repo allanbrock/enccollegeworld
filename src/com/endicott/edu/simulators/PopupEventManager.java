@@ -1,10 +1,8 @@
 package com.endicott.edu.simulators;
 
-import java.util.ArrayList;
 import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.ui.InterfaceUtils;
-
-import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * Created by CJ Mustone and Joseph Moss
@@ -69,11 +67,17 @@ public class PopupEventManager {
      * and return true.  Return false we didn't find that a popup
      */
     public void removePopupIfButtonPressed(javax.servlet.http.HttpServletRequest request) {
-        for (PopupEventModel e : currentEvents) {
-            if (InterfaceUtils.isThisParamNameInRequest(request, "clearAll")) {
-                this.clearPopupManager();
-                return;
+        if (InterfaceUtils.isThisParamNameInRequest(request, "readAll")) {
+            ArrayList<PopupEventModel> tempEvents = new ArrayList<>(currentEvents);
+
+            for (PopupEventModel e : tempEvents) {
+                if (!(e.getAcknowledgeButtonCallback() == null)) {
+                    currentEvents.remove(e);
+                }
             }
+            return;
+        }
+        for (PopupEventModel e : currentEvents) {
             if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
                 currentEvents.remove(e);
                 return;

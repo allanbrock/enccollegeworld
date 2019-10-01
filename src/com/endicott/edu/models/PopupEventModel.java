@@ -15,7 +15,7 @@ public class PopupEventModel implements Serializable {
     private String rightButtonText;
     private String rightButtonCallback;
     private String acknowledgeButtonText;
-    private String acknowledgeButtonCallback;
+    private String acknowledgeButtonCallback = null;
     private String imagePath;
     private String altImageText;
     private String servlet;
