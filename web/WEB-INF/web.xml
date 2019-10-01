@@ -141,4 +141,13 @@
         <url-pattern>/faculty/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>sportsServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.SportsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sportsServlet</servlet-name>
+        <url-pattern>/rest/sports/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
