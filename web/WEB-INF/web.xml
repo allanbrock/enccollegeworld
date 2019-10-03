@@ -168,4 +168,13 @@
         <url-pattern>/rest/gates/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>storeServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.StoreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>storeServlet</servlet-name>
+        <url-pattern>/rest/store/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
