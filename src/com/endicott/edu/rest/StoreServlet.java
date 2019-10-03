@@ -1,11 +1,15 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.CollegeDao;
+import com.endicott.edu.datalayer.InventoryDao;
 import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.ItemModel;
 import com.google.gson.Gson;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class StoreServlet extends javax.servlet.http.HttpServlet {
@@ -25,12 +29,12 @@ public class StoreServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        CollegeModel college;
-        college = CollegeDao.getCollege(collegeId);
+        List<ItemModel> items;
+        items = InventoryDao.getItems(collegeId);
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
-        sendAsJson(response, college);
+        sendAsJson(response, items);
     }
 
     //a utility method to send object
