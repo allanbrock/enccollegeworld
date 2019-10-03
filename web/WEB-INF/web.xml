@@ -159,4 +159,13 @@
         <url-pattern>/rest/sports/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>gatesServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.GatesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gatesServlet</servlet-name>
+        <url-pattern>/rest/gates/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
