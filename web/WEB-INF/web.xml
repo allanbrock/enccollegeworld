@@ -169,6 +169,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>everythingServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.EverythingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>everythingServlet</servlet-name>
+        <url-pattern>/rest/everything/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
         <servlet-name>storeServlet</servlet-name>
         <servlet-class>com.endicott.edu.rest.StoreServlet</servlet-class>
     </servlet>

@@ -3,7 +3,6 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import javax.swing.*;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -223,23 +222,23 @@ public class CollegeManager {
      * @return the college
      */
     public static CollegeModel updateCollegeTuition(String collegeId, int amount, PopupEventManager popupManager){
-        if ((amount >= 0) && (amount <= 100000)) {
-            CollegeModel college = CollegeDao.getCollege(collegeId);
-            college.setYearlyTuitionCost(amount);
-            CollegeDao.saveCollege(college);
-
-            calculateStatisticsAndRatings(collegeId);
-
-            NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
-
-            StudentManager studentManager = new StudentManager();
-            studentManager.calculateStatistics(collegeId, false);
-
-            return college;
-        } else {
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        if ((amount < 0) || (amount > 100000)) {
             popupManager.newPopupEvent("Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
-            return null;
+            return college;
         }
+
+        college.setYearlyTuitionCost(amount);
+        CollegeDao.saveCollege(college);
+
+        calculateStatisticsAndRatings(collegeId);
+
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
+
+        StudentManager studentManager = new StudentManager();
+        studentManager.calculateStatistics(collegeId, false);
+
+        return college;
     }
 
     private static void calculateStatisticsAndRatings(String collegeId) {
