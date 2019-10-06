@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.GateModel;
+import com.endicott.edu.models.ObjectivesModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,7 @@ public class GateManager {
         return false;
     }
 
+
     public static int getGateGoal(int gateLevel) {
         return (int)GATE_LEVELS.get(gateLevel);
     }
@@ -80,6 +82,27 @@ public class GateManager {
             if (gate.getKey().equals(key)) return gate;
         }
         return null;
+    }
+
+    public static ObjectivesModel getObjectives(String collegeId) {
+        int studentCount = StudentDao.getStudents(collegeId).size();;
+        ObjectivesModel objectives = new ObjectivesModel();
+        objectives.currentLevel = 0;
+        objectives.gates = GateDao.getGates(collegeId).toArray(new GateModel[0]);
+        objectives.studentsNeededForLevel = new int[GATE_LEVELS.size()];
+
+        for(int i=0; i<GATE_LEVELS.size(); i++) {
+            objectives.studentsNeededForLevel[i] = (int) GATE_LEVELS.get(i);
+            if (studentCount > (int)GATE_LEVELS.get(i)) {
+                objectives.currentLevel = i;
+            }
+        }
+
+        objectives.nextLevel = Math.min(objectives.currentLevel+1, GATE_LEVELS.size()-1);
+        objectives.studentCount = studentCount;
+        objectives.studentsNeededForNextLevel = Math.max((int) GATE_LEVELS.get(objectives.nextLevel) - studentCount, 0);
+
+        return objectives;
     }
 
     /**

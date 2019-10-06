@@ -7,7 +7,7 @@ public class EverythingModel implements Serializable {
     public CollegeModel college;
     public BuildingModel[] buildings;
     public List<SportModel> sports;
-    public GateModel[] objectives;
+    public ObjectivesModel objectives;
     public List<FacultyModel> faculty;
     public List<EventsModel> events;
     public List<ItemModel> store;

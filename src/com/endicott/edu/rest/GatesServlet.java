@@ -2,6 +2,8 @@ package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.models.GateModel;
+import com.endicott.edu.models.ObjectivesModel;
+import com.endicott.edu.simulators.GateManager;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,14 +32,13 @@ public class GatesServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        GateModel[] gates;
-        gates = GateDao.getGatesArray(collegeId);
+        ObjectivesModel objectives = GateManager.getObjectives(collegeId);
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, gates);
+        sendAsJson(response, objectives);
     }
 
 

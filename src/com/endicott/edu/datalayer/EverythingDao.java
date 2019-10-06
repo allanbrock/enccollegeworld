@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.EverythingModel;
+import com.endicott.edu.simulators.GateManager;
 
 public class EverythingDao {
     public static EverythingModel getEverything(String collegeId) {
@@ -8,7 +9,7 @@ public class EverythingDao {
        model.college = CollegeDao.getCollege(collegeId);
        model.buildings = BuildingDao.getBuildingsArray(collegeId);
        model.sports = SportsDao.getSports(collegeId);
-       model.objectives = GateDao.getGatesArray(collegeId);
+       model.objectives = GateManager.getObjectives(collegeId);
        model.faculty = FacultyDao.getFaculty(collegeId);
        model.events = EventsDao.getEvents(collegeId);
        model.store = InventoryDao.getItems(collegeId);
