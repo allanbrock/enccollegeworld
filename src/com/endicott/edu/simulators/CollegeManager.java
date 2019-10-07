@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class CollegeManager {
     static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
-
+    private Logger logger = Logger.getLogger("CollegeManager");
     /**
      * Creates a new college.
      *

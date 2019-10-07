@@ -5,11 +5,13 @@ import com.endicott.edu.models.CollegeModel;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 // Created by abrocken on 7/17/2017.
 
 public class CollegeDao {
-    private  static HashMap<String, CollegeModel> cache = new HashMap<>(); // Cache for CollegeModel
+    private static Logger logger = Logger.getLogger("CollegeDao");
+    private static HashMap<String, CollegeModel> cache = new HashMap<>(); // Cache for CollegeModel
 
     public static CollegeModel getCollege(String collegeId) {
         if (cache.containsKey(collegeId)){
@@ -50,6 +52,7 @@ public class CollegeDao {
 
     public static void deleteCollege(String collegeId) {
         File file = new File(getFilePath(collegeId));
+        logger.info("Deleting files from " + file.toString());
         boolean result = file.delete();
 
         FacultyDao.removeAllFaculty(collegeId);
