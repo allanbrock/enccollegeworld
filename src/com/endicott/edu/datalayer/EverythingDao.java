@@ -14,6 +14,7 @@ public class EverythingDao {
        model.events = EventsDao.getEvents(collegeId);
        model.store = InventoryDao.getItems(collegeId);
        model.students = StudentDao.getStudentsArray(collegeId);
+       model.news = NewsFeedDao.getNews(collegeId);
        return model;
     }
 }
