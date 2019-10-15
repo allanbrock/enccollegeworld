@@ -18,6 +18,7 @@ public class StudentModel implements Serializable {
     private String gender = "unknown";
     private String runId = "unknown";
     private String note = "no note";
+    private String feedback = "";
     private int numberHoursBeenSick = 0; // number of hours of current illness -- 0 if well
     private int numberHoursLeftBeingSick = 0;
     private int hourLastUpdated = 0;
@@ -92,6 +93,8 @@ public class StudentModel implements Serializable {
         return note;
     }
 
+    public String getFeedback() { return feedback; }
+
     public String getGender() {
         return gender;
     }
@@ -147,6 +150,8 @@ public class StudentModel implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public void setFeedback(String feedback) { this.feedback = feedback;}
 
     public int getNumberHoursBeenSick() {
         return numberHoursBeenSick;

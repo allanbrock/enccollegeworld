@@ -326,6 +326,7 @@ public class StudentManager {
            setDormHappinessRating(student, college);
            setStudentProfessorHappiness(collegeId, student);
            setStudentOverallBuildingHappinessRating(student, college);
+           getStudentFeedback(student, collegeId);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
@@ -661,6 +662,8 @@ public class StudentManager {
         } else {
             feedback += ".";
         }
+
+        student.setFeedback(feedback);
 
         return feedback;
     }
