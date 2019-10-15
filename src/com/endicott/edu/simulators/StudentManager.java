@@ -326,6 +326,7 @@ public class StudentManager {
            setDormHappinessRating(student, college);
            setStudentProfessorHappiness(collegeId, student);
            setStudentOverallBuildingHappinessRating(student, college);
+           getStudentFeedback(student, collegeId);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
@@ -358,6 +359,7 @@ public class StudentManager {
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
+        getStudentFeedback(student, college.getRunId());
     }
 
     private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
@@ -366,6 +368,7 @@ public class StudentManager {
         int acadmicBuildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(academicBuildingQuality, 15, 0, 100);
 
         student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
+        getStudentFeedback(student, college.getRunId());
     }
 
     private void setDormHappinessRating(StudentModel student,CollegeModel college){
@@ -374,6 +377,7 @@ public class StudentManager {
         int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
 
         student.setDormHappinessRating(dormHappinessLevel);
+        getStudentFeedback(student, college.getRunId());
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
@@ -420,6 +424,7 @@ public class StudentManager {
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
         s.setAdvisorHappinessHappinessRating(happinessRating);
+        getStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
@@ -433,12 +438,14 @@ public class StudentManager {
         happinessRating = Math.min(happinessRating, 100);
 
         s.setAcademicHappinessRating(happinessRating);
+        getStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentProfessorHappiness(String collegeId, StudentModel s){
         int rating = FacultyManager.getAverageFacultyPerformance(collegeId);
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100);
         s.setProfessorHappinessRating(happinessRating);
+        getStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentHealthHappiness(StudentModel s) {
@@ -513,6 +520,7 @@ public class StudentManager {
         buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
         buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
+        getStudentFeedback(s, college.getRunId());
     }
 
     private void calculateStudentFacultyRatio(String collegeId) {
@@ -661,6 +669,8 @@ public class StudentManager {
         } else {
             feedback += ".";
         }
+
+        student.setFeedback(feedback);
 
         return feedback;
     }
