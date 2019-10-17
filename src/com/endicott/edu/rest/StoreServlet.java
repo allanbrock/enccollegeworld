@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 public class StoreServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
+
+
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo == null) {
