@@ -73,6 +73,11 @@ public class GateDao {
         saveAllGates(collegeId, gates);
     }
 
+    public static void deleteGates(String collegeId) {
+        File file = new File(getFilePath(collegeId));
+        file.delete();
+    }
+
     public static void main(String[] args) {
         testNotes();
     }

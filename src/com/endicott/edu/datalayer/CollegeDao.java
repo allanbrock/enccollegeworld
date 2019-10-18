@@ -61,6 +61,9 @@ public class CollegeDao {
         PlagueDao.deletePlagues(collegeId);
         SportsDao.deleteSports(collegeId);
         StudentDao.deleteStudents(collegeId);
+        FireDAO.deleteFires(collegeId);
+        GateDao.deleteGates(collegeId);
+        TutorialDao.deleteTutorials(collegeId);
     }
 
 

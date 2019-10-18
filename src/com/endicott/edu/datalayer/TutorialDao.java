@@ -87,6 +87,11 @@ public class TutorialDao {
         logger.info("Saved tutorials...");
     }
 
+    public static void deleteTutorials(String collegeId) {
+        File file = new File(getFilePath(collegeId));
+        file.delete();
+    }
+
     public static void main(String[] args) {
         testNotes();
     }
