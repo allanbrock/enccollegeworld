@@ -64,6 +64,10 @@ public class CollegeDao {
         FireDAO.deleteFires(collegeId);
         GateDao.deleteGates(collegeId);
         TutorialDao.deleteTutorials(collegeId);
+
+        if (cache.containsKey(collegeId)){
+            cache.remove(collegeId);
+        }
     }
 
 
