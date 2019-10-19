@@ -38,6 +38,12 @@ public class EverythingServlet extends javax.servlet.http.HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
+        // Does college exist? A poor way to check is number of students.
+        if (everything.students.length <= 0) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         sendAsJson(response, everything);
     }
 
