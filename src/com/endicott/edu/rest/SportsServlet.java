@@ -6,13 +6,16 @@ import com.endicott.edu.datalayer.SportsDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.SportModel;
+import com.endicott.edu.simulators.SportManager;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -24,23 +27,41 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        BufferedReader br =
+                new BufferedReader(new InputStreamReader(request.getInputStream()));
 
-//        if (username != null) {
-//            request.getSession().setAttribute("user", user);
-//            response.sendRedirect("home");
-//        }
-//        else {
-//            request.setAttribute("error", "Unknown user, please try again");
-//            request.getRequestDispatcher("/login.jsp").forward(request, response);
-//        }
+        String json = "";
+        String newResponse = "";
+        if(br != null){
+            json = br.readLine();
+            System.out.println(json);
+        }
+        Gson g = new Gson();
+        Type type = new TypeToken<List<TT>>(){}.getType();
+        List<TT> theJson = g.fromJson(json, type);
+
+
+        switch (theJson.get(0).getActionId()){
+            case "ADD":
+                newResponse = SportManager.addNewTeam(theJson.get(0).getSportName(), theJson.get(0).getCollegeId());
+                break;
+            case "SELL":
+                SportManager.deleteSelectedSport(theJson.get(0).getCollegeId(),theJson.get(0).getSportName());
+                newResponse = "successfull";
+                break;
+        }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        Temp t = new Temp("ok!", "It's worked!");
+        if (newResponse == null){
+            newResponse = "successfull";
+        }
+
+
+
+        Temp t = new Temp("OK!", newResponse);
         sendAsJson(response, t);
 
     }
@@ -94,4 +115,42 @@ class Temp{
 
     private String ok;
     private String title;
+}
+
+class TT{
+    private String sportName, collegeId, actionId;
+
+
+    public TT(String sportName, String collegeId, String actionId) {
+        this.sportName = sportName;
+        this.collegeId = collegeId;
+        this.actionId = actionId;
+    }
+
+    public String getActionId() {
+        return actionId;
+    }
+
+    public void setActionId(String actionId) {
+        this.actionId = actionId;
+    }
+
+    public TT() {
+    }
+
+    public String getSportName() {
+        return sportName;
+    }
+
+    public void setSportName(String sportName) {
+        this.sportName = sportName;
+    }
+
+    public String getCollegeId() {
+        return collegeId;
+    }
+
+    public void setCollegeId(String collegeId) {
+        this.collegeId = collegeId;
+    }
 }
