@@ -95,7 +95,7 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
         // There may be a command after the college name.
         if (splits.length >= 3) {
             String command = splits[2];  // only command is next day at the moment.
-            logger.info("Servlet command: " + command);
+            logger.info("Servlet command: " + command + " " + collegeId);
             PopupEventManager popupMgr = new PopupEventManager();  // This is a stub.  Must be changed.
             CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
 
