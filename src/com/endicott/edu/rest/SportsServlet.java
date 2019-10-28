@@ -65,6 +65,7 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
             Temp t = new Temp("OK!", newResponse);
             sendAsJson(response, t);
         }catch (Exception e){
+            //
             sendAsJson(response, "ERROR");
         }
 
