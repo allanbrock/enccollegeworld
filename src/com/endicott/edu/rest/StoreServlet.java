@@ -1,9 +1,8 @@
 package com.endicott.edu.rest;
 
-import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.InventoryDao;
-import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.ItemModel;
+import com.endicott.edu.simulators.InventoryManager;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +30,14 @@ public class StoreServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
+        // see if theres a second param, if theres a second, thats gotta be the item so get it and call buyitem
+        logger.info("store " +pathInfo);
+        if (splits.length >=2 && splits[2]!=null){
+            String name = splits[2];
+            InventoryManager.buyItem(name, collegeId);
+
+            return;
+        }
         List<ItemModel> items;
         items = InventoryDao.getItems(collegeId);
         response.setHeader("Access-Control-Allow-Origin", "*");
