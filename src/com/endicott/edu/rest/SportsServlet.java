@@ -27,42 +27,47 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BufferedReader br =
-                new BufferedReader(new InputStreamReader(request.getInputStream()));
+        try {
+            BufferedReader br =
+                    new BufferedReader(new InputStreamReader(request.getInputStream()));
 
-        String json = "";
-        String newResponse = "";
-        if(br != null){
-            json = br.readLine();
-            System.out.println(json);
-        }
-        Gson g = new Gson();
-        Type type = new TypeToken<List<TT>>(){}.getType();
-        List<TT> theJson = g.fromJson(json, type);
+            String json = "";
+            String newResponse = "";
+            if (br != null) {
+                json = br.readLine();
+                System.out.println(json);
+            }
+            Gson g = new Gson();
+            Type type = new TypeToken<List<TT>>() {
+            }.getType();
+            List<TT> theJson = g.fromJson(json, type);
 
 
-        switch (theJson.get(0).getActionId()){
-            case "ADD":
-                newResponse = SportManager.addNewTeam(theJson.get(0).getSportName(), theJson.get(0).getCollegeId());
-                break;
-            case "SELL":
-                SportManager.deleteSelectedSport(theJson.get(0).getCollegeId(),theJson.get(0).getSportName());
+            switch (theJson.get(0).getActionId()) {
+                case "ADD":
+                    newResponse = SportManager.addNewTeam(theJson.get(0).getSportName(), theJson.get(0).getCollegeId());
+                    break;
+                case "SELL":
+                    SportManager.deleteSelectedSport(theJson.get(0).getCollegeId(), theJson.get(0).getSportName());
+                    newResponse = "successfull";
+                    break;
+            }
+
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+
+            if (newResponse == null) {
                 newResponse = "successfull";
-                break;
+            }
+
+
+            Temp t = new Temp("OK!", newResponse);
+            sendAsJson(response, t);
+        }catch (Exception e){
+            //
+            sendAsJson(response, "ERROR");
         }
-
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
-
-        if (newResponse == null){
-            newResponse = "successfull";
-        }
-
-
-
-        Temp t = new Temp("OK!", newResponse);
-        sendAsJson(response, t);
 
     }
 
