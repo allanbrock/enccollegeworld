@@ -1,5 +1,7 @@
 package com.endicott.edu.models;
 
+import com.endicott.edu.simulators.CoachManager;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,4 +15,5 @@ public class EverythingModel implements Serializable {
     public List<ItemModel> store;
     public StudentModel[] students;
     public NewsFeedItemModel[] news;
+    public List<CoachModel> coaches;
 }
