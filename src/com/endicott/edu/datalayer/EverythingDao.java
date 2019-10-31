@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.EverythingModel;
+import com.endicott.edu.simulators.CoachManager;
 import com.endicott.edu.simulators.GateManager;
 
 public class EverythingDao {
@@ -15,6 +16,7 @@ public class EverythingDao {
        model.store = InventoryDao.getItems(collegeId);
        model.students = StudentDao.getStudentsArray(collegeId);
        model.news = NewsFeedDao.getNews(collegeId);
+       model.coaches = CoachManager.getCollegeCoaches();
        return model;
     }
 }

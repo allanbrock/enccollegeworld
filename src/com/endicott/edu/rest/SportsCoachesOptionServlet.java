@@ -1,29 +1,30 @@
 package com.endicott.edu.rest;
 
-import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.SportsDao;
-import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.CoachModel;
 import com.endicott.edu.models.SportModel;
+import com.endicott.edu.simulators.CoachManager;
+import com.endicott.edu.simulators.FacultyManager;
+import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.SportManager;
+import com.endicott.edu.ui.InterfaceUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * Created by Ran Ben David on 09/25/2019.
- */
 
-public class SportsServlet extends javax.servlet.http.HttpServlet {
+public class SportsCoachesOptionServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,17 +39,19 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
                 System.out.println(json);
             }
             Gson g = new Gson();
-            Type type = new TypeToken<List<TT>>() {
+            Type type = new TypeToken<List<SportsCoachesOptionServletModel>>() {
             }.getType();
-            List<TT> theJson = g.fromJson(json, type);
+            List<SportsCoachesOptionServletModel> theJson = g.fromJson(json, type);
 
 
             switch (theJson.get(0).getActionId()) {
-                case "ADD":
-                    newResponse = SportManager.addNewTeam(theJson.get(0).getSportName(), theJson.get(0).getCollegeId());
+                case "FIRE_COACH":
+                    //FacultyManager.removeFaculty(theJson.get(0).getCollegeId(), theJson.get(0).getCoachModel(), true);
+                    fireOrGiveRaise(theJson.get(0).getCoachModel().getFacultyID(), theJson.get(0).getCollegeId(), theJson.get(0).getActionId());
+                    newResponse = "successfull";
                     break;
-                case "SELL":
-                    SportManager.deleteSelectedSport(theJson.get(0).getCollegeId(), theJson.get(0).getSportName());
+                case "GIVE_RAISE":
+                    fireOrGiveRaise(theJson.get(0).getCoachModel().getFacultyID(), theJson.get(0).getCollegeId(), theJson.get(0).getActionId());
                     newResponse = "successfull";
                     break;
             }
@@ -61,11 +64,15 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
                 newResponse = "successfull";
             }
 
+            InterfaceUtils.openCollegeAndStoreInRequest(theJson.get(0).getCollegeId(), request);
 
             Temp t = new Temp("OK!", newResponse);
             sendAsJson(response, t);
+
         }catch (Exception e){
-            //
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
             sendAsJson(response, "ERROR");
         }
 
@@ -110,26 +117,39 @@ public class SportsServlet extends javax.servlet.http.HttpServlet {
         out.print(res);
         out.flush();
     }
+
+    private void fireOrGiveRaise(String facultyID, String collegeId, String actionId){
+        for(int i = 0; i < CoachManager.getCollegeCoaches().size(); i++){
+            if (facultyID.equals(CoachManager.getCollegeCoaches().get(i).getFacultyID()) && actionId.equals("GIVE_RAISE")){
+                FacultyManager.giveFacultyRaise(collegeId, CoachManager.getCollegeCoaches().get(i), true);
+            }
+
+            if (facultyID.equals(CoachManager.getCollegeCoaches().get(i).getFacultyID()) && actionId.equals("FIRE_COACH")){
+                FacultyManager.removeFaculty(collegeId, CoachManager.getCollegeCoaches().get(i), true);
+            }
+        }
+    }
 }
 
-class Temp{
-    public Temp(String ok, String title) {
-        this.ok = ok;
-        this.title = title;
+class SportsCoachesOptionServletModel{
+    private CoachModel coachModel;
+    private String actionId,collegeId;
+
+    public SportsCoachesOptionServletModel(CoachModel coachModel, String actionId, String collegeId) {
+        this.coachModel = coachModel;
+        this.actionId = actionId;
+        this.collegeId = collegeId;
     }
 
-    private String ok;
-    private String title;
-}
+    public SportsCoachesOptionServletModel() {
+    }
 
-class TT{
-    private String sportName, collegeId, actionId;
+    public CoachModel getCoachModel() {
+        return coachModel;
+    }
 
-
-    public TT(String sportName, String collegeId, String actionId) {
-        this.sportName = sportName;
-        this.collegeId = collegeId;
-        this.actionId = actionId;
+    public void setCoachModel(CoachModel coachModel) {
+        this.coachModel = coachModel;
     }
 
     public String getActionId() {
@@ -138,17 +158,6 @@ class TT{
 
     public void setActionId(String actionId) {
         this.actionId = actionId;
-    }
-
-    public TT() {
-    }
-
-    public String getSportName() {
-        return sportName;
-    }
-
-    public void setSportName(String sportName) {
-        this.sportName = sportName;
     }
 
     public String getCollegeId() {
