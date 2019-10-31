@@ -187,4 +187,12 @@
         <url-pattern>/rest/store/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>coachesOptions</servlet-name>
+        <servlet-class>com.endicott.edu.rest.SportsCoachesOptionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>coachesOptions</servlet-name>
+        <url-pattern>/rest/coachesOptions/*</url-pattern>
+    </servlet-mapping>
 </web-app>
