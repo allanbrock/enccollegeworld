@@ -1,5 +1,8 @@
 package com.endicott.edu.models;
 
+import com.endicott.edu.datalayer.PopupEventDao;
+import com.oracle.tools.packager.Log;
+
 import java.io.Serializable;
 
 public class CollegeModel implements Serializable {
@@ -156,6 +159,11 @@ public class CollegeModel implements Serializable {
     }
 
     public void setMode(String mode) {
+        //Testing the "PopupEventDao"
+//        if (mode.equals("Demo")){
+//            new PopupEventDao().newPopupEvent("DEMO", "DEMO","TEXT", "CallBack", "image", "TEXT" );
+//        }
+
         this.mode = CollegeMode.PLAY;
 
         if (mode.equals("Play")) this.mode = CollegeMode.PLAY;
