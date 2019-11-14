@@ -12,7 +12,7 @@ public class PopupEventManager {
     private ArrayList<PopupEventModel> currentEvents;
 
     public PopupEventManager(){
-       currentEvents = new ArrayList<>();
+        currentEvents = new ArrayList<>();
 
     }
 
@@ -24,18 +24,18 @@ public class PopupEventManager {
     public void newPopupEvent(String title, String description, String leftButtonText, String leftButtonCallback,
                               String rightButtonText, String rightButtonCallback, String imagePath, String altImageText){
         PopupEventModel newEvent = new PopupEventModel(title, description, leftButtonText, leftButtonCallback, rightButtonText,
-                                   rightButtonCallback, imagePath, altImageText);
+                rightButtonCallback, imagePath, altImageText);
 
         currentEvents.add(newEvent);
 
     }
-//    public void newPopupEvent(String title, String description, String acknowledgeButtonText){
+    //    public void newPopupEvent(String title, String description, String acknowledgeButtonText){
 //        PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText);
 //        this.addEvent(newEvent);
 //    }
     public void newPopupEvent(String title, String description, String acknowledgeButtonText, String acknowledgeButtonCallback, String imagePath, String altImageText) {
         PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText,
-                                   acknowledgeButtonCallback, imagePath, altImageText);
+                acknowledgeButtonCallback, imagePath, altImageText);
 
         this.addEvent(newEvent);
     }

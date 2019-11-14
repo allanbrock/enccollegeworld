@@ -170,11 +170,6 @@
                     </div>
                 </div>
             <%};%>
-            <!-- We're not showing the done button because we want each event acknowledged.
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
-            </div>
-            -->
         </div>
 
     </div>

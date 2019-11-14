@@ -1,14 +1,15 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.EventsDao;
+import com.endicott.edu.datalayer.PopupEventDao;
 import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.EventsModel;
+import com.endicott.edu.models.PopupEventModel;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,9 +33,8 @@ public class EventsServlet extends javax.servlet.http.HttpServlet {
             return;
         }
 
-        String collegeId = splits[1];
-        List<EventsModel> events;
-        events = EventsDao.getEvents(collegeId);
+        List<PopupEventModel> events;
+        events = PopupEventDao.getPopupEvents();
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");

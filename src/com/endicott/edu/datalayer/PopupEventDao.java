@@ -1,32 +1,60 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.PopupEventModel;
+import com.endicott.edu.models.StudentModel;
 import com.endicott.edu.ui.InterfaceUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class PopupEventDao {
+    private static String getFilePath(String runId) {
+        return DaoUtils.getFilePathPrefix(runId) +  "popupevent.dat";
+    }
     private Logger logger = Logger.getLogger("PopupEventDao");
-
-    private static ArrayList<PopupEventModel> popupEventModels;
+    private  static HashMap<String, List<PopupEventModel> cache = new HashMap<>();
 
     public PopupEventDao(){
         popupEventModels = new ArrayList<>();
     }
 
-    private void addEvent(PopupEventModel event){
-        if (popupEventModels == null){
-            popupEventModels = new ArrayList<>();
+    public static List<PopupEventModel> getPopupEvents(String runId){
+        if (cache.containsKey(runId))
+            return cache.get(runId);
+
+        ArrayList<PopupEventModel> popupEvents = new ArrayList<>();
+
+        try {
+            File file = new File(getFilePath(runId));
+
+            if (!file.exists()) {
+                return popupEvents;  // There are no students yet.
+            }
+            else{
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                popupEvents = (ArrayList<PopupEventModel>) ois.readObject();
+                ois.close();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        popupEventModels.add(event);
+
+        cache.put(runId,popupEvents);
+
+        return popupEvents;
     }
 
-    public static List<PopupEventModel> getPopupEvents(){
-        if (popupEventModels == null){
-            return null;
-        }
-        return popupEventModels;
+    public static PopupEventModel[] getStudentsArray(String collegeId) {
+        List<PopupEventModel> popupEvents = getPopupEvents(collegeId);
+        return popupEvents.toArray(new PopupEventModel[popupEvents.size()]);
     }
 
     public void newPopupEvent(String title, String description, String leftButtonText, String leftButtonCallback,
