@@ -195,4 +195,14 @@
         <servlet-name>coachesOptions</servlet-name>
         <url-pattern>/rest/coachesOptions/*</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createDeleteCollegeServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.CreateDeleteCollegeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createDeleteCollegeServlet</servlet-name>
+        <url-pattern>/rest/createOrDeleteCollege/</url-pattern>
+    </servlet-mapping>
+
 </web-app>
