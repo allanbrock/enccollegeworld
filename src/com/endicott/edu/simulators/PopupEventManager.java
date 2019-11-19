@@ -18,7 +18,7 @@ public class PopupEventManager {
     /*
         Time does not affect popups currently, and so this function is not needed at this time.
      */
-    public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
+    public void handleTimeChange(String runId, PopupEventManager popupManager) {
         // Really important the we save the changes to disk.
         // dao.saveAllPopupEvents(runId, popupEvents);
     }
@@ -76,8 +76,6 @@ public class PopupEventManager {
     public void removePopupIfButtonPressed(String collegeId, javax.servlet.http.HttpServletRequest request) {
         ArrayList<PopupEventModel> tempEvents = new ArrayList<>(getEventsList(collegeId));
         if (InterfaceUtils.isThisParamNameInRequest(request, "readAll")) {
-
-
             for (PopupEventModel e : tempEvents) {
                 if (!(e.getAcknowledgeButtonCallback() == null)) {
                     dao.deletePopupEvent(collegeId, e);

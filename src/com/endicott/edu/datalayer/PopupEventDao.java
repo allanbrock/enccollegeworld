@@ -93,6 +93,7 @@ public class PopupEventDao {
     public static void deletePopupEvent(String runId, PopupEventModel pem) {
         List<PopupEventModel> popupEvents = getPopupEvents(runId);
         popupEvents.remove(pem);
+        deletePopupEvents(runId);
         saveAllPopupEvents(runId, popupEvents);
     }
 

@@ -83,11 +83,9 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         }
 
 
-        /*
-            CURRENTLY BROKEN
-         */
+
         // Check if the button pressed was from a popup.  If so clear it.
-        // popupManager.removePopupIfButtonPressed(request);
+        popupManager.removePopupIfButtonPressed(collegeId, request);
 
         // Bankrupt college PopupEvent Button
         if(request.getParameter("returnToWelcome") != null){
