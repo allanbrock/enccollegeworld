@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 
 public class CollegeManager {
     static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
-    private Logger logger = Logger.getLogger("CollegeManager");
+    public static Logger logger = Logger.getLogger("CollegeManager");
     /**
      * Creates a new college.
      *
@@ -108,39 +109,52 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
+
+
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_1 - " +  getDate());
 
         EventManager disasterManager = new EventManager(collegeId);
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_2 - " +  getDate());
 
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_3 - " +  getDate());
 
         FloodManager floodManager = new FloodManager();
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_4 - " +  getDate());
 
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_5 - " +  getDate());
 
         SnowManager snowManager = new SnowManager();
         snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_6 - " +  getDate());
 
         RiotManager riotManager = new RiotManager();
         riotManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_7 - " +  getDate());
 
         BuildingManager buildingManager = new BuildingManager();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_8 - " +  getDate());
 
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_9 - " +  getDate());
 
         StudentManager studentManager = new StudentManager();
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_10 - " +  getDate());
 
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        logger.info("RAN_11 - " +  getDate());
 
 
         // After all the simulators are run, there is a final
@@ -152,6 +166,7 @@ public class CollegeManager {
         TutorialManager.advanceTip("viewFaculty",collegeId);
         TutorialManager.advanceTip("viewSports",collegeId);
         TutorialManager.advanceTip("viewStudent",collegeId);
+        logger.info("RAN_12 - " + getDate());
 
 //        if (college.getAvailableCash() <= 0) {
 //            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
@@ -161,6 +176,11 @@ public class CollegeManager {
 
         return college;
     }
+
+    public static String getDate(){
+        return String.valueOf(System.currentTimeMillis());
+    }
+
 
     /**
      * Returns current Date of college.
