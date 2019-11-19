@@ -97,7 +97,7 @@
 <% } %>
 
 <!-- displays modal for events if there are any -->
-<% if (popupManager.isQueueInitiated()) { %>
+<% if (popupManager.isQueueInitiated(college.getRunId())) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
@@ -148,7 +148,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <!-- Creates a modal body for each event in the list-->
-            <% for (PopupEventModel event : popupManager.getEventsList()) {%>
+            <% for (PopupEventModel event : popupManager.getEventsList(college.getRunId())) {%>
                 <div class="modal-body">
                     <h3><%=event.getTitle()%></h3>
                     <div>

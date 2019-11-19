@@ -73,29 +73,28 @@ public class PopupEventManager {
      * If so, call the Manager that is support to handle the request, delete the pop event,
      * and return true.  Return false we didn't find that a popup
      */
-    /*
-    public void removePopupIfButtonPressed(javax.servlet.http.HttpServletRequest request) {
+    public void removePopupIfButtonPressed(String collegeId, javax.servlet.http.HttpServletRequest request) {
+        ArrayList<PopupEventModel> tempEvents = new ArrayList<>(getEventsList(collegeId));
         if (InterfaceUtils.isThisParamNameInRequest(request, "readAll")) {
-            ArrayList<PopupEventModel> tempEvents = new ArrayList<>(currentEvents);
+
 
             for (PopupEventModel e : tempEvents) {
                 if (!(e.getAcknowledgeButtonCallback() == null)) {
-                    currentEvents.remove(e);
+                    dao.deletePopupEvent(collegeId, e);
                 }
             }
             return;
         }
-        for (PopupEventModel e : currentEvents) {
+        for (PopupEventModel e : tempEvents) {
             if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
-                currentEvents.remove(e);
+                dao.deletePopupEvent(collegeId, e);
                 return;
             }else if(InterfaceUtils.isThisParamNameInRequest(request, e.getLeftButtonCallback()) || InterfaceUtils.isThisParamNameInRequest(request, e.getRightButtonCallback())){
-                currentEvents.remove(e);
+                dao.deletePopupEvent(collegeId, e);
                 return;
 
             }
         }
     }
-    */
 
 }

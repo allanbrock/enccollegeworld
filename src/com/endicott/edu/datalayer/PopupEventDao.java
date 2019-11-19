@@ -18,7 +18,7 @@ public class PopupEventDao {
         return DaoUtils.getFilePathPrefix(runId) +  "popupevent.dat";
     }
     private static Logger logger = Logger.getLogger("PopupEventDao");
-    private  static HashMap<String, List<PopupEventModel>> cache = new HashMap<>();
+    private static HashMap<String, List<PopupEventModel>> cache = new HashMap<>();
 
     public static List<PopupEventModel> getPopupEvents(String runId){
         if (cache.containsKey(runId))
@@ -59,6 +59,14 @@ public class PopupEventDao {
         return popupEvents.size();
     }
 
+    public void saveNewPopupEvent(String runId, PopupEventModel popupEvent) {
+        logger.info("Saving new popupEvent...");
+        List<PopupEventModel> popupEvents = getPopupEvents(runId);
+        popupEvent.setRunId(runId);
+        popupEvents.add(popupEvent);
+        saveAllPopupEvents(runId, popupEvents);
+    }
+
     public static void saveAllPopupEvents(String runId, List<PopupEventModel> popupEvents){
         logger.info("Saving all popupEvents...");
         try {
@@ -82,11 +90,9 @@ public class PopupEventDao {
         logger.info("Saved popupEvents...");
     }
 
-    public void saveNewPopupEvent(String runId, PopupEventModel popupEvent) {
-        logger.info("Saving new student...");
+    public static void deletePopupEvent(String runId, PopupEventModel pem) {
         List<PopupEventModel> popupEvents = getPopupEvents(runId);
-        popupEvent.setRunId(runId);
-        popupEvents.add(popupEvent);
+        popupEvents.remove(pem);
         saveAllPopupEvents(runId, popupEvents);
     }
 
@@ -106,36 +112,4 @@ public class PopupEventDao {
         deletePopupEvents(collegeId);
     }
     public boolean isManagerEmpty(String collegeId){ return (getNumberOfPopupEvents(collegeId) == 0); }
-
-
-    /**
-     * Take the request and see if indicates that a popup acknowledgement button was pressed.
-     * If so, call the Manager that is support to handle the request, delete the pop event,
-     * and return true.  Return false we didn't find that a popup
-     */
-    /*
-    public void removePopupIfButtonPressed(javax.servlet.http.HttpServletRequest request) {
-        if (InterfaceUtils.isThisParamNameInRequest(request, "readAll")) {
-            ArrayList<PopupEventModel> tempEvents = new ArrayList<>(popupEventModels);
-
-            for (PopupEventModel e : tempEvents) {
-                if (!(e.getAcknowledgeButtonCallback() == null)) {
-                    popupEventModels.remove(e);
-                }
-            }
-            return;
-        }
-        for (PopupEventModel e : popupEventModels) {
-            if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
-                popupEventModels.remove(e);
-                return;
-            }else if(InterfaceUtils.isThisParamNameInRequest(request, e.getLeftButtonCallback()) || InterfaceUtils.isThisParamNameInRequest(request, e.getRightButtonCallback())){
-                popupEventModels.remove(e);
-                return;
-
-            }
-        }
-    }
-    */
-
 }
