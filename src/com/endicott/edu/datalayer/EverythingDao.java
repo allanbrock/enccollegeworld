@@ -17,7 +17,7 @@ public class EverythingDao {
        model.students = StudentDao.getStudentsArray(collegeId);
        model.news = NewsFeedDao.getNews(collegeId);
        model.coaches = CoachManager.getCollegeCoaches();
-       model.popupEvent = PopupEventDao.getPopupEvents();
+       model.popupEvent = PopupEventDao.getPopupEvents(collegeId);
        return model;
     }
 }

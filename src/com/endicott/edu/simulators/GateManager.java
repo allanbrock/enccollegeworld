@@ -132,6 +132,6 @@ public class GateManager {
         int oldGateLevel = gateLevel;
         gateLevel = getGateLevel(collegeId);
         if(oldGateLevel != gateLevel)
-            popupManager.newPopupEvent("Level Up!", "Congrats you've reached enough students for level " + gateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+            popupManager.newPopupEvent(collegeId,"Level Up!", "Congrats you've reached enough students for level " + gateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
     }
 }

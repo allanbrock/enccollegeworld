@@ -39,7 +39,7 @@ public class FireManager {
         List<FireModel> fires = FireDAO.getFires(runId);
         if (fires.size() != 0) {
             for (FireModel fire:fires) {
-                generateCorrectPopUp(fire,popupManager);
+                generateCorrectPopUp(runId, fire,popupManager);
             }
         }
         fires.clear();
@@ -67,21 +67,21 @@ public class FireManager {
         InventoryManager.createItem("Smoke Detectors", false, "smokedetector.png", 50000, 3, "Some smoke detectors might decrease the odds of a raging fire from breaking out.", collegeId);
     }
 
-    private void generateCorrectPopUp(FireModel fire, PopupEventManager popupManager){
+    private void generateCorrectPopUp(String collegeId, FireModel fire, PopupEventManager popupManager){
         if (!hasUpgradeBeenPurchased() && !fire.isCatastrophic()){
-            popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
+            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
                     "Repair", "ok", "Buy Upgrade", "goToStore",
                     "resources/images/fire.png", "Plague Doctor");
         } else if (!hasUpgradeBeenPurchased() && fire.isCatastrophic()){
-            popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
+            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
                     "OK", "ok", "Buy Upgrade", "goToStore",
                     "resources/images/fire.png", "Plague Doctor");
         } else if (hasUpgradeBeenPurchased() && !fire.isCatastrophic()){
-            popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
+            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
                     "Repair", "ok" , "resources/images/fire.png",
                     "Plague Doctor");
         } else {
-            popupManager.newPopupEvent("Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
+            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
                     "OK", "ok",  "resources/images/fire.png",
                     "Plague Doctor");
         }

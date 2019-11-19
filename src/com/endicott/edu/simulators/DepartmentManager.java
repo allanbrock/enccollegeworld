@@ -36,7 +36,7 @@ public class DepartmentManager {
         checkDepartmentRatingsForBonuses(collegeId, departmentRatings);
         if(eligibleToAddDepartment() && newDepartmentReady == false){
             newDepartmentReady = true;
-            popupManager.newPopupEvent("Eligible to add a new Academic Department!", "Due to the College's academic success, a new department can be added! Go to the faculty page to add a department", "ok", "done", "resources/images/books.png", "Eligible for new department");
+            popupManager.newPopupEvent(collegeId,"Eligible to add a new Academic Department!", "Due to the College's academic success, a new department can be added! Go to the faculty page to add a department", "ok", "done", "resources/images/books.png", "Eligible for new department");
         }
     }
 
@@ -141,7 +141,7 @@ public class DepartmentManager {
                     for (DepartmentModel d : departmentOptions) {
                         if (department.equals(d.getDepartmentName())) {
                             if (!d.getBonusGiven()) {
-                                CollegeManager.recieveDepartmentPerformanceBonus(college, d.getDepartmentName(), popupManager);
+                                CollegeManager.recieveDepartmentPerformanceBonus(collegeID, college, d.getDepartmentName(), popupManager);
                                 d.setBonusGiven(true);
                             }
                         }

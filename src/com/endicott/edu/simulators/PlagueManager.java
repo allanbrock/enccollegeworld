@@ -58,7 +58,7 @@ public class PlagueManager {
         }
 
         if (didPlagueEnd && !didPlagueMutate) {
-            popupManager.newPopupEvent("Plague Ends",
+            popupManager.newPopupEvent(collegeId, "Plague Ends",
                     "It seems like the plague is ending.",
                     "Ok", "plagueAckCallback1", "resources/images/plague.jpg", "Plague Doctor");
         }
@@ -72,7 +72,7 @@ public class PlagueManager {
             int newVictims = newNumberSick - oldNumberSick;
             if (newVictims > 15) {
                 if (!isPurellUpgradePurchased()) {
-                    popupManager.newPopupEvent("Plague Spreads!",
+                    popupManager.newPopupEvent(collegeId, "Plague Spreads!",
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n" +
                                     "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
@@ -81,13 +81,13 @@ public class PlagueManager {
 
                 }
                 else{
-                    popupManager.newPopupEvent("Plague Spreads!",
+                    popupManager.newPopupEvent(collegeId,"Plague Spreads!",
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n",
                             "Ok", "plagueAckCallback2", "resources/images/plague.jpg", "Plague Doctor");
                 }
             }else if(didPlagueMutate){
-                popupManager.newPopupEvent("Plague Mutates!", "It appears the plague has mutated and the quarantined students are displaying zombie like symptoms." +
+                popupManager.newPopupEvent(collegeId,"Plague Mutates!", "It appears the plague has mutated and the quarantined students are displaying zombie like symptoms." +
                         " You could contact the government for assistance, but it could be a PR disaster. You could also leave it to your Science department.",
                         "Government", "outSourceHelp", "Science Dept", "inHouseHelp",
                         "resources/images/zombie.png", "Zombie");
@@ -106,7 +106,7 @@ public class PlagueManager {
                     || CollegeManager.isMode(collegeId, CollegeMode.DEMO_ZOMBIE_MUTATION)) {
                 startNewPlague(plagues);
                 EventManager.newEventStart(collegeId);
-                popupManager.newPopupEvent("Plague!",
+                popupManager.newPopupEvent(collegeId, "Plague!",
                         "An illness is starting to starting to sweep through the campus. What would you like to do?",
                         "Quarantine the sick students ($5,000)", "quarantineStudents", "Do Nothing", "plagueCallback4",
                         "resources/images/plague.jpg", "Plague Doctor");
@@ -170,7 +170,7 @@ public class PlagueManager {
 
 
             StudentDao.saveAllStudents(collegeId, students);
-            popupMan.newPopupEvent("Zombie Outbreak Over!", studentString, "Ok", "N/A", "resources/images/fun.png", " ");
+            popupMan.newPopupEvent(collegeId,"Zombie Outbreak Over!", studentString, "Ok", "N/A", "resources/images/fun.png", " ");
 
 
 
@@ -193,7 +193,7 @@ public class PlagueManager {
         dao.savePlague(collegeId, plague);
         if(nobelProb > probMostStudentsDie){
 
-            popupMan.newPopupEvent("Zombie Outbreak Over!", "Your science department was able to find a cure! " +
+            popupMan.newPopupEvent(collegeId,"Zombie Outbreak Over!", "Your science department was able to find a cure! " +
                     "Not only does it look like all the infected students are going to recover, but your school won an international award" +
                     "and has received $300,000!", "Ok", "N/A", "resources/images/fun.png", " ");
 
@@ -223,7 +223,7 @@ public class PlagueManager {
             }
             double percentStudentsDead = (endingNumStudents/startingNumStudents)*100;
             String percentStudentsDeadFormatted = new DecimalFormat("##.##").format(percentStudentsDead);
-            popupMan.newPopupEvent("Zombie Outbreak Over...", "Your science department was unable to find a cure in time. As a result, " +
+            popupMan.newPopupEvent(collegeId,"Zombie Outbreak Over...", "Your science department was unable to find a cure in time. As a result, " +
                     "the infection spread and infected "+percentStudentsDeadFormatted+"% of the student body. The Government had to be called in to handle the situation, " +
                     "resulting in a large financial loss as well as the loss of "+numDeaths+" students lives.",
                     "Ok", "N/A", "resources/images/fun.png", " ");

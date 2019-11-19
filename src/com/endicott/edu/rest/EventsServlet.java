@@ -33,14 +33,15 @@ public class EventsServlet extends javax.servlet.http.HttpServlet {
             return;
         }
 
-        List<PopupEventModel> events;
-        events = PopupEventDao.getPopupEvents();
+        String collegeId = splits[1];
+        PopupEventModel[] popupEvents;
+        popupEvents = PopupEventDao.getPopupEventsArray(collegeId);
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, events);
+        sendAsJson(response, popupEvents);
     }
 
     //a utility method to send object

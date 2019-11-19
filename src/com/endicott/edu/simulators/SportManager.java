@@ -71,7 +71,7 @@ public class SportManager {
                 updateCoachPerformance(collegeId, sport.getCoachName());
             else {
                 assignCoach(collegeId, sport);
-                popupManager.newPopupEvent("New Coach", "The " + sport.getSportName() + " team coach has been replaced", "ok", "done", "resources/images/money.jpg", "Coach Replacement");
+                popupManager.newPopupEvent(collegeId,"New Coach", "The " + sport.getSportName() + " team coach has been replaced", "ok", "done", "resources/images/money.jpg", "Coach Replacement");
             }
             fillUpTeamAndSetActiveStatus(collegeId, sport);
             billRunningCostofSport(collegeId, hoursAlive, sport);
@@ -105,11 +105,11 @@ public class SportManager {
                         //this sport is a champ
                         recentSport.addChampionship();
                         //make a popup
-                        popupManager.newPopupEvent("Champions!", recentSport.getName() + " have won a championship!", "OK","ok", "resources/images/trophy.png", "Sports");
+                        popupManager.newPopupEvent(collegeId, "Champions!", recentSport.getName() + " have won a championship!", "OK","ok", "resources/images/trophy.png", "Sports");
                         NewsManager.createNews(collegeId, hoursAlive, recentSport.getName() + " has won a championship!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
                         //cause riot
                         RiotModel riot = new RiotModel();
-                        RiotManager.createSportsRiot(recentSport, riot, popupManager);
+                        RiotManager.createSportsRiot(collegeId, recentSport, riot, popupManager);
                     }
                     //set recent season sports to inactive even if they didn't win
                     recentSport.setIsActive(0);
@@ -202,7 +202,7 @@ public class SportManager {
             calculateNumberOfPlayersOnTeam(collegeId, team);
             fillUpTeamAndSetActiveStatus(collegeId, team);
             sports.add(team);   // We've added a new sport to our list.
-            popupManager.newPopupEvent(team.getName(), "The " + team.getName() + " just formed. " +
+            popupManager.newPopupEvent(collegeId, team.getName(), "The " + team.getName() + " just formed. " +
                     " " + team.getCoachName() + " is the coach. Go team!",
                     "OK", "ok",
                     "resources/images/volleyballnet.png", "Sports");
@@ -624,17 +624,17 @@ public class SportManager {
 
         if (numberBetween5and9 > aveAbilityOnTeam) {
             sport.setGamesLost(sport.getGamesLost() + 1);
-            popupManager.newPopupEvent("Sports", sport.getName() + " lost a game.", "OK", "ok", "resources/images/dangerSign.png", "Sports");
+            popupManager.newPopupEvent(collegeId,"Sports", sport.getName() + " lost a game.", "OK", "ok", "resources/images/dangerSign.png", "Sports");
             NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just lost a game.", NewsType.SPORTS_NEWS, NewsLevel.BAD_NEWS);
         } else {
             sport.setGamesWon(sport.getGamesWon() + 1);
             //if winless is still set to true, this team just won their first game. send a popup to main page
             if (winless){
-                popupManager.newPopupEvent("Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/award.png", "Sports");
+                popupManager.newPopupEvent(collegeId,"Sports", sport.getName() + " has won their first game of the season!", "OK", "ok", "resources/images/award.png", "Sports");
                 NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
             }
             else {
-                popupManager.newPopupEvent("Sports", sport.getName() + " won a game!", "OK", "ok", "resources/images/award.png", "Sports");
+                popupManager.newPopupEvent(collegeId,"Sports", sport.getName() + " won a game!", "OK", "ok", "resources/images/award.png", "Sports");
                 NewsManager.createNews(collegeId, hoursAlive, sport.getName() + " just won a game!", NewsType.SPORTS_NEWS, NewsLevel.GOOD_NEWS);
             }
         }

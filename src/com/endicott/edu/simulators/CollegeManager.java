@@ -224,7 +224,7 @@ public class CollegeManager {
     public static CollegeModel updateCollegeTuition(String collegeId, int amount, PopupEventManager popupManager){
         CollegeModel college = CollegeDao.getCollege(collegeId);
         if ((amount < 0) || (amount > 100000)) {
-            popupManager.newPopupEvent("Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
+            popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
             return college;
         }
 
@@ -303,8 +303,8 @@ public class CollegeManager {
         CollegeDao.saveCollege(college);
     }
 
-    public static void recieveDepartmentPerformanceBonus(CollegeModel college, String departmentName, PopupEventManager popupManager){
+    public static void recieveDepartmentPerformanceBonus(String collegeId, CollegeModel college, String departmentName, PopupEventManager popupManager){
         college.setAvailableCash(college.getAvailableCash() + 10000);
-        popupManager.newPopupEvent("Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
+        popupManager.newPopupEvent(collegeId, "Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
     }
 }
