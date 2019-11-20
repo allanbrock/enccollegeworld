@@ -61,7 +61,7 @@ public class FloodManager {
             buildingManager.disasterStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
             logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding of " + floodedDorm+" has ended! ", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            popupManager.newPopupEvent("Flood Ended!", "The flood in "+floodedDorm+" is finally over!","Ok","okFloodEnded",
+            popupManager.newPopupEvent(collegeId,"Flood Ended!", "The flood in "+floodedDorm+" is finally over!","Ok","okFloodEnded",
                     "resources/images/DORM.png","Unflooded Dorm");
             FloodDao.deleteFlood(collegeId);
             return;
@@ -139,7 +139,7 @@ public class FloodManager {
             logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);
             logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
 
-            generateCorrectPopup(hasUpgrade,randomFlood,popupManager);
+            generateCorrectPopup(collegeId, hasUpgrade,randomFlood,popupManager);
 
             NewsManager.createNews(collegeId, hoursAlive, "Flooding detected at " + randomFlood.getDormName(), NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             //Accountant.payBill(collegeId, "Flood cost for dorm " + dorm.getName(), randomFlood.getCostOfFlood());
@@ -157,12 +157,12 @@ public class FloodManager {
      * @param theFlood the FloodModel for which the popup will be created
      * @param popupManager the PopupEventManager
      * */
-    private void generateCorrectPopup(Boolean hasUpgrade, FloodModel theFlood, PopupEventManager popupManager){
+    private void generateCorrectPopup(String collegeId, Boolean hasUpgrade, FloodModel theFlood, PopupEventManager popupManager){
         if(hasUpgrade){
-            popupManager.newPopupEvent("Flood in  "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded!","Ok","okFloodWithUpgrade",
+            popupManager.newPopupEvent(collegeId,"Flood in  "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded!","Ok","okFloodWithUpgrade",
                     "resources/images/DORM.png","Unflooded Dorm");
         }else{
-            popupManager.newPopupEvent("Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
+            popupManager.newPopupEvent(collegeId,"Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
                     "Go to Store","goToStore","No Thanks","doNothing", "resources/images/flood.png","flooded Dorm");
         }
 

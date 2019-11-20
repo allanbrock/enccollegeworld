@@ -33,15 +33,15 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         int advanceTimeDays = 0;
         if (request.getParameter("nextDayButton") != null) {
             advanceTimeDays = 1;
-            popupManager.clearPopupManager();
+            popupManager.clearPopupManager(collegeId);
         }
         if (request.getParameter("nextWeekButton") != null) {
             advanceTimeDays = 7;
-            popupManager.clearPopupManager();
+            popupManager.clearPopupManager(collegeId);
         }
         logger.info("Advance time days " + advanceTimeDays);
 
-        for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(); i++) {
+        for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(collegeId); i++) {
             logger.info("Advancing time.");
             CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
         }
@@ -83,8 +83,9 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         }
 
 
+
         // Check if the button pressed was from a popup.  If so clear it.
-        popupManager.removePopupIfButtonPressed(request);
+        popupManager.removePopupIfButtonPressed(collegeId, request);
 
         // Bankrupt college PopupEvent Button
         if(request.getParameter("returnToWelcome") != null){

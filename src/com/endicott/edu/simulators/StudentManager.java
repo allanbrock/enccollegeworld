@@ -38,11 +38,24 @@ public class StudentManager {
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
+        CollegeManager.logger.info("RAN_StudentManager_ 1 - " + CollegeManager.getDate());
+
         admitStudents(collegeId, hoursAlive, false, popupManager);
+        CollegeManager.logger.info("RAN_StudentManager_ 2 - " + CollegeManager.getDate());
+
         receiveStudentTuition(collegeId);
+        CollegeManager.logger.info("RAN_StudentManager_ 3 - " + CollegeManager.getDate());
+
         withdrawStudents(collegeId, hoursAlive);
+        CollegeManager.logger.info("RAN_StudentManager_ 4 - " + CollegeManager.getDate());
+
         calculateStatistics(collegeId, false);
+        CollegeManager.logger.info("RAN_StudentManager_ 5 - " + CollegeManager.getDate());
+
         updateStudentsTime(collegeId, hoursAlive);
+        CollegeManager.logger.info("RAN_StudentManager_ 6 - " + CollegeManager.getDate());
+
+        CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
     }
 
     /**
@@ -51,7 +64,7 @@ public class StudentManager {
      * @param collegeId
      */
     private void receiveStudentTuition(String collegeId) {
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<StudentModel> students = StudentDao.getStudents(collegeId);
         college = CollegeDao.getCollege(collegeId);
         int dailyTuitionSum = (college.getYearlyTuitionCost() / 365) * students.size();
         Accountant.receiveIncome(collegeId,"Student tuition received.",dailyTuitionSum);
@@ -77,8 +90,8 @@ public class StudentManager {
         } catch (Exception e) {
         }
 
-        List<StudentModel> students = dao.getStudents(collegeId);
-        Date currDate = CollegeManager.getCollegeDate(collegeId);
+        List<StudentModel> students = StudentDao.getStudents(collegeId);
+        //Date currDate = CollegeManager.getCollegeDate(collegeId);
 
         if(isNewCollege) {
             numNewStudents = 140;
@@ -113,11 +126,11 @@ public class StudentManager {
             college = CollegeDao.getCollege(collegeId);
             college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
             college.setNumberStudentsAccepted(0);
-            CollegeDao.saveCollege(college);
+            //CollegeDao.saveCollege(college);
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) +
                     " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             if (popupManager != null)
-                popupManager.newPopupEvent("Admissions Day",
+                popupManager.newPopupEvent(collegeId, "Admissions Day",
                     "" + numNewStudents +" new students joined!","Ok",
                     "ok", "resources/images/students.png", "Admissions");
 
@@ -150,7 +163,7 @@ public class StudentManager {
         }
 
         college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
 
         if (numNewStudents > 0) {
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
@@ -244,7 +257,7 @@ public class StudentManager {
         }
         college.setRetentionRate(retentionRate);
 
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
         // Don't create a news story if no students leave
         if ((currentSize - students.size()) > 0) {
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(currentSize - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
@@ -272,20 +285,23 @@ public class StudentManager {
      * @param collegeId
      */
     public void calculateStatistics(String collegeId, boolean initial) {
-        calculaterOverallStudentHealth(collegeId);
-        calculateStudentFacultyRatio(collegeId);
+        List<StudentModel> students = dao.getStudents(collegeId);
+
+        calculaterOverallStudentHealth(collegeId, students);
+        calculateStudentFacultyRatio(collegeId, students);
         calculateStudentFacultyRatioRating(collegeId);
 
-        setHappinessForEachStudent(collegeId, initial);
+        setHappinessForEachStudent(collegeId, initial, students);
 
-        calculateOverallStudentHappiness(collegeId);
+        calculateOverallStudentHappiness(collegeId, students);
 
         //calculateRetentionRate(collegeId);
+
+        //Need to save the new class
     }
 
-    private void calculaterOverallStudentHealth(String collegeId) {
+    private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
-        List<StudentModel> students = dao.getStudents(collegeId);
 
         int nSick = 0;
         for(int i = 0; i < students.size(); i++){
@@ -298,12 +314,11 @@ public class StudentManager {
         int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
         college.setStudentHealthRating(rating);
 
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
     }
 
-    private void calculateOverallStudentHappiness(String collegeId) {
+    private void calculateOverallStudentHappiness(String collegeId, List<StudentModel> students) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
-        List<StudentModel> students = dao.getStudents(collegeId);
 
         int happinessSum = 0;
         for (int i = 0; i < students.size(); i++) {
@@ -313,11 +328,10 @@ public class StudentManager {
         int aveHappiness = happinessSum/Math.max(1,students.size());
 
         college.setStudentBodyHappiness(aveHappiness);
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
     }
 
-    private void setHappinessForEachStudent(String collegeId, boolean initial){
-        List<StudentModel> students = dao.getStudents(collegeId);
+    private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
        for(int i = 0; i < students.size(); i++){
@@ -348,6 +362,7 @@ public class StudentManager {
             students.get(i).setHappinessLevel(happiness);
         }
 
+       //save
         dao.saveAllStudents(collegeId, students);
     }
 
@@ -529,14 +544,13 @@ public class StudentManager {
         getStudentFeedback(s, college.getRunId());
     }
 
-    private void calculateStudentFacultyRatio(String collegeId) {
+    private void calculateStudentFacultyRatio(String collegeId, List<StudentModel> students) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
-        List<StudentModel> students = dao.getStudents(college.getRunId());
         List<FacultyModel> faculty = facultyDao.getFaculty(college.getRunId());
 
         college.setStudentFacultyRatio(students.size() / Math.max(faculty.size(),1));
 
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
     }
 
     private void calculateStudentFacultyRatioRating(String collegeId) {
@@ -562,7 +576,7 @@ public class StudentManager {
         }
         college.setRetentionRate(retentionRate);
 
-        CollegeDao.saveCollege(college);
+        //CollegeDao.saveCollege(college);
     }
 
     private boolean didItHappen(float oddsBetween0And1) {

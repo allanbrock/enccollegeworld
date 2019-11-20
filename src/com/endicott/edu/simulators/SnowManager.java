@@ -112,12 +112,12 @@ public class SnowManager {
 
         if(currentDay == START_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Winter is here.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            popupManager.newPopupEvent("Winter is here!", "Winter is here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
+            popupManager.newPopupEvent(collegeId, "Winter is here!", "Winter is here, and with it.. Snow Storms! Stay warm and pay attention to possible weather changes. ",
                     "Ok","okWinterStarted",
                     "resources/images/winterIcon.png","winter season icon");
         }else if (currentDay == END_OF_WINTER){
             NewsManager.createNews(collegeId, hoursAlive, "Spring has arrived.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            popupManager.newPopupEvent("Goodbye snow..Spring is here!", "After waiting all winter long, we finally get to feel the sun and warmth of Spring. Don't forget to stop and smell the flowers! ",
+            popupManager.newPopupEvent(collegeId, "Goodbye snow..Spring is here!", "After waiting all winter long, we finally get to feel the sun and warmth of Spring. Don't forget to stop and smell the flowers! ",
                     "Ok","okSpringStarted",
                     "resources/images/springIcon.png","spring season icon");
             logger.info("EVARUBIO SNOW isItWinter() ES EL END_OF_WINTER !!!! popupshould be here. currentDay = " +currentDay);
@@ -197,13 +197,13 @@ public class SnowManager {
         double fightChance = rand.nextDouble();
 
         if((stormIntensity == 1) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_LOW)){
-            generateFightPopup(popupManager);
+            generateFightPopup(collegeId, popupManager);
             Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 1500 );
         } else if((stormIntensity == 2) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_MID)){
-            generateFightPopup(popupManager);
+            generateFightPopup(collegeId, popupManager);
             Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 2500 );
         } else if((stormIntensity == 3) && (fightChance < PROBABILTY_OF_SNOWBALL_FIGTH_FOR_HIGH)){
-            generateFightPopup(popupManager);
+            generateFightPopup(collegeId, popupManager);
             Accountant.payBill(collegeId,"Cost of snowball fight damages ascends to: " , 3700 );
         }
 
@@ -214,11 +214,11 @@ public class SnowManager {
      * Generates the correct popup in the event that a snowball fight is happening
      * @param popupManager The popupEventManager
      * */
-    public void generateFightPopup(PopupEventManager popupManager){
+    public void generateFightPopup(String collegeId, PopupEventManager popupManager){
         // for future use (alternating them)
         String grinchImgPath = "resources/images/grinch-snowball-fight.png";
         String handsImgPath ="resources/images/hands-snowball-fight.png";
-        popupManager.newPopupEvent("Snowball Fight Outburst!",
+        popupManager.newPopupEvent(collegeId,"Snowball Fight Outburst!",
                 "Oh no! The un-plowed amount of snow was too tempting for students.. A campus-wide Snowball Fight is in progress, Maintenance won't be happy.",
                 "Ok","okSnowballFight",
                 "resources/images/grinch-snowball-fight.png","grinch snowball fight");
@@ -477,17 +477,17 @@ public class SnowManager {
                 NewsManager.createNews(collegeId, hoursAlive, "All snow removed from " + oneBuildingSnowed.getName() +"! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
                 buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(),snowStorm.getOneBuildingSnowed().getName(), collegeId, "None");
                 NewsManager.createNews(collegeId, hoursAlive, "Low Intensity Snow Storm OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-                popupManager.newPopupEvent("Low Intensity Snow Storm OVER!", "The snow storm is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+". Time to enjoy the great weather!",
+                popupManager.newPopupEvent(collegeId,"Low Intensity Snow Storm OVER!", "The snow storm is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+". Time to enjoy the great weather!",
                         "Ok","okSnowStormEnded",
                         "resources/images/lowSunny.png","Sun");
             }else if(!hasLowUpgrade && !isOver){    //if not over, and NO upgrade
-                popupManager.newPopupEvent("Weather Alert: Low Intensity Snow Storm",
+                popupManager.newPopupEvent(collegeId,"Weather Alert: Low Intensity Snow Storm",
                         "Oh no! "+oneBuildingSnowed.getName() +
                                 " has been snowed in! Would you like to buy more Snow Pushers from the store to prevent this from happening so often?",
                         "Buy Snow Pushers","goToStore","No Thanks","doNothing",
                         "resources/images/lowSnowStorm.png","Low Intensity Snow Storm");
             }else if(hasLowUpgrade && !isOver){     //if not over and YES upgrade
-                popupManager.newPopupEvent("Weather Alert: Low Intensity Snow Storm",
+                popupManager.newPopupEvent(collegeId,"Weather Alert: Low Intensity Snow Storm",
                         "Oh no! "+ oneBuildingSnowed.getName() +
                                 " has been snowed in! Maintenance will be able to reduce snow removal costs thanks to previously buying Snow Pushers! What a great call!",
                         "Ok","okSnowStormEnded",
@@ -501,18 +501,18 @@ public class SnowManager {
                 buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(),snowStorm.getOneBuildingSnowed().getName(), collegeId, "None");
                 logger.info("EVARUBIO . handleTimeChange() -> MID-STORM has been DELETED.");
                 NewsManager.createNews(collegeId, hoursAlive, "Mid-Intensity Blizzard OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-                popupManager.newPopupEvent("Mid-Intensity Blizzard OVER!",
+                popupManager.newPopupEvent(collegeId,"Mid-Intensity Blizzard OVER!",
                         "The snow blizzard is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+" and its pipes are fully functioning now. Temperatures are finally rising! Time to enjoy the great weather!",
                         "Ok","okSnowStormEnded",
                         "resources/images/midTempRising.png","Temperatures rising");
             }else if(!hasMidUpgrade && !isOver){
-                popupManager.newPopupEvent("Weather Alert: Mid-Intensity Blizzard",
+                popupManager.newPopupEvent(collegeId,"Weather Alert: Mid-Intensity Blizzard",
                         "Oh no! "+oneBuildingSnowed.getName() +
                                 " has been snowed in! The low temperatures and the amount of fallen snow have caused the pipes to completely freeze. Would you like to buy better and newer pipes from out store? Newer pipes reduce the probability of this happening again, reducing future costs.",
                         "Buy New Pipes","goToStore","No Thanks","doNothing",
                         "resources/images/midBlizzardThunder.png","Mid Intensity Blizzard Storm");
             }else if(hasMidUpgrade && !isOver){
-                popupManager.newPopupEvent("Weather Alert: Mid-Intensity Blizzard",
+                popupManager.newPopupEvent(collegeId,"Weather Alert: Mid-Intensity Blizzard",
                         "Oh no! The low temperatures and the amount of fallen snow have caused "+ oneBuildingSnowed.getName() +
                                 " to be snowed in! Thanks to previously investing in newer pipes the plumbing system is intact! Great call! ",
                         "Ok","okSnowStormEnded",
@@ -528,18 +528,18 @@ public class SnowManager {
                     NewsManager.createNews(collegeId, hoursAlive, "Successfully removed snow from " + b.getName() +"! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
 
                 }
-                popupManager.newPopupEvent("Severe Snow Storm OVER!",
+                popupManager.newPopupEvent(collegeId, "Severe Snow Storm OVER!",
                         "The snow emergency is finally over. Maintenance has successfully removed all snow from affected areas! Time to enjoy this great weather while it lasts!",
                         "Ok", "okSnowStormEnded",
                         "resources/images/highCoolSun.png", "Cool Sun");
             }else if(!hasHighUpgrade && !isOver){
-                popupManager.newPopupEvent("URGENT - WINTER WEATHER MESSAGE",
+                popupManager.newPopupEvent(collegeId,"URGENT - WINTER WEATHER MESSAGE",
                         "High Intensity Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ buildingsSnowedIn.get(0).getName() +" and " +buildingsSnowedIn.get(1).getName()+
                                 " have been completely snowed in! Would you like to buy more Snowplows at our store for future use? Buying more Snowplows reduces both the probability of a high-intensity snow storm from happening again and also reduces future snow removal costs.",
                         "Buy Snowplows","goToStore","No Thanks","doNothing",
                         "resources/images/highHeavySnow.png","Heavy Snow Sign");
             }else if(hasHighUpgrade && !isOver){
-                popupManager.newPopupEvent("URGENT - WINTER WEATHER MESSAGE",
+                popupManager.newPopupEvent(collegeId,"URGENT - WINTER WEATHER MESSAGE",
                         "High Intensity Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ buildingsSnowedIn.get(0).getName() +" and " +buildingsSnowedIn.get(1).getName() +
                                 " have been completely snowed in! Thanks to previously investing in more Snowplows Maintenance will be able to reduce snow removal costs! Great call! ",
                         "Ok","okSnowStormEnded",

@@ -97,7 +97,7 @@
 <% } %>
 
 <!-- displays modal for events if there are any -->
-<% if (popupManager.isQueueInitiated()) { %>
+<% if (popupManager.isQueueInitiated(college.getRunId())) { %>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#eventPopUp").modal('show');
@@ -148,7 +148,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <!-- Creates a modal body for each event in the list-->
-            <% for (PopupEventModel event : popupManager.getEventsList()) {%>
+            <% for (PopupEventModel event : popupManager.getEventsList(college.getRunId())) {%>
                 <div class="modal-body">
                     <h3><%=event.getTitle()%></h3>
                     <div>
@@ -170,11 +170,6 @@
                     </div>
                 </div>
             <%};%>
-            <!-- We're not showing the done button because we want each event acknowledged.
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
-            </div>
-            -->
         </div>
 
     </div>

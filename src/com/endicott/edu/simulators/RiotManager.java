@@ -19,7 +19,7 @@ public class RiotManager {
         EventManager eventManager = new EventManager(runId);
 
         if (CollegeManager.isMode(runId, CollegeMode.DEMO_RIOT) || eventManager.doesEventStart(runId, EventType.RIOT)) {
-            createRegularRiot(currentRiot, popupManager, randomRiotDescription());
+            createRegularRiot(runId, currentRiot, popupManager, randomRiotDescription());
             letStudentsRiot(runId);
         }
 
@@ -76,7 +76,7 @@ public class RiotManager {
   }
 
 
-    public static void createSportsRiot(SportModel sport, RiotModel riot, PopupEventManager popupManager) {
+    public static void createSportsRiot(String collegeId, SportModel sport, RiotModel riot, PopupEventManager popupManager) {
 
         if (sport.getSportName().equals("$50,000 - Men's Basketball")) {
             riot.setName("Men's Basketball Riot");
@@ -102,18 +102,18 @@ public class RiotManager {
         }
 
 
-        popupManager.newPopupEvent(riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
 
 
     }
 
     //For Joe and others to make non-sport related riots
-    public void createRegularRiot(RiotModel riot, PopupEventManager popupManager, String cause)
+    public void createRegularRiot(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause)
     {
         riot.setName(cause);
         riot.setDescription("A riot has started on campus!");
 
-        popupManager.newPopupEvent(riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
     }
 
     public boolean isEventActive(String collegeId) {

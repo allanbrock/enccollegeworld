@@ -20,6 +20,7 @@ public class PopupEventModel implements Serializable {
     private String altImageText;
     private String servlet;
     private int type;
+    private String runId;
 
 
     /**
@@ -106,5 +107,13 @@ public class PopupEventModel implements Serializable {
 
     public String getAltImageText() {
         return altImageText;
+    }
+
+    public String getRunId() {
+        return runId;
+    }
+
+    public void setRunId(String runId) {
+        this.runId = runId;
     }
 }
