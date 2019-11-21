@@ -103,7 +103,7 @@ public class FacultyDao {
         file.delete();
     }
 
-    public void removeSingleFaculty(String collegeId, FacultyModel member){
+    public static void removeSingleFaculty(String collegeId, FacultyModel member){
         logger.info("Removing faculty member..");
         String tmp = member.getFacultyID();
         List<FacultyModel> newFacultyList = getFaculty(collegeId);
