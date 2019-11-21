@@ -21,6 +21,7 @@ public class PopupEventModel implements Serializable {
     private String servlet;
     private int type;
     private String runId;
+    private int eventId;
 
 
     /**
@@ -116,4 +117,8 @@ public class PopupEventModel implements Serializable {
     public void setRunId(String runId) {
         this.runId = runId;
     }
+
+    public int getEventId() { return eventId; }
+
+    public void setEventId(int id) { this.eventId = id; }
 }

@@ -7,6 +7,7 @@ import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.ui.InterfaceUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by CJ Mustone and Joseph Moss
@@ -14,6 +15,23 @@ import java.util.List;
 public class PopupEventManager {
     //Keeps a list of all Popup Events for the current simulation period
     static private PopupEventDao dao = new PopupEventDao();
+
+    private static void assignUniqueId(String collegeId, PopupEventModel event) {
+        int id = new Random().nextInt(900000) + 100000;
+        while (!isUniqueId(getEventsList(collegeId), id)) {
+            id = new Random().nextInt(900000) + 100000;
+        }
+        event.setEventId(id);
+    }
+
+    private static boolean isUniqueId (ArrayList <PopupEventModel> events, int id){
+        for (PopupEventModel p : events) {
+            if (p.getEventId() == id) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /*
         Time does not affect popups currently, and so this function is not needed at this time.
@@ -30,6 +48,7 @@ public class PopupEventManager {
         PopupEventModel newEvent = new PopupEventModel(title, description, leftButtonText, leftButtonCallback, rightButtonText,
                 rightButtonCallback, imagePath, altImageText);
 
+        assignUniqueId(collegeId, newEvent);
         dao.saveNewPopupEvent(collegeId, newEvent);
         return newEvent;
 
@@ -43,6 +62,7 @@ public class PopupEventManager {
         PopupEventModel newEvent = new PopupEventModel(title, description, acknowledgeButtonText,
                 acknowledgeButtonCallback, imagePath, altImageText);
 
+        assignUniqueId(collegeId, newEvent);
         dao.saveNewPopupEvent(collegeId, newEvent);
         return newEvent;
     }
@@ -50,7 +70,7 @@ public class PopupEventManager {
     public boolean isQueueInitiated(String collegeId){
         return (dao.getNumberOfPopupEvents(collegeId) > 0);
     }
-    public ArrayList<PopupEventModel> getEventsList(String collegeId){
+    public static ArrayList<PopupEventModel> getEventsList(String collegeId){
         return new ArrayList<PopupEventModel>(dao.getPopupEvents(collegeId));
     }
     public PopupEventModel getCurrentEvent(String collegeId){
