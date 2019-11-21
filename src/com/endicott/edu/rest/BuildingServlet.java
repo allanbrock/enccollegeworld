@@ -36,17 +36,18 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
         BuildingModel[] buildings;
         buildings = BuildingDao.getBuildingsArray(collegeId);
 
-        if(splits[2] == "repair") {
+        if(splits[2].equalsIgnoreCase("repair")) {
             BuildingManager.repairBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
-        } else if (splits[2] == "upgrade") {
+        } else if (splits[2].equalsIgnoreCase("upgrade")) {
             BuildingManager.upgradeBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
-        } else if (splits[2] == "purchase") {
+        } else if (splits[2].equalsIgnoreCase("purchase")) {
         }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
+        buildings = BuildingDao.getBuildingsArray(collegeId);
         sendAsJson(response, buildings);
     }
 
