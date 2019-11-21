@@ -21,7 +21,6 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        logger.info("TEST " + pathInfo);
         if (pathInfo == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -36,10 +35,6 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
         String collegeId = splits[1];
         BuildingModel[] buildings;
         buildings = BuildingDao.getBuildingsArray(collegeId);
-
-        for(int i = 0; i < splits.length; i++) {
-            logger.info("testing: " + i + " " + splits[i]);
-        }
 
         if(splits[2] == "repair") {
             BuildingManager.repairBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
