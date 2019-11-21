@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.simulators.BuildingManager;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String pathInfo = request.getPathInfo();
+        logger.info("TEST " + pathInfo);
         if (pathInfo == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -34,6 +36,17 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
         String collegeId = splits[1];
         BuildingModel[] buildings;
         buildings = BuildingDao.getBuildingsArray(collegeId);
+
+        for(int i = 0; i < splits.length; i++) {
+            logger.info("testing: " + i + " " + splits[i]);
+        }
+
+        if(splits[2] == "repair") {
+            BuildingManager.repairBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
+        } else if (splits[2] == "upgrade") {
+            BuildingManager.upgradeBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
+        } else if (splits[2] == "purchase") {
+        }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
