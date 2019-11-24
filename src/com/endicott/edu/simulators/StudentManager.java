@@ -136,6 +136,8 @@ public class StudentManager {
                     "ok", "resources/images/students.png", "Admissions");
 
         }
+
+        StudentDao.saveAllStudentsUsingCache(collegeId);
     }
 
     static public void setStudentIndex(int i) {
@@ -206,7 +208,7 @@ public class StudentManager {
             student.setRunId(collegeId);
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
             students.add(student);
-            dao.saveAllStudents(collegeId, students);
+            dao.saveAllStudentsJustToCache(collegeId, students);
         }
     }
 

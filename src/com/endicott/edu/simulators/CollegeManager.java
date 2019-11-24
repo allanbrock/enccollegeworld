@@ -52,20 +52,18 @@ public class CollegeManager {
         // The order of this matters (example: a dorm is established, before students enter).
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
-        BuildingManager.establishCollege(collegeId, college);
-        FacultyManager.establishCollege(collegeId, college);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.establishCollege(collegeId);
-
-        SportManager.establishCollege(collegeId);
-        GateManager.establishCollege(collegeId);
-        FloodManager.establishCollege(collegeId);
-        SnowManager.establishCollege(collegeId);
-        PlagueManager.establishCollege(collegeId);
-        FireManager.establishCollege(collegeId);
-        PlayManager.establishCollege(collegeId);
-        InventoryManager.establishCollege(collegeId);
+        logger.info("Establish buildings.");BuildingManager.establishCollege(collegeId, college);
+        logger.info("Establish faculty.");FacultyManager.establishCollege(collegeId, college);
+        logger.info("Establish student.");StudentManager studentManager = new StudentManager();
+        logger.info("Establish student.");studentManager.establishCollege(collegeId);
+        logger.info("Establish sports.");SportManager.establishCollege(collegeId);
+        logger.info("Establish gates.");GateManager.establishCollege(collegeId);
+        logger.info("Establish floods.");FloodManager.establishCollege(collegeId);
+        logger.info("Establish snow.");SnowManager.establishCollege(collegeId);
+        logger.info("Establish plague.");PlagueManager.establishCollege(collegeId);
+        logger.info("Establish fire.");FireManager.establishCollege(collegeId);
+        logger.info("Establish play.");PlayManager.establishCollege(collegeId);
+        logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
 
         return college;
     }
@@ -154,8 +152,6 @@ public class CollegeManager {
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         logger.info("AdvanceTime Calculate Stats");
-
-
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
         calculateTuitionRating(collegeId);

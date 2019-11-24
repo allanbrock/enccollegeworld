@@ -74,7 +74,6 @@ public class StudentDao {
     }
 
     public static void saveAllStudentsJustToCache(String runId, List<StudentModel> students){
-        logger.info("Saving all students to cache.");
          cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
     }
 
