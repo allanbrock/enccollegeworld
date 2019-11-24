@@ -14,8 +14,7 @@ public class ViewGatesServlet extends javax.servlet.http.HttpServlet {
     static private Logger logger = Logger.getLogger("ViewFacultyServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        logRequestParameters(request);
-
+        //logRequestParameters(request);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {

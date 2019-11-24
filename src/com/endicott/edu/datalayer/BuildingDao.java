@@ -1,28 +1,29 @@
 package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.AdministrativeBldgModel;
-import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.DormModel;
-import com.endicott.edu.models.DiningHallModel;
-import com.endicott.edu.models.AcademicCenterModel;
+import com.endicott.edu.models.*;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-
 
 // Created by abrocken on 7/17/2017.
 
 public class BuildingDao {
+    private  static HashMap<String, List<BuildingModel>> cache = new HashMap<>();
+
     private static String getFilePath(String collegeId) {
         return DaoUtils.getFilePathPrefix(collegeId) +  "building.dat";
     }
     private static Logger logger = Logger.getLogger("BuildingDao");
 
     public static List<BuildingModel> getBuildings(String collegeId) {
+        if (cache.containsKey(collegeId))
+            return cache.get(collegeId);
+
         ArrayList<BuildingModel> buildings = new ArrayList<>();
         BuildingModel buildingModel = null;
         try {
@@ -40,7 +41,7 @@ public class BuildingDao {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        cache.put(collegeId,buildings);
         return buildings;
     }
 
@@ -49,15 +50,29 @@ public class BuildingDao {
         return buildings.toArray(new BuildingModel[buildings.size()]);
     }
 
-    public static void saveAllBuildings(String collegeId, List<BuildingModel> notes){
-        logger.info("Saving all buildings...");
+    public static void saveAllBuildingsJustToCache(String runId, List<BuildingModel> buildings){
+        cache.put(runId, buildings);  // We need to update the cache so that next we get the up to date college.
+    }
+
+    public static void saveAllBuildingsUsingCache(String runId) {
+        List<BuildingModel> buildings;
+
+        if (!cache.containsKey(runId))
+            return;
+
+        buildings = cache.get(runId);
+        saveAllBuildings(runId, buildings);
+    }
+
+    public static void saveAllBuildings(String collegeId, List<BuildingModel> buildings){
+        logger.info("Saving all buildings to disk");
         try {
             File file = new File(getFilePath(collegeId));
             file.createNewFile();
             FileOutputStream fos;
             fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(notes);
+            oos.writeObject(buildings);
             oos.close();
         } catch (FileNotFoundException e) {
             logger.info("Got file not found when attempting to create: " + getFilePath(collegeId));
@@ -69,7 +84,7 @@ public class BuildingDao {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        logger.info("Saved buildings...");
+        cache.put(collegeId, buildings);
     }
 
     public static void saveNewBuilding(String collegeId, BuildingModel building) {
@@ -80,12 +95,12 @@ public class BuildingDao {
         saveAllBuildings(collegeId, buildings);
     }
 
-    public static void updateSingleBuilding(String collegeId, BuildingModel building) {
+    public static void updateSingleBuildingInCache(String collegeId, BuildingModel building) {
         List<BuildingModel> buildings = getBuildings(collegeId);
         for(int b = 0; b < buildings.size(); b++){
             if(buildings.get(b).getName().equals(building.getName())){
                 buildings.set(b, building);
-                saveAllBuildings(collegeId, buildings);
+                saveAllBuildingsJustToCache(collegeId, buildings);
             }
         }
     }
@@ -93,6 +108,10 @@ public class BuildingDao {
     public static void deleteBuilding(String collegeId) {
         File file = new File(getFilePath(collegeId));
         file.delete();
+
+        if (cache.containsKey(collegeId)){
+            cache.remove(collegeId);
+        }
     }
 
     public static void main(String[] args) {

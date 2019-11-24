@@ -43,9 +43,6 @@ public class SnowManager {
     InventoryManager inventoryManager = new InventoryManager();
     private Logger logger = Logger.getLogger("SnowManager");
 
-
-
-
     /**
      * Simulates snow storms and changes in them due to passage of time at college. Called when One day goes by.
      *          -used in: CollegeManager (advanceTimeByOneDay)
@@ -55,7 +52,6 @@ public class SnowManager {
      * @param popupManager popup manager instance
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        logger.info("EVARUBIO . SNOW .  handleTimeChange() START OF METHOD ");
         SnowModel snowStorm = SnowDao.getSnowStorm(collegeId);
         //for future use
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
@@ -65,9 +61,8 @@ public class SnowManager {
         //snowSeasonPopup(hoursAlive,collegeId,popupManager);
         //if there is NO snow storm occurring, possibly start one:
         if (snowStorm == null ) {
-            logger.info("EVARUBIO - SNOW handleTimeChange() IT IS WINTER SEASON posiblycreate storm..  ");
             if(isItWinter(collegeId,hoursAlive,popupManager)){
-                logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
+                //logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is NULL, gonna call possiblyCreateSnowStorm()  ");
                 possiblyCreateSnowStorm(collegeId, hoursAlive, popupManager);
             }
 
@@ -79,17 +74,11 @@ public class SnowManager {
         int elapsedTime = hoursAlive - snowStorm.getHourLastUpdated();
         int timeLeft = Math.max(0, snowStorm.getHoursLeftInSnowStorm() - elapsedTime);
         if (timeLeft <= 0) {
-            logger.info("EVARUBIO - SNOW handleTimeChange() snow storm is OVER, gonna call deleteSnowStorm()  ");
-            isHappening = false;
-            logger.info("EVARUBIO - SNOW handleTimeChange() just set isHappening to false");
-            logger.info("EVARUBIO - SNOW handleTimeChange() value of isHappening = " + isHappening);
-
             generateCorrectPopup(snowStorm,true,popupManager, collegeId,hoursAlive);
             SnowDao.deleteSnowStorm(collegeId);
             return;
         } else {
-            logger.info("EVARUBIO . handleTimeChange() snow storm is currently happening, gonna call setHoursLeftInSnowStorm()  ");
-
+            //logger.info("EVARUBIO . handleTimeChange() snow storm is currently happening, gonna call setHoursLeftInSnowStorm()  ");
             possiblyStartSnowballFight(snowStorm.getSnowIntensity(),collegeId,popupManager);
             snowStorm.setHoursLeftInSnowStorm(timeLeft);
         }
@@ -106,8 +95,6 @@ public class SnowManager {
      * */
     public Boolean isItWinter(String collegeId, int hoursAlive,PopupEventManager popupManager){
         int currentDay = hoursAlive / 24 + 1;
-        logger.info("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
-        System.out.println("EVARUBIO - SNOW isItWinter() currentDay: "+currentDay);
         Boolean isCold = false;
 
         if(currentDay == START_OF_WINTER){
@@ -120,14 +107,14 @@ public class SnowManager {
             popupManager.newPopupEvent(collegeId, "Goodbye snow..Spring is here!", "After waiting all winter long, we finally get to feel the sun and warmth of Spring. Don't forget to stop and smell the flowers! ",
                     "Ok","okSpringStarted",
                     "resources/images/springIcon.png","spring season icon");
-            logger.info("EVARUBIO SNOW isItWinter() ES EL END_OF_WINTER !!!! popupshould be here. currentDay = " +currentDay);
+            //logger.info("EVARUBIO SNOW isItWinter() ES EL END_OF_WINTER !!!! popupshould be here. currentDay = " +currentDay);
         }
 
         if(currentDay>= START_OF_WINTER && currentDay <= END_OF_WINTER){
             isCold = true;
 
         }
-        logger.info("EVARUBIO - SNOW isItWinter() value: "+isCold);
+        //logger.info("EVARUBIO - SNOW isItWinter() value: "+isCold);
         return isCold;
     }
     /**
@@ -141,7 +128,7 @@ public class SnowManager {
      */
     public void possiblyCreateSnowStorm(String collegeId, int hoursAlive,PopupEventManager popupManager) {
         if (!EventManager.isEventPermitted(collegeId)) {
-            logger.info("EVARUBIO . SNOW . possiblyCreateSnowStorm() - the Event was NOT permitted. ");
+            //logger.info("EVARUBIO . SNOW . possiblyCreateSnowStorm() - the Event was NOT permitted. ");
             return;
         }
 
@@ -151,7 +138,7 @@ public class SnowManager {
 
         Random rand = new Random();
         int oddsOfStorm = rand.nextInt(220);
-        logger.info("EVARUBIO . SNOW. possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
+        //logger.info("EVARUBIO . SNOW. possiblyCreateSnowStorm() Random oddsOfStorm: " + oddsOfStorm);
 
         EventManager eventManager = new EventManager(collegeId);
         if (CollegeManager.isMode(collegeId, CollegeMode.DEMO_SNOW) || eventManager.doesEventStart(collegeId, EventType.SNOW)) {
@@ -165,20 +152,20 @@ public class SnowManager {
                 // 0 - 30 : 30
             }else if ((oddsOfStorm <= (PROBABILTY_OF_LOW_STORM - 10)) && hasLowUpgrade){
                 startLowIntensitySnow(collegeId, hoursAlive, popupManager);
-                logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
+                //logger.info("EVARUBIO . possiblyCreateSnowStorm() has LOW Upgrade, probability has been decreased by 10. ");
                 //  ---- MID SNOW ----      (40 - 70 : 30)
             }else if((oddsOfStorm > PROBABILTY_OF_LOW_STORM) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && !hasMidUpgrade) {
                 startMidIntensitySnow(collegeId, hoursAlive, popupManager);
 
             }else if ((oddsOfStorm > (PROBABILTY_OF_LOW_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_MID_STORM) && hasMidUpgrade){
                 startMidIntensitySnow(collegeId, hoursAlive, popupManager);
-                logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
+                //logger.info("EVARUBIO . possiblyCreateSnowStorm() has MID Upgrade, probability has been decreased by 10. ");
                 //  ---- HIGH SNOW ----     (70 - 100 : 30)
             }else if((oddsOfStorm > PROBABILTY_OF_MID_STORM) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && !hasHighUpgrade) {
                 startHighIntensitySnow(collegeId, hoursAlive, popupManager);
             }else if ((oddsOfStorm > (PROBABILTY_OF_MID_STORM + 10)) && (oddsOfStorm <= PROBABILTY_OF_HIGH_STORM) && hasHighUpgrade){
                 startHighIntensitySnow(collegeId, hoursAlive, popupManager);
-                logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
+                //logger.info("EVARUBIO . possiblyCreateSnowStorm() has HIGH Upgrade, probability has been decreased by 10. ");
 
             } else {
                 startHighIntensitySnow(collegeId,hoursAlive,popupManager);
@@ -222,7 +209,7 @@ public class SnowManager {
                 "Oh no! The un-plowed amount of snow was too tempting for students.. A campus-wide Snowball Fight is in progress, Maintenance won't be happy.",
                 "Ok","okSnowballFight",
                 "resources/images/grinch-snowball-fight.png","grinch snowball fight");
-        logger.info("EVARUBIO SNOW . possiblyStartSnowballFight() - snowball fight happening! ");
+        //logger.info("EVARUBIO SNOW . possiblyStartSnowballFight() - snowball fight happening! ");
     }
     /**
      * Starts a Low intensity Snow Storm.
@@ -236,8 +223,6 @@ public class SnowManager {
         SnowDao snowDao = new SnowDao();
         int intensity = 1;
         isHappening = true;
-        logger.info("EVARUBIO - SNOW startLowIntensitySnow() just set isHappening to true");
-        logger.info("EVARUBIO - SNOW startLowIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
         int lengthOfStorm = generateLengthOfSnow(intensity);
@@ -245,8 +230,6 @@ public class SnowManager {
 
         SnowModel lowSnow = new SnowModel(collegeId,oneBuildingSnowed,intensity,lowRandCost, lengthOfStorm, lengthOfStorm, oneBuildingSnowed.getTimeSinceLastRepair());
         snowDao.saveSnowStorm(collegeId,lowSnow);
-        logger.info("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
-        System.out.println("EVARUBIO .  startLowIntensitySnow() LOW-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
 
         generateCorrectPopup(lowSnow,false, popupManager,collegeId,hoursAlive);
 
@@ -269,8 +252,6 @@ public class SnowManager {
         SnowDao snowDao = new SnowDao();
         int intensity = 2;
         isHappening = true;
-        logger.info("EVARUBIO - SNOW startMidIntensitySnow() just set isHappening to true");
-        logger.info("EVARUBIO - SNOW startMidIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
         buildingMgr.acceleratedDecayAfterDisaster(collegeId, oneBuildingSnowed.getName());
@@ -279,7 +260,6 @@ public class SnowManager {
 
         SnowModel midSnow = new SnowModel(collegeId,oneBuildingSnowed,intensity,midRandCost, lengthOfStorm, lengthOfStorm, oneBuildingSnowed.getTimeSinceLastRepair());
         snowDao.saveSnowStorm(collegeId,midSnow);
-        logger.info("EVARUBIO .  startMidIntensitySnow() MID-SNOW STORM CREATED name of dorm:  " + oneBuildingSnowed.getName() +" Duration: "+ lengthOfStorm );
 
         generateCorrectPopup(midSnow,false, popupManager,collegeId,hoursAlive);
 
@@ -301,8 +281,6 @@ public class SnowManager {
         SnowDao snowDao = new SnowDao();
         int intensity = 3;
         isHappening = true;
-        logger.info("EVARUBIO - SNOW startHighIntensitySnow() just set isHappening to true");
-        logger.info("EVARUBIO - SNOW startHighIntensitySnow() value of isHappening = " + isHappening);
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         List<BuildingModel> buildingsSnowedIn = new ArrayList<>();
         int lengthOfStorm = generateLengthOfSnow(intensity);
@@ -325,7 +303,6 @@ public class SnowManager {
 
         SnowModel intenseSnowStorm = new SnowModel(collegeId, buildingsSnowedIn, intensity, randSevereCost, lengthOfStorm, lengthOfStorm, oneBuild.getTimeSinceLastRepair());
         snowDao.saveSnowStorm(collegeId,intenseSnowStorm);
-        logger.info("EVARUBIO .  startHighIntensitySnow() HIGH-SNOW STORM CREATED name of dorms:  " + oneBuild.getName() +" "+twoBuild.getName()+ " Duration: "+ lengthOfStorm );
 
         generateCorrectPopup(intenseSnowStorm,false, popupManager,collegeId,hoursAlive);
 
@@ -441,7 +418,6 @@ public class SnowManager {
      * @param snowStorm
      */
     private void billCostOfSnowStorm(String collegeId, SnowModel snowStorm){
-        logger.info("EVARUBIO . billCostOfSnowStorm() Start-Of-Method. Intensity: "+snowStorm.getSnowIntensity());
         if(snowStorm.getSnowIntensity() == 1){
             Accountant.payBill(collegeId,"Plowing cost for " + snowStorm.getOneBuildingSnowed().getName(), snowStorm.getCostOfPlowing());
         }else if(snowStorm.getSnowIntensity() == 2){
@@ -499,7 +475,7 @@ public class SnowManager {
             if(isOver){
                 NewsManager.createNews(collegeId, hoursAlive, "All snow removed from " + oneBuildingSnowed.getName() +"! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
                 buildingManager.disasterStatusChange(snowStorm.getHoursLeftInSnowStorm(),snowStorm.getOneBuildingSnowed().getName(), collegeId, "None");
-                logger.info("EVARUBIO . handleTimeChange() -> MID-STORM has been DELETED.");
+                //logger.info("EVARUBIO . handleTimeChange() -> MID-STORM has been DELETED.");
                 NewsManager.createNews(collegeId, hoursAlive, "Mid-Intensity Blizzard OVER.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
                 popupManager.newPopupEvent(collegeId,"Mid-Intensity Blizzard OVER!",
                         "The snow blizzard is finally over. Maintenance has successfully removed all snow from " +snowStorm.getOneBuildingSnowed().getName()+" and its pipes are fully functioning now. Temperatures are finally rising! Time to enjoy the great weather!",

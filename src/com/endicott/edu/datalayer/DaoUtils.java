@@ -11,7 +11,7 @@ public class DaoUtils {
     private static Logger logger = Logger.getLogger("DaoUtils");
 
     static public String getFilePathPrefix(String collegeId) {
-        logger.info("Location of colleges: " + getCollegeStorageDirectory());
+        //logger.info("Location of colleges: " + getCollegeStorageDirectory());
         return getCollegeStorageDirectory() + File.separator + collegeId;
     }
 

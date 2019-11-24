@@ -23,6 +23,7 @@ public class StudentDao {
         if (cache.containsKey(runId))
             return cache.get(runId);
 
+        logger.info("Reading students from disk.");
         ArrayList<StudentModel> students = new ArrayList<>();
         StudentModel studentModel = null;
         try {
@@ -72,8 +73,23 @@ public class StudentDao {
         return playerList;
     }
 
+    public static void saveAllStudentsJustToCache(String runId, List<StudentModel> students){
+        logger.info("Saving all students to cache.");
+         cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
+    }
+
+    public static void saveAllStudentsUsingCache(String runId) {
+        List<StudentModel> students;
+
+        if (!cache.containsKey(runId))
+            return;
+
+        students = cache.get(runId);
+        saveAllStudents(runId, students);
+    }
+
     public static void saveAllStudents(String runId, List<StudentModel> students){
-        logger.info("Saving all students...");
+        logger.info("Saving all students to disk.");
         try {
             File file = new File(getFilePath(runId));
             file.createNewFile();
@@ -92,11 +108,9 @@ public class StudentDao {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
         cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
-        logger.info("Saved students...");
     }
 
     public void saveNewStudent(String runId, StudentModel student) {
-        logger.info("Saving new student...");
         List<StudentModel> students = getStudents(runId);
         student.setRunId(runId);
         students.add(student);
@@ -106,6 +120,10 @@ public class StudentDao {
     public static void deleteStudents(String runId) {
         File file = new File(getFilePath(runId));
         file.delete();
+
+        if (cache.containsKey(runId)){
+            cache.remove(runId);
+        }
     }
 
     public static void main(String[] args) {

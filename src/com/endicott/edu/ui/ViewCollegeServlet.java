@@ -15,8 +15,8 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
-        logger.info("Got college servlet request.");
-        InterfaceUtils.logRequestParameters(request);
+        //logger.info("Got college servlet request.");
+        //InterfaceUtils.logRequestParameters(request);
         // Check if session timed out.
         if (collegeId == null || !CollegeManager.doesCollegeExist(collegeId)) {
             logger.info("No college id.  Going to welcome.");

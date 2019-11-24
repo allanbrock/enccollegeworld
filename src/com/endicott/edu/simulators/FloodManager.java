@@ -55,11 +55,8 @@ public class FloodManager {
         int timeLeft = Math.max(0, flood.getHoursLeftInFlood() - elapsedTime);
         if (timeLeft <= 0) {
             isHappening = false;
-            logger.info("EVARUBIO - FLOOD handleTimeChange() just set isHappening to false");
-            logger.info("EVARUBIO - FLOOD handleTimeChange() value of isHappening = " + isHappening);
 
             buildingManager.disasterStatusChange(flood.getHoursLeftInFlood(),floodedDorm, collegeId, "None");
-            logger.info("EVARUBIO . handleTimeChange() -> flood has been DELETED.");
             NewsManager.createNews(collegeId, hoursAlive, "Flooding of " + floodedDorm+" has ended! ", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
             popupManager.newPopupEvent(collegeId,"Flood Ended!", "The flood in "+floodedDorm+" is finally over!","Ok","okFloodEnded",
                     "resources/images/DORM.png","Unflooded Dorm");
@@ -91,18 +88,14 @@ public class FloodManager {
     private void possiblyStartFlood(String collegeId, int hoursAlive, PopupEventManager popupManager, Boolean hasUpgrade) {
         List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
 
-        logger.info(" EVARUBIO . possiblyStartFlood() START-OF-METHOD ");
-
         for (BuildingModel dorm : dorms) {
             if (dorm.getHoursToComplete() <= 0) {   //only if a dorm is FULLY built call didFloodStartAtThisDorm()
-                logger.info(" EVARUBIO . possiblyStartFlood() there are dorms completed so call didFloodStartAtThisDorm() to check odds of creating a flood." );
                 if (didFloodStartAtThisDorm(collegeId, hoursAlive, dorm, popupManager, hasUpgrade)) {     //if the odds say yes start a flood, if not nothing.
                     //logger.info(" EVARUBIO . possiblyStartFlood() didFloodStartAtThisDorm() good odds- is TRUE, FLOOD CREATED(3/6) in dorm:   " + dorm.getName() );
                     return;
                 }
             }
         }
-        logger.info(" EVARUBIO . possiblyStartFlood() END-OF-METHOD ");
     }
 
     /**
@@ -135,9 +128,6 @@ public class FloodManager {
             floodDao.saveTheFlood(collegeId, randomFlood);
             EventManager.isEventPermitted(collegeId);
             isHappening = true;
-            logger.info("EVARUBIO - FLOOD . didFloodStartAtThisDorm()  just set isHappening to true ");
-            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() value of isHappening : " + isHappening);
-            logger.info("EVARUBIO FLOOD.  didFloodStartAtThisDorm() FLOOD CREATED name of dorm:  " + dorm.getName() + "Duration: "+ randomLength );
 
             generateCorrectPopup(collegeId, hasUpgrade,randomFlood,popupManager);
 

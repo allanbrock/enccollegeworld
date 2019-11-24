@@ -227,8 +227,6 @@ public class SportManager {
      */
     public static String addNewTeam(String sportName, String collegeId){
         SportsDao newSportDao = new SportsDao();
-        logger.info("Attempt to add sport: '" + sportName + "' to '" + collegeId + "'");
-        //SportModel sport = new SportModel();
         SportModel result = null;
 
         //variables for bulidings check
@@ -550,9 +548,8 @@ public class SportManager {
         for(int yz = 0; yz < availableSportsNames.size(); yz++){
 
             // TODO: we should check if the college has enough money to startup the sport.
-
-            System.out.println(availableSportsNames.get(yz) + "This is a check");
-            logger.info("list of the names after the check " + availableSportsNames.get(yz));
+//            System.out.println(availableSportsNames.get(yz) + "This is a check");
+//            logger.info("list of the names after the check " + availableSportsNames.get(yz));
             SportModel tempSport = new SportModel();
             tempSport.setName(availableSportsNames.get(yz));
             availableSports.add(tempSport);

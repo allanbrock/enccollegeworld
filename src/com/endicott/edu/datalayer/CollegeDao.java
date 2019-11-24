@@ -52,7 +52,6 @@ public class CollegeDao {
 
     public static void deleteCollege(String collegeId) {
         File file = new File(getFilePath(collegeId));
-        logger.info("Deleting files from " + file.toString());
         boolean result = file.delete();
 
         FacultyDao.removeAllFaculty(collegeId);

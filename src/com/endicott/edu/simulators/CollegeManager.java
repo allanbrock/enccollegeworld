@@ -109,64 +109,62 @@ public class CollegeManager {
         // Each one takes care of what happened since they were
         // last called.  They are given the current time.
 
-
-
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_1 - " +  getDate());
 
+        logger.info("AdvanceTime Disasters");
         EventManager disasterManager = new EventManager(collegeId);
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_2 - " +  getDate());
 
+        logger.info("AdvanceTime Plagues");
         PlagueManager plagueManager = new PlagueManager();
         plagueManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_3 - " +  getDate());
 
+        logger.info("AdvanceTime Floods");
         FloodManager floodManager = new FloodManager();
         floodManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_4 - " +  getDate());
 
+        logger.info("AdvanceTime Fires");
         FireManager fireManager = new FireManager();
         fireManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_5 - " +  getDate());
 
+        logger.info("AdvanceTime Snow");
         SnowManager snowManager = new SnowManager();
         snowManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_6 - " +  getDate());
 
+        logger.info("AdvanceTime Riots");
         RiotManager riotManager = new RiotManager();
         riotManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_7 - " +  getDate());
 
+        logger.info("AdvanceTime Buildings");
         BuildingManager buildingManager = new BuildingManager();
         buildingManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_8 - " +  getDate());
 
+        logger.info("AdvanceTime Sports");
         SportManager sportManager = new SportManager();
         sportManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_9 - " +  getDate());
 
+        logger.info("AdvanceTime Students");
         StudentManager studentManager = new StudentManager();
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_10 - " +  getDate());
 
+        logger.info("AdvanceTime Faculty");
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        logger.info("RAN_11 - " +  getDate());
+
+        logger.info("AdvanceTime Calculate Stats");
 
 
         // After all the simulators are run, there is a final
         // calculation of the college statistics.
-        calculateStatisticsAndRatings(collegeId);
+        calculateTuitionRating(collegeId);
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
         TutorialManager.advanceTip("viewFaculty",collegeId);
         TutorialManager.advanceTip("viewSports",collegeId);
         TutorialManager.advanceTip("viewStudent",collegeId);
-        logger.info("RAN_12 - " + getDate());
 
 //        if (college.getAvailableCash() <= 0) {
 //            popupManager.newPopupEvent("Bankrupt!", "You ran out of money! Better luck next time!",
@@ -174,6 +172,7 @@ public class CollegeManager {
 //                    "Insert empty Wallet Picture Here");
 //        }
 
+        logger.info("AdvanceTime Done");
         return college;
     }
 
@@ -251,7 +250,7 @@ public class CollegeManager {
         college.setYearlyTuitionCost(amount);
         CollegeDao.saveCollege(college);
 
-        calculateStatisticsAndRatings(collegeId);
+        calculateTuitionRating(collegeId);
 
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
 
@@ -259,10 +258,6 @@ public class CollegeManager {
         studentManager.calculateStatistics(collegeId, false);
 
         return college;
-    }
-
-    private static void calculateStatisticsAndRatings(String collegeId) {
-        calculateTuitionRating(collegeId);
     }
 
     private static void calculateTuitionRating(String collegeId) {

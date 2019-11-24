@@ -31,7 +31,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        InterfaceUtils.logRequestParameters(request);
+        //InterfaceUtils.logRequestParameters(request);
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
 
         // For loop to check if the repair or upgrade buttons were hit on one of the buildings.
@@ -154,7 +154,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         logger.info("In doGet.");
-        InterfaceUtils.logRequestParameters(request);
+        //InterfaceUtils.logRequestParameters(request);
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
         logger.info("College id is " + runId);
         String beginStr = String.valueOf(beginPurchase);
@@ -209,8 +209,8 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
         }
 
 
-        logger.info("In ViewBuildingsServlet.doPost()");
-        InterfaceUtils.logRequestParameters(request);
+        //logger.info("In ViewBuildingsServlet.doPost()");
+        //InterfaceUtils.logRequestParameters(request);
 
         if(runId == null || buildingName ==null || buildingType == null ){
             UiMessage message = new UiMessage("Cannot add dorm, information is missing");

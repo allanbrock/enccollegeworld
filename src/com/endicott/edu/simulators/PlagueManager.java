@@ -23,7 +23,6 @@ public class PlagueManager {
     private static int probMostStudentsDie = 70;
     private static int probGovCausesRiot = 30;
 
-
     /**
      * Simulate changes in the plague due to passage of time.
      * NOTE: THERE IS ONLY ONE PLAGUE AT A TIME.
@@ -54,7 +53,6 @@ public class PlagueManager {
             plague.setNumberOfHoursLeftInPlague(hoursLeftInPlague);
             didPlagueEnd = (oldHoursLeftInPlague > 0 && hoursLeftInPlague <= 0);
             quarantine = plague.isQuarantine();
-
         }
 
         if (didPlagueEnd && !didPlagueMutate) {
@@ -78,7 +76,6 @@ public class PlagueManager {
                                     "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
                             "Ok", "plagueAckCallback2", "Visit Store", "goToStore",
                             "resources/images/plague.jpg", "Plague Doctor");
-
                 }
                 else{
                     popupManager.newPopupEvent(collegeId,"Plague Spreads!",
@@ -113,15 +110,10 @@ public class PlagueManager {
             }
         }
 
+        StudentDao.saveAllStudentsUsingCache(collegeId);
         dao.saveAllPlagues(collegeId, plagues);
     }
 
-    /**
-     * Quarantine Students
-     *
-     *
-     * @param collegeId
-     */
     public static void quarantineStudents(String collegeId){
         Accountant accountant = new Accountant();
         PlagueDao dao = new PlagueDao();
@@ -144,11 +136,9 @@ public class PlagueManager {
         plague.setNumberOfHoursLeftInPlague(0);
         dao.savePlague(collegeId, plague);
 
-        if(riotProb < probGovCausesRiot){
+        if (riotProb < probGovCausesRiot){
             //Cause Riot
         }else{
-
-
             //save plague
             dao.savePlague(collegeId, plague);
             int billFromGov = ((int)(accountant.getAvailableCash(collegeId)*.25));
@@ -164,20 +154,14 @@ public class PlagueManager {
                 if(students.get(i).getNumberHoursLeftBeingSick() > 0){
                     studentString = studentString + students.get(i).getName() + ", ";
                     students.remove(i);
-
                 }
             }
 
-
             StudentDao.saveAllStudents(collegeId, students);
             popupMan.newPopupEvent(collegeId,"Zombie Outbreak Over!", studentString, "Ok", "N/A", "resources/images/fun.png", " ");
-
-
-
-
         }
-//        request.getSession().setAttribute("popupMan", popupMan);
     }
+
     public static void schoolHandlesPlagueMutation(String collegeId, javax.servlet.http.HttpServletRequest request, PopupEventManager popupMan){
         Random rand = new Random();
         int nobelProb = rand.nextInt(100);
@@ -192,23 +176,17 @@ public class PlagueManager {
 
         dao.savePlague(collegeId, plague);
         if(nobelProb > probMostStudentsDie){
-
             popupMan.newPopupEvent(collegeId,"Zombie Outbreak Over!", "Your science department was able to find a cure! " +
                     "Not only does it look like all the infected students are going to recover, but your school won an international award" +
                     "and has received $300,000!", "Ok", "N/A", "resources/images/fun.png", " ");
 
             accountant.receiveIncome(collegeId, "Congraulations on the award!", 300000);
-
-
-
         }else{
-
             StudentDao studentDao = new StudentDao();
             List<StudentModel> students = studentDao.getStudents(collegeId);
             int probOfStudentDeath = 90;
             double startingNumStudents = students.size();
             double endingNumStudents = students.size();
-
 
             int numDeaths = 0;
             for(int i = 0; i < students.size(); i++){
@@ -218,7 +196,6 @@ public class PlagueManager {
                     numDeaths++;
                     students.remove(i);
                     endingNumStudents--;
-
                 }
             }
             double percentStudentsDead = (endingNumStudents/startingNumStudents)*100;
@@ -232,11 +209,9 @@ public class PlagueManager {
 
             accountant.payBill(collegeId, "The Government charged you $"+billFromGov+".00 for their assistance.", billFromGov);
             StudentDao.saveAllStudents(collegeId, students);
-
-
         }
-//        request.getSession().setAttribute("popupMan", popupMan);
     }
+
     /**
      * Start a plague*
      *
@@ -281,7 +256,6 @@ public class PlagueManager {
     static public void establishCollege(String collegeId){
         int hoursInPlague = createInitialPlague(collegeId);
         InventoryManager.createItem("Hand Sanitizers", false, "handsanitizer.png", 10000, 0, "Helps stop the spread of disease. Who knows what weird disease might develop otherwise?", collegeId);
-//        plagueSpreadsThroughStudents(collegeId, 0, hoursInPlague, 0);
     }
 
     /**
@@ -335,13 +309,9 @@ public class PlagueManager {
                 PlagueModel plague = plagueDao.getPlague(collegeId);
                 plague.setMutation(true);
                 plagueDao.savePlague(collegeId, plague);
-
-
                 return nSick;
             }
-
         }else{
-
             probCatchesFromOthers = (studentSickCount * 100) / students.size();
             int probCatchesFromOutside = 10; // out of 100
             int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
@@ -362,13 +332,10 @@ public class PlagueManager {
                 NewsManager.createNews(collegeId, currentHour, "Student " + someoneSick + " and " + (nSick - 1) + " others have fallen ill.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
             }
 
-            dao.saveAllStudents(collegeId, students);
-
+            dao.saveAllStudentsJustToCache(collegeId, students);
         }
 
         return nSick;
-
-
     }
 
     /**
@@ -395,16 +362,14 @@ public class PlagueManager {
                 }
             }
         }
-        dao.saveAllStudents(collegeId, students);
+        dao.saveAllStudentsJustToCache(collegeId, students);
     }
-    private void handlePlagueMutation(PopupEventManager popupMan){
 
+    private void handlePlagueMutation(PopupEventManager popupMan){
     }
+
     /**
      * For those students that are sick, reduce the time left in there illness.
-     *
-     * @param collegeId
-     * @param hoursAlive
      */
     private int makeStudentsBetter(String collegeId, int hoursAlive) {
         StudentDao dao = new StudentDao();
@@ -424,9 +389,10 @@ public class PlagueManager {
             }
         }
 
-        dao.saveAllStudents(collegeId, students);
+        dao.saveAllStudentsJustToCache(collegeId, students);
         return nSick;
     }
+
     //Checks to see if the Purell Upgrade is puchased, and if so lowers the plague probability to .01
     public void checkForPurellUpgrade(String runId){
         if (inventoryManager.isPurchased(purellUpgradeName,runId)){
@@ -434,13 +400,12 @@ public class PlagueManager {
             this.plagueProbablity = .01;
         }
     }
+
     public boolean isPurellUpgradePurchased() {
         return purellUpgradePurchased;
     }
 
     public boolean isPlagueMuated() { return didPlagueMutate; }
-
-
 
     public boolean isEventActive(String collegeId) {
         List<PlagueModel> plagues = dao.getPlagues(collegeId);

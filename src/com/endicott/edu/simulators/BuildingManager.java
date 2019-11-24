@@ -6,7 +6,6 @@ import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.*;
 
-import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,7 +22,6 @@ public class BuildingManager {
     static private GateManager gateManager = new GateManager();
     static private StudentManager studentManager = new StudentManager();
     static private BuildingModel buildingModel = new BuildingModel();
-
 
     /**
      * Simulate all changes in buildings caused by advancing the hours the college
@@ -49,12 +47,12 @@ public class BuildingManager {
                                 + building.getName() + "has finished construction and is now open!", "Close", "ok",
                         "resources/images/" + building.getKindOfBuilding() + ".png", building.getKindOfBuilding());
                 building.setHasBeenAnnouncedAsComplete(true);
-                BuildingDao.updateSingleBuilding(runId, building);
+                BuildingDao.updateSingleBuildingInCache(runId, building);
             }
         }
 
         // Really important the we save the changes to disk.
-        dao.saveAllBuildings(runId, buildings);
+        dao.saveAllBuildingsUsingCache(runId);
     }
 
     /**
@@ -77,7 +75,7 @@ public class BuildingManager {
     private static void setNewRepairCost(String collegeId, BuildingModel building){
         int newRepairCost = ((100 - (int)building.getShownQuality()) * 300);
         building.setRepairCost(newRepairCost);
-        BuildingDao.updateSingleBuilding(collegeId, building);
+        BuildingDao.updateSingleBuildingInCache(collegeId, building);
     }
 
     /**
@@ -86,7 +84,7 @@ public class BuildingManager {
      * @param building
      * @param runId
      */
-    public void workOnBuilding(BuildingModel building, String runId){
+    private void workOnBuilding(BuildingModel building, String runId){
         if (building.getHoursToComplete() > 0) {
             building.setHoursToComplete(building.getHoursToComplete() - 24);
             surpriseEventDuringConstruction(runId, 24);
@@ -118,8 +116,7 @@ public class BuildingManager {
             }
         }
 
-
-        BuildingDao.updateSingleBuilding(runId, building);
+        BuildingDao.updateSingleBuildingInCache(runId, building);
     }
 
     /**
@@ -239,7 +236,8 @@ public class BuildingManager {
         building.setHoursToComplete(336); //always take two weeks to upgrade
         building.setIsUpgradeComplete(false);
         Accountant.payBill(collegeId, "Upgrade to " + building.getName(), building.getUpgradeCost());//pay for upgrade
-        BuildingDao.updateSingleBuilding(collegeId, building);
+        BuildingDao.updateSingleBuildingInCache(collegeId, building);
+        BuildingDao.saveAllBuildingsUsingCache(collegeId);
     }
 
     /**
@@ -264,7 +262,8 @@ public class BuildingManager {
             building.setHiddenQuality(10); //10 is the max hidden quality
             setNewRepairCost(collegeId, building);
         }
-        BuildingDao.updateSingleBuilding(collegeId, building);
+        BuildingDao.updateSingleBuildingInCache(collegeId, building);
+        BuildingDao.saveAllBuildingsUsingCache(collegeId);
     }
 
     /**
@@ -294,7 +293,7 @@ public class BuildingManager {
      * @param collegeId
      * @param b
      */
-    public void buildingDecayForOneDay(String collegeId, BuildingModel b){
+    private void buildingDecayForOneDay(String collegeId, BuildingModel b){
         // Only decay buildings that aren't under construction
         // AND aren't the Library, Health Center, or Entertainment Center
         if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(buildingModel.getLibraryConst()) ||
@@ -307,7 +306,7 @@ public class BuildingManager {
             double randomDecay = Math.random() * 0.2;
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
-        dao.updateSingleBuilding(collegeId, b);
+        dao.updateSingleBuildingInCache(collegeId, b);
     }
 
     /**
@@ -366,7 +365,7 @@ public class BuildingManager {
             buildingName = b.getName();
             if (s < c) {
                 b.setNumStudents(s + 1);
-                dao.updateSingleBuilding(collegeId, b);
+                dao.updateSingleBuildingInCache(collegeId, b);
                 return buildingName;
             }
         }

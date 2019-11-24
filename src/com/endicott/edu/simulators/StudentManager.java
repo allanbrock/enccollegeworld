@@ -38,22 +38,23 @@ public class StudentManager {
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
-        CollegeManager.logger.info("RAN_StudentManager_ 1 - " + CollegeManager.getDate());
 
+        CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
         admitStudents(collegeId, hoursAlive, false, popupManager);
-        CollegeManager.logger.info("RAN_StudentManager_ 2 - " + CollegeManager.getDate());
 
+        CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
         receiveStudentTuition(collegeId);
-        CollegeManager.logger.info("RAN_StudentManager_ 3 - " + CollegeManager.getDate());
 
+        CollegeManager.logger.info("Advance Time Students: withdraw - " + CollegeManager.getDate());
         withdrawStudents(collegeId, hoursAlive);
-        CollegeManager.logger.info("RAN_StudentManager_ 4 - " + CollegeManager.getDate());
 
+        CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
         calculateStatistics(collegeId, false);
-        CollegeManager.logger.info("RAN_StudentManager_ 5 - " + CollegeManager.getDate());
 
+        CollegeManager.logger.info("Advance Time Students: updateTime - " + CollegeManager.getDate());
         updateStudentsTime(collegeId, hoursAlive);
-        CollegeManager.logger.info("RAN_StudentManager_ 6 - " + CollegeManager.getDate());
+
+        CollegeManager.logger.info("Advance Time Students: done " + CollegeManager.getDate());
 
         CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
     }
@@ -286,7 +287,6 @@ public class StudentManager {
      */
     public void calculateStatistics(String collegeId, boolean initial) {
         List<StudentModel> students = dao.getStudents(collegeId);
-
         calculaterOverallStudentHealth(collegeId, students);
         calculateStudentFacultyRatio(collegeId, students);
         calculateStudentFacultyRatioRating(collegeId);
@@ -296,11 +296,10 @@ public class StudentManager {
         calculateOverallStudentHappiness(collegeId, students);
 
         //calculateRetentionRate(collegeId);
-
-        //Need to save the new class
     }
 
     private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: health statistics");
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         int nSick = 0;
@@ -318,6 +317,7 @@ public class StudentManager {
     }
 
     private void calculateOverallStudentHappiness(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: happiness statistics");
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         int happinessSum = 0;
@@ -332,9 +332,12 @@ public class StudentManager {
     }
 
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
+        CollegeManager.logger.info("StudentManager: set happiness");
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
-       for(int i = 0; i < students.size(); i++){
+        int aveFacultyRating = FacultyManager.getAverageFacultyPerformance(collegeId);
+
+        for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student);
            setStudentAcademicHappiness(student, college);
@@ -344,9 +347,9 @@ public class StudentManager {
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
-           setStudentProfessorHappiness(collegeId, student);
+           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
            setStudentOverallBuildingHappinessRating(student, college);
-           getStudentFeedback(student, collegeId);
+           setStudentFeedback(student, collegeId);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
@@ -380,7 +383,7 @@ public class StudentManager {
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
-        getStudentFeedback(student, college.getRunId());
+        setStudentFeedback(student, college.getRunId());
     }
 
     private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
@@ -389,7 +392,7 @@ public class StudentManager {
         int acadmicBuildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(academicBuildingQuality, 15, 0, 100);
 
         student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
-        getStudentFeedback(student, college.getRunId());
+        setStudentFeedback(student, college.getRunId());
     }
 
     private void setDormHappinessRating(StudentModel student,CollegeModel college){
@@ -398,7 +401,7 @@ public class StudentManager {
         int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
 
         student.setDormHappinessRating(dormHappinessLevel);
-        getStudentFeedback(student, college.getRunId());
+        setStudentFeedback(student, college.getRunId());
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
@@ -445,13 +448,10 @@ public class StudentManager {
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
         s.setAdvisorHappinessHappinessRating(happinessRating);
-        getStudentFeedback(s, college.getRunId());
+        setStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
-
-        // TODO: Update function to insure value is accurate and not negative
-
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
 
@@ -459,20 +459,16 @@ public class StudentManager {
         happinessRating = Math.min(happinessRating, 100);
 
         s.setAcademicHappinessRating(happinessRating);
-        getStudentFeedback(s, college.getRunId());
+        setStudentFeedback(s, college.getRunId());
     }
 
-    private void setStudentProfessorHappiness(String collegeId, StudentModel s){
-        int rating = FacultyManager.getAverageFacultyPerformance(collegeId);
-        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 10, 0, 100);
+    private void setStudentProfessorHappiness(String collegeId, StudentModel s, int aveFacultyPerformance){
+        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(aveFacultyPerformance, 10, 0, 100);
         s.setProfessorHappinessRating(happinessRating);
-        getStudentFeedback(s, college.getRunId());
+        setStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentHealthHappiness(StudentModel s) {
-
-        // TODO: update to change over time of being sick
-
         s.setHealthHappinessRating(100);
         if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
@@ -541,7 +537,7 @@ public class StudentManager {
         buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
         buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
-        getStudentFeedback(s, college.getRunId());
+        setStudentFeedback(s, college.getRunId());
     }
 
     private void calculateStudentFacultyRatio(String collegeId, List<StudentModel> students) {
@@ -622,8 +618,7 @@ public class StudentManager {
      * @param student   The student who's giving feedback
      * @return          The feedback based on the students happiness levels
      */
-    public static String getStudentFeedback(StudentModel student, String collegeId) {
-
+    private static String setStudentFeedback(StudentModel student, String collegeId) {
         Boolean usesVerb        = (Math.random() >= 0.5);
         Boolean useNoun         = true;
         String feedback         = (usesVerb ? "I " : "The ");
