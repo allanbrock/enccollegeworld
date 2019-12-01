@@ -247,7 +247,7 @@ public class FireManager {
                 if (nFaculty > 0) {
                     int facultyToRemove = new Random().nextInt(faculty.size());
                     if (faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")) {
-                        for (DepartmentModel d : DepartmentManager.getDepartmentOptions()) {
+                        for (DepartmentModel d : DepartmentManager.getUnlockedDepts()) {
                             if (faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())) {
                                 d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
                             }
@@ -270,7 +270,7 @@ public class FireManager {
             for (int j = 0; j <numFacultyDeaths && (faculty.size() > 0); j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
                 if(faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")){
-                    for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+                    for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
                         if(faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())){
                             d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
                         }

@@ -79,11 +79,12 @@ public class FacultyManager {
      * @param collegeId instance of the simulation
      */
     public static void establishCollege(String collegeId, CollegeModel college){
-        DepartmentManager.establishDepartments(college.getDepartmentCount());
+        DepartmentManager.createDeptNameChoices(college.getDepartmentCount());
         for (int i=0; i<22; i++) {
-            String department = generateFacultyDepartment();
-           FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(department), department);  // Default salary for now
-            for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+            String deptName = getQuasiRandomUnlockedDeptName();
+            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(deptName), deptName);
+
+            for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
                 if(member.getDepartmentName().equals(d.getDepartmentName())){
                     if(d.getOverallEmployeeCount() > 2) {
                         d.putInEmployeeCounts(member.getTitle(), d.getOverallEmployeeCount() - 1);
@@ -120,7 +121,7 @@ public class FacultyManager {
     public static String generateFacultyTile(String departmentName){
         String title;
         DepartmentModel curDept = new DepartmentModel("tempName");
-        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
             if(d.getDepartmentName().equals(departmentName)){
                 curDept = d;
                 break;
@@ -135,38 +136,30 @@ public class FacultyManager {
         return title;
     }
 
-    public static String generateFacultyDepartment(){
+    private static String getQuasiRandomUnlockedDeptName(){
         Random r = new Random();
-        ArrayList<String> emptyDepartments = new ArrayList<>();
-        ArrayList<String> onlyDeans = new ArrayList<>();
-        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+        ArrayList<String> deptsWithoutDeans = new ArrayList<>();
+        ArrayList<String> deptsWithoutAssistantDeans = new ArrayList<>();
+
+        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
             if(d.getEmployeeCounts().get("Dean") == 0)
-                emptyDepartments.add(d.getDepartmentName());
+                deptsWithoutDeans.add(d.getDepartmentName());
             else if(d.getEmployeeCounts().get("Assistant Dean") == 0)
-                onlyDeans.add(d.getDepartmentName());
+                deptsWithoutAssistantDeans.add(d.getDepartmentName());
         }
-        if(emptyDepartments.size() > 0 ){
-            int rand = r.nextInt((emptyDepartments.size() - 0));
-            for(int i = 0; i < emptyDepartments.size(); i++){
-                if(i == rand)
-                    return emptyDepartments.get(i);
-            }
+
+        if (deptsWithoutDeans.size() > 0 ){
+            int rand = r.nextInt(deptsWithoutDeans.size());
+            return deptsWithoutDeans.get(rand);
         }
-        else if(onlyDeans.size() > 0){
-            int rand = r.nextInt((onlyDeans.size() - 0));
-            for(int i = 0; i < onlyDeans.size(); i++){
-                if(i == rand)
-                    return onlyDeans.get(i);
-            }
+
+        if(deptsWithoutAssistantDeans.size() > 0){
+            int rand = r.nextInt(deptsWithoutAssistantDeans.size());
+            return deptsWithoutAssistantDeans.get(rand);
         }
-        else{
-            int rand = r.nextInt((DepartmentManager.getDepartmentOptions().size() - 0));
-            for(int i = 0; i < DepartmentManager.getDepartmentOptions().size(); i++){
-                if(i == rand)
-                    return DepartmentManager.getDepartmentOptions().get(i).getDepartmentName();
-            }
-        }
-        return "";  // Statement should never be hit
+
+        int rand = r.nextInt(DepartmentManager.getUnlockedDepts().size());
+        return DepartmentManager.getUnlockedDepts().get(rand).getDepartmentName();
     }
 
     public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
@@ -217,14 +210,14 @@ public class FacultyManager {
     }
 
     public static String[] getDepartmentOptionStrings (){
-        String[] names = new String[DepartmentManager.getDepartmentOptions().size()];
-        for(int i = 0; i < DepartmentManager.getDepartmentOptions().size(); i++){
-            names[i] = DepartmentManager.getDepartmentOptions().get(i).getDepartmentName();
+        String[] names = new String[DepartmentManager.getUnlockedDepts().size()];
+        for(int i = 0; i < DepartmentManager.getUnlockedDepts().size(); i++){
+            names[i] = DepartmentManager.getUnlockedDepts().get(i).getDepartmentName();
         }
         return names;
     }
 
-    public static ArrayList<DepartmentModel> getDepartmentOptions() { return DepartmentManager.getDepartmentOptions(); }
+    public static ArrayList<DepartmentModel> getDepartmentOptions() { return DepartmentManager.getUnlockedDepts(); }
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness
@@ -295,7 +288,7 @@ public class FacultyManager {
     public static void removeFaculty(String collegeID, FacultyModel member, Boolean coach){
         FacultyDao fao = new FacultyDao();
         if(!coach) {
-            for (DepartmentModel d : DepartmentManager.getDepartmentOptions()) {
+            for (DepartmentModel d : DepartmentManager.getUnlockedDepts()) {
                 if (member.getDepartmentName().equals(d.getDepartmentName())) {
                     DepartmentManager.removeEmployeeFromDepartment(member, d);
                     break;
@@ -394,7 +387,7 @@ public class FacultyManager {
 
     private static ArrayList<DepartmentModel> checkDepartmentsForDeans(String deanPosition){
         ArrayList<DepartmentModel> deanlessDepartments = new ArrayList<>();
-        for(DepartmentModel d : DepartmentManager.getDepartmentOptions()){
+        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
             if(d.getEmployeeCounts().get(deanPosition) < 1){
                 deanlessDepartments.add(d);
             }
