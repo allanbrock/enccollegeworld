@@ -227,12 +227,12 @@ public class StudentManager {
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
 
-        if (!isWithdrawlDay(collegeId))
-            return;
+//        if (!isWithdrawlDay(collegeId))
+//            return;
 
         float scalingFactor = .01f;
         List<StudentModel> students = dao.getStudents(collegeId);
-        int currentSize = students.size();
+        int nStudents = students.size();
 
         // scroll through students list and remove student based upon a probability determined by their happiness level
         // the lower the happiness the greater the chance they have of withdrawing
@@ -240,7 +240,7 @@ public class StudentManager {
 
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappinessLevel();
-            float odds = Math.min((50f - h), 0) * scalingFactor;
+            float odds = Math.max(1f, (100f - h)/33f) * (1f/60f);
             if (didItHappen(odds)) {
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
@@ -253,17 +253,10 @@ public class StudentManager {
         college = CollegeDao.getCollege(collegeId);
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
 
-        // The retention rate is based on the last 7 days (withdrawl day)
-        int retentionRate = 0;
-        if (currentSize > 0) {
-            retentionRate = Math.max(((currentSize - studentsWithdrawn) * 100)/ currentSize, 0);
-        }
-        college.setRetentionRate(retentionRate);
-
         //CollegeDao.saveCollege(college);
         // Don't create a news story if no students leave
-        if ((currentSize - students.size()) > 0) {
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(currentSize - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+        if ((nStudents - students.size()) > 0) {
+            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(nStudents - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
         }
     }
 
@@ -297,7 +290,7 @@ public class StudentManager {
 
         calculateOverallStudentHappiness(collegeId, students);
 
-        //calculateRetentionRate(collegeId);
+        calculateRetentionRate(collegeId);
     }
 
     private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
@@ -328,8 +321,11 @@ public class StudentManager {
         }
 
         int aveHappiness = happinessSum/Math.max(1,students.size());
+        // Add a little randomness. Currently happiness doesn't seem to
+        // vary much from day to day.  That is an issue.
+        Random rand = new Random();
+        college.setStudentBodyHappiness(Math.min(100, aveHappiness + rand.nextInt(8)));
 
-        college.setStudentBodyHappiness(aveHappiness);
         //CollegeDao.saveCollege(college);
     }
 
@@ -367,7 +363,6 @@ public class StudentManager {
             students.get(i).setHappinessLevel(happiness);
         }
 
-       //save
         dao.saveAllStudents(collegeId, students);
     }
 
@@ -566,12 +561,11 @@ public class StudentManager {
      */
     private void calculateRetentionRate(String collegeId) {
         college = CollegeDao.getCollege(collegeId);
-        int retentionRate = 100;
-        if (college.getNumberStudentsAdmitted() > 0) {
-            retentionRate =
-                    Math.max(((college.getNumberStudentsAdmitted() - college.getNumberStudentsWithdrew()) * 100)/
-                            college.getNumberStudentsAdmitted(), 0);
-        }
+        int retentionRate;
+        int nAdmit = Math.max(1, college.getNumberStudentsAdmitted());
+        int nWithdrawn = Math.max(0, college.getNumberStudentsWithdrew());
+        nWithdrawn = Math.min(nAdmit, nWithdrawn);
+        retentionRate = 100 * (nAdmit - nWithdrawn) / nAdmit;
         college.setRetentionRate(retentionRate);
 
         //CollegeDao.saveCollege(college);
