@@ -1,8 +1,10 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.datalayer.PopupEventDao;
+import com.endicott.edu.simulators.CollegeManager;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
@@ -39,6 +41,17 @@ public class CollegeModel implements Serializable {
     private int softballChampionships = 0;
     private int mBasketballChampionships = 0;
     private int wBasketballChampionships = 0;
+
+
+    private Date currentDate;
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
 
     public int getDepartmentCount(){ return departmentCount; }
     public void setDepartmentCount(int departmentCount){ this.departmentCount = departmentCount; }
@@ -101,6 +114,7 @@ public class CollegeModel implements Serializable {
 
     public void setHoursAlive(int hoursAlive) {
         this.hoursAlive = hoursAlive;
+        this.currentDate = CollegeManager.hoursToDate(getHoursAlive());
     }
 
     public String getNote() {

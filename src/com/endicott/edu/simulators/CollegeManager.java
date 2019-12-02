@@ -187,9 +187,13 @@ public class CollegeManager {
         CollegeModel college = new CollegeDao().getCollege(collegeId);
         int hoursAlive = 0;
         if (college != null) {
-            hoursAlive =college.getHoursAlive();
+            hoursAlive = college.getHoursAlive();
         }
 
+        return(hoursToDate(hoursAlive));
+    }
+
+    static public Date hoursToDate(int hoursAlive) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, 8);

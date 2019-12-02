@@ -251,6 +251,7 @@ public class StudentManager {
         dao.saveAllStudents(collegeId, students);
 
         college = CollegeDao.getCollege(collegeId);
+        college.setNumberStudentsAdmitted(Math.max(college.getNumberStudentsAdmitted(), nStudents));
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
 
         //CollegeDao.saveCollege(college);
