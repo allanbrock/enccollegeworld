@@ -21,6 +21,8 @@ public class CollegeModel implements Serializable {
     private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
     private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
+    private int studentRecreationalHappiness = 0; // 0 to 100 rating of student recreational happiness
+    private int studentFinancialHappiness = 0; //0 to 100 rating or student recreational happiness
     private int departmentCount = 4;
     private int academicRating = 0;
     private int gate = 0;                    // This is the current gate or level that is open.
@@ -50,6 +52,14 @@ public class CollegeModel implements Serializable {
     public void setStudentHealthRating(int studentHealthRating) {
         this.studentHealthRating = studentHealthRating;
     }
+
+    public void setStudentRecreationalHappiness(int studentRecreationalHappiness) {this.studentRecreationalHappiness = studentRecreationalHappiness;}
+
+    public int getStudentRecreationalHappiness() {return studentRecreationalHappiness;}
+
+    public void setStudentFinancialHappiness(int studentFinancialHappiness) { this.studentFinancialHappiness = studentFinancialHappiness;}
+
+    public int getStudentFinancialHappiness() {return studentFinancialHappiness;}
 
     public int getStudentFacultyRatioRating() {
         return studentFacultyRatioRating;
