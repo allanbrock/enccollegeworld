@@ -290,6 +290,8 @@ public class StudentManager {
         setHappinessForEachStudent(collegeId, initial, students);
 
         calculateOverallStudentHappiness(collegeId, students);
+        calculateOverallStudentRecreationalHappiness(collegeId, students);
+        calculateOverallStudentFinancialHappiness(collegeId, students);
 
         calculateRetentionRate(collegeId);
     }
@@ -328,6 +330,36 @@ public class StudentManager {
         college.setStudentBodyHappiness(Math.min(100, aveHappiness + rand.nextInt(8)));
 
         //CollegeDao.saveCollege(college);
+    }
+
+    private void calculateOverallStudentRecreationalHappiness(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: recreational happiness statistics");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        int recHappinessSum = 0;
+        for (int i=0; i<students.size(); i++) {
+            recHappinessSum += students.get(i).getFunHappinessRating();
+        }
+
+        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
+
+        Random rand = new Random();
+        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness + rand.nextInt(8)));
+    }
+
+    private void calculateOverallStudentFinancialHappiness(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: financial happiness statistics");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        int finHappinessSum = 0;
+        for (int i=0; i<students.size(); i++) {
+            finHappinessSum += students.get(i).getMoneyHappinessRating();
+        }
+
+        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
+
+        Random rand = new Random();
+        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness + rand.nextInt(8)));
     }
 
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
