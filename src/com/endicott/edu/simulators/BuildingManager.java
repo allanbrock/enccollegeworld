@@ -8,6 +8,7 @@ import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -50,7 +51,7 @@ public class BuildingManager {
                 BuildingDao.updateSingleBuildingInCache(runId, building);
             }
         }
-
+        calculateOverallBuildingHealth(runId, buildings);
         // Really important the we save the changes to disk.
         dao.saveAllBuildingsUsingCache(runId);
     }
@@ -591,6 +592,21 @@ public class BuildingManager {
         TutorialManager.saveNewTip(collegeId, 5,"viewBuildings", "Certain buildings have specific benefits. Try to see if you can notice them!", false);
         TutorialManager.saveNewTip(collegeId, 6,"viewBuildings", "Remember when purchasing a building that construction will take time. It won't just be built immediately!", false);
         TutorialManager.saveNewTip(collegeId, 7,"viewBuildings", "Watch out for disasters in buildings! The results could be catastrophic.", false, "fire.png");
+    }
+
+    private void calculateOverallBuildingHealth(String collegeId, List<BuildingModel> buildings) {
+        CollegeManager.logger.info("BuildingManager: recreational happiness statistics");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        int healthSum = 0;
+        for (int i=0; i<buildings.size(); i++) {
+            healthSum += buildings.get(i).getShownQuality();
+        }
+
+        int avgHealth = healthSum/Math.max(1,buildings.size());
+
+        Random rand = new Random();
+        college.setTotalBuildingHealth(Math.min(100, avgHealth + rand.nextInt(8)));
     }
 }
 
