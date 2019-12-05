@@ -119,6 +119,12 @@ public class FacultyDao {
         logger.info("Faculty member removed: " + tmp);
     }
 
+    public static void giveRaise(String collegeId, FacultyModel member){
+        logger.info("Giving a raise...");
+        int tmpSalary = member.getSalary();
+        member.setSalary(tmpSalary + 25000);
+    }
+
     /**
      * returns the number of faculty in the list for the college
      * @param collegeId

@@ -1,8 +1,10 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.EventsDao;
+import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.EventsModel;
+import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.models.FacultyModel;
 import com.google.gson.Gson;
 
@@ -44,14 +46,16 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
             FacultyDao.removeSingleFaculty(collegeId, facultyMember);
         }
         else if(splits[2].equalsIgnoreCase("raise")){
-
+            FacultyDao.giveRaise(collegeId, facultyMember);
         }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, faculty);
+        EverythingModel allOfEverything = EverythingDao.getEverything(collegeId);
+
+        sendAsJson(response, allOfEverything);
     }
 
     //a utility method to send object
