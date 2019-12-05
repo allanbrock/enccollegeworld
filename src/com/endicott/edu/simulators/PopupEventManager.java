@@ -5,6 +5,8 @@ import com.endicott.edu.datalayer.PopupEventDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.ui.InterfaceUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -93,7 +95,7 @@ public class PopupEventManager {
      * If so, call the Manager that is support to handle the request, delete the pop event,
      * and return true.  Return false we didn't find that a popup
      */
-    public void removePopupIfButtonPressed(String collegeId, javax.servlet.http.HttpServletRequest request) {
+    public void removePopupIfButtonPressed(String collegeId, HttpServletRequest request) {
         ArrayList<PopupEventModel> tempEvents = new ArrayList<>(getEventsList(collegeId));
         if (InterfaceUtils.isThisParamNameInRequest(request, "readAll")) {
             for (PopupEventModel e : tempEvents) {
@@ -103,14 +105,32 @@ public class PopupEventManager {
             }
             return;
         }
-        for (PopupEventModel e : tempEvents) {
-            if (InterfaceUtils.isThisParamNameInRequest(request, e.getAcknowledgeButtonCallback())) {
-                dao.deletePopupEvent(collegeId, e);
-                return;
-            }else if(InterfaceUtils.isThisParamNameInRequest(request, e.getLeftButtonCallback()) || InterfaceUtils.isThisParamNameInRequest(request, e.getRightButtonCallback())){
-                dao.deletePopupEvent(collegeId, e);
-                return;
 
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+        String queryString = request.getQueryString();
+        String requestAsString = "";
+
+        if (queryString == null) {
+            requestAsString = requestURL.toString();
+        } else {
+            requestAsString = requestURL.append('?').append(queryString).toString();
+        }
+
+        for (PopupEventModel e : tempEvents) {
+            if (requestAsString.contains(Integer.toString(e.getEventId()))) {
+                if (e.getRightButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
+                    // do?
+                    dao.deletePopupEvent(collegeId, e);
+                }
+                else if (e.getLeftButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
+                    // do?
+                    dao.deletePopupEvent(collegeId, e);
+                }
+                else {
+                    // do?
+                    dao.deletePopupEvent(collegeId, e);
+                }
+                return;
             }
         }
     }
