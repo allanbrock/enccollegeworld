@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 /**
  * Created by Ran Ben David on 09/25/2019.
  */
-
+/*
 public class EventsServlet extends javax.servlet.http.HttpServlet {
     private static Logger logger = Logger.getLogger("ViewAboutServlet");
 
@@ -59,4 +59,4 @@ public class EventsServlet extends javax.servlet.http.HttpServlet {
         out.print(res);
         out.flush();
     }
-}
+}*/
