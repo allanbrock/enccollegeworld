@@ -1,8 +1,10 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.BuildingDao;
+import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.datalayer.PopupEventDao;
 import com.endicott.edu.models.BuildingModel;
+import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.google.gson.Gson;
@@ -41,14 +43,16 @@ public class EventOptionChosenServlet extends javax.servlet.http.HttpServlet {
             popupManager = new PopupEventManager();
 
         popupManager.removePopupIfButtonPressed(collegeId, request);
-        PopupEventModel[] popupEvents;
-        popupEvents = PopupEventDao.getPopupEventsArray(collegeId);
+//        PopupEventModel[] popupEvents;
+//        popupEvents = PopupEventDao.getPopupEventsArray(collegeId);
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, popupEvents);
+        EverythingModel allOfEverything = EverythingDao.getEverything(collegeId);
+
+        sendAsJson(response, allOfEverything);
     }
 
     //a utility method to send object

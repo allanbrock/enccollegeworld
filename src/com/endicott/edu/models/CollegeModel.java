@@ -30,7 +30,7 @@ public class CollegeModel implements Serializable {
     private int gate = 0;                    // This is the current gate or level that is open.
     private CollegeMode mode = CollegeMode.PLAY;
     private int daysUntilNextEvent = 3;
-    private boolean isTimePaused = false;
+    private boolean isTimePaused = true;
     //public PopupEventModel;
 
     //Counts amount of total championships won to be tracked in the trophy case

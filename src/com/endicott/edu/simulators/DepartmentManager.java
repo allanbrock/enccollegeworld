@@ -37,7 +37,7 @@ public class DepartmentManager {
         checkDepartmentRatingsForBonuses(collegeId, departmentRatings);
         if(eligibleToAddDepartment() && !newDepartmentReady){
             newDepartmentReady = true;
-            popupManager.newPopupEvent(collegeId,"Eligible to add a new Academic Department!", "Due to the College's academic success, a new department can be added! Go to the faculty page to add a department", "ok", "done", "resources/images/books.png", "Eligible for new department");
+            //popupManager.newPopupEvent(collegeId,"Eligible to add a new Academic Department!", "Due to the College's academic success, a new department can be added! Go to the faculty page to add a department", "ok", "done", "resources/images/books.png", "Eligible for new department");
         }
     }
 

@@ -130,10 +130,10 @@ public class StudentManager {
             //CollegeDao.saveCollege(college);
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) +
                     " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            if (popupManager != null)
-                popupManager.newPopupEvent(collegeId, "Admissions Day",
-                    "" + numNewStudents +" new students joined!","Ok",
-                    "ok", "resources/images/students.png", "Admissions");
+//            if (popupManager != null)
+//                popupManager.newPopupEvent(collegeId, "Admissions Day",
+//                    "" + numNewStudents +" new students joined!","Ok",
+//                    "ok", "resources/images/students.png", "Admissions");
 
         }
 

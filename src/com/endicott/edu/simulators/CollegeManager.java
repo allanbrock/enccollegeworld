@@ -100,6 +100,9 @@ public class CollegeManager {
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
+        PopupEventManager popupMgr = new PopupEventManager();
+        popupMgr.newPopupEvent(collegeId, "Welcome", "Welcome to hour " + college.getHoursAlive(), "ok", "done", "resources/images/money.jpg", "Welcome");
+
         // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
 
@@ -320,6 +323,6 @@ public class CollegeManager {
 
     public static void recieveDepartmentPerformanceBonus(String collegeId, CollegeModel college, String departmentName, PopupEventManager popupManager){
         college.setAvailableCash(college.getAvailableCash() + 10000);
-        popupManager.newPopupEvent(collegeId, "Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
+        //popupManager.newPopupEvent(collegeId, "Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
     }
 }
