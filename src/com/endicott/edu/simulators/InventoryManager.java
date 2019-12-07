@@ -85,7 +85,7 @@ public class InventoryManager {
         // Get the gate that we are at an unlock inventory items.
         // But be careful not to lock an item that was already unlocked.
 //        int gate = CollegeManager.getGate(collegeId);
-        int gate = GateManager.getGateLevel(collegeId);
+        int gate = GateManager.calculateGateLevel(collegeId);
         unlockItems(collegeId, gate);
     }
 }

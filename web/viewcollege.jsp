@@ -188,14 +188,14 @@
 <%--                </div>--%>
                 <div class="col-md-12">
 
-                    <h2>You are on Level <%=GateManager.getGateLevel(college.getRunId())%></h2>
-                    <% int studentsNeeded = Math.max(GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1) - students.length, 0); %>
+                    <h2>You are on Level <%=GateManager.calculateGateLevel(college.getRunId())%></h2>
+                    <% int studentsNeeded = Math.max(GateManager.getGateGoal(GateManager.calculateGateLevel(college.getRunId())+1) - students.length, 0); %>
                     <h3>You need <%=studentsNeeded%> students to get to the next level.</h3>
                     <div class="progress" style="margin-bottom:0">
                         <div class="progress-bar progress-bar-success" role="progressbar"
                              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
                              style="width:<%=GateManager.getOverallGateProgress(college.getRunId())%>%">
-                            <%=students.length%> / <%=GateManager.getGateGoal(GateManager.getGateLevel(college.getRunId())+1)%> students
+                            <%=students.length%> / <%=GateManager.getGateGoal(GateManager.calculateGateLevel(college.getRunId())+1)%> students
                         </div>
                     </div>
                 </div>

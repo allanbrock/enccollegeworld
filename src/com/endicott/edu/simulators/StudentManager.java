@@ -307,8 +307,10 @@ public class StudentManager {
             }
         }
 
-        int percentageWell = 100 - (nSick * 100) / Math.max(students.size(), 1);
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
+        int percentageWell = 100 - (2*(nSick * 100) / Math.max(students.size(), 1));
+        int rating = Math.max(0, percentageWell);
+        rating = Math.min(rating, 100);
+        //int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
         college.setStudentHealthRating(rating);
 
         //CollegeDao.saveCollege(college);

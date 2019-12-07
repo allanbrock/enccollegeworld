@@ -1,7 +1,9 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.GateModel;
 import com.endicott.edu.models.ObjectivesModel;
 
@@ -24,7 +26,6 @@ public class GateManager {
         put(5, 500);
         }
     };
-    private static int gateLevel;
 
     public GateManager() {
     }
@@ -33,11 +34,11 @@ public class GateManager {
      * @param collegeId     unique college string
      * @param key           unique gate string
      * @param description   description for gate
-     * @param gateLevel     1 - 5
+     * @param level     1 - 5
      */
-    public static void createGate(String collegeId, String key, String description, String iconPath, int gateLevel) {
+    public static void createGate(String collegeId, String key, String description, String iconPath, int level) {
         GateDao gateDao = new GateDao();
-        gateDao.saveNewGate(collegeId, new GateModel(key, description, iconPath, gateLevel));
+        gateDao.saveNewGate(collegeId, new GateModel(key, description, iconPath, level));
     }
 
     /**
@@ -55,11 +56,11 @@ public class GateManager {
     }
 
 
-    public static int getGateGoal(int gateLevel) {
-        return (int)GATE_LEVELS.get(gateLevel);
+    public static int getGateGoal(int level) {
+        return (int) GATE_LEVELS.get(level);
     }
 
-    public static int getGateLevel(String collegeId) {
+    public static int calculateGateLevel(String collegeId) {
         int studentCount = StudentDao.getStudents(collegeId).size();
         for(int i = GATE_LEVELS.size()-1; i > 0; i--)
             if(studentCount > (int)GATE_LEVELS.get(i))
@@ -68,7 +69,7 @@ public class GateManager {
     }
 
     public static int getOverallGateProgress(String collegeId) {
-        return 100 * StudentDao.getStudents(collegeId).size() / (int)GATE_LEVELS.get(getGateLevel(collegeId)+1);
+        return 100 * StudentDao.getStudents(collegeId).size() / (int)GATE_LEVELS.get(calculateGateLevel(collegeId)+1);
     }
 
     /**
@@ -125,13 +126,19 @@ public class GateManager {
     }
 
     public static void establishCollege(String collegeId){
-        gateLevel = 0;
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.setGate(0);
+        CollegeDao.saveCollege(college);
     }
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        int oldGateLevel = gateLevel;
-        gateLevel = getGateLevel(collegeId);
-        if(oldGateLevel != gateLevel)
-            popupManager.newPopupEvent(collegeId,"Level Up!", "Congrats you've reached enough students for level " + gateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        int oldGateLevel = college.getGate();
+        int newGateLevel = calculateGateLevel(collegeId);
+        if(newGateLevel > oldGateLevel) {
+            college.setGate(newGateLevel);
+            CollegeDao.saveCollege(college);
+            popupManager.newPopupEvent(collegeId, "Level Up!", "Congrats you've reached enough students for level " + newGateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+        }
     }
 }
