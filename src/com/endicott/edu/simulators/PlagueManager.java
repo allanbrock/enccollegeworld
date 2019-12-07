@@ -114,13 +114,15 @@ public class PlagueManager {
         dao.saveAllPlagues(collegeId, plagues);
     }
 
-    public static void quarantineStudents(String collegeId){
+    public static void quarantineStudents(String collegeId) {
         Accountant accountant = new Accountant();
         PlagueDao dao = new PlagueDao();
         PlagueModel plague = dao.getPlague(collegeId);
-        plague.setQuarantine(true);
-        dao.savePlague(collegeId, plague);
-        accountant.payBill(collegeId, "Students are now quarantined", 5000);
+        if (plague != null) {
+            plague.setQuarantine(true);
+            dao.savePlague(collegeId, plague);
+            accountant.payBill(collegeId, "Students are now quarantined", 5000);
+        }
     }
 
     public static void govHandlesPlagueMutation(String collegeId, javax.servlet.http.HttpServletRequest request, PopupEventManager popupMan){

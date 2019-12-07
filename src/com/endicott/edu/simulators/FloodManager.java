@@ -152,8 +152,9 @@ public class FloodManager {
             popupManager.newPopupEvent(collegeId,"Flood in  "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded!","Ok","okFloodWithUpgrade",
                     "resources/images/DORM.png","Unflooded Dorm");
         }else{
-            popupManager.newPopupEvent(collegeId,"Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Would you like to visit the store to invest in more drains to reduce the probability of future floods? ",
-                    "Go to Store","goToStore","No Thanks","doNothing", "resources/images/flood.png","flooded Dorm");
+            popupManager.newPopupEvent(collegeId,"Flood in "+ theFlood.getDormName()+"!", "Oh no! "+theFlood.getDormName() +" has been flooded! Visit the store to invest in more drains to reduce the probability of future floods.",
+                    "Ok","okFloodWithUpgrade",
+                    "resources/images/DORM.png","Unflooded Dorm");
         }
 
     }

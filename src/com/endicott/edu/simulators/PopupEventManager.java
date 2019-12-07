@@ -119,19 +119,38 @@ public class PopupEventManager {
         for (PopupEventModel e : tempEvents) {
             if (requestAsString.contains(Integer.toString(e.getEventId()))) {
                 if (e.getRightButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
-                    // do?
-                    dao.deletePopupEvent(collegeId, e);
+                    handleCallback(e.getRightButtonCallback(), collegeId);
                 }
-                else if (e.getLeftButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
-                    // do?
-                    dao.deletePopupEvent(collegeId, e);
+                else if (e.getLeftButtonCallback() != null && requestAsString.contains(e.getLeftButtonCallback())) {
+                    handleCallback(e.getLeftButtonCallback(), collegeId);
                 }
-                else {
-                    // do?
-                    dao.deletePopupEvent(collegeId, e);
-                }
+                dao.deletePopupEvent(collegeId, e);
                 return;
             }
+        }
+    }
+
+    private void handleCallback(String callbackName, String collegeId) {
+        if (callbackName.equals("goToStore")){
+            // Well, we'd like to automatically goto the store.  See ViewCollegeServet.
+        }
+
+        if(callbackName.equals("quarantineStudents")){
+            PlagueManager.quarantineStudents(collegeId);
+        }
+        if(callbackName.equals("outSourceHelp")){
+            PopupEventManager popupManager = new PopupEventManager();
+            PlagueManager.govHandlesPlagueMutation(collegeId, null, popupManager);
+        }
+        if(callbackName.equals("inHouseHelp")){
+            PopupEventManager popupManager = new PopupEventManager();
+            PlagueManager.schoolHandlesPlagueMutation(collegeId, null, popupManager);
+        }
+        if(callbackName.equals("picked_pro")) {
+            PlayManager.handleProfessionalDirectorPicked(collegeId);
+        }
+        else if(callbackName.equals("picked_student")){
+            PlayManager.handleStudentDirectorPicked(collegeId);
         }
     }
 

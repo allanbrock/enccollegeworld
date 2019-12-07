@@ -78,11 +78,11 @@ public class FireManager {
                     "resources/images/fire.png", "Plague Doctor");
         } else if (hasUpgradeBeenPurchased() && !fire.isCatastrophic()){
             popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "Repair", "ok" , "resources/images/fire.png",
+                    "Ok", "ok" , "resources/images/fire.png",
                     "Plague Doctor");
         } else {
             popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "OK", "ok",  "resources/images/fire.png",
+                    "Ok", "ok",  "resources/images/fire.png",
                     "Plague Doctor");
         }
     }

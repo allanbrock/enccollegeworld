@@ -42,10 +42,10 @@ public class PlagueDao {
     public PlagueModel getPlague(String collegeId){
         List<PlagueModel> plagues;
         plagues = getPlagues(collegeId);
-        logger.info(plagues.toString());
+        if (plagues == null || plagues.size() <= 0)
+            return null;
+
         return plagues.get(0);
-
-
     }
 
     public void saveAllPlagues(String collegeId, List<PlagueModel> notes){

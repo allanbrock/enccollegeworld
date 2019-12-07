@@ -5,6 +5,7 @@ import com.endicott.edu.models.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.Date;
 
@@ -95,13 +96,18 @@ public class CollegeManager {
      * @param collegeId college name
      */
     static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
-        // Advance time college has been alive.
         CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        // If there is a popup, we are not going to advance the day.
+        // The pop must be cleared through the user inteface first.
+        List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);
+        if (popupEvents == null || popupEvents.size() > 0) {
+            logger.info("Not advancing day because there are pop ups.");
+            return college;
+        }
+
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
-
-        PopupEventManager popupMgr = new PopupEventManager();
-        popupMgr.newPopupEvent(collegeId, "Welcome", "Welcome to hour " + college.getHoursAlive(), "ok", "done", "resources/images/money.jpg", "Welcome");
 
         // How many hours has the college been alive (counting from hour 0).
         int hoursAlive = college.getHoursAlive();
