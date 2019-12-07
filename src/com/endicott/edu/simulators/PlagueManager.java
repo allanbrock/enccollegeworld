@@ -74,7 +74,7 @@ public class PlagueManager {
                             "And the plague continues. " + newVictims +
                                     " more students are infected.  There are now " + newNumberSick + " ill.\n" +
                                     "Purchase a Purell dispensers from the store to reduce the risk of plagues on campus.",
-                            "Ok", "plagueAckCallback2", "Visit Store", "goToStore",
+                            "Ok", "NoCallback",
                             "resources/images/plague.jpg", "Plague Doctor");
                 }
                 else{

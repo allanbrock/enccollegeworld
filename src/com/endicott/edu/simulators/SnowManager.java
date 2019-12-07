@@ -459,8 +459,8 @@ public class SnowManager {
             }else if(!hasLowUpgrade && !isOver){    //if not over, and NO upgrade
                 popupManager.newPopupEvent(collegeId,"Weather Alert: Low Intensity Snow Storm",
                         "Oh no! "+oneBuildingSnowed.getName() +
-                                " has been snowed in! Would you like to buy more Snow Pushers from the store to prevent this from happening so often?",
-                        "Buy Snow Pushers","goToStore","No Thanks","doNothing",
+                                " has been snowed in! Visit the store to buy snowplows.",
+                        "Ok","NoCallback",
                         "resources/images/lowSnowStorm.png","Low Intensity Snow Storm");
             }else if(hasLowUpgrade && !isOver){     //if not over and YES upgrade
                 popupManager.newPopupEvent(collegeId,"Weather Alert: Low Intensity Snow Storm",
@@ -484,8 +484,9 @@ public class SnowManager {
             }else if(!hasMidUpgrade && !isOver){
                 popupManager.newPopupEvent(collegeId,"Weather Alert: Mid-Intensity Blizzard",
                         "Oh no! "+oneBuildingSnowed.getName() +
-                                " has been snowed in! The low temperatures and the amount of fallen snow have caused the pipes to completely freeze. Would you like to buy better and newer pipes from out store? Newer pipes reduce the probability of this happening again, reducing future costs.",
-                        "Buy New Pipes","goToStore","No Thanks","doNothing",
+                                " has been snowed in! The low temperatures and the amount of fallen snow have caused the pipes to completely freeze." +
+                        " Visit the store to buy more freeze-proof pipes.",
+                        "Ok","NoCallback",
                         "resources/images/midBlizzardThunder.png","Mid Intensity Blizzard Storm");
             }else if(hasMidUpgrade && !isOver){
                 popupManager.newPopupEvent(collegeId,"Weather Alert: Mid-Intensity Blizzard",
@@ -511,8 +512,9 @@ public class SnowManager {
             }else if(!hasHighUpgrade && !isOver){
                 popupManager.newPopupEvent(collegeId,"URGENT - WINTER WEATHER MESSAGE",
                         "High Intensity Winter Storm Warning in effect starting today. Expecting 4 to 7 inches of snow. "+ buildingsSnowedIn.get(0).getName() +" and " +buildingsSnowedIn.get(1).getName()+
-                                " have been completely snowed in! Would you like to buy more Snowplows at our store for future use? Buying more Snowplows reduces both the probability of a high-intensity snow storm from happening again and also reduces future snow removal costs.",
-                        "Buy Snowplows","goToStore","No Thanks","doNothing",
+                                " have been completely snowed in! " +
+                                "Visit the store to buy more snowplows.",
+                        "Ok","NoCallback",
                         "resources/images/highHeavySnow.png","Heavy Snow Sign");
             }else if(hasHighUpgrade && !isOver){
                 popupManager.newPopupEvent(collegeId,"URGENT - WINTER WEATHER MESSAGE",

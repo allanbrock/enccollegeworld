@@ -68,23 +68,10 @@ public class FireManager {
     }
 
     private void generateCorrectPopUp(String collegeId, FireModel fire, PopupEventManager popupManager){
-        if (!hasUpgradeBeenPurchased() && !fire.isCatastrophic()){
-            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "Repair", "ok", "Buy Upgrade", "goToStore",
-                    "resources/images/fire.png", "Plague Doctor");
-        } else if (!hasUpgradeBeenPurchased() && fire.isCatastrophic()){
-            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "OK", "ok", "Buy Upgrade", "goToStore",
-                    "resources/images/fire.png", "Plague Doctor");
-        } else if (hasUpgradeBeenPurchased() && !fire.isCatastrophic()){
-            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "Ok", "ok" , "resources/images/fire.png",
-                    "Plague Doctor");
-        } else {
-            popupManager.newPopupEvent(collegeId,"Fire in " + fire.getBuildingBurned().getName(), fire.getDescription(),
-                    "Ok", "ok",  "resources/images/fire.png",
-                    "Plague Doctor");
-        }
+        popupManager.newPopupEvent(collegeId, fire.getBuildingBurned().getName() + " is on fire!",
+                fire.getDescription(),
+                "Ok", "NoCallBack",
+                "resources/images/fire.png", "Fire");
     }
 
 
