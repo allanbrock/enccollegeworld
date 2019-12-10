@@ -228,7 +228,7 @@
                 <div class="col-md-5" style="padding: 10px">
                     <h2><%=student.getName()%></h2>
                     <div class="speech-bubble">
-                        <strong><%=StudentManager.getStudentFeedback(student, college.getRunId())%></strong>
+                        <strong><%=student.getFeedback()%></strong>
                     </div>
                 </div>
 
