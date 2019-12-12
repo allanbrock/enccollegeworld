@@ -2,8 +2,10 @@ package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
+import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.simulators.BuildingManager;
 import com.google.gson.Gson;
 
@@ -41,14 +43,15 @@ public class BuildingServlet extends javax.servlet.http.HttpServlet {
         } else if (splits[2].equalsIgnoreCase("upgrade")) {
             BuildingManager.upgradeBuilding(collegeId, BuildingManager.getBuildingByName(splits[3], collegeId));
         } else if (splits[2].equalsIgnoreCase("purchase")) {
+            BuildingManager.addBuilding(collegeId, splits[3], splits[4], "Medium");
         }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        buildings = BuildingDao.getBuildingsArray(collegeId);
-        sendAsJson(response, buildings);
+        EverythingModel everything = EverythingDao.getEverything(collegeId);
+        sendAsJson(response, everything);
     }
 
     //a utility method to send object
