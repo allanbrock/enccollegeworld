@@ -36,6 +36,6 @@
     </orderEntry>
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
     <orderEntry type="library" name="javax.servlet-api7" level="project" />
-    <orderEntry type="library" name="javax.servlet-api" level="project" />
+    <orderEntry type="library" name="javax.servlet:javax.servlet-api:4.0.1" level="project" />
   </component>
 </module>
