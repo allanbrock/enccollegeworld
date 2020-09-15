@@ -3,7 +3,7 @@ package com.endicott.edu.models;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum BuildingType {
+public enum BuildingSize {
     SMALL(1),
     MEDIUM(2),
     LARGE(3);
@@ -12,18 +12,18 @@ public enum BuildingType {
 
     private static Map map = new HashMap<>();
 
-    private BuildingType(int value) {
+    private BuildingSize(int value) {
         this.value = value;
     }
 
     static {
-        for (BuildingType buildingType : BuildingType.values()) {
-            map.put(buildingType.value, buildingType);
+        for (BuildingSize buildingSize : BuildingSize.values()) {
+            map.put(buildingSize.value, buildingSize);
         }
     }
 
-    public static BuildingType valueOf(int buildingType) {
-        return (BuildingType) map.get(buildingType);
+    public static BuildingSize valueOf(int buildingSize) {
+        return (BuildingSize) map.get(buildingSize);
     }
 
     public int getValue() {
