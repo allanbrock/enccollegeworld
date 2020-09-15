@@ -4,17 +4,17 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.Serializable;
 
 public class BuildingModel implements Serializable {
-    private final static String academicConst = "ACADEMIC";
-    private final static String adminConst = "ADMIN";
-    private final static String diningConst = "DINING";
-    private final static String dormConst = "DORM";
-    private final static String entertainmentConst = "ENTERTAINMENT";
-    private final static String healthConst = "HEALTH";
-    private final static String libraryConst = "LIBRARY";
-    private final static String sportsConst = "SPORTS";
-    private final static String baseballDiamond = "BASEBALL DIAMOND";
-    private final static String footballStadium = "FOOTBALL STADIUM";
-    private final static String hockeyRink = "HOCKEY RINK";
+//    private final static String academicConst = "ACADEMIC";
+//    private final static String adminConst = "ADMIN";
+//    private final static String diningConst = "DINING";
+//    private final static String dormConst = "DORM";
+//    private final static String entertainmentConst = "ENTERTAINMENT";
+//    private final static String healthConst = "HEALTH";
+//    private final static String libraryConst = "LIBRARY";
+//    private final static String sportsConst = "SPORTS";
+//    private final static String baseballDiamond = "BASEBALL DIAMOND";
+//    private final static String footballStadium = "FOOTBALL STADIUM";
+//    private final static String hockeyRink = "HOCKEY RINK";
 
     // These are all changed when the building is made (in the order they're set).
     private String runId = "unknown";
@@ -23,7 +23,7 @@ public class BuildingModel implements Serializable {
     private int numStudents = 0;
     private float hiddenQuality = 0;
     private float shownQuality = 0;
-    private String kindOfBuilding;
+    private BuildingType kindOfBuilding;
     private int totalBuildCost = 0;
     private int upgradeCost = 0;
     private int costPerDay = 0;
@@ -48,7 +48,7 @@ public class BuildingModel implements Serializable {
     private boolean hasBeenAnnouncedAsComplete = true;
 
     //for DormModel, DiningHallModel, and AcademicCenterModel
-    public BuildingModel(String name, int numStudents, String kindOfBuilding, String size){
+    public BuildingModel(String name, int numStudents, BuildingType kindOfBuilding, String size){
         this.name = name;
         this.size = size;
         this.numStudents = numStudents;
@@ -59,7 +59,7 @@ public class BuildingModel implements Serializable {
         this.capacity = setCapacityBasedOnSize(size);
     }
     //For Football Stadium, Hockey Rink, and Baseball Diamond
-    public BuildingModel(String name, String kindOfBuilding, String size){
+    public BuildingModel(String name, BuildingType kindOfBuilding, String size){
         this.name = name;
         this.size = size;
         this.hiddenQuality = 10;
@@ -68,7 +68,7 @@ public class BuildingModel implements Serializable {
         setStatsBasedOnSize(size);
     }
     //for AdministrativeBldgModel, LibraryModel, EntertainmentCenterModel, HealthCenterModel and SportsCenterModel
-    public BuildingModel(String name, String kindOfBuilding){
+    public BuildingModel(String name, BuildingType kindOfBuilding){
         this.name = name;
         this.size = "N/A";
         this.hiddenQuality = 10;
@@ -198,7 +198,7 @@ public class BuildingModel implements Serializable {
     private void setShownQuality(float shownQuality) {this.shownQuality = shownQuality;}
 
     public String getKindOfBuilding() {return kindOfBuilding;}
-    public void setKindOfBuilding(String kindOfBuilding) {this.kindOfBuilding = kindOfBuilding;}
+    public void setKindOfBuilding(BuildingType kindOfBuilding) {this.kindOfBuilding = kindOfBuilding;}
 
     public int getTotalBuildCost(){return this.totalBuildCost;}
     public void setTotalBuildCost(int totalBuildCost){this.totalBuildCost = totalBuildCost;}
