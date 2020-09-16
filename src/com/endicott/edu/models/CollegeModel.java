@@ -10,6 +10,8 @@ public class CollegeModel implements Serializable {
     private int availableCash = 20000;           // amount of money in college bank account
     private int yearlyTuitionCost = 40000;   // the amount it costs to attend the school for a single year
     private int reputation = 50;             // reputation of college based on 1-100
+    private int totalIncome = 0;             // the amount of money the college has
+    private int totalExpenditure = 0;        //the amount of money the college has spent
     private String runId = "unknown";        // name of the college
     private String note = "empty";           // note for debugging
     private int studentBodyHappiness;        // out of 100, 0 is unhappy
@@ -185,6 +187,21 @@ public class CollegeModel implements Serializable {
         this.mode = mode;
     }
 
+    public  int getTotalIncome(){
+        return totalIncome;
+    }
+
+    public void setTotalIncome(int totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public int getTotalExpenditure(){
+        return totalExpenditure;
+    }
+
+    public void setTotalExpenditure(int totalExpenditure){
+        this.totalExpenditure = totalExpenditure;
+    }
     public void setMode(String mode) {
         //Testing the "PopupEventDao"
 //        if (mode.equals("Demo")){
