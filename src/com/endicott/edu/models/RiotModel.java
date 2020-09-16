@@ -8,6 +8,7 @@ public class RiotModel implements Serializable {
     private String runId = "unknown";
     private String description;
     private String name;
+    private String riotLocation = "";
 
     public RiotModel() {
 
@@ -24,4 +25,7 @@ public class RiotModel implements Serializable {
 
     public void setName(String n) {this.name = n;}
     public String getName() {return this.name;}
+
+    public void setRiotLocation(String loc) {this.riotLocation = loc;}
+    public String getRiotLocation() {return this.riotLocation;}
 }
