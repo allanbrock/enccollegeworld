@@ -74,7 +74,7 @@
 
     String beginPurchase = (String) request.getAttribute("beginBuildingPurchase");
     String wasBuildingTypeSelected = (String) request.getAttribute("wasBuildingTypeSelected");
-    String buildingType = (String) request.getAttribute("buildingType");
+    String buildingSize = (String) request.getAttribute("buildingSize");
     String randomName = (String) request.getAttribute("randomName");
     TutorialModel tip = TutorialManager.getCurrentTip("viewBuildings", college.getRunId());
 
@@ -198,7 +198,7 @@
             <div class="col-sm-5" style=" margin-top: 30px;">
         <div class="form-group">
             <%--Sorting dropdown--%>
-            <label for="buildingType">Filter by Building Type</label>
+            <label for="buildingSize">Filter by Building Type</label>
             <select class="form-control" id="sortByBuildingType" name="sortByBuildingType" style="width: 160px;">
                 <option value="All Buildings">All Buildings</option>
                 <option value="Administrative Building">Administrative Building</option>
@@ -319,8 +319,8 @@
                     <input type="submit" class="btn btn-info" name="beginBuildingPurchase" value="Begin">
                 <%}else if(wasBuildingTypeSelected == "false"){ %>
                     <div class="form-group">
-                        <label for="buildingType">Select a building type</label>
-                        <select class="form-control" id="buildingType" name="buildingType">
+                        <label for="buildingSize">Select a building type</label>
+                        <select class="form-control" id="buildingSize" name="buildingSize">
                             <option value="Academic Center">Academic Center</option>
                             <option value="Dining Hall">Dining Hall</option>
                             <option value="Dormitory">Dormitory</option>
@@ -374,8 +374,8 @@
                 <%}else if(wasBuildingTypeSelected == "true"){ %>
                     <!-- if the building selected is a building with a size-->
                     <div class="form-group">
-                        <%if(buildingType.equals("Dormitory") || buildingType.equals("Dining Hall") ||
-                                buildingType.equals("Academic Center")){%>
+                        <%if(buildingSize.equals("Dormitory") || buildingSize.equals("Dining Hall") ||
+                                buildingSize.equals("Academic Center")){%>
                             <label for="buildingSize" > Select a building size</label >
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <!--if they can afford everything they can see everything-->
@@ -393,13 +393,13 @@
                                     <%}%>
                                 <%}%>
                             </select >
-                        <%}else if(buildingType.equals("Football Stadium") || buildingType.equals("Baseball Diamond")
-                                || buildingType.equals("Hockey Rink") && college.getAvailableCash() > 150000){%>
+                        <%}else if(buildingSize.equals("Football Stadium") || buildingSize.equals("Baseball Diamond")
+                                || buildingSize.equals("Hockey Rink") && college.getAvailableCash() > 150000){%>
                             <select class="form-control" id = "buildingSize" name = "buildingSize" >
                                 <option > $150,000 - Medium </option >
                             </select >
                         <%}%>
-                        <h4>Confirm Purchase of <%=buildingType%></h4>
+                        <h4>Confirm Purchase of <%=buildingSize%></h4>
                         <div class="form-group">
                             <%if(randomName != null){%>
                             <input type="text" class="form-control" id="buildingName" name="buildingName"

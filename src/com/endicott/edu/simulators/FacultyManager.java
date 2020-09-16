@@ -400,7 +400,7 @@ public class FacultyManager {
         for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
             sum += f.getPerformance();
         }
-        return sum / FacultyDao.getFaculty(collegeId).size();
+        return sum/FacultyDao.getFaculty(collegeId).size();
     }
 
     private static void loadTips(String collegeId) {

@@ -10,9 +10,12 @@ public class CollegeModel implements Serializable {
     private int availableCash = 20000;           // amount of money in college bank account
     private int yearlyTuitionCost = 40000;   // the amount it costs to attend the school for a single year
     private int reputation = 50;             // reputation of college based on 1-100
+    private int totalIncome = 0;             // the amount of money the college has
+    private int totalExpenditure = 0;        //the amount of money the college has spent
     private String runId = "unknown";        // name of the college
     private String note = "empty";           // note for debugging
     private int studentBodyHappiness;        // out of 100, 0 is unhappy
+    private int facultyBodyHappiness;        // out of 100, 0 is unhappy
     private int studentFacultyRatio = 100;     // number of students per faculty member
     private int numberStudentsAdmitted = 0;  // number of students admitted since college created.
     private int numberStudentsAccepted = 0;  // number of students accepted to the school.
@@ -45,11 +48,12 @@ public class CollegeModel implements Serializable {
     private int wBasketballChampionships = 0;
 
 
+    public void setFacultyBodyHappiness(int n){this.facultyBodyHappiness=n;}
+    public int getFacultyBodyHappiness(){return this.facultyBodyHappiness;}
+
     private Date currentDate;
 
-    public Date getCurrentDate() {
-        return currentDate;
-    }
+    public Date getCurrentDate() { return currentDate;}
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
@@ -185,6 +189,21 @@ public class CollegeModel implements Serializable {
         this.mode = mode;
     }
 
+    public  int getTotalIncome(){
+        return totalIncome;
+    }
+
+    public void setTotalIncome(int totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public int getTotalExpenditure(){
+        return totalExpenditure;
+    }
+
+    public void setTotalExpenditure(int totalExpenditure){
+        this.totalExpenditure = totalExpenditure;
+    }
     public void setMode(String mode) {
         //Testing the "PopupEventDao"
 //        if (mode.equals("Demo")){
