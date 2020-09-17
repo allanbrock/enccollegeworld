@@ -33,10 +33,8 @@ public class StudentManager {
      * Simulate the changes in students and student finances
      * due to passage of time at the college.
      *
-     * @param collegeId The ID of the college the user is currently using
-     * @param hoursAlive The number of hours the college has been alive
-     * Update by Ryan Kelley on 9/14/20
-     * Changed the function that'll withdraw students to actually be called since it was under the wrong name
+     * @param collegeId
+     * @param hoursAlive
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
@@ -64,7 +62,7 @@ public class StudentManager {
     /**
      * Receive student tuition.
      *
-     * @param collegeId The college that the user is currently playing
+     * @param collegeId
      */
     private void receiveStudentTuition(String collegeId) {
         List<StudentModel> students = StudentDao.getStudents(collegeId);
@@ -89,7 +87,7 @@ public class StudentManager {
         //Get the administrative building quality
         int adminBuildingQuality = 0;
         try {
-            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
+            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingType.admin().getType(), collegeId).get(0).getShownQuality();
         } catch (Exception e) {
         }
 
@@ -221,23 +219,18 @@ public class StudentManager {
         int day = CollegeManager.getCollegeCurrentDay(collegeId);
         return (day % 7 == 0);
     }
-
     /**
-     * Withdraw students from the college based on their level of happiness
+     * Withdraw students from the college.
      *
-     * @param collegeId The ID of the college the user is playing on
-     * @param hoursAlive The numbers of hours the college has been alive, sent if there is a news update
-     * Updated by Ryan Kelley on 9/16/20
-     * Changed up the formula to change withdraw rate. Should be solely based on overall happiness now, the higher
-     * the less likely it is to change
+     * @param collegeId
+     * @param hoursAlive
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
 
-        //Commented out because students need to be prepared to leave every day if something very bad happens
-        // if (!isWithdrawlDay(collegeId))
-        // return;
+//        if (!isWithdrawlDay(collegeId))
+//            return;
 
-
+        float scalingFactor = .01f;
         List<StudentModel> students = dao.getStudents(collegeId);
         int nStudents = students.size();
 
@@ -245,16 +238,10 @@ public class StudentManager {
         // the lower the happiness the greater the chance they have of withdrawing
         int studentsWithdrawn = 0;
 
-        //Check each student to see if they will leave or not
-        //Student's happiness is turned into a percent and rolled to see if they leave
-        //If they roll is true they will leave (unless their happiness was .65 or above, otherwise they stay
-        //Adjust numbers as needed, this helps ensure no abuse of students staying with high tuition or other issues
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappinessLevel();
-            double odds = Math.min(1f, h/100.0);
-            CollegeManager.logger.info("Rolling odds to stay with " + odds);
-            if (didItHappen(odds) && odds < .65) {
-                CollegeManager.logger.info("A student has withdrew");
+            float odds = Math.max(1f, (100f - h)/33f) * (1f/60f);
+            if (didItHappen(odds)) {
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
                 studentsWithdrawn++;
@@ -377,56 +364,38 @@ public class StudentManager {
         college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness + rand.nextInt(8)));
     }
 
-    /**
-     * Sets the happiness for each student at the college based upon their happiness in
-     * other categories
-     *
-     * @param collegeId The id of the college the user is playing
-     * @param initial The boolean to determine if this is initial set-up
-     * @param students The list of the students at the college
-     * Update by Ryan Kelley on 9/14/20
-     * Updated to add a function call to see if happiness ratings in any key spots were very low, if so,
-     * their total happiness across the board would decrease and they will want to leave more
-     * Also changed fun happiness to not be calculated in overall happiness for now since it is a value that
-     * can't really be tracked/never changes
-     */
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
         CollegeManager.logger.info("StudentManager: set happiness");
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         int aveFacultyRating = FacultyManager.getAverageFacultyPerformance(collegeId);
 
-        for(int i = 0; i < students.size(); i++) {
-            StudentModel student = students.get(i);
-            setStudentHealthHappiness(student, initial);
-            setStudentAcademicHappiness(student, college);
-            setStudentAdvisorHappiness(student, college, initial);
-            setStudentMoneyHappiness(student, college);
-            setStudentFunHappiness(student, college);
-            setDiningHallHappinessRating(student, college);
-            setAcademicCenterHappinessRating(student, college);
-            setDormHappinessRating(student, college);
-            setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
-            setStudentOverallBuildingHappinessRating(student, college);
-            setStudentFeedback(student, collegeId);
+        for(int i = 0; i < students.size(); i++){
+           StudentModel student = students.get(i);
+           setStudentHealthHappiness(student);
+           setStudentAcademicHappiness(student, college);
+           setStudentAdvisorHappiness(student, college, initial);
+           setStudentMoneyHappiness(student, college);
+           setStudentFunHappiness(student, college);
+           setDiningHallHappinessRating(student, college);
+           setAcademicCenterHappinessRating(student, college);
+           setDormHappinessRating(student, college);
+           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
+           setStudentOverallBuildingHappinessRating(student, college);
+           setStudentFeedback(student, collegeId);
 
-            // Below if you add up the factors on happiness, they sum to 1.0
-            // Check first to see if there is a rating so low that should cause unhappines to go down for everyone
-            Boolean badRating = checkRatings(student);
-            int happiness =
-                (int) (0.1 * student.getAcademicHappinessRating() +
-                        0.1 * student.getHealthHappinessRating() +
-                        0.5 * student.getMoneyHappinessRating() +
-                        //0.1 * student.getFunHappinessRating() +   Add this back when happiness can be influenced/changed?
-                        0.1 * student.getOverallBuildingHappinessRating() +
-                        0.2 * student.getProfessorHappinessRating());
-            if(badRating) {
-                happiness = happiness - 30; //30% more decreased since student is already very unhappy, likely to withdraw
-                //Update the number above if too few/many students are leaving
-            }
-                happiness = Math.min(happiness, 100);
-                happiness = Math.max(happiness, 0);
-                students.get(i).setHappinessLevel(happiness);
+           // Below if you add up the factors on happiness, they sum to 1.0
+
+           int happiness =
+                   (int) (0.1 * student.getAcademicHappinessRating() +
+                          0.1 * student.getHealthHappinessRating() +
+                          0.5 * student.getMoneyHappinessRating() +
+                          0.1 * student.getFunHappinessRating() +
+                          0.1 * student.getOverallBuildingHappinessRating() +
+                          0.1 * student.getProfessorHappinessRating());
+            happiness = Math.min(happiness, 100);
+            happiness = Math.max(happiness, 0);
+            students.get(i).setHappinessLevel(happiness);
         }
 
         dao.saveAllStudents(collegeId, students);
@@ -472,12 +441,6 @@ public class StudentManager {
         s.setFunHappinessRating(50);
     }
 
-    /**
-     * Sets the financial happiness of a single student
-     *
-     * @param s The student to update
-     * @param college The college the user is current playing on
-     */
     private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
 
         // TODO: Bug-fix function to set value that isn't 0.
@@ -520,16 +483,8 @@ public class StudentManager {
         setStudentFeedback(s, college.getRunId());
     }
 
-    /**
-     * Sets the academic happiness for a single student (Values from 100% to 0%)
-     *
-     * @param s The student that is having the value evaluated
-     * @param college The college that the user is currently playing
-     */
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
         int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
-
-        //Change rating by setting an average rating (rating) and a deviation (15) to find happinessRating
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
 
         happinessRating = Math.max(happinessRating, 0);
@@ -545,43 +500,11 @@ public class StudentManager {
         setStudentFeedback(s, college.getRunId());
     }
 
-    /**
-     * Check the health of a student based upon if anyone at the college is sick
-     *
-     * @param s The student to be updated
-     * Update by Ryan Kelley on 9/14/20
-     * Changed the values so that if a student was sick, their happiness rises gradually
-     *  back up instead of going to 100% instantly. Also created an initial value to start at 100
-     */
-    private void setStudentHealthHappiness(StudentModel s, boolean initial) {
-        int studentHealthHappiness = s.getHealthHappinessRating();
-        if (initial) {
-            s.setHealthHappinessRating(100);
-        }
-        else if(s.getNumberHoursLeftBeingSick() > 0){
+    private void setStudentHealthHappiness(StudentModel s) {
+        s.setHealthHappinessRating(100);
+        if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
         }
-        //Check to see if the student is still not 100% happy after being sick, if so, add back 25%
-        else {
-            if (studentHealthHappiness+20 < 100) {
-                s.setHealthHappinessRating(studentHealthHappiness + 25);
-            }
-        }
-    }
-
-    /**
-     * Checks to see if a student is very unhappy in a department. If they are, then their happiness drains on
-     * other categories no matter how good/bad they are
-     *
-     * @param student The student who will be evaluated
-     * @return Returns if the any of the ratings are very bad (true if so, false if not)
-     */
-    private Boolean checkRatings(StudentModel student) {
-        //Check if any of the ratings are extremely poor, if so, drain their happiness
-        //Update this if any new happiness ratings determine the overall student happiness
-        return(student.getAcademicHappinessRating() < 20 || student.getMoneyHappinessRating() < 20 ||
-            student.getFunHappinessRating() < 20 || student.getOverallBuildingHappinessRating() <20 ||
-            student.getProfessorHappinessRating() < 20);
     }
 
     /**
@@ -611,15 +534,15 @@ public class StudentManager {
         for(BuildingModel b : allBuildings){
             // Certain buildings have to be added to the student no matter what
             // These include Health Center, Library, Sports Center, Baseball Diamond, Football Stadium, and Hockey Rink
-            if(b.getKindOfBuilding().equals(BuildingModel.getHealthConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getLibraryConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getSportsConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getBaseballDiamondConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getFootballStadiumConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
+            if(b.getKindOfBuilding().equals(BuildingType.health().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.library().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.sports().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.footballStadium().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType())){
                 studentsBuildingsOnly.add(b);
             }
-            else if(b.getKindOfBuilding().equals(BuildingModel.getEntertainmentConst())){
+            else if(b.getKindOfBuilding().equals(BuildingType.entertainment().getType())){
                 // The entertainment center always adds happiness, but will add more for a higher quality center
                 entertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
             }
@@ -683,18 +606,8 @@ public class StudentManager {
         //CollegeDao.saveCollege(college);
     }
 
-    /**
-     * Rolls for a chance of something happening or not.
-     *
-     * @param oddsBetween0And1 Odds for returning true
-     * @return T/F depending on if the roll was higher/lower respectively
-     * Updated by Ryan Kelley on 9/16/20
-     * Changed function so that you could see the percentage rolled for debugging purposes
-     */
-    private boolean didItHappen(double oddsBetween0And1) {
-        double roll = Math.random();
-        CollegeManager.logger.info("Roll value: " + roll);
-        return (roll > oddsBetween0And1);
+    private boolean didItHappen(float oddsBetween0And1) {
+        return (Math.random() < oddsBetween0And1);
     }
 
     private void loadTips(String collegeId) {
@@ -714,17 +627,17 @@ public class StudentManager {
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){
-            if(buildingType.equals(buildingModel.getDormConst())){
+            if(buildingType.equals(BuildingType.dorm().getType())){
                 if(buildingName.equals(s.getDorm())){
                     buildingMgr.assignDorm(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getDiningConst())){
+            else if(buildingType.equals(BuildingType.dining().getType())){
                 if(buildingName.equals(s.getDiningHall())){
                     buildingMgr.assignDiningHall(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getAcademicConst())){
+            else if(buildingType.equals(BuildingType.academic().getType())){
                 if(buildingName.equals(s.getAcademicBuilding())){
                     buildingMgr.assignAcademicBuilding(collegeId);
                 }

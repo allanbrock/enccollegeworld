@@ -134,7 +134,7 @@
                         int filledBeds = 0;
                         for (BuildingModel b : buildings){
                             if(b.isBuilt()){
-                                if(b.getKindOfBuilding().equals(BuildingModel.getDormConst())) {
+                                if(b.getKindOfBuilding().equals(BuildingType.dorm().getType())) {
                                     int numStudents = b.getNumStudents();
                                     int capacity = b.getCapacity();
                                     openBeds += capacity - numStudents;
@@ -155,7 +155,7 @@
                         int takenPlates = 0;
                         for (BuildingModel b : buildings){
                             if(b.isBuilt()){
-                                if(b.getKindOfBuilding().equals(BuildingModel.getDiningConst())) {
+                                if(b.getKindOfBuilding().equals(BuildingType.dining().getType())) {
                                     int numStudents = b.getNumStudents();
                                     int capacity = b.getCapacity();
                                     availablePlates += capacity - numStudents;
@@ -176,7 +176,7 @@
                         int filledDesks = 0;
                         for (BuildingModel b : buildings){
                             if(b.isBuilt()){
-                                if(b.getKindOfBuilding().equals(BuildingModel.getAcademicConst())) {
+                                if(b.getKindOfBuilding().equals(BuildingType.academic().getType())) {
                                     int numStudents = b.getNumStudents();
                                     int capacity = b.getCapacity();
                                     openDesks += capacity - numStudents;

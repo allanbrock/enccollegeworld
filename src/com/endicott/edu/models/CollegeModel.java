@@ -15,7 +15,6 @@ public class CollegeModel implements Serializable {
     private String runId = "unknown";        // name of the college
     private String note = "empty";           // note for debugging
     private int studentBodyHappiness;        // out of 100, 0 is unhappy
-    private int facultyBodyHappiness;        // out of 100, 0 is unhappy
     private int studentFacultyRatio = 100;     // number of students per faculty member
     private int numberStudentsAdmitted = 0;  // number of students admitted since college created.
     private int numberStudentsAccepted = 0;  // number of students accepted to the school.
@@ -48,12 +47,11 @@ public class CollegeModel implements Serializable {
     private int wBasketballChampionships = 0;
 
 
-    public void setFacultyBodyHappiness(int n){this.facultyBodyHappiness=n;}
-    public int getFacultyBodyHappiness(){return this.facultyBodyHappiness;}
-
     private Date currentDate;
 
-    public Date getCurrentDate() { return currentDate;}
+    public Date getCurrentDate() {
+        return currentDate;
+    }
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;

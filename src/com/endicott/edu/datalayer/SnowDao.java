@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.BuildingModel;
+import com.endicott.edu.models.BuildingType;
 import com.endicott.edu.models.SnowModel;
 
 import javax.ws.rs.WebApplicationException;
@@ -101,8 +102,8 @@ public class SnowDao {
         SnowDao dao = new SnowDao();
         List<BuildingModel> edifList = new ArrayList<>();
 
-        BuildingModel b1 = new BuildingModel("Eva Hall", 50, BuildingModel.getDormConst(),"Medium");
-        BuildingModel b2 = new BuildingModel("Rafa Dorm", 40, BuildingModel.getDormConst(),"Small");
+        BuildingModel b1 = new BuildingModel("Eva Hall", 50, BuildingType.dorm().getType(),"Medium");
+        BuildingModel b2 = new BuildingModel("Rafa Dorm", 40, BuildingType.dorm().getType(),"Small");
         edifList.add(b1);
         edifList.add(b2);
 
