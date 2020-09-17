@@ -34,7 +34,7 @@ public class FloodManager {
         Boolean hasUpgrade = hasUpgradeBeenPurchased(collegeId);
 
         FloodModel flood = FloodDao.getFlood(collegeId);
-        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
+        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingType.dorm().getType(), collegeId);
 
         //If there is NO flood, possibly start one:
         if (flood == null) {
@@ -86,7 +86,7 @@ public class FloodManager {
      * @param hoursAlive
      */
     private void possiblyStartFlood(String collegeId, int hoursAlive, PopupEventManager popupManager, Boolean hasUpgrade) {
-        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingModel.getDormConst(), collegeId);
+        List<BuildingModel> dorms = BuildingManager.getBuildingListByType(BuildingType.dorm().getType(), collegeId);
 
         for (BuildingModel dorm : dorms) {
             if (dorm.getHoursToComplete() <= 0) {   //only if a dorm is FULLY built call didFloodStartAtThisDorm()

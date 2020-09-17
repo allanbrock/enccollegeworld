@@ -38,6 +38,7 @@
 
 
 </head>
+
 <body>
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -158,17 +159,21 @@
             <table class="table table-condensed">
                 <thread>
                     <tr>
-                        <th>Name</th>
+                        <th>School of Arts and Sciences</th>
                     </tr>
                 </thread>
                 <tbody>
                 <%
                     for (int i = 0; i < faculty.size(); i++) {
                 %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Arts and Sciences")) {
+                %>
                 <tr>
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
+
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                         <div id="<%=i%>" class="collapse">
                             <div class="well well-sm">
@@ -185,14 +190,206 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                            <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
                         <%}%>
                     </td>
                 </tr>
+                <%}%>
                 <% } %>
                 </tbody>
             </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Business</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Business")) {
+                %>
+                <tr>
+                    <td><%=faculty.get(i).getFacultyName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary1" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Nursing</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Nursing")){
+                %>
+                <tr>
+                    <td><%=faculty.get(i).getFacultyName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary2" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Sports Science and Fitness</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Sports Science and Fitness")){
+                %>
+                <tr>
+                    <td><%=faculty.get(i).getFacultyName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary3" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+
+
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
@@ -263,6 +460,11 @@
         </table>
     </div>
 </form>
+<script>
+    function checkTitle(){
+
+    }
+</script>
 
 </body>
 </html>

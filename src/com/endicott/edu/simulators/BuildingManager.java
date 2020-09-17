@@ -297,8 +297,8 @@ public class BuildingManager {
     private void buildingDecayForOneDay(String collegeId, BuildingModel b){
         // Only decay buildings that aren't under construction
         // AND aren't the Library, Health Center, or Entertainment Center
-        if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(buildingModel.getLibraryConst()) ||
-        b.getKindOfBuilding().equals(buildingModel.getHealthConst()) || b.getKindOfBuilding().equals(buildingModel.getEntertainmentConst()))
+        if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(BuildingType.library().getType()) ||
+        b.getKindOfBuilding().equals(BuildingType.health().getType()) || b.getKindOfBuilding().equals(BuildingType.entertainment().getType()))
         || b.isUpgradeComplete() == false || b.isRepairComplete() == false)) {
             float currentQuality = b.getHiddenQuality();
             //Generates a random number between 0-1
@@ -381,7 +381,7 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     public String assignDorm(String collegeId) {
-        return findBuildingToAssignToStudent(collegeId, BuildingModel.getDormConst());
+        return findBuildingToAssignToStudent(collegeId, BuildingType.dorm().getType());
     }
 
     /**
@@ -391,7 +391,7 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     public String assignDiningHall(String collegeId) {
-        return findBuildingToAssignToStudent(collegeId, BuildingModel.getDiningConst());
+        return findBuildingToAssignToStudent(collegeId, BuildingType.dining().getType());
     }
 
     /**
@@ -401,7 +401,7 @@ public class BuildingManager {
      * @return the name of the building where the student as placed.  If no space available, return commuter.
      */
     public String assignAcademicBuilding(String collegeId) {
-        return findBuildingToAssignToStudent(collegeId, BuildingModel.getAcademicConst());
+        return findBuildingToAssignToStudent(collegeId, BuildingType.academic().getType());
     }
 
     /**
@@ -454,7 +454,7 @@ public class BuildingManager {
      * @return
      */
     public static int getOpenBeds(String collegeID){
-        return getOpenSpots(collegeID, BuildingModel.getDormConst());
+        return getOpenSpots(collegeID, BuildingType.dorm().getType());
     }
 
     /**
@@ -464,7 +464,7 @@ public class BuildingManager {
      * @return
      */
     public static int getOpenDesks(String collegeID){
-        return getOpenSpots(collegeID, BuildingModel.getAcademicConst());
+        return getOpenSpots(collegeID, BuildingType.academic().getType());
     }
 
     /**
@@ -474,7 +474,7 @@ public class BuildingManager {
      * @return
      */
     public static int getOpenPlates(String collegeID){
-        return getOpenSpots(collegeID, BuildingModel.getDiningConst());
+        return getOpenSpots(collegeID, BuildingType.dining().getType());
     }
 
     /**
