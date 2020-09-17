@@ -2,6 +2,7 @@ package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.ui.InterfaceUtils;
 
 import javax.ws.rs.WebApplicationException;
@@ -91,6 +92,7 @@ public class PopupEventDao {
     }
 
     public static void deletePopupEvent(String runId, PopupEventModel pem) {
+        //CollegeManager.logger.info("GIANA NEKITOPOULOS delete DAO");
         List<PopupEventModel> popupEvents = getPopupEvents(runId);
         popupEvents.remove(pem);
         deletePopupEvents(runId);
