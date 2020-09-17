@@ -230,17 +230,4 @@ public class BuildingModel implements Serializable {
 
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
-
-    // Building consts
-//    public static String getAcademicConst() {return BuildingType.academic().getType();}
-//    public static String getAdminConst() {return BuildingType.admin().getType();}
-//    public static String getDiningConst() {return BuildingType.dining().getType();}
-//    public static String getDormConst() {return BuildingType.dorm().getType();}
-//    public static String getEntertainmentConst() {return BuildingType.entertainment().getType();}
-//    public static String getHealthConst() {return BuildingType.health().getType();}
-//    public static String getLibraryConst() {return BuildingType.library().getType();}
-//    public static String getSportsConst() {return BuildingType.sports().getType();}
-//    public static String getBaseballDiamondConst() {return BuildingType.baseballDiamond().getType();}
-//    public static String getFootballStadiumConst() {return  BuildingType.footballStadium().getType();}
-//    public static String getHockeyRinkConst() {return BuildingType.hockeyRink().getType();}
 }

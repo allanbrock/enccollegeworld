@@ -539,7 +539,7 @@ public class StudentManager {
                     b.getKindOfBuilding().equals(BuildingType.sports().getType()) ||
                     b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType()) ||
                     b.getKindOfBuilding().equals(BuildingType.footballStadium().getType()) ||
-                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType())){
+                    b.getKindOfBuilding().equals(BuildingType.hockeyRink().getType())){
                 studentsBuildingsOnly.add(b);
             }
             else if(b.getKindOfBuilding().equals(BuildingType.entertainment().getType())){
