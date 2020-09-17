@@ -240,8 +240,10 @@ public class StudentManager {
 
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappinessLevel();
-            float odds = Math.max(1f, (100f - h)/33f) * (1f/60f);
-            if (didItHappen(odds)) {
+            double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64% they stay)
+            CollegeManager.logger.info("Odds are: " + odds);
+            if (students.get(i).getHappinessLevel() < .65 && didItHappen(odds)) {
+                CollegeManager.logger.info("A student withdrew!");
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
                 studentsWithdrawn++;
@@ -372,7 +374,7 @@ public class StudentManager {
 
         for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
-           setStudentHealthHappiness(student);
+           setStudentHealthHappiness(student, initial);
            setStudentAcademicHappiness(student, college);
            setStudentAdvisorHappiness(student, college, initial);
            setStudentMoneyHappiness(student, college);
@@ -388,13 +390,19 @@ public class StudentManager {
 
            int happiness =
                    (int) (0.1 * student.getAcademicHappinessRating() +
-                          0.1 * student.getHealthHappinessRating() +
+                          0.2 * student.getHealthHappinessRating() +
                           0.5 * student.getMoneyHappinessRating() +
-                          0.1 * student.getFunHappinessRating() +
+                          //0.1 * student.getFunHappinessRating() +     Uncomment this once Fun can be interacted with
                           0.1 * student.getOverallBuildingHappinessRating() +
                           0.1 * student.getProfessorHappinessRating());
+
+           //If the rating of any one happiness is very low, their overall happiness will drop further
+            if(checkForUnhappiness(student)) {
+                happiness -= 30;
+            }
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
+
             students.get(i).setHappinessLevel(happiness);
         }
 
@@ -500,10 +508,21 @@ public class StudentManager {
         setStudentFeedback(s, college.getRunId());
     }
 
-    private void setStudentHealthHappiness(StudentModel s) {
-        s.setHealthHappinessRating(100);
-        if (s.getNumberHoursLeftBeingSick() > 0){
+    /**
+     * Set the health happiness of a single student
+     *
+     * @param s The student to update
+     * @param initial If this is a first time setup of the college
+     */
+    private void setStudentHealthHappiness(StudentModel s, boolean initial) {
+        if (initial) {
+            s.setHealthHappinessRating(100);
+        }
+        else if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
+        }
+        else if(s.getNumberHoursLeftBeingSick() < 100) {
+            s.setHealthHappinessRating(s.getHealthHappinessRating()+25);
         }
     }
 
@@ -606,9 +625,16 @@ public class StudentManager {
         //CollegeDao.saveCollege(college);
     }
 
-    private boolean didItHappen(float oddsBetween0And1) {
-        return (Math.random() < oddsBetween0And1);
+    private boolean didItHappen(double oddsBetween0And1) {
+        double roll = Math.random();
+        CollegeManager.logger.info("The roll: " + roll);
+        return (roll > oddsBetween0And1);
     }
+
+    private boolean checkForUnhappiness(StudentModel s) {
+        return s.getAcademicHappinessRating() < 20 || s.getHealthHappinessRating() < 20 ||
+                s.getMoneyHappinessRating() < 20 || s.getOverallBuildingHappinessRating() < 20
+                || s.getProfessorHappinessRating() < 20; }
 
     private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
