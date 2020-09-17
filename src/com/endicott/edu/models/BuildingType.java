@@ -1,32 +1,57 @@
 package com.endicott.edu.models;
 
-import java.util.HashMap;
-import java.util.Map;
+public class BuildingType {
+    private String type;
 
-public enum BuildingType {
-    SMALL(1),
-    MEDIUM(2),
-    LARGE(3);
-
-    private int value;
-
-    private static Map map = new HashMap<>();
-
-    private BuildingType(int value) {
-        this.value = value;
+    private BuildingType(String type){
+        this.type = type;
     }
 
-    static {
-        for (BuildingType buildingType : BuildingType.values()) {
-            map.put(buildingType.value, buildingType);
-        }
+    public String getType(){
+        return this.type;
     }
 
-    public static BuildingType valueOf(int buildingType) {
-        return (BuildingType) map.get(buildingType);
+    public static BuildingType academic(){
+        return new BuildingType("ACADEMIC");
     }
 
-    public int getValue() {
-        return value;
+    public static BuildingType admin(){
+        return new BuildingType("ADMIN");
+    }
+
+    public static BuildingType dining(){
+        return new BuildingType("DINING");
+    }
+
+    public static BuildingType dorm(){
+        return new BuildingType("DORM");
+    }
+
+    public static BuildingType entertainment(){
+        return new BuildingType("ENTERTAINMENT");
+    }
+
+    public static BuildingType health(){
+        return new BuildingType("HEALTH");
+    }
+
+    public static BuildingType library(){
+        return new BuildingType("LIBRARY");
+    }
+
+    public static BuildingType sports(){
+        return new BuildingType("SPORTS");
+    }
+
+    public static BuildingType baseballDiamond(){
+        return new BuildingType("BASEBALL DIAMOND");
+    }
+
+    public static BuildingType footballStadium(){
+        return new BuildingType("FOOTBALL STADIUM");
+    }
+
+    public static BuildingType hockeyRink(){
+        return new BuildingType("HOCKEY RINK");
     }
 }

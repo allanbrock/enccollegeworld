@@ -87,7 +87,7 @@ public class StudentManager {
         //Get the administrative building quality
         int adminBuildingQuality = 0;
         try {
-            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
+            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingType.admin().getType(), collegeId).get(0).getShownQuality();
         } catch (Exception e) {
         }
 
@@ -534,15 +534,15 @@ public class StudentManager {
         for(BuildingModel b : allBuildings){
             // Certain buildings have to be added to the student no matter what
             // These include Health Center, Library, Sports Center, Baseball Diamond, Football Stadium, and Hockey Rink
-            if(b.getKindOfBuilding().equals(BuildingModel.getHealthConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getLibraryConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getSportsConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getBaseballDiamondConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getFootballStadiumConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
+            if(b.getKindOfBuilding().equals(BuildingType.health().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.library().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.sports().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.footballStadium().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType())){
                 studentsBuildingsOnly.add(b);
             }
-            else if(b.getKindOfBuilding().equals(BuildingModel.getEntertainmentConst())){
+            else if(b.getKindOfBuilding().equals(BuildingType.entertainment().getType())){
                 // The entertainment center always adds happiness, but will add more for a higher quality center
                 entertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
             }
@@ -627,17 +627,17 @@ public class StudentManager {
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){
-            if(buildingType.equals(buildingModel.getDormConst())){
+            if(buildingType.equals(BuildingType.dorm().getType())){
                 if(buildingName.equals(s.getDorm())){
                     buildingMgr.assignDorm(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getDiningConst())){
+            else if(buildingType.equals(BuildingType.dining().getType())){
                 if(buildingName.equals(s.getDiningHall())){
                     buildingMgr.assignDiningHall(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getAcademicConst())){
+            else if(buildingType.equals(BuildingType.academic().getType())){
                 if(buildingName.equals(s.getAcademicBuilding())){
                     buildingMgr.assignAcademicBuilding(collegeId);
                 }
