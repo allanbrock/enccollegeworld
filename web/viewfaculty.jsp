@@ -173,6 +173,7 @@
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
+
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                         <div id="<%=i%>" class="collapse">
                             <div class="well well-sm">
