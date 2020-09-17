@@ -103,7 +103,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="viewCollege"><%=college.getRunId()%></a></li>
                     <li><a href="viewStudent">Students</a></li>
-                    <li class="active"><a href="/viewBuilding">Buildings</a></li>
+                    <li class="active"><a href="viewBuilding">Buildings</a></li>
                     <li><a href="viewSports">Sports</a></li>
                     <li><a href="viewFaculty">Faculty</a></li>
                     <li><a href="viewGates">Objectives</a></li>

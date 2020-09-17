@@ -202,7 +202,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
+                    <h3>Total Income $<%=numberFormatter.format(college.getTotalIncome())%>
+                    </h3>
+                    <h3>Total Expenditure $<%=numberFormatter.format(college.getTotalExpenditure())%></h3>
+                    <h2>NetBalance $<%=numberFormatter.format(college.getAvailableCash())%>
                     </h2>
 
                     <p>Day <%=college.getCurrentDay()%>
