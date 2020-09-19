@@ -525,7 +525,7 @@ public class StudentManager {
         else if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
         }
-        else if(s.getNumberHoursLeftBeingSick() > 100) {
+        else if(s.getHealthHappinessRating() < 100) {
             s.setHealthHappinessRating(s.getHealthHappinessRating()+25);
         }
     }
