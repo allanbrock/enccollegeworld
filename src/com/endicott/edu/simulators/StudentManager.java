@@ -42,11 +42,11 @@ public class StudentManager {
         CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
         admitStudents(collegeId, hoursAlive, false, popupManager);
 
-        CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
-        receiveStudentTuition(collegeId);
-
         CollegeManager.logger.info("Advance Time Students: withdraw - " + CollegeManager.getDate());
         withdrawStudents(collegeId, hoursAlive);
+
+        CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
+        receiveStudentTuition(collegeId);
 
         CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
         calculateStatistics(collegeId, false);
@@ -214,6 +214,7 @@ public class StudentManager {
 
     /**
      * Is this a day on which figure out which students are leaving the college?
+     * Currently not in use
      */
     private boolean isWithdrawlDay(String collegeId) {
         int day = CollegeManager.getCollegeCurrentDay(collegeId);
@@ -222,13 +223,14 @@ public class StudentManager {
     /**
      * Withdraw students from the college.
      *
-     * @param collegeId
-     * @param hoursAlive
+     * @param collegeId The ID of the college
+     * @param hoursAlive The number of hours the college has been open
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
-
-//        if (!isWithdrawlDay(collegeId))
-//            return;
+        // Commented out due to raising tuition or other events that'll make students want to leave
+        // This might be usuable if tuition is collected weekly as well
+        // if (!isWithdrawlDay(collegeId))
+        // return;
 
         float scalingFactor = .01f;
         List<StudentModel> students = dao.getStudents(collegeId);
@@ -284,6 +286,7 @@ public class StudentManager {
      * @param collegeId
      */
     public void calculateStatistics(String collegeId, boolean initial) {
+        CollegeManager.logger.info("Calculating new student statistics");
         List<StudentModel> students = dao.getStudents(collegeId);
         calculaterOverallStudentHealth(collegeId, students);
         calculateStudentFacultyRatio(collegeId, students);
@@ -364,6 +367,7 @@ public class StudentManager {
 
         Random rand = new Random();
         college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness + rand.nextInt(8)));
+        CollegeManager.logger.info("The new overall financial happiness is: " + college.getStudentFinancialHappiness());
     }
 
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
@@ -521,7 +525,7 @@ public class StudentManager {
         else if (s.getNumberHoursLeftBeingSick() > 0){
             s.setHealthHappinessRating(0);
         }
-        else if(s.getNumberHoursLeftBeingSick() < 100) {
+        else if(s.getNumberHoursLeftBeingSick() > 100) {
             s.setHealthHappinessRating(s.getHealthHappinessRating()+25);
         }
     }
