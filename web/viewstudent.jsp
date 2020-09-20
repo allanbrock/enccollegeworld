@@ -340,6 +340,7 @@
                                     <tr><td><img class="img-responsive" src="resources/images/DINING.png"></td><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/ACADEMIC.png"></td><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/DORM.png"></td><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
+                                    <tr><td><img class=img-responsive" src="resources/images/DORM.png"></td><td>Personality</td><td><%=student.getNature()%></td></tr>
 
                             </table>
                         </div>
