@@ -251,11 +251,13 @@ public class CollegeManager {
      */
     public static CollegeModel updateCollegeTuition(String collegeId, int amount, PopupEventManager popupManager){
         CollegeModel college = CollegeDao.getCollege(collegeId);
+        logger.info("Updating Tuition to: " + amount);
         if ((amount < 0) || (amount > 100000)) {
             popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
             return college;
         }
 
+        college.setPreviousTuitionCost(college.getYearlyTuitionCost());
         college.setYearlyTuitionCost(amount);
         CollegeDao.saveCollege(college);
 
@@ -272,7 +274,8 @@ public class CollegeManager {
     private static void calculateTuitionRating(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(60000, 24000, college.getYearlyTuitionCost());
+        int rating = SimulatorUtilities.getRatingZeroToOneHundred(75000, 25000, college.getYearlyTuitionCost());
+        logger.info("Rating was: " + rating);
         college.setYearlyTuitionRating(rating);
         CollegeDao.saveCollege(college);
     }

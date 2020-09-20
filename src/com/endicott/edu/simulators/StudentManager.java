@@ -21,7 +21,7 @@ public class StudentManager {
      * The college has just been created. Add initial students and calculate
      * student statistics.
      *
-     * @param collegeId
+     * @param collegeId ID of the new college
      */
     public void establishCollege(String collegeId) {
         loadTips(collegeId);
@@ -33,8 +33,8 @@ public class StudentManager {
      * Simulate the changes in students and student finances
      * due to passage of time at the college.
      *
-     * @param collegeId
-     * @param hoursAlive
+     * @param collegeId ID of the college currently in use
+     * @param hoursAlive Amount of time the college has been open
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         acceptStudents(collegeId, hoursAlive);
@@ -149,7 +149,10 @@ public class StudentManager {
     }
 
     /**
-     * Determine how many students to accept in one day.
+     * Determines how many students to accept in one day.
+     *
+     * @param collegeId Id of the college currently in use
+     * @param hoursAlive The amount of hours the college has been open (days)
      */
     private void acceptStudents(String collegeId, int hoursAlive){
         int numNewStudents;
@@ -214,14 +217,19 @@ public class StudentManager {
 
     /**
      * Is this a day on which figure out which students are leaving the college?
-     * Currently not in use
+     * (Not in use as students are set to leave whenever if they are unhappy enough)
+     *
+     * @param collegeId The ID of the college currently in use
+     *
+     * @return True if the current day is divisible by 7, false if not
      */
     private boolean isWithdrawlDay(String collegeId) {
         int day = CollegeManager.getCollegeCurrentDay(collegeId);
         return (day % 7 == 0);
     }
+
     /**
-     * Withdraw students from the college.
+     * Withdraw students from the college, determine by overall happiness.
      *
      * @param collegeId The ID of the college
      * @param hoursAlive The number of hours the college has been open
@@ -243,8 +251,7 @@ public class StudentManager {
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappinessLevel();
             double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64% they stay)
-            CollegeManager.logger.info("Odds are: " + odds);
-            if (students.get(i).getHappinessLevel() < .65 && didItHappen(odds)) {
+            if (students.get(i).getHappinessLevel() < 60 && didItHappen(odds)) {
                 CollegeManager.logger.info("A student withdrew!");
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
@@ -381,7 +388,7 @@ public class StudentManager {
            setStudentHealthHappiness(student, initial);
            setStudentAcademicHappiness(student, college);
            setStudentAdvisorHappiness(student, college, initial);
-           setStudentMoneyHappiness(student, college);
+           setStudentMoneyHappiness(student, college, initial);
            setStudentFunHappiness(student, college);
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
@@ -453,11 +460,22 @@ public class StudentManager {
         s.setFunHappinessRating(50);
     }
 
-    private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
-
-        // TODO: Bug-fix function to set value that isn't 0.
-
-        int rating = college.getYearlyTuitionRating(); // This is rating 0 to 100
+    /**
+     * Sets the money/financial happiness of a single student
+     *
+     * @param s The student having their happiness updated
+     * @param college The college that is currently in use
+     * @param initial Value to determine if this is the first time setup of the college
+     */
+    private void setStudentMoneyHappiness(StudentModel s, CollegeModel college, Boolean initial) {
+        int rating; //The rating of the student
+        if(initial) {
+            //For the initial start, students have a rating of 0 so this needs to be set
+            rating = SimulatorUtilities.getRatingZeroToOneHundred(70000, 20000, college.getYearlyTuitionCost());
+        }
+        else {
+            rating = college.getYearlyTuitionRating(); //Previous rating the student had
+        }
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
@@ -629,22 +647,42 @@ public class StudentManager {
         //CollegeDao.saveCollege(college);
     }
 
+    /**
+     * Rolls a number and returns whether or not the roll was higher than the odds
+     *
+     * @param oddsBetween0And1 The odds of success (.64 = 64% of returning false)
+     *
+     * @return True if the roll was higher, false if lower
+     */
     private boolean didItHappen(double oddsBetween0And1) {
         double roll = Math.random();
-        CollegeManager.logger.info("The roll: " + roll);
         return (roll > oddsBetween0And1);
     }
 
+    /**
+     * Check if a student is very unhappy in any of the overallHappiness categories
+     *
+     * @param s The student to be checked
+     *
+     * @return True if a student is very unhappy in any category, false if not
+     */
     private boolean checkForUnhappiness(StudentModel s) {
         return s.getAcademicHappinessRating() < 20 || s.getHealthHappinessRating() < 20 ||
                 s.getMoneyHappinessRating() < 20 || s.getOverallBuildingHappinessRating() < 20
-                || s.getProfessorHappinessRating() < 20; }
+                || s.getProfessorHappinessRating() < 20;
+    }
 
+    /**
+     * Load up the tips in the Students Tab
+     *
+     * @param collegeId The id of the college in use
+     */
     private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
+        //Add any new tips in here to be displayed in the Student tab
         TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "If the students aren't happy they might leave.", true, "student.png");
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Click on different students to see how they feel.", false);
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "There are many different things that makes a student happy.", false);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Click on different students to see how they are feeling.", false);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Tuition is a major factor in student happiness.", false);
     }
 
     /**

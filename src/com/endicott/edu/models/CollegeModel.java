@@ -9,6 +9,7 @@ public class CollegeModel implements Serializable {
     private int hoursAlive = 0;              // hours the college has been in existence
     private int availableCash = 20000;           // amount of money in college bank account
     private int yearlyTuitionCost = 40000;   // the amount it costs to attend the school for a single year
+    private int previousTuitionCost = 0;    // the tuition amount the user previously set
     private int reputation = 50;             // reputation of college based on 1-100
     private int totalIncome = 0;             // the amount of money the college has
     private int totalExpenditure = 0;        //the amount of money the college has spent
@@ -111,6 +112,10 @@ public class CollegeModel implements Serializable {
     public void setYearlyTuitionCost(int yearlyTuitionCost) {
         this.yearlyTuitionCost = yearlyTuitionCost;
     }
+
+    public int getPreviousTuitionCost() {return previousTuitionCost;}
+
+    public void setPreviousTuitionCost(int cost) {this.previousTuitionCost = cost;}
 
     public int getAvailableCash() {
         return availableCash;
