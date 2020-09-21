@@ -29,6 +29,7 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private String matchedConstantType;
     private String randomName;
     private static Logger logger = Logger.getLogger("ViewBuildingsServlet");
+    private static PopupEventManager popupManager;
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         //InterfaceUtils.logRequestParameters(request);
@@ -243,7 +244,10 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
      */
     private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
-        BuildingManager.upgradeBuilding(runId, building);
+
+        popupManager.newPopupEvent(runId, "UPGRADE", "Please choose what you want to upgrade", "Ok", "ok", "resources/images/largecampus.png", "icon");
+
+//        BuildingManager.upgradeBuilding(runId, building);
 
         doGet(request, response);
 
