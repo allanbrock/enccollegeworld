@@ -815,6 +815,18 @@ public class StudentManager {
         return nouns.get(new Random().nextInt(nouns.size()));
     }
 
+    public int getNumRebelliousStudentsRatio(String collegeId) {
+        int numStudents=0;
+        int totalStudents=0;
+        List<StudentModel> students = dao.getStudents(collegeId);
+        for(StudentModel s : students) {
+            if (s.getNature() == "Rebellious")
+                numStudents += 1;
+            totalStudents += 1;
+        }
+        return totalStudents / numStudents;
+    }
+
     private String assignRandomNature() {
         if (rand.nextInt(10) > 8)
             return "Impulsive";

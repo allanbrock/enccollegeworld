@@ -2,20 +2,25 @@ package com.endicott.edu.simulators;
 
 import java.util.Random;
 
+import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.*;
+import java.util.List;
 
 
 public class RiotManager {
     RiotModel currentRiot = new RiotModel();
+    private Random rand = new Random();
 
     public void handleTimeChange(String runId, int hoursAlive, PopupEventManager popupManager) {
         // Makes a new CollegeModel college and sets it equal to the current college
         CollegeModel college = new CollegeModel();
         college = CollegeDao.getCollege(runId);
+        StudentManager sm = new StudentManager();
+        BuildingManager bm = new BuildingManager();
 
-        checkRiotSeverity(college, runId, hoursAlive, popupManager);
+        checkRiotSeverity(college, sm, bm, runId, hoursAlive, popupManager);
     }
 
     /**
@@ -29,12 +34,12 @@ public class RiotManager {
      * If both student happiness and tuition are acceptable, a regular riot occurs
      * @return void
      */
-    public void checkRiotSeverity(CollegeModel college, String runId, int hoursAlive, PopupEventManager popupManager) {
+    public void checkRiotSeverity(CollegeModel college, StudentManager sm, BuildingManager bm, String runId, int hoursAlive, PopupEventManager popupManager) {
         // Low student happiness and high tuition
         if(college.getStudentBodyHappiness() < 33 && college.getYearlyTuitionCost() > 80000)
             createSevereRiot(runId, currentRiot, popupManager, "Student QoL Sucks and Tuition is too high!");
-        // Low student happiness or High tuition
-        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000)
+        // Low student happiness or High tuition or high percentage of Rebellious students
+        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000 || sm.getNumRebelliousStudentsRatio(runId) > 30)
             createRowdyStudentBehaviour(runId, currentRiot, popupManager, "The students are becoming visibly upset!");
         // Low faculty pay or happiness
         else if(college.getStudentFacultyRatioRating() < 3 || college.getFacultyBodyHappiness() < 50)
@@ -149,6 +154,23 @@ public class RiotManager {
         BuildingManager.getBuildingListByType("Academic", collegeId);
         return building;
     }*/
+
+    /**
+     * Author: Justen Koo
+     * chooses a random building for the riot to have occurred in or nearby, and damages it
+     * @param collegeId
+     * @return
+     */
+    public BuildingModel setRandomLocation(BuildingManager bm, String collegeId) {
+        int numAllBlds = 0;
+        BuildingModel victim = new BuildingModel();
+        List<BuildingModel> allBuildings = BuildingDao.getBuildings(collegeId);
+        for (int i = 0; i < allBuildings.size(); i++)
+            numAllBlds += 1;
+        victim = allBuildings.get(rand.nextInt(numAllBlds));
+        bm.acceleratedDecayAfterDisaster(collegeId, String.valueOf(victim));
+        return victim;
+    }
 
     public boolean isEventActive(String collegeId) {
         return false;
