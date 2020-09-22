@@ -138,6 +138,7 @@ public class StudentManager {
         }
 
         StudentDao.saveAllStudentsUsingCache(collegeId);
+
     }
 
     static public void setStudentIndex(int i) {
@@ -179,6 +180,14 @@ public class StudentManager {
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
+
+            //Generates a random url for the student's avatar
+            AvatarModel avatar = new AvatarModel();
+            String url = avatar.randomize();
+            System.out.println("Creating the url..." + url);
+            student.setAvatarUrl(url);
+            System.out.println("URL: " + avatar.getAvatarUrl());
+
             if (rand.nextInt(10) + 1 > 5) {
                 student.setName(NameGenDao.generateName(false));
                 student.setGender("Male");
@@ -213,7 +222,11 @@ public class StudentManager {
             student.setNature(assignRandomNature());
             students.add(student);
             dao.saveAllStudentsJustToCache(collegeId, students);
+
+//            CollegeManager.logger.info("Generating avatars..." + avatar.getAvatarUrl());
+//            System.out.println(avatar.getAvatarUrl());
         }
+
     }
 
     /**

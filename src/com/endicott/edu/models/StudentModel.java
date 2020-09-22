@@ -1,5 +1,7 @@
 package com.endicott.edu.models;
 
+import com.endicott.edu.simulators.CollegeManager;
+
 import java.io.Serializable;
 
 /**
@@ -34,6 +36,9 @@ public class StudentModel implements Serializable {
     private int overallBuildingHappinessRating = 0;
     private FacultyModel advisor;
     private String nature = "unknown";      // a general idea of what kind of person the student is
+    private String avatar;           //each student will get a randomly generated avatar profile picture
+//    private AvatarModel avatar;
+
 
     public StudentModel() {
     }
@@ -51,6 +56,10 @@ public class StudentModel implements Serializable {
         this.numberHoursLeftBeingSick = numberHoursLeftBeingSick;
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
+
+//        avatar = new AvatarModel();
+
+
     }
 
     public String getName() {
@@ -224,4 +233,12 @@ public class StudentModel implements Serializable {
 
     public void setNature(String n) {this.nature = n;}
     public String getNature(){return this.nature;}
+
+    public String getAvatar(){
+        return avatar;
+    }
+
+    public void setAvatarUrl(String s){
+        avatar = s;
+    }
 }
