@@ -38,6 +38,12 @@
 
 
 </head>
+<style>
+    .icon{
+        width: 60px;
+        height: 60px;
+    }
+</style>
 
 <body>
 <%
@@ -170,6 +176,7 @@
                     if(faculty.get(i).getDepartmentName().equals("Arts and Sciences")) {
                 %>
                 <tr>
+                    <td><img class='icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Kurt&hairColor=BrownDark&facialHairType=Blank&facialHairColor=Brown&clotheType=ShirtScoopNeck&clotheColor=White&eyeType=Default&eyebrowType=FlatNatural&mouthType=Tongue&skinColor=Brown'/></td>
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
@@ -212,6 +219,8 @@
                     if(faculty.get(i).getDepartmentName().equals("Business")) {
                 %>
                 <tr>
+<%--                    <img class="img-responsive" src="resources/images/fun.png">--%>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairMiaWallace&accessoriesType=Round&hairColor=Platinum&facialHairType=MoustacheMagnum&facialHairColor=Black&clotheType=ShirtCrewNeck&clotheColor=Red&eyeType=Happy&eyebrowType=SadConcerned&mouthType=Tongue&skinColor=Tanned'/></td>
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
@@ -255,6 +264,7 @@
                     if(faculty.get(i).getDepartmentName().equals("Nursing")){
                 %>
                 <tr>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Prescription01&hairColor=Platinum&facialHairType=Blank&facialHairColor=Red&clotheType=Overall&clotheColor=Black&eyeType=Wink&eyebrowType=AngryNatural&mouthType=Concerned&skinColor=Black'/></td>
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
@@ -298,6 +308,7 @@
                     if(faculty.get(i).getDepartmentName().equals("Sports Science and Fitness")){
                 %>
                 <tr>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortRound&accessoriesType=Round&hairColor=Black&facialHairType=BeardMagestic&facialHairColor=Brown&clotheType=Hoodie&clotheColor=Black&eyeType=WinkWacky&eyebrowType=Angry&mouthType=Vomit&skinColor=Pale'/></td>
                     <td><%=faculty.get(i).getFacultyName()%>
                     </td>
                     <td>
