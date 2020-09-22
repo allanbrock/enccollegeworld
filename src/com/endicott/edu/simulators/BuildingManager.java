@@ -311,6 +311,16 @@ public class BuildingManager {
     }
 
     /**
+     * Author: Justen Koo
+     * subtracts from building health due to a riot
+     * @param collegeId
+     * @param b
+     */
+    private void setBuildingHealth(String collegeId, BuildingModel b) {
+
+    }
+
+    /**
      * Destroys a building in the case of a catastrophic fire/other disaster.
      *
      * @param buildings
