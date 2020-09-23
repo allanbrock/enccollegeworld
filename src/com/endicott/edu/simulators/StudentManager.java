@@ -425,6 +425,7 @@ public class StudentManager {
             if(checkForUnhappiness(student)) {
                 happiness -= 30;
             }
+            System.out.println("Student happiness: " + happiness);
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
 
@@ -491,6 +492,7 @@ public class StudentManager {
             rating = college.getYearlyTuitionRating(); //Previous rating the student had
         }
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
+        college.setYearlyTuitionRating(rating);
     }
 
     private void setStudentAdvisorHappiness(StudentModel s, CollegeModel college, boolean initial) {
