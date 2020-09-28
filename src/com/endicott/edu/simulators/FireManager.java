@@ -112,7 +112,7 @@ public class FireManager {
 
         if (!isCatastrophic){
             fire.setDescription(victims, hasUpgradeBeenPurchased());
-            buildingManager.acceleratedDecayAfterDisaster(runId,fire.getBuildingBurned().getName());
+            buildingManager.acceleratedDecay(runId,fire.getBuildingBurned().getName(), "disaster");
             fires.add(fire);
             FireDAO.saveNewFire(runId, fire);
             StudentDao.saveAllStudents(runId, students);

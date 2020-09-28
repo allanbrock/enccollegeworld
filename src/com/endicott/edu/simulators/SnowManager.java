@@ -254,7 +254,7 @@ public class SnowManager {
         isHappening = true;
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
         BuildingModel oneBuildingSnowed = getRandCompletedBuilding(buildings);
-        buildingMgr.acceleratedDecayAfterDisaster(collegeId, oneBuildingSnowed.getName());
+        buildingMgr.acceleratedDecay(collegeId, oneBuildingSnowed.getName(), "disaster");
         int lengthOfStorm = generateLengthOfSnow(intensity);
         int midRandCost = generateCostOfSnow(intensity,hasSpecificUpgradePurchased(midUpgradeName,collegeId));
 
@@ -297,8 +297,8 @@ public class SnowManager {
             twoBuild = getRandCompletedBuilding(buildings);
         }
         buildingsSnowedIn.add(oneBuild);
-        buildingMgr.acceleratedDecayAfterDisaster(collegeId, oneBuild.getName());
-        buildingMgr.acceleratedDecayAfterDisaster(collegeId, twoBuild.getName());
+        buildingMgr.acceleratedDecay(collegeId, oneBuild.getName(), "decay");
+        buildingMgr.acceleratedDecay(collegeId, twoBuild.getName(), "decay");
         buildingsSnowedIn.add(twoBuild);
 
         SnowModel intenseSnowStorm = new SnowModel(collegeId, buildingsSnowedIn, intensity, randSevereCost, lengthOfStorm, lengthOfStorm, oneBuild.getTimeSinceLastRepair());
