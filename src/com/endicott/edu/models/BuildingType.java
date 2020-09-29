@@ -1,5 +1,7 @@
 package com.endicott.edu.models;
 
+import java.util.ArrayList;
+
 public class BuildingType {
     private String type;
 

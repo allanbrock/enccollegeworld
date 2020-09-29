@@ -2,6 +2,8 @@ package com.endicott.edu.models;
 
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class BuildingModel implements Serializable {
 
