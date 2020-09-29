@@ -245,9 +245,10 @@ public class ViewBuildingsServlet extends javax.servlet.http.HttpServlet {
     private void upgradeBuilding(HttpServletRequest request, HttpServletResponse response, BuildingModel building) throws javax.servlet.ServletException, IOException {
         String runId = InterfaceUtils.getCollegeIdFromSession(request);
 
-        popupManager.newPopupEvent(runId, "UPGRADE", "Please choose what you want to upgrade", "Ok", "ok", "resources/images/largecampus.png", "icon");
+        //Is currently showing popup on dashboard instead of buildings page
+//        popupManager.newPopupEvent(runId, "UPGRADE", "Please choose what you want to upgrade", "Ok", "ok", "resources/images/largecampus.png", "icon");
 
-//        BuildingManager.upgradeBuilding(runId, building);
+        BuildingManager.upgradeBuilding(runId, building);
 
         doGet(request, response);
 
