@@ -224,7 +224,8 @@
             <div class="row">
                 <div class="col-md-2">
 <%--                    <img class="img-responsive" src="resources/images/student.png">--%>
-                    <img class="img-responsive" src="https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelRed&clotheType=BlazerSweater&eyeType=Default&eyebrowType=RaisedExcited&facialHairColor=Black&facialHairType=MoustacheFancy&hairColor=SilverGray&hatColor=Red&mouthType=Default&skinColor=Pale&topType=Eyepatch">
+<%--                    <img class="img-responsive" src="https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelRed&clotheType=BlazerSweater&eyeType=Default&eyebrowType=RaisedExcited&facialHairColor=Black&facialHairType=MoustacheFancy&hairColor=SilverGray&hatColor=Red&mouthType=Default&skinColor=Pale&topType=Eyepatch">--%>
+                    <img class="img-responsive" src="<%=student.getAvatar()%>">
                 </div>
                 <div class="col-md-5" style="padding: 10px">
                     <h2><%=student.getName()%></h2>
@@ -274,7 +275,9 @@
                                      onclick="select(this)"
                                 >
 <%--                                    <img src="resources/images/student.png">--%>
-                                    <img src="https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelRed&clotheType=BlazerSweater&eyeType=Default&eyebrowType=RaisedExcited&facialHairColor=Black&facialHairType=MoustacheFancy&hairColor=SilverGray&hatColor=Red&mouthType=Default&skinColor=Pale&topType=Eyepatch">
+<%--                                    <img src="https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelRed&clotheType=BlazerSweater&eyeType=Default&eyebrowType=RaisedExcited&facialHairColor=Black&facialHairType=MoustacheFancy&hairColor=SilverGray&hatColor=Red&mouthType=Default&skinColor=Pale&topType=Eyepatch">--%>
+                                        <img src="<%=student.getAvatar()%>">
+<%--                                        <img src="<%=student.getAvatar().getAvatarUrl()%>">--%>
                                     <p><%=students[i].getName().split(" ")[1]%>, <%=students[i].getName().split(" ")[0].charAt(0)%></p>
                                 </div>
                                 <% } %>

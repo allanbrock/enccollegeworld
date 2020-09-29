@@ -188,42 +188,31 @@ public class BuildingManager {
      * @param buildingSize size of building
      */
     public static BuildingModel createCorrectBuildingType(String buildingType, String buildingName, String buildingSize) {
-        if(buildingType.equals("Academic Center")){
+        if(buildingType.equals("Academic Center"))
             return new AcademicCenterModel(buildingName, 0, buildingSize);
-        }
-        else if(buildingType.equals("Administrative Building")){
+        else if(buildingType.equals("Administrative Building"))
             return new AdministrativeBldgModel(buildingName);
-        }
-        else if(buildingType.equals("Dining Hall")){
+        else if(buildingType.equals("Dining Hall"))
             return new DiningHallModel(buildingName, 0, buildingSize);
-        }
-        else if(buildingType.equals("Dormitory")){
+        else if(buildingType.equals("Dormitory"))
             return new DormModel(buildingName, 0, buildingSize);
-        }
-        else if(buildingType.equals("Entertainment Center")){
+        else if(buildingType.equals("Entertainment Center"))
             return new EntertainmentCenterModel(buildingName);
-        }
-        else if(buildingType.equals("Health Center")){
+        else if(buildingType.equals("Health Center"))
             return new HealthCenterModel(buildingName);
-        }
-        else if(buildingType.equals("Library")){
+        else if(buildingType.equals("Library"))
             return new LibraryModel(buildingName);
-        }
-        else if(buildingType.equals("Sports Center")){
+        else if(buildingType.equals("Sports Center"))
             return new SportsCenterModel(buildingName);
-        }
-        else if(buildingType.equals("Baseball Diamond")){
+        else if(buildingType.equals("Baseball Diamond"))
             return new BaseballDiamondModel(buildingName, buildingSize);
-        }
-        else if(buildingType.equals("Football Stadium")){
+        else if(buildingType.equals("Football Stadium"))
             return new FootballStadiumModel(buildingName, buildingSize);
-        }
-        else if(buildingType.equals("Hockey Rink")){
+        else if(buildingType.equals("Hockey Rink"))
             return new HockeyRinkModel(buildingName, buildingSize);
-        }
-        else{ //if for some reason it is none of these it will still make a new building
+        //if for some reason it is none of these it will still make a new building
+        else
             return new BuildingModel();
-        }
     }
 
     /**
@@ -289,17 +278,14 @@ public class BuildingManager {
     }
 
     /**
-     * Handles decaying certain buildings every day.
+     * Handles decaying every building everyday.
      *
      * @param collegeId
      * @param b
      */
     private void buildingDecayForOneDay(String collegeId, BuildingModel b){
         // Only decay buildings that aren't under construction
-        // AND aren't the Library, Health Center, or Entertainment Center
-        if((!(b.getHoursToComplete() > 0|| b.getKindOfBuilding().equals(BuildingType.library().getType()) ||
-        b.getKindOfBuilding().equals(BuildingType.health().getType()) || b.getKindOfBuilding().equals(BuildingType.entertainment().getType()))
-        || b.isUpgradeComplete() == false || b.isRepairComplete() == false)) {
+        if((!(b.getHoursToComplete() > 0 || b.isUpgradeComplete() == false || b.isRepairComplete() == false))){
             float currentQuality = b.getHiddenQuality();
             //Generates a random number between 0-1
             //Multiply by .2 since One hidden quality point = Five shown quality points
@@ -308,16 +294,6 @@ public class BuildingManager {
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
         dao.updateSingleBuildingInCache(collegeId, b);
-    }
-
-    /**
-     * Author: Justen Koo
-     * subtracts from building health due to a riot
-     * @param collegeId
-     * @param b
-     */
-    private void setBuildingHealth(String collegeId, BuildingModel b) {
-
     }
 
     /**
@@ -340,17 +316,21 @@ public class BuildingManager {
 
     /**
      * After a bad disaster, the building quality should drop significantly.
-     * This will only drop the building quality up to 20% and only ONCE (not every day after the disaster).
+     * This will only drop the building quality up to 39.99% for disasters or 24.99% for riots and only ONCE (not every day after the disaster).
      *
      * @param collegeId
      * @param buildingName
      */
-    public void acceleratedDecayAfterDisaster(String collegeId, String buildingName){
+    public void acceleratedDecay(String collegeId, String buildingName, String event){
         List<BuildingModel> buildings = dao.getBuildings(collegeId);
+        double randomDecay;
         for (BuildingModel b : buildings) {
             if (b.getName() == buildingName) {
                 float currentQuality = b.getHiddenQuality();
-                double randomDecay = Math.random() * 4; //Max decay: 20%
+                if (event == "disaster")
+                     randomDecay = Math.random() * 40;
+                else
+                    randomDecay = Math.random() * 25;
                 b.setHiddenQuality((float) (currentQuality - randomDecay));
             }
         }
@@ -380,7 +360,6 @@ public class BuildingManager {
                 return buildingName;
             }
         }
-
         return "Commuter";
     }
 
@@ -430,9 +409,8 @@ public class BuildingManager {
         for (BuildingModel b : buildings) {
             String name = b.getName();
             int s = b.getNumStudents();
-            if (name.equals(dormName) || name.equals(diningName) || name.equals(academicName)) {
+            if (name.equals(dormName) || name.equals(diningName) || name.equals(academicName))
                 b.setNumStudents(s - 1);
-            }
         }
         dao.saveAllBuildings(collegeId, buildings);
     }
@@ -561,11 +539,9 @@ public class BuildingManager {
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         List<BuildingModel> buildingsToReturn = new ArrayList<>();
         for(BuildingModel b : allBuildings){
-            if(b.getKindOfBuilding().equals(buildingType)){
+            if(b.getKindOfBuilding().equals(buildingType))
                 buildingsToReturn.add(b);
-            }
         }
-
         return buildingsToReturn;
     }
 
@@ -580,9 +556,8 @@ public class BuildingManager {
         List<BuildingModel> allBuildings = dao.getBuildings(collegeId);
         BuildingModel buildingToReturn = null;
         for(BuildingModel b : allBuildings){
-            if(b.getName().equals(name)){
+            if(b.getName().equals(name))
                 buildingToReturn = b;
-            }
         }
         return buildingToReturn;
     }
@@ -619,10 +594,3 @@ public class BuildingManager {
         college.setTotalBuildingHealth(Math.min(100, avgHealth + rand.nextInt(8)));
     }
 }
-
-
-
-
-
-
-

@@ -37,24 +37,24 @@ public class RiotManager {
     public void checkRiotSeverity(CollegeModel college, StudentManager sm, BuildingManager bm, String runId, int hoursAlive, PopupEventManager popupManager) {
         // Low student happiness and high tuition
         if(college.getStudentBodyHappiness() < 33 && college.getYearlyTuitionCost() > 80000)
-            createSevereRiot(runId, currentRiot, popupManager, "Student QoL Sucks and Tuition is too high!");
+            createSevereRiot(bm, runId, currentRiot, popupManager, "Student QoL Sucks and Tuition is too high!");
         // Low student happiness or High tuition or high percentage of Rebellious students
-        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000 || sm.getNumRebelliousStudentsRatio(runId) > 30)
-            createRowdyStudentBehaviour(runId, currentRiot, popupManager, "The students are becoming visibly upset!");
+        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000 || sm.getNumRebelliousStudentsRatio(runId) > 5)
+            createRowdyStudentBehaviour(runId, bm, currentRiot, popupManager, "The students are becoming visibly upset!");
         // Low faculty pay or happiness
         else if(college.getStudentFacultyRatioRating() < 3 || college.getFacultyBodyHappiness() < 50)
-            createFacultyRiot(runId, currentRiot, popupManager, "You Aren't Treating The Faculty Well");
+            createFacultyRiot(bm, runId, currentRiot, popupManager, "You Aren't Treating The Faculty Well");
         // Number of students drops below certain amount
         else if(college.getRetentionRate() < 60f)
-            createStakeholderRiot(runId, currentRiot, popupManager, "The Stakeholders are pissed you messed up the school");
+            createStakeholderRiot(bm, runId, currentRiot, popupManager, "The Stakeholders are pissed you messed up the school");
         // Acceptable happiness and tuition
         else {
             createRegularRiot(runId, currentRiot, popupManager, randomRiotDescription());
-            letPeopleRiot(runId, 5000, 2000, 0, 5000, "Boring");
         }
     }
 
-    public void letPeopleRiot(String runID, int mean, int stdDev, int min, int max, String msg) {
+    public void letPeopleRiot(BuildingManager bm, String runID, int mean, int stdDev, int min, int max, String msg) {
+        setRandomLocation(bm, runID);
         int amt = SimulatorUtilities.getRandomNumberWithNormalDistribution(mean, stdDev, min, max);
         Accountant.payBill(runID, msg + " This cost you: ", amt );
     }
@@ -72,13 +72,13 @@ public class RiotManager {
      * @param
      * @return
      */
-    public void createSevereRiot(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
+    public void createSevereRiot(BuildingManager bm, String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
         riot.setName(cause);
         riot.setRiotCost(250000);
         //chooseBuildingVictim();
         riot.setDescription("Mayhem has broken loose across the student body! They demand lower tuition and better quality of life!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
-        letPeopleRiot(collegeId, 5000, 2000, 0, riot.getRiotCost(), "You really messed up.");
+        letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "You really messed up.");
     }
 
     /**
@@ -87,35 +87,34 @@ public class RiotManager {
      * @param
      * @return
      */
-    public void createFacultyRiot(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
+    public void createFacultyRiot(BuildingManager bm, String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
         riot.setName(cause);
         riot.setRiotCost(150000);
-        //chooseBuildingVictim();
         riot.setDescription("The faculty are fed up with the administration! They have started to boycott teaching!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
-        letPeopleRiot(collegeId, 5000, 2000, 0, riot.getRiotCost(), "Professors aren't professing.");
+        letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "Professors aren't professing.");
     }
 
     /**
      * Author: Justen Koo
      * Defaces a random school property due to rowdy student behaviour
      */
-    public void createRowdyStudentBehaviour(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
+    public void createRowdyStudentBehaviour(String collegeId, BuildingManager bm, RiotModel riot, PopupEventManager popupManager, String cause) {
         riot.setName(cause);
         riot.setRiotCost(5000);
-        // chooseBuildingVictim(collegeId);
         riot.setDescription("A group of rowdy students defaced school property!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
-        letPeopleRiot(collegeId, 5000, 2000, 0, riot.getRiotCost(), "This gang of hooligans were destructive.");
+        letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "This gang of hooligans were destructive.");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
     }
 
-    public void createStakeholderRiot(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
+    public void createStakeholderRiot(BuildingManager bm, String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
         riot.setName(cause);
         riot.setRiotCost(50000);
         // chooseBuildingVictim(collegeId)
         riot.setDescription("Your stakeholders aren't happy with your management");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
-        letPeopleRiot(collegeId, riot.getRiotCost(), 2000, 0, riot.getRiotCost(), "They did a lot of damage.");
+        letPeopleRiot(bm, collegeId, riot.getRiotCost(), 25000, 0, riot.getRiotCost(), "They did a lot of damage.");
     }
 
     public static void createSportsRiot(String collegeId, SportModel sport, RiotModel riot, PopupEventManager popupManager) {
@@ -168,7 +167,7 @@ public class RiotManager {
         for (int i = 0; i < allBuildings.size(); i++)
             numAllBlds += 1;
         victim = allBuildings.get(rand.nextInt(numAllBlds));
-        bm.acceleratedDecayAfterDisaster(collegeId, String.valueOf(victim));
+        bm.acceleratedDecay(collegeId, String.valueOf(victim), "riot");
         return victim;
     }
 
