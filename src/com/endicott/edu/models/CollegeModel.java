@@ -28,9 +28,11 @@ public class CollegeModel implements Serializable {
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
     private int studentRecreationalHappiness = 0; // 0 to 100 rating of student recreational happiness
     private int studentFinancialHappiness = 0; // 0 to 100 rating of student recreational happiness
+    private int studentBuildingHappiness = 0;
+    private int studentProfessorHappiness = 0;
     private int totalBuildingHealth = 0; // 0 to 100 average of all buildings health
     private int departmentCount = 4;
-    private int academicRating = 0;
+    private int studentAcademicHappiness = 0;
     private int gate = 0;                    // This is the current gate or level that is open.
     private CollegeMode mode = CollegeMode.PLAY;
     private int daysUntilNextEvent = 3;
@@ -80,6 +82,14 @@ public class CollegeModel implements Serializable {
     public void setStudentFinancialHappiness(int studentFinancialHappiness) { this.studentFinancialHappiness = studentFinancialHappiness;}
 
     public int getStudentFinancialHappiness() {return studentFinancialHappiness;}
+
+    public void setStudentBuildingHappiness(int studentBuildingHappiness) { this.studentBuildingHappiness = studentBuildingHappiness;}
+
+    public int getStudentBuildingHappiness() {return studentBuildingHappiness;}
+
+    public void setStudentProfessorHappiness(int studentProfessorHappiness) { this.studentProfessorHappiness = studentProfessorHappiness;}
+
+    public int getStudentProfessorHappiness() {return studentProfessorHappiness;}
 
     public int getStudentFacultyRatioRating() {
         return studentFacultyRatioRating;
@@ -249,9 +259,9 @@ public class CollegeModel implements Serializable {
 
     public int getSoftballChampionships() { return softballChampionships;}
 
-    public int getAcademicRating() { return academicRating; }
+    public int getStudentAcademicHappiness() { return studentAcademicHappiness; }
 
-    public void setAcademicRating(int academicRating) { this.academicRating = academicRating; }
+    public void setStudentAcademicHappiness(int studentAcademicHappiness) { this.studentAcademicHappiness = studentAcademicHappiness; }
 
     public int getGate() {
         return gate;

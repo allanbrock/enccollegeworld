@@ -309,17 +309,57 @@ public class StudentManager {
     public void calculateStatistics(String collegeId, boolean initial) {
         CollegeManager.logger.info("Calculating new student statistics");
         List<StudentModel> students = dao.getStudents(collegeId);
-        calculaterOverallStudentHealth(collegeId, students);
         calculateStudentFacultyRatio(collegeId, students);
         calculateStudentFacultyRatioRating(collegeId);
 
         setHappinessForEachStudent(collegeId, initial, students);
 
-        calculateOverallStudentHappiness(collegeId, students);
-        calculateOverallStudentRecreationalHappiness(collegeId, students);
-        calculateOverallStudentFinancialHappiness(collegeId, students);
-
+        calculateAllAverageHappiness(collegeId, students);
         calculateRetentionRate(collegeId);
+    }
+
+    private void calculateAllAverageHappiness(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: Calculating average happinesses");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        //Variables to find sums of total student happinesses
+        int healthHappinessSum = 0;
+        int happinessSum = 0;
+        int recHappinessSum = 0;
+        int finHappinessSum = 0;
+        int acaHappinessSum = 0;
+        int buildHappinessSum = 0;
+        int profHappinessSum = 0;
+
+        //Loop through and find individual student's happiness in every category
+        for (int i = 0; i < students.size(); i++) {
+            healthHappinessSum += students.get(i).getHealthHappinessRating();
+            happinessSum += students.get(i).getHappinessLevel();
+            recHappinessSum += students.get(i).getFunHappinessRating();
+            finHappinessSum += students.get(i).getMoneyHappinessRating();
+            acaHappinessSum += students.get(i).getAcademicHappinessRating();
+            buildHappinessSum += students.get(i).getOverallBuildingHappinessRating();
+            profHappinessSum += students.get(i).getProfessorHappinessRating();
+
+        }
+
+        //Calculate the average happiness of student population for all
+        int avgHealthHappiness = healthHappinessSum/Math.max(1, students.size());
+        int avgHappiness = happinessSum/Math.max(1,students.size());
+        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
+        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
+        int avgAcaHappiness = acaHappinessSum/Math.max(1,students.size());
+        int avgBuildHappiness = buildHappinessSum/Math.max(1,students.size());
+        int avgProfHappiness = profHappinessSum/Math.max(1,students.size());
+
+        //Set the happinesses averages accordingly, making sure they stay at 100 or below
+        college.setStudentBodyHappiness(Math.min(100, avgHealthHappiness));
+        college.setStudentBodyHappiness(Math.min(100, avgHappiness));
+        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness));
+        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness));
+        college.setStudentAcademicHappiness(Math.min(100, avgAcaHappiness));
+        college.setStudentBuildingHappiness(avgBuildHappiness);
+        college.setStudentProfessorHappiness(avgProfHappiness);
     }
 
     private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
