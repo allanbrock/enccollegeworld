@@ -258,7 +258,7 @@
                             <div class="studentContainer">
                                 <%
                                     for (int i = 0; i < students.length; i++) {
-                                        int happiness = students[i].getHappinessLevel();
+                                        int happiness = students[i].getHappiness();
                                 %>
 
                                 <div class = "studentElement" id="<%=i%>"
@@ -300,7 +300,7 @@
                                 <tr>
                                     <td></td>
                                     <td>ID Number: </td>
-                                    <td><%=student.getIdNumber()%></td>
+                                    <td><%=student.getId()%></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -332,7 +332,7 @@
                                     <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
                                 <tr/>
                                 <% } %>
-                                    <tr><td><img class="img-responsive" src="resources/images/fun.png"><td><td><b>Overall Happiness</b></td><td><%=student.getHappinessLevel()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/fun.png"><td><td><b>Overall Happiness</b></td><td><%=student.getHappiness()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/books.png"></td></td><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/advisor.png"></td><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/HEALTH.png"></td><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>

@@ -42,7 +42,7 @@ public class StudentDao {
             e.printStackTrace();
         }
 
-        Collections.sort(students, (o1, o2) -> o2.getHappinessLevel() - o1.getHappinessLevel());
+        Collections.sort(students, (o1, o2) -> o2.getHappiness() - o1.getHappiness());
         cache.put(runId,students);
 
         return students;

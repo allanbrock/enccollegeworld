@@ -177,6 +177,14 @@ public class StudentManager {
         }
     }
 
+    /**
+     * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
+     *
+     * @param numNewStudents The number of new students to be made
+     * @param collegeId The id of the college in use
+     * @param students The list of students currently at the college
+     * @param initial Check if this is the first time setup for the college
+     */
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
@@ -184,20 +192,18 @@ public class StudentManager {
             //Generates a random url for the student's avatar
             AvatarModel avatar = new AvatarModel();
             String url = avatar.randomize();
-            System.out.println("Creating the url..." + url);
             student.setAvatarUrl(url);
-            System.out.println("URL: " + avatar.getAvatarUrl());
 
             if (rand.nextInt(10) + 1 > 5) {
                 student.setName(NameGenDao.generateName(false));
-                student.setGender("Male");
+                student.setGender(GenderModel.MALE);
             } else {
                 student.setName(NameGenDao.generateName(true));
-                student.setGender("Female");
+                student.setGender(GenderModel.FEMALE);
             }
 
-            student.setIdNumber(IdNumberGenDao.getID(collegeId));
-            student.setHappinessLevel(70);
+            student.setId(IdNumberGenDao.getID(collegeId));
+            student.setHappiness(90);
             if(i <= 50 && initial) {
                 student.setAthleticAbility(rand.nextInt(5) + 5);
             }
@@ -263,9 +269,9 @@ public class StudentManager {
         int studentsWithdrawn = 0;
 
         for (int i = 0; i < students.size(); i++){
-            int h = students.get(i).getHappinessLevel();
+            int h = students.get(i).getHappiness();
             double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64% they stay)
-            if (students.get(i).getHappinessLevel() < 60 && didItHappen(odds)) {
+            if (students.get(i).getHappiness() < 60 && didItHappen(odds)) {
                 CollegeManager.logger.info("A student withdrew!");
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
@@ -334,7 +340,7 @@ public class StudentManager {
         //Loop through and find individual student's happiness in every category
         for (int i = 0; i < students.size(); i++) {
             healthHappinessSum += students.get(i).getHealthHappinessRating();
-            happinessSum += students.get(i).getHappinessLevel();
+            happinessSum += students.get(i).getHappiness();
             recHappinessSum += students.get(i).getFunHappinessRating();
             finHappinessSum += students.get(i).getMoneyHappinessRating();
             acaHappinessSum += students.get(i).getAcademicHappinessRating();
@@ -388,7 +394,7 @@ public class StudentManager {
 
         int happinessSum = 0;
         for (int i = 0; i < students.size(); i++) {
-            happinessSum += students.get(i).getHappinessLevel();
+            happinessSum += students.get(i).getHappiness();
         }
 
         int aveHappiness = happinessSum/Math.max(1,students.size());
@@ -469,7 +475,7 @@ public class StudentManager {
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
 
-            students.get(i).setHappinessLevel(happiness);
+            students.get(i).setHappiness(happiness);
         }
 
         dao.saveAllStudents(collegeId, students);
@@ -791,12 +797,12 @@ public class StudentManager {
 //      happinessLevels.put("fun" , student.getFunHappinessRating());
 
         // Negative feedback
-        if(student.getHappinessLevel() < 50) {
+        if(student.getHappiness() < 50) {
             Collections.addAll(verbs,"hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
             Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
 
         // Positive feedback
-        } else if(student.getHappinessLevel() > 70) {
+        } else if(student.getHappiness() > 70) {
             Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
             Collections.addAll(adjectives, "great ", "fantastic ", "super ", "surprisingly well ");
 
@@ -832,9 +838,9 @@ public class StudentManager {
         feedback += conclusion[new Random().nextInt(conclusion.length)];
         String[] positivePunctuation = {"!", "!!", "!!!"};
         String[] negativePunctuation = {".", "..", "..."};
-        if(student.getHappinessLevel() < 50) {
+        if(student.getHappiness() < 50) {
             feedback += negativePunctuation[new Random().nextInt(negativePunctuation.length)];
-        } else if (student.getHappinessLevel() > 70) {
+        } else if (student.getHappiness() > 70) {
             feedback += positivePunctuation[new Random().nextInt(positivePunctuation.length)];
         } else {
             feedback += ".";
