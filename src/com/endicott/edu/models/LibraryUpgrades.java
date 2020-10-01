@@ -7,6 +7,7 @@ public class LibraryUpgrades {
     private Upgrades computers= new Upgrades("Computers", 3200, 50);
     private Upgrades printers = new Upgrades("Printers", 5000, 50);
     private Upgrades seating = new Upgrades("Seating", 500, 50);
+    public static final int maxLevel = 3;
 
     private LibraryUpgrades(){
         libraryUpgrades = new ArrayList<Upgrades>();

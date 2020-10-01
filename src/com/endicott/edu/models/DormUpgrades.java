@@ -7,6 +7,7 @@ public class DormUpgrades {
     private Upgrades airConditioning= new Upgrades("Air Conditioning", 10000, 50);
     private Upgrades plumbing= new Upgrades("Plumbing", 3200, 50);
     private Upgrades commonRooms = new Upgrades("CommonRooms", 5000, 50);
+    public static final int maxLevel = 5;
 
     private DormUpgrades(){
         dormUpgrades = new ArrayList<Upgrades>();
