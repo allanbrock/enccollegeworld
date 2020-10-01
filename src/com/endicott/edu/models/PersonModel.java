@@ -3,10 +3,10 @@ package com.endicott.edu.models;
 //Authors
 //Ryan Kelley, Marissa Patti, Giana Nekitopoulos
 
-//Method is the Superclass for all people in the game (students, faculty, eventually coaches?)
+//Class is the Superclass for all people in the game
 //Implement this class in any class where your defining a new type of person in the college
 public abstract class PersonModel {
-    protected String fullName;
+    protected String name;                //The full name of the person
     protected String firstName;           //The first name of the person
     protected String lastName;            //The last name of the person
     protected GenderModel gender;         //The gender of the person (male/female)
@@ -24,7 +24,7 @@ public abstract class PersonModel {
         this.gender = gender;
         this.id = id;
         this.happiness = happiness;
-        fullName = firstName + " " + lastName;
+        name = firstName + " " + lastName;
     }
 
     public void setFirstName(String s) {this.firstName = s; }
@@ -33,12 +33,19 @@ public abstract class PersonModel {
     public void setLastName(String s) {this.lastName = s; }
     public String getLastName() {return this.lastName;}
 
-    public String getFullName() {return fullName;}
-    public void setFullName(String firstName, String lastName) {this.fullName = firstName + " " + lastName;}
-    public void setFullName(String fullName) {this.fullName = fullName;}
+    public String getName() {return name;}
+    public void setName(String firstName, String lastName) {this.name = firstName + " " + lastName;}
+    public void setName(String fullName) {this.name = fullName;}
 
     public void setGender(GenderModel gender) { this.gender = gender; }
-    public GenderModel getGender() {return gender;}
+    public String getGender() {
+        if(this.gender == GenderModel.FEMALE) {
+            return "FEMALE";
+        }
+        else {
+            return "MALE";
+        }
+    }
 
     public void setId(int i) {this.id = i;}
     public int getId() {return this.id;}

@@ -7,17 +7,13 @@ import java.io.Serializable;
 /**
  * Created by Connor Frazier on 9/12/2017.
  */
-public class StudentModel implements Serializable {
-    private String name = "unknown";
-    private int idNumber = 0;
-    private int happinessLevel = 0; //0-100
+public class StudentModel extends PersonModel implements Serializable {
     private boolean athlete = false;
     private int athleticAbility = 0; //0-10
     private String team = "unknown";
     private String dorm = "unknown";
     private String diningHall = "unknown";
     private String academicBuilding = "unknown";
-    private String gender = "unknown";
     private String runId = "unknown";
     private String note = "no note";
     private String feedback = "";
@@ -43,44 +39,17 @@ public class StudentModel implements Serializable {
     public StudentModel() {
     }
 
-    public StudentModel(String name, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String Gender, String runId, int numberHoursBeenSick, int numberHoursLeftBeingSick, int hourLastUpdated, String nature) {
-        this.name = name;
-        this.idNumber = idNumber;
-        this.happinessLevel = happinessLevel;
+    public StudentModel(String firstName, String lastName, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, GenderModel gender, String runId, int numberHoursBeenSick, int numberHoursLeftBeingSick, int hourLastUpdated, String nature) {
+        super(firstName, lastName, gender, idNumber, happinessLevel);
         this.athlete = athlete;
         this.athleticAbility = athleticAbility;
         this.dorm = dorm;
-        this.gender = gender;
         this.runId = runId;
         this.numberHoursBeenSick = numberHoursBeenSick;
         this.numberHoursLeftBeingSick = numberHoursLeftBeingSick;
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
-
-//        avatar = new AvatarModel();
-
-
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getIdNumber() {
-        return idNumber;
-    }
-    public void setIdNumber(int idNumber) {
-        this.idNumber = idNumber;
-    }
-
-    public int getHappinessLevel() {
-        return happinessLevel;
-    }
-    public void setHappinessLevel(int happinessLevel) {
-        this.happinessLevel = happinessLevel;
+        //avatar = new AvatarModel();
     }
 
     public boolean isAthlete() {
@@ -134,13 +103,6 @@ public class StudentModel implements Serializable {
 
     public String getFeedback() { return feedback; }
     public void setFeedback(String feedback) { this.feedback = feedback;}
-
-    public String getGender() {
-        return gender;
-    }
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getRunId() {
         return runId;
