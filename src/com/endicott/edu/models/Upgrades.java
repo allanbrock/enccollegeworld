@@ -32,4 +32,6 @@ public class Upgrades {
     public void increaseLevel(){
         this.level++;
     }
+
+    public void decreaseLevel(){this.level--;}
 }

@@ -117,7 +117,7 @@ public class RiotManager {
         letPeopleRiot(bm, collegeId, riot.getRiotCost(), 25000, 0, riot.getRiotCost(), "They did a lot of damage.");
     }
 
-    public static void createSportsRiot(String collegeId, SportModel sport, RiotModel riot, PopupEventManager popupManager) {
+    public static void createSportsRiot(/*BuildingManager bm*/String collegeId, SportModel sport, RiotModel riot, PopupEventManager popupManager) {
         if (sport.getSportName().equals("$50,000 - Men's Basketball")) {
             riot.setName("Men's Basketball Riot");
             riot.setDescription("Your Men's Basketball team has won a conference championship! A riot has broke out on campus, it will cost you $" + riot.getRiotCost());
@@ -141,18 +141,10 @@ public class RiotManager {
             riot.setDescription("Your Softball team has won a conference championship! A riot has broke out on campus");
         }
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
-    }
+        // FIXME: Add support in SportManager so that createSportsRiot is passed a BuildingManager reference
+        // letPeopleRiot(bm, collegeId, riot.getRiotCost(), 25000, 0, riot.getRiotCost(), "They did a lot of damage.");
 
-    /**
-     * Author: Justen Koo
-     * Compares the satisfaction levels of all of the buildings and causes the riot to occur at the one with the lowest
-     * @param
-     * @return
-     */
-    /*public String chooseBuildingVictim(String collegeId) {
-        BuildingManager.getBuildingListByType("Academic", collegeId);
-        return building;
-    }*/
+    }
 
     /**
      * Author: Justen Koo
