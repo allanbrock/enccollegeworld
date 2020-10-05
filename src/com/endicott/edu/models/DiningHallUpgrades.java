@@ -6,7 +6,7 @@ public class DiningHallUpgrades {
     private Upgrades foodVariety= new Upgrades("Food Variety", 10000, 50);
     private Upgrades cutleries= new Upgrades("Cutleries", 3200, 50);
     private Upgrades staff = new Upgrades("Staff", 5000, 50);
-    public static final int maxLevel = 10;
+
 
     private DiningHallUpgrades(){
         diningUpgrades = new ArrayList<Upgrades>();
