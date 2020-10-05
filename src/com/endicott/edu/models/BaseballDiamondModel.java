@@ -2,20 +2,14 @@ package com.endicott.edu.models;
 import java.util.ArrayList;
 
 public class BaseballDiamondModel extends BuildingModel{
-    private Upgrades grassQuality = new Upgrades("bbGrass",0, 0);
-    private Upgrades dirtQuality = new Upgrades("bbDirt", 0, 0);
-    private Upgrades baseQuality = new Upgrades("bbBase", 0, 0);
-    private Upgrades seatQuality = new Upgrades("bbSeat", 0, 0);
-    private Upgrades stadiumLights = new Upgrades("bbLighting", 0, 0);
-
     //inherits from BuildingModel
     public BaseballDiamondModel(String name, String size) {
         super(name, BuildingType.baseballDiamond().getType(), size);
-        this.getUpgrades().add(grassQuality);
-        this.getUpgrades().add(dirtQuality);
-        this.getUpgrades().add(baseQuality);
-        this.getUpgrades().add(seatQuality);
-        this.getUpgrades().add(stadiumLights);
+        this.getUpgrades().add(new Upgrades("grassQuality",0, 0));
+        this.getUpgrades().add(new Upgrades("dirtQuality", 0, 0));
+        this.getUpgrades().add(new Upgrades("baseQuality", 0, 0));
+        this.getUpgrades().add(new Upgrades("seatQuality", 0, 0));
+        this.getUpgrades().add(new Upgrades("stadiumLights", 0, 0));
     }
 
     public void increaseBaseballDiamondLevel(Upgrades upgrade) {

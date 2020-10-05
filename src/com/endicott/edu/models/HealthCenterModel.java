@@ -2,20 +2,15 @@ package com.endicott.edu.models;
 import java.util.ArrayList;
 
 public class HealthCenterModel extends BuildingModel {
-    private Upgrades sanitation = new Upgrades("hcSanitation", 0, 0);
-    private Upgrades hospitality = new Upgrades("hcHospitality", 0, 0);
-    private Upgrades hours = new Upgrades("hcHours", 0, 0);
-    private Upgrades numRooms = new Upgrades("hcNumRooms", 0, 0);
-    private Upgrades roomQuality = new Upgrades("hcRoomQuality", 0, 0);
 
     //inherits from BuildingModel
     public HealthCenterModel(String name){
         super(name, BuildingType.health().getType());
-        this.getUpgrades().add(sanitation);
-        this.getUpgrades().add(hospitality);
-        this.getUpgrades().add(hours);
-        this.getUpgrades().add(numRooms);
-        this.getUpgrades().add(roomQuality);
+        this.getUpgrades().add(new Upgrades("hcSanitation", 0, 0));
+        this.getUpgrades().add(new Upgrades("hcHospitality", 0, 0));
+        this.getUpgrades().add(new Upgrades("hcHours", 0, 0));
+        this.getUpgrades().add(new Upgrades("hcNumRooms", 0, 0));
+        this.getUpgrades().add(new Upgrades("hcRoomQuality", 0, 0));
     }
 
     public void increaseHealthCenterLevel(Upgrades upgrade) {

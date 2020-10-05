@@ -2,18 +2,14 @@ package com.endicott.edu.models;
 import java.util.ArrayList;
 
 public class FootballStadiumModel extends BuildingModel{
-    private Upgrades grassQuality = new Upgrades("fbGrass",0, 0);
-    private Upgrades seatQuality = new Upgrades("fbSeat", 0, 0);
-    private Upgrades stadiumLights = new Upgrades("fbLighting", 0, 0);
-    private Upgrades lineQuality = new Upgrades("fbLine", 0, 0);
 
     //inherits from BuildingModel
     public FootballStadiumModel(String name, String size) {
         super(name, BuildingType.footballStadium().getType(), size);
-        this.getUpgrades().add(grassQuality);
-        this.getUpgrades().add(seatQuality);
-        this.getUpgrades().add(stadiumLights);
-        this.getUpgrades().add(lineQuality);
+        this.getUpgrades().add(new Upgrades("fbGrass",0, 0));
+        this.getUpgrades().add(new Upgrades("fbSeat", 0, 0));
+        this.getUpgrades().add(new Upgrades("fbLighting", 0, 0));
+        this.getUpgrades().add(new Upgrades("fbLine", 0, 0));
     }
 
     public void increaseFootballStadiumLevel(Upgrades upgrade) {
