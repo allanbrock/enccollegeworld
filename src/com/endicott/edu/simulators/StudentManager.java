@@ -37,19 +37,20 @@ public class StudentManager {
      * @param hoursAlive Amount of time the college has been open
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+        //Order: Take in students, check their happiness, have them leave if they aren't happy, grab they're tuition, update time at college
         acceptStudents(collegeId, hoursAlive);
 
         CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
         admitStudents(collegeId, hoursAlive, false, popupManager);
+
+        CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
+        calculateStatistics(collegeId, false);
 
         CollegeManager.logger.info("Advance Time Students: withdraw - " + CollegeManager.getDate());
         withdrawStudents(collegeId, hoursAlive);
 
         CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
         receiveStudentTuition(collegeId);
-
-        CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
-        calculateStatistics(collegeId, false);
 
         CollegeManager.logger.info("Advance Time Students: updateTime - " + CollegeManager.getDate());
         updateStudentsTime(collegeId, hoursAlive);
@@ -203,7 +204,7 @@ public class StudentManager {
             }
 
             student.setId(IdNumberGenDao.getID(collegeId));
-            student.setHappiness(90);
+
             if(i <= 50 && initial) {
                 student.setAthleticAbility(rand.nextInt(5) + 5);
             }
@@ -346,7 +347,6 @@ public class StudentManager {
             acaHappinessSum += students.get(i).getAcademicHappinessRating();
             buildHappinessSum += students.get(i).getOverallBuildingHappinessRating();
             profHappinessSum += students.get(i).getProfessorHappinessRating();
-
         }
 
         //Calculate the average happiness of student population for all
@@ -388,55 +388,6 @@ public class StudentManager {
         //CollegeDao.saveCollege(college);
     }
 
-    private void calculateOverallStudentHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int happinessSum = 0;
-        for (int i = 0; i < students.size(); i++) {
-            happinessSum += students.get(i).getHappiness();
-        }
-
-        int aveHappiness = happinessSum/Math.max(1,students.size());
-        // Add a little randomness. Currently happiness doesn't seem to
-        // vary much from day to day.  That is an issue.
-        Random rand = new Random();
-        college.setStudentBodyHappiness(Math.min(100, aveHappiness + rand.nextInt(8)));
-
-        //CollegeDao.saveCollege(college);
-    }
-
-    private void calculateOverallStudentRecreationalHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: recreational happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int recHappinessSum = 0;
-        for (int i=0; i<students.size(); i++) {
-            recHappinessSum += students.get(i).getFunHappinessRating();
-        }
-
-        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
-
-        Random rand = new Random();
-        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness + rand.nextInt(8)));
-    }
-
-    private void calculateOverallStudentFinancialHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: financial happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int finHappinessSum = 0;
-        for (int i=0; i<students.size(); i++) {
-            finHappinessSum += students.get(i).getMoneyHappinessRating();
-        }
-
-        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
-
-        Random rand = new Random();
-        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness + rand.nextInt(8)));
-        CollegeManager.logger.info("The new overall financial happiness is: " + college.getStudentFinancialHappiness());
-    }
-
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
         CollegeManager.logger.info("StudentManager: set happiness");
         CollegeModel college = CollegeDao.getCollege(collegeId);
@@ -455,7 +406,6 @@ public class StudentManager {
            setDormHappinessRating(student, college);
            setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
            setStudentOverallBuildingHappinessRating(student, college);
-           setStudentFeedback(student, collegeId);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
@@ -476,6 +426,7 @@ public class StudentManager {
             happiness = Math.max(happiness, 0);
 
             students.get(i).setHappiness(happiness);
+            setStudentFeedback(student, collegeId);
         }
 
         dao.saveAllStudents(collegeId, students);
@@ -514,7 +465,7 @@ public class StudentManager {
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
-        // TODO: how do we decide if students are having fun?
+         //TODO: how do we decide if students are having fun?
         s.setFunHappinessRating(50);
     }
 
@@ -535,7 +486,6 @@ public class StudentManager {
             rating = college.getYearlyTuitionRating(); //Previous rating the student had
         }
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
-        college.setYearlyTuitionRating(rating);
     }
 
     private void setStudentAdvisorHappiness(StudentModel s, CollegeModel college, boolean initial) {
@@ -811,22 +761,24 @@ public class StudentManager {
 
             if(useNeutralIntro==neutralIntro.length-1) {
                 feedback = neutralMidro[new Random().nextInt(neutralMidro.length)];
-            } else {
+            }
+            else {
                 feedback =  neutralIntro[useNeutralIntro] +
                             neutralMidro[new Random().nextInt(neutralMidro.length)].toLowerCase();
             }
                 feedback += neutralOutro[new Random().nextInt(neutralOutro.length)];
-
         }
 
-        if(useNoun)
-            if (usesVerb)
+        if(useNoun) {       //If it was not a neutral response
+            if (usesVerb) {     //If random chance when usesVerb was assigned was true
                 feedback += verbs.get(new Random().nextInt(verbs.size())) +
-                            "the " + getFeedbackNoun(happinessLevels, true);
-            else
+                        "the " + getFeedbackNoun(happinessLevels, true);
+            }
+            else {
                 feedback += getFeedbackNoun(happinessLevels, true) + "is " +
-                            adjectives.get(new Random().nextInt(adjectives.size()));
-
+                        adjectives.get(new Random().nextInt(adjectives.size()));
+            }
+        }
         // Conclusion
         String[] conclusion =  {" here", " at this school", " at "+collegeId, ""};
         feedback += conclusion[new Random().nextInt(conclusion.length)];
@@ -839,7 +791,6 @@ public class StudentManager {
         } else {
             feedback += ".";
         }
-
         student.setFeedback(feedback);
     }
 

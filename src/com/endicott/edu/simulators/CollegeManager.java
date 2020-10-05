@@ -118,6 +118,10 @@ public class CollegeManager {
 
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
+        logger.info("AdvanceTime Calculate Tuition Rating");
+        //Before anything else, the tuition rating it changed for the college
+        calculateTuitionRating(collegeId);
+
         logger.info("AdvanceTime Disasters");
         EventManager disasterManager = new EventManager(collegeId);
         disasterManager.handleTimeChange(collegeId, hoursAlive, popupManager);
@@ -159,11 +163,6 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-
-        logger.info("AdvanceTime Calculate Stats");
-        // After all the simulators are run, there is a final
-        // calculation of the college statistics.
-        calculateTuitionRating(collegeId);
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
@@ -264,9 +263,6 @@ public class CollegeManager {
         calculateTuitionRating(collegeId);
 
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
-
-        StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId, false);
 
         return college;
     }
