@@ -3,7 +3,6 @@ package com.endicott.edu.models;
 import java.util.ArrayList;
 
 public class LibraryModel extends BuildingModel {
-    private ArrayList<Upgrades> upgrades;
     private Upgrades chairs = new Upgrades("libraryChairs", 0, 0);
     private Upgrades desks = new Upgrades("libraryDesks", 0, 0);
     private Upgrades coffee = new Upgrades("libraryCoffee", 0, 0);
@@ -18,29 +17,29 @@ public class LibraryModel extends BuildingModel {
 
     public LibraryModel(String name){
         super(name, BuildingType.library().getType());
-        this.upgrades.add(chairs);
-        this.upgrades.add(desks);
-        this.upgrades.add(coffee);
-        this.upgrades.add(lighting);
-        this.upgrades.add(soundproofing);
-        this.upgrades.add(internet);
-        this.upgrades.add(catalogue);
-        this.upgrades.add(computers);
-        this.upgrades.add(printers);
-        this.upgrades.add(seating);
+        this.getUpgrades().add(chairs);
+        this.getUpgrades().add(desks);
+        this.getUpgrades().add(coffee);
+        this.getUpgrades().add(lighting);
+        this.getUpgrades().add(soundproofing);
+        this.getUpgrades().add(internet);
+        this.getUpgrades().add(catalogue);
+        this.getUpgrades().add(computers);
+        this.getUpgrades().add(printers);
+        this.getUpgrades().add(seating);
     }
 
     public void increaseLibraryLevel(Upgrades upgrade) {
         for(int i = 0; i < upgrade.getMaxLevel(); i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).increaseLevel();
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).increaseLevel();
         }
     }
 
     public void decreaseLibraryLevel(Upgrades upgrade) {
         for(int i = 0; i > 0; i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).decreaseLevel();
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).decreaseLevel();
         }
     }
 }

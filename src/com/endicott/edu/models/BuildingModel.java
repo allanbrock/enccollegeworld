@@ -19,6 +19,7 @@ public class BuildingModel implements Serializable {
     private int upgradeCost = 0;
     private int costPerDay = 0;
     private int capacity = 0;
+    private ArrayList<Upgrades> upgrades;
 
     // These are all updated dynamically (as the game is played)
     private int timeSinceLastRepair = 0;
@@ -48,6 +49,7 @@ public class BuildingModel implements Serializable {
         this.kindOfBuilding = kindOfBuilding;
         setStatsBasedOnSize(size);
         this.capacity = setCapacityBasedOnSize(size);
+        this.upgrades = new ArrayList<Upgrades>();
     }
     //For Football Stadium, Hockey Rink, and Baseball Diamond
     public BuildingModel(String name, String kindOfBuilding, String size){
@@ -232,4 +234,8 @@ public class BuildingModel implements Serializable {
 
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
+
+    public ArrayList<Upgrades> getUpgrades(){
+        return this.upgrades;
+    }
 }
