@@ -6,10 +6,15 @@ public class DiningHallModel extends BuildingModel {
     //inherits from BuildingModel
     public static final int maxLevel = 10;
     private ArrayList<Upgrades> upgrades;
+    private Upgrades foodVariety= new Upgrades("Food Variety", 10000, 50);
+    private Upgrades cutleries= new Upgrades("Cutleries", 3200, 50);
+    private Upgrades staff = new Upgrades("Staff", 5000, 50);
 
     public DiningHallModel(String name, int numStudents, String size){
         super(name, numStudents, BuildingType.dining().getType(), size);
-        this.upgrades = DiningHallUpgrades.getUpgrades();
+        this.upgrades.add(foodVariety);
+        this.upgrades.add(cutleries);
+        this.upgrades.add(staff);
     }
 
     public void upgradeDiningHallModel(Upgrades upgrade) {
@@ -25,4 +30,6 @@ public class DiningHallModel extends BuildingModel {
                 upgrades.get(i).decreaseLevel();
         }
     }
+
+
 }

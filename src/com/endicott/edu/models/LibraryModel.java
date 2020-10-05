@@ -9,7 +9,10 @@ public class LibraryModel extends BuildingModel {
     private Upgrades coffee = new Upgrades("libraryCoffee", 0, 0);
     private Upgrades lighting = new Upgrades("libraryLighting", 0, 0);
     private Upgrades soundproofing = new Upgrades("librarySoundproofing", 0, 0);
-    private Upgrades internet = new Upgrades("libraryLightning", 0, 0);
+    private Upgrades internet = new Upgrades("libraryLightning", 0, 0);private Upgrades catalogue= new Upgrades("Catalogue", 10000, 50);
+    private Upgrades computers= new Upgrades("Computers", 3200, 50);
+    private Upgrades printers = new Upgrades("Printers", 5000, 50);
+    private Upgrades seating = new Upgrades("Seating", 500, 50);
     // would a librarian or staff be considered an upgrade?
     // private Upgrades librarian = new Upgrades("librarian", 0, 0);
 
@@ -23,6 +26,10 @@ public class LibraryModel extends BuildingModel {
         this.upgrades.add(lighting);
         this.upgrades.add(soundproofing);
         this.upgrades.add(internet);
+        this.upgrades.add(catalogue);
+        this.upgrades.add(computers);
+        this.upgrades.add(printers);
+        this.upgrades.add(seating);
     }
 
     public void increaseLibraryLevel(Upgrades upgrade) {
