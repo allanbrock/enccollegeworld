@@ -6,30 +6,40 @@ import java.lang.Math;
 import java.util.ArrayList;
 
 public class AvatarModel {
-    private String avatarUrl = ""; //the url of the avatar picture
-    private static ArrayList<String> accessories;
-    private static ArrayList<String> clothesColor;
-    private static ArrayList<String> clothesType;
-    private static ArrayList<String> eyeType;
-    private static ArrayList<String> eyebrowType;
-    private static ArrayList<String> facialHairType;
-    private static ArrayList<String> hairColor;
-    private static ArrayList<String> mouthType;
-    private static ArrayList<String> skinColor;
-    private static ArrayList<String> topType;
+    private String avatarUrl = "";      //the url of the avatar picture
+    private String accessory = "";      //The accessory the person has
+    private String clothesColor = "";   //The color of the person's clothes
+    private String clothes = "";        //The clothes the person is wearing
+    private String eye = "";            //The eye type the person has
+    private String eyebrow = "";        //The type of eyebrow the person has
+    private String facialHairColor = "";//The facial hair color of the person
+    private String facialHair = "";     //The type of facialHair a person has
+    private String hairColor = "";      //The hair color of the person
+    private String hatColor = "";       //The color of the person's hat
+    private String mouth = "";          //The type of mouth the person has
+    private String skinColor = "";      //The color of the person's skin
+    private String top = "";            //The top that the person is wearing
 
+    //Following are arraylists holding all the options
+    private static ArrayList<String> accessories = new ArrayList();
+    private static ArrayList<String> clothesColors = new ArrayList();
+    private static ArrayList<String> clothesTypes = new ArrayList();
+    private static ArrayList<String> eyeTypes = new ArrayList();
+    private static ArrayList<String> eyebrowTypes = new ArrayList();
+    private static ArrayList<String> facialHairTypes = new ArrayList();
+    private static ArrayList<String> hairColors = new ArrayList();
+    private static ArrayList<String> mouthTypes = new ArrayList();
+    private static ArrayList<String> skinColors = new ArrayList();
+    private static ArrayList<String> topTypes = new ArrayList();
+
+    //Default constructor, assumed you will set the paramters before using
     public AvatarModel() {
-        accessories = new ArrayList();
-        clothesColor = new ArrayList();
-        clothesType = new ArrayList();
-        eyeType = new ArrayList();
-        eyebrowType = new ArrayList();
-        facialHairType = new ArrayList();
-        hairColor = new ArrayList();
-        mouthType = new ArrayList();
-        skinColor = new ArrayList();
-        topType = new ArrayList();
+        randomize();    //Change this so that it isn't totally random, depending gender/nature students look different
+        //My idea would be to call randomize, then do some extra calculations after, updating the set fields (Unless they all need specifics)
+    }
 
+    //Function called to set up the arraylists so that new models can be created
+    public static void generateAvatarOptions() {
         addAccessories();
         addClothesColor();
         addClothesType();
@@ -40,65 +50,74 @@ public class AvatarModel {
         addTopType();
         addHairColor();
         addFacialHairType();
-
+        System.out.println("We are done with being in here");
     }
 
-    public String getAvatarUrl(){
-        return avatarUrl;
-    }
+    public String getAvatarUrl(){ return avatarUrl;}
 
-    public void setAvatarUrl(String s){
-        avatarUrl = s;
-    }
+    public void setAvatarUrl(String s){ avatarUrl = s;}
 
+    //Function for completely randomizing the person's icon (no specific gender or nature calculations)
     public String randomize(){
         StringBuilder sb = new StringBuilder();
 
         int accessoriesVal = (int)(Math.random() * 100) % accessories.size();
+        accessory = accessories.get(accessoriesVal);
         sb.append("https://avataaars.io/" + "?accessoriesType=" + accessories.get(accessoriesVal));
-        System.out.println(sb);
 
-        int clothesColorVal = (int)(Math.random() * 100) % clothesColor.size();
-        sb.append("&clotheColor=" + clothesColor.get(clothesColorVal));
+        int clothesColorVal = (int)(Math.random() * 100) % clothesColors.size();
+        clothesColor = clothesColors.get(clothesColorVal);
+        sb.append("&clotheColor=" + clothesColors.get(clothesColorVal));
 
         sb.append("&avatarStyle=Circle"); //this adds the background color to the picture
 
-        int clothesTypeVal = (int)(Math.random() * 100) % clothesType.size();
-        sb.append("&clotheType=" + clothesType.get(clothesTypeVal));
+        int clothesTypeVal = (int)(Math.random() * 100) % clothesTypes.size();
+        clothes = clothesTypes.get(clothesTypeVal);
+        sb.append("&clotheType=" + clothesTypes.get(clothesTypeVal));
 
-        int eyeVal = (int)(Math.random() * 100) % eyeType.size();
-        sb.append("&eyeType=" + eyeType.get(eyeVal));
+        int eyeVal = (int)(Math.random() * 100) % eyeTypes.size();
+        eye = eyeTypes.get(eyeVal);
+        sb.append("&eyeType=" + eyeTypes.get(eyeVal));
 
-        int eyeBrowVal = (int)(Math.random() * 100) % eyebrowType.size();
-        sb.append("&eyebrowType=" + eyebrowType.get(eyeBrowVal));
+        int eyeBrowVal = (int)(Math.random() * 100) % eyebrowTypes.size();
+        eyebrow = eyebrowTypes.get(eyeBrowVal);
+        sb.append("&eyebrowType=" + eyebrowTypes.get(eyeBrowVal));
 
-        int hairColorVal = (int)(Math.random() * 100) % hairColor.size();
-        sb.append("&facialHairColor=" + hairColor.get(hairColorVal));
+        int hairColorVal = (int)(Math.random() * 100) % hairColors.size();
+        facialHairColor = hairColors.get(hairColorVal);
+        sb.append("&facialHairColor=" + hairColors.get(hairColorVal));
 
-        int facialHairTypeVal = (int)(Math.random() * 100) % facialHairType.size();
-        sb.append("&facialHairType=" + facialHairType.get(facialHairTypeVal));
+        int facialHairTypeVal = (int)(Math.random() * 100) % facialHairTypes.size();
+        facialHair = facialHairTypes.get(facialHairTypeVal);
+        sb.append("&facialHairType=" + facialHairTypes.get(facialHairTypeVal));
 
-        hairColorVal = (int)(Math.random() * 100) % hairColor.size();
-        sb.append("&hairColor=" + hairColor.get(hairColorVal));
+        hairColorVal = (int)(Math.random() * 100) % hairColors.size();
+        hairColor = hairColors.get(hairColorVal);
+        sb.append("&hairColor=" + hairColors.get(hairColorVal));
 
-        clothesColorVal = (int)(Math.random() * 100) % clothesColor.size();
-        sb.append("&hatColor=" + clothesColor.get(clothesColorVal));
+        clothesColorVal = (int)(Math.random() * 100) % clothesColors.size();
+        hatColor = clothesColors.get(clothesColorVal);
+        sb.append("&hatColor=" + clothesColors.get(clothesColorVal));
 
-        int mouthVal = (int)(Math.random() * 100) % mouthType.size();
-        sb.append("&mouthType=" + mouthType.get(mouthVal));
+        int mouthVal = (int)(Math.random() * 100) % mouthTypes.size();
+        mouth = mouthTypes.get(mouthVal);
+        sb.append("&mouthType=" + mouthTypes.get(mouthVal));
 
-        int skinVal = (int)(Math.random() * 100) % skinColor.size();
-        sb.append("&skinColor=" + skinColor.get(skinVal));
+        int skinVal = (int)(Math.random() * 100) % skinColors.size();
+        skinColor = skinColors.get(skinVal);
+        sb.append("&skinColor=" + skinColors.get(skinVal));
 
-        int topVal = (int)(Math.random() * 100) % topType.size();
-        sb.append("&topType=" + topType.get(topVal));
+        int topVal = (int)(Math.random() * 100) % topTypes.size();
+        top = topTypes.get(topVal);
+        sb.append("&topType=" + topTypes.get(topVal));
 
         avatarUrl = sb.toString();
         System.out.println(avatarUrl);
         return avatarUrl;
     }
 
-    public void addAccessories(){
+    //FOLLOWING ARE FUNCTIONS TO ADD ALL OPTIONS TO EACH CATEGORY (CALLED ONCE, UPDATE IF ADDING MORE OPTIONS)
+    public static void addAccessories(){
         accessories.add("Blank");
         accessories.add("Kurt");
         accessories.add("Prescription01");
@@ -109,137 +128,136 @@ public class AvatarModel {
     }
 
     //Hat color options are the same as these
-    public void addClothesColor(){
-        clothesColor.add("Black");
-        clothesColor.add("Blue03");
-        clothesColor.add("Grey02");
-        clothesColor.add("Heather");
-        clothesColor.add("PastelBlue");
-        clothesColor.add("PastelGreen");
-        clothesColor.add("PastelOrange");
-        clothesColor.add("PastelRed");
-        clothesColor.add("PastelYellow");
-        clothesColor.add("Pink");
-        clothesColor.add("Red");
-        clothesColor.add("White");
+    public static void addClothesColor(){
+        clothesColors.add("Black");
+        clothesColors.add("Blue03");
+        clothesColors.add("Grey02");
+        clothesColors.add("Heather");
+        clothesColors.add("PastelBlue");
+        clothesColors.add("PastelGreen");
+        clothesColors.add("PastelOrange");
+        clothesColors.add("PastelRed");
+        clothesColors.add("PastelYellow");
+        clothesColors.add("Pink");
+        clothesColors.add("Red");
+        clothesColors.add("White");
     }
 
-    public void addClothesType(){
-        clothesType.add("BlazerShirt");
-        clothesType.add("BlazerSweater");
-        clothesType.add("CollarSweater");
-        clothesType.add("GraphicShirt");
-        clothesType.add("Hoodie");
-        clothesType.add("Overall");
-        clothesType.add("ShirtCrewNeck");
-        clothesType.add("ShirtScoopNeck");
-        clothesType.add("ShirtVNeck");
+    public static void addClothesType(){
+        clothesTypes.add("BlazerShirt");
+        clothesTypes.add("BlazerSweater");
+        clothesTypes.add("CollarSweater");
+        clothesTypes.add("GraphicShirt");
+        clothesTypes.add("Hoodie");
+        clothesTypes.add("Overall");
+        clothesTypes.add("ShirtCrewNeck");
+        clothesTypes.add("ShirtScoopNeck");
+        clothesTypes.add("ShirtVNeck");
     }
 
-    public void addEyeType(){
-        eyeType.add("Default");
-        eyeType.add("Close");
-        eyeType.add("Cry");
-        eyeType.add("Dizzy");
-        eyeType.add("EyeRoll");
-        eyeType.add("Happy");
-        eyeType.add("Hearts");
-        eyeType.add("Side");
-        eyeType.add("Squint");
-        eyeType.add("Surprise");
-        eyeType.add("Wink");
-        eyeType.add("WinkWacky");
+    public static void addEyeType(){
+        eyeTypes.add("Default");
+        eyeTypes.add("Close");
+        eyeTypes.add("Cry");
+        eyeTypes.add("Dizzy");
+        eyeTypes.add("EyeRoll");
+        eyeTypes.add("Happy");
+        eyeTypes.add("Hearts");
+        eyeTypes.add("Side");
+        eyeTypes.add("Squint");
+        eyeTypes.add("Surprise");
+        eyeTypes.add("Wink");
+        eyeTypes.add("WinkWacky");
     }
 
-    public void addEyebrowType(){
-        eyebrowType.add("Default");
-        eyebrowType.add("Angry");
-        eyebrowType.add("RaisedExcited");
-        eyebrowType.add("SadConcerned");
-        eyebrowType.add("UnibrowNatural");
-        eyebrowType.add("UpDown");
+    public static void addEyebrowType(){
+        eyebrowTypes.add("Default");
+        eyebrowTypes.add("Angry");
+        eyebrowTypes.add("RaisedExcited");
+        eyebrowTypes.add("SadConcerned");
+        eyebrowTypes.add("UnibrowNatural");
+        eyebrowTypes.add("UpDown");
     }
 
-    public void addFacialHairType(){
-        facialHairType.add("Blank");
-        facialHairType.add("BeardMedium");
-        facialHairType.add("BeardLight");
-        facialHairType.add("BeardMajestic");
-        facialHairType.add("MoustacheFancy");
-        facialHairType.add("MoustacheMagnum");
+    public static void addFacialHairType(){
+        facialHairTypes.add("Blank");
+        facialHairTypes.add("BeardMedium");
+        facialHairTypes.add("BeardLight");
+        facialHairTypes.add("BeardMajestic");
+        facialHairTypes.add("MoustacheFancy");
+        facialHairTypes.add("MoustacheMagnum");
     }
 
     //Color for both facial hair and hair
-    public void addHairColor(){
-        hairColor.add("Auburn");
-        hairColor.add("Black");
-        hairColor.add("Blonde");
-        hairColor.add("BlondeGolden");
-        hairColor.add("Brown");
-        hairColor.add("BrownDark");
-        hairColor.add("PastelPink");
-        hairColor.add("Platinum");
-        hairColor.add("Red");
-        hairColor.add("SilverGray");
+    public static void addHairColor(){
+        hairColors.add("Auburn");
+        hairColors.add("Black");
+        hairColors.add("Blonde");
+        hairColors.add("BlondeGolden");
+        hairColors.add("Brown");
+        hairColors.add("BrownDark");
+        hairColors.add("PastelPink");
+        hairColors.add("Platinum");
+        hairColors.add("Red");
+        hairColors.add("SilverGray");
     }
 
-    public void addMouthType(){
-        mouthType.add("Default");
-        mouthType.add("Concerned");
-        mouthType.add("Disbelief");
-        mouthType.add("Eating");
-        mouthType.add("Grimace");
-        mouthType.add("Sad");
-        mouthType.add("ScreamOpen");
-        mouthType.add("Serious");
-        mouthType.add("Smile");
-        mouthType.add("Tongue");
-        mouthType.add("Twinkle");
-        mouthType.add("Vomit");
+    public static void addMouthType(){
+        mouthTypes.add("Default");
+        mouthTypes.add("Concerned");
+        mouthTypes.add("Disbelief");
+        mouthTypes.add("Eating");
+        mouthTypes.add("Grimace");
+        mouthTypes.add("Sad");
+        mouthTypes.add("ScreamOpen");
+        mouthTypes.add("Serious");
+        mouthTypes.add("Smile");
+        mouthTypes.add("Tongue");
+        mouthTypes.add("Twinkle");
+        mouthTypes.add("Vomit");
     }
 
-    public void addSkinColor(){
-        skinColor.add("Tanned");
-        skinColor.add("Yellow");
-        skinColor.add("Pale");
-        skinColor.add("Light");
-        skinColor.add("Brown");
-        skinColor.add("DarkBrown");
-        skinColor.add("Black");
+    public static void addSkinColor(){
+        skinColors.add("Tanned");
+        skinColors.add("Yellow");
+        skinColors.add("Pale");
+        skinColors.add("Light");
+        skinColors.add("Brown");
+        skinColors.add("DarkBrown");
+        skinColors.add("Black");
     }
 
-    public void addTopType(){
-        topType.add("NoHair");
-        topType.add("EyePatch");
-        topType.add("Hat");
-        topType.add("Hijab");
-        topType.add("Turban");
-        topType.add("WinterHat2");
-        topType.add("LongHairBigHair");
-        topType.add("LongHairBob");
-        topType.add("LongHairBun");
-        topType.add("LongHairCurly");
-        topType.add("LongHairCurvy");
-        topType.add("LongHairDreads");
-        topType.add("LongHairFrida");
-        topType.add("LongHairFro");
-        topType.add("LongHairFroBand");
-        topType.add("LongHairNotTooLong");
-        topType.add("LongHairShavedSides");
-        topType.add("LongHairMiaWallace");
-        topType.add("LongHairStraight2");
-        topType.add("LongHairStraightStrand");
-        topType.add("ShortHairDreads01");
-        topType.add("ShortHairDreads02");
-        topType.add("ShortHairFrizzle");
-        topType.add("ShortHairShaggyMullet");
-        topType.add("ShortHairShortCurly");
-        topType.add("ShortHairShortFlat");
-        topType.add("ShortHairShortRound");
-        topType.add("ShortHairShortWaved");
-        topType.add("ShortHairSides");
-        topType.add("ShortHairTheCaesar");
-        topType.add("ShortHairTheCaesarSidePart");
+    public static void addTopType(){
+        topTypes.add("NoHair");
+        topTypes.add("EyePatch");
+        topTypes.add("Hat");
+        topTypes.add("Hijab");
+        topTypes.add("Turban");
+        topTypes.add("WinterHat2");
+        topTypes.add("LongHairBigHair");
+        topTypes.add("LongHairBob");
+        topTypes.add("LongHairBun");
+        topTypes.add("LongHairCurly");
+        topTypes.add("LongHairCurvy");
+        topTypes.add("LongHairDreads");
+        topTypes.add("LongHairFrida");
+        topTypes.add("LongHairFro");
+        topTypes.add("LongHairFroBand");
+        topTypes.add("LongHairNotTooLong");
+        topTypes.add("LongHairShavedSides");
+        topTypes.add("LongHairMiaWallace");
+        topTypes.add("LongHairStraight2");
+        topTypes.add("LongHairStraightStrand");
+        topTypes.add("ShortHairDreads01");
+        topTypes.add("ShortHairDreads02");
+        topTypes.add("ShortHairFrizzle");
+        topTypes.add("ShortHairShaggyMullet");
+        topTypes.add("ShortHairShortCurly");
+        topTypes.add("ShortHairShortFlat");
+        topTypes.add("ShortHairShortRound");
+        topTypes.add("ShortHairShortWaved");
+        topTypes.add("ShortHairSides");
+        topTypes.add("ShortHairTheCaesar");
+        topTypes.add("ShortHairTheCaesarSidePart");
     }
-
 }

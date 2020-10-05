@@ -97,6 +97,7 @@ public class StudentManager {
 
         if(isNewCollege) {
             numNewStudents = 140;
+            AvatarModel.generateAvatarOptions();
         }
         else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
             NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
@@ -192,8 +193,7 @@ public class StudentManager {
 
             //Generates a random url for the student's avatar
             AvatarModel avatar = new AvatarModel();
-            String url = avatar.randomize();
-            student.setAvatarUrl(url);
+            student.setAvatarIcon(avatar);
 
             if (rand.nextInt(10) + 1 > 5) {
                 student.setName(NameGenDao.generateName(false));
@@ -229,9 +229,6 @@ public class StudentManager {
             student.setNature(assignRandomNature());
             students.add(student);
             dao.saveAllStudentsJustToCache(collegeId, students);
-
-//            CollegeManager.logger.info("Generating avatars..." + avatar.getAvatarUrl());
-//            System.out.println(avatar.getAvatarUrl());
         }
 
     }
@@ -421,7 +418,6 @@ public class StudentManager {
             if(checkForUnhappiness(student)) {
                 happiness -= 30;
             }
-            System.out.println("Student happiness: " + happiness);
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
 

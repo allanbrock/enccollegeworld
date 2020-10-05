@@ -18,7 +18,6 @@ public class StudentModel extends PersonModel implements Serializable {
     private String runId = "unknown";               //The ID of the college (just saved into each student)
     private String feedback = "";                   //The student's thoughts about the college (Based off of happiness)
     private String nature = "unknown";              //Trait of the student (a general idea of what kind of person the student is)
-    private String avatar = "";                     //The icon/image of a student (url)
     private int numberHoursLeftBeingSick = 0;       //The number of hours the student has left being sick (0 if not sick)
     private int hourLastUpdated = 0;                //Amount of time the student has been alive (in hours)
     private int healthHappinessRating = 0;          //Student's happiness when it comes to health on campus (0-100)
@@ -103,13 +102,6 @@ public class StudentModel extends PersonModel implements Serializable {
 
     public void setNature(String n) {this.nature = n;}
     public String getNature(){return this.nature;}
-
-    public String getAvatar(){
-        return avatar;
-    }
-    public void setAvatarUrl(String s){
-        avatar = s;
-    }
 
     public int getNumberHoursLeftBeingSick() {
         return numberHoursLeftBeingSick;
