@@ -508,8 +508,8 @@ public class BuildingManager {
                 0,"Medium");
         saveBuildingHelper(startingAcademicBuilding, collegeId, college);
 
-        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(NameGenDao.generateBuildingName()+" Building");
-        saveBuildingHelper(startingAdministrative, collegeId, college);
+//        AdministrativeBldgModel startingAdministrative = new AdministrativeBldgModel(NameGenDao.generateBuildingName()+" Building");
+//        saveBuildingHelper(startingAdministrative, collegeId, college);
 
         SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);

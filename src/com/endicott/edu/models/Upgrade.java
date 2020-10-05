@@ -1,8 +1,9 @@
 package com.endicott.edu.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Upgrades {
+public class Upgrade implements Serializable {
     private String name;
     private int cost;
     private int happinessModifier;
@@ -11,14 +12,14 @@ public class Upgrades {
     private ArrayList<UpgradeEvents> events;
     private int maxLevel;
 
-    public Upgrades(String name, int cost, int happinessModifier){
+    public Upgrade(String name, int cost, int happinessModifier){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
         this.level = 0;
     }
 
-    public Upgrades(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel){
+    public Upgrade(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
