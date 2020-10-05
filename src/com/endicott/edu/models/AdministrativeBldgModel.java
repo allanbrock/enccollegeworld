@@ -6,7 +6,6 @@ public class AdministrativeBldgModel extends BuildingModel{
     //inherits from BuildingModel
 
     private ArrayList<Upgrades> upgrades;
-    public static final int maxLevel = 3;
     private Upgrades tables = new Upgrades("Tables",0, 0);
     private Upgrades bursars = new Upgrades("Bursars", 0, 0);
     private Upgrades cubicles = new Upgrades("cubicles", 0, 0);
@@ -21,14 +20,14 @@ public class AdministrativeBldgModel extends BuildingModel{
     }
 
     public void upgradeAdminModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).increaseLevel();
         }
     }
 
     public void downgradeAdminModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
+        for(int i = 0; i > 0; i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).decreaseLevel();
         }

@@ -20,14 +20,14 @@ public class HealthCenterModel extends BuildingModel {
     }
 
     public void increaseHealthCenterLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).increaseLevel();
         }
     }
 
     public void decreaseHealthCenterLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
+        for(int i = 0; i > 0; i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).decreaseLevel();
         }

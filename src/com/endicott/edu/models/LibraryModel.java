@@ -16,8 +16,6 @@ public class LibraryModel extends BuildingModel {
     // would a librarian or staff be considered an upgrade?
     // private Upgrades librarian = new Upgrades("librarian", 0, 0);
 
-    public static final int maxLevel = 5;
-
     public LibraryModel(String name){
         super(name, BuildingType.library().getType());
         this.upgrades.add(chairs);
@@ -33,14 +31,14 @@ public class LibraryModel extends BuildingModel {
     }
 
     public void increaseLibraryLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).increaseLevel();
         }
     }
 
     public void decreaseLibraryLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
+        for(int i = 0; i > 0; i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).decreaseLevel();
         }

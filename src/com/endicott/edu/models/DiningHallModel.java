@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class DiningHallModel extends BuildingModel {
     //inherits from BuildingModel
-    public static final int maxLevel = 10;
     private ArrayList<Upgrades> upgrades;
     private Upgrades foodVariety= new Upgrades("Food Variety", 10000, 50);
     private Upgrades cutleries= new Upgrades("Cutleries", 3200, 50);
@@ -18,14 +17,14 @@ public class DiningHallModel extends BuildingModel {
     }
 
     public void upgradeDiningHallModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).increaseLevel();
         }
     }
 
     public void downgradeDiningHallModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
+        for(int i = 0; i > 0; i++) {
             if(upgrade.getName()==upgrades.get(i).getName())
                 upgrades.get(i).decreaseLevel();
         }
