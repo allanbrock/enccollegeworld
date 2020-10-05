@@ -1,28 +1,28 @@
 package com.endicott.edu.models;
 
-import java.util.ArrayList;
-
 public class DiningHallModel extends BuildingModel {
     //inherits from BuildingModel
-    public static final int maxLevel = 10;
-    private ArrayList<Upgrades> upgrades;
 
     public DiningHallModel(String name, int numStudents, String size){
         super(name, numStudents, BuildingType.dining().getType(), size);
-        this.upgrades = DiningHallUpgrades.getUpgrades();
+        this.getUpgrades().add(new Upgrade("Food Variety", 10000, 50));
+        this.getUpgrades().add(new Upgrade("Cutleries", 3200, 50));
+        this.getUpgrades().add(new Upgrade("Staff", 5000, 50));
     }
 
-    public void upgradeDiningHallModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).increaseLevel();
+    public void upgradeDiningHallModel(Upgrade upgrade) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).increaseLevel();
         }
     }
 
-    public void downgradeDiningHallModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).decreaseLevel();
+    public void downgradeDiningHallModel(Upgrade upgrade) {
+        for(int i = 0; i > 0; i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).decreaseLevel();
         }
     }
+
+
 }

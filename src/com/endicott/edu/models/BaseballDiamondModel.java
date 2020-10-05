@@ -1,35 +1,27 @@
 package com.endicott.edu.models;
-import java.util.ArrayList;
 
 public class BaseballDiamondModel extends BuildingModel{
-    private ArrayList<Upgrades> upgrades;
-    private Upgrades grassQuality = new Upgrades("bbGrass",0, 0);
-    private Upgrades dirtQuality = new Upgrades("bbDirt", 0, 0);
-    private Upgrades baseQuality = new Upgrades("bbBase", 0, 0);
-    private Upgrades seatQuality = new Upgrades("bbSeat", 0, 0);
-    private Upgrades stadiumLights = new Upgrades("bbLighting", 0, 0);
-
     //inherits from BuildingModel
     public BaseballDiamondModel(String name, String size) {
         super(name, BuildingType.baseballDiamond().getType(), size);
-        this.upgrades.add(grassQuality);
-        this.upgrades.add(dirtQuality);
-        this.upgrades.add(baseQuality);
-        this.upgrades.add(seatQuality);
-        this.upgrades.add(stadiumLights);
+        this.getUpgrades().add(new Upgrade("grassQuality",0, 0));
+        this.getUpgrades().add(new Upgrade("dirtQuality", 0, 0));
+        this.getUpgrades().add(new Upgrade("baseQuality", 0, 0));
+        this.getUpgrades().add(new Upgrade("seatQuality", 0, 0));
+        this.getUpgrades().add(new Upgrade("stadiumLights", 0, 0));
     }
 
-    public void increaseBaseballDiamondLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).increaseLevel();
+    public void increaseBaseballDiamondLevel(Upgrade upgrade) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).increaseLevel();
         }
     }
 
-    public void decreaseBaseballDiamondLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).decreaseLevel();
+    public void decreaseBaseballDiamondLevel(Upgrade upgrade) {
+        for(int i = 0; i > 0; i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).decreaseLevel();
         }
     }
 }

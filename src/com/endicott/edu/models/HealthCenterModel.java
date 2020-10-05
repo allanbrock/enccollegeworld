@@ -1,35 +1,28 @@
 package com.endicott.edu.models;
-import java.util.ArrayList;
 
 public class HealthCenterModel extends BuildingModel {
-    private ArrayList<Upgrades> upgrades;
-    private Upgrades sanitation = new Upgrades("hcSanitation", 0, 0);
-    private Upgrades hospitality = new Upgrades("hcHospitality", 0, 0);
-    private Upgrades hours = new Upgrades("hcHours", 0, 0);
-    private Upgrades numRooms = new Upgrades("hcNumRooms", 0, 0);
-    private Upgrades roomQuality = new Upgrades("hcRoomQuality", 0, 0);
 
     //inherits from BuildingModel
     public HealthCenterModel(String name){
         super(name, BuildingType.health().getType());
-        this.upgrades.add(sanitation);
-        this.upgrades.add(hospitality);
-        this.upgrades.add(hours);
-        this.upgrades.add(numRooms);
-        this.upgrades.add(roomQuality);
+        this.getUpgrades().add(new Upgrade("hcSanitation", 0, 0));
+        this.getUpgrades().add(new Upgrade("hcHospitality", 0, 0));
+        this.getUpgrades().add(new Upgrade("hcHours", 0, 0));
+        this.getUpgrades().add(new Upgrade("hcNumRooms", 0, 0));
+        this.getUpgrades().add(new Upgrade("hcRoomQuality", 0, 0));
     }
 
-    public void increaseHealthCenterLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).increaseLevel();
+    public void increaseHealthCenterLevel(Upgrade upgrade) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).increaseLevel();
         }
     }
 
-    public void decreaseHealthCenterLevel(Upgrades upgrade) {
-        for(int i = 0; i < upgrades.size(); i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).decreaseLevel();
+    public void decreaseHealthCenterLevel(Upgrade upgrade) {
+        for(int i = 0; i > 0; i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).decreaseLevel();
         }
     }
 }

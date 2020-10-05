@@ -1,29 +1,32 @@
 package com.endicott.edu.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Upgrades {
+public class Upgrade implements Serializable {
     private String name;
     private int cost;
     private int happinessModifier;
     private int level;
     private String description;
     private ArrayList<UpgradeEvents> events;
+    private int maxLevel;
 
-    public Upgrades(String name, int cost, int happinessModifier){
+    public Upgrade(String name, int cost, int happinessModifier){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
         this.level = 0;
     }
 
-    public Upgrades(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events){
+    public Upgrade(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
         this.level = 0;
         this.description = description;
         this.events = events;
+        this.maxLevel = maxLevel;
     }
 
     public String getName(){
@@ -48,4 +51,8 @@ public class Upgrades {
     }
 
     public void decreaseLevel(){this.level--;}
+
+    public int getMaxLevel(){
+        return this.maxLevel;
+    }
 }

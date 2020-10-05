@@ -1,28 +1,25 @@
 package com.endicott.edu.models;
 
-import java.util.ArrayList;
-
 public class DormModel extends BuildingModel {
     //inherits from BuildingModel
-    private ArrayList<Upgrades> upgrades;
-    public static final int maxLevel = 3;
-
     public DormModel(String name, int numStudents, String size){
         super(name, numStudents, BuildingType.dorm().getType(), size);
-        this.upgrades = DormUpgrades.getUpgrades();
+        this.getUpgrades().add(new Upgrade("Air Conditioning", 10000, 50));
+        this.getUpgrades().add(new Upgrade("Plumbing", 3200, 50));
+        this.getUpgrades().add(new Upgrade("CommonRooms", 5000, 50));
     }
 
-    public void upgradeDormModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).increaseLevel();
+    public void upgradeDormModel(Upgrade upgrade) {
+        for(int i = 0; i < upgrade.getMaxLevel(); i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).increaseLevel();
         }
     }
 
-    public void downgradeDormModel(Upgrades upgrade) {
-        for(int i = 0; i < maxLevel; i++) {
-            if(upgrade.getName()==upgrades.get(i).getName())
-                upgrades.get(i).decreaseLevel();
+    public void downgradeDormModel(Upgrade upgrade) {
+        for(int i = 0; i > 0; i++) {
+            if(upgrade.getName()==getUpgrades().get(i).getName())
+                getUpgrades().get(i).decreaseLevel();
         }
     }
 }
