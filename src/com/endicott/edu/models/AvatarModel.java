@@ -35,7 +35,6 @@ public class AvatarModel {
     //Default constructor, assumed you will set the paramters before using
     public AvatarModel() {
         randomize();    //Change this so that it isn't totally random, depending gender/nature students look different
-        //My idea would be to call randomize, then do some extra calculations after, updating the set fields (Unless they all need specifics)
     }
 
     //Function called to set up the arraylists so that new models can be created
@@ -50,7 +49,6 @@ public class AvatarModel {
         addTopType();
         addHairColor();
         addFacialHairType();
-        System.out.println("We are done with being in here");
     }
 
     public String getAvatarUrl(){ return avatarUrl;}
@@ -112,7 +110,6 @@ public class AvatarModel {
         sb.append("&topType=" + topTypes.get(topVal));
 
         avatarUrl = sb.toString();
-        System.out.println(avatarUrl);
         return avatarUrl;
     }
 
@@ -165,7 +162,7 @@ public class AvatarModel {
         eyeTypes.add("Hearts");
         eyeTypes.add("Side");
         eyeTypes.add("Squint");
-        eyeTypes.add("Surprise");
+        eyeTypes.add("Surprised");
         eyeTypes.add("Wink");
         eyeTypes.add("WinkWacky");
     }
