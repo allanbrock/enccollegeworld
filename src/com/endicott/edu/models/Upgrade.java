@@ -1,7 +1,5 @@
 package com.endicott.edu.models;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,7 +7,7 @@ public class Upgrade implements Serializable {
     protected String name;
     protected int cost;
     protected int happinessModifier;
-    protected int curretLevel;
+    protected int currentLevel;
     protected String description;
     protected ArrayList<UpgradeEvents> events;
     protected int maxLevel;
@@ -19,14 +17,14 @@ public class Upgrade implements Serializable {
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
-        this.curretLevel = 0;
+        this.currentLevel = 0;
     }
 
     public Upgrade(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel, boolean typeOfChange){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
-        this.curretLevel = 0;
+        this.currentLevel = 0;
         this.description = description;
         this.events = events;
         this.maxLevel = maxLevel;
@@ -51,10 +49,10 @@ public class Upgrade implements Serializable {
     //gives level to the upgrades, each building may have a max level of upgrade
     //each level increase should give more stats eg. student happiness, faculty happiness, college rating, etc
     public void increaseLevel(){
-        this.curretLevel++;
+        this.currentLevel++;
     }
 
-    public void decreaseLevel(){this.curretLevel--;}
+    public void decreaseLevel(){this.currentLevel--;}
 
     public int getMaxLevel(){
         return this.maxLevel;
