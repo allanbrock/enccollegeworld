@@ -282,6 +282,7 @@ public class StudentManager {
         college = CollegeDao.getCollege(collegeId);
         college.setNumberStudentsAdmitted(Math.max(college.getNumberStudentsAdmitted(), nStudents));
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
+        calculateRetentionRate(collegeId); //Calculate the retention rate since students have possibly left the college
 
         //CollegeDao.saveCollege(college);
         // Don't create a news story if no students leave
@@ -319,7 +320,6 @@ public class StudentManager {
         setHappinessForEachStudent(collegeId, initial, students);
         calculaterOverallStudentHealth(collegeId, students);
         calculateAllAverageHappiness(collegeId, students);
-        calculateRetentionRate(collegeId);
     }
 
     private void calculateAllAverageHappiness(String collegeId, List<StudentModel> students) {
@@ -356,7 +356,7 @@ public class StudentManager {
         int avgProfHappiness = profHappinessSum/Math.max(1,students.size());
 
         //Set the happinesses averages accordingly, making sure they stay at 100 or below
-        college.setStudentBodyHappiness(Math.min(100, avgHealthHappiness));
+        college.setStudentHealthHappiness(Math.min(100, avgHealthHappiness));
         college.setStudentBodyHappiness(Math.min(100, avgHappiness));
         college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness));
         college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness));
@@ -376,10 +376,9 @@ public class StudentManager {
             }
         }
 
-        int percentageWell = 100 - (2*(nSick * 100) / Math.max(students.size(), 1));
+        int percentageWell = ((Math.max(students.size(), 1) - nSick) * 100) / Math.max(students.size(), 1);
         int rating = Math.max(0, percentageWell);
         rating = Math.min(rating, 100);
-        //int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
         college.setStudentHealthRating(rating);
 
         //CollegeDao.saveCollege(college);
@@ -533,6 +532,7 @@ public class StudentManager {
     }
 
     /**
+     * Changed!!!
      * Set the health happiness of a single student
      *
      * @param s The student to update
@@ -540,13 +540,15 @@ public class StudentManager {
      */
     private void setStudentHealthHappiness(StudentModel s, boolean initial) {
         if (initial) {
+            //When college starts
             s.setHealthHappinessRating(100);
         }
-        else if (s.getNumberHoursLeftBeingSick() > 0){
-            s.setHealthHappinessRating(0);
-        }
-        else if(s.getHealthHappinessRating() < 100) {
-            s.setHealthHappinessRating(s.getHealthHappinessRating()+25);
+        else {
+            //Calculation: Everyday they are sick is -48 happiness, plus a bit of random deviation
+            System.out.println("HOURS LEFT: " + s.getNumberHoursLeftBeingSick());
+            int happiness = (100-2*s.getNumberHoursLeftBeingSick());
+            happiness = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 10, 0, 100);
+            s.setHealthHappinessRating(happiness);
         }
     }
 
