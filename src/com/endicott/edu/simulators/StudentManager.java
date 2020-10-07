@@ -356,7 +356,7 @@ public class StudentManager {
         int avgProfHappiness = profHappinessSum/Math.max(1,students.size());
 
         //Set the happinesses averages accordingly, making sure they stay at 100 or below
-        college.setStudentBodyHappiness(Math.min(100, avgHealthHappiness));
+        college.setStudentHealthHappiness(Math.min(100, avgHealthHappiness));
         college.setStudentBodyHappiness(Math.min(100, avgHappiness));
         college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness));
         college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness));
@@ -376,10 +376,9 @@ public class StudentManager {
             }
         }
 
-        int percentageWell = 100 - (2*(nSick * 100) / Math.max(students.size(), 1));
+        int percentageWell = ((Math.max(students.size(), 1) - nSick) * 100) / Math.max(students.size(), 1);
         int rating = Math.max(0, percentageWell);
         rating = Math.min(rating, 100);
-        //int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
         college.setStudentHealthRating(rating);
 
         //CollegeDao.saveCollege(college);

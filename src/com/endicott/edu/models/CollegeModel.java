@@ -26,6 +26,7 @@ public class CollegeModel implements Serializable {
     private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
     private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
     private int studentHealthRating = 0;       // 0 to 100 rating of student health
+    private int studentHealthHappiness = 0;       // 0 to 100 rating of student health
     private int studentRecreationalHappiness = 0; // 0 to 100 rating of student recreational happiness
     private int studentFinancialHappiness = 0; // 0 to 100 rating of student recreational happiness
     private int studentBuildingHappiness = 0;
@@ -73,6 +74,14 @@ public class CollegeModel implements Serializable {
 
     public void setStudentHealthRating(int studentHealthRating) {
         this.studentHealthRating = studentHealthRating;
+    }
+
+    public int getStudentHealthHappiness() {
+        return studentHealthHappiness;
+    }
+
+    public void setStudentHealthHappiness(int studentHealthHappiness) {
+        this.studentHealthHappiness = studentHealthHappiness;
     }
 
     public void setStudentRecreationalHappiness(int studentRecreationalHappiness) {this.studentRecreationalHappiness = studentRecreationalHappiness;}
