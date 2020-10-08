@@ -393,22 +393,23 @@ public class StudentManager {
         for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
            setStudentHealthHappiness(student, initial);
-           setStudentAcademicHappiness(student, college);
            setStudentAdvisorHappiness(student, college, initial);
+           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
+           setStudentAcademicHappiness(student, college);
            setStudentMoneyHappiness(student, college, initial);
            setStudentFunHappiness(student, college);
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
-           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
            setStudentOverallBuildingHappinessRating(student, college);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
            int happiness =
-                   (int) (0.1 * student.getAcademicHappinessRating() +
+                   // adjust percentages when building/professor happinesses are less random
+                   (int) (0.3 * student.getAcademicHappinessRating() +
                           0.2 * student.getHealthHappinessRating() +
-                          0.5 * student.getMoneyHappinessRating() +
+                          0.3 * student.getMoneyHappinessRating() +
                           //0.1 * student.getFunHappinessRating() +     Uncomment this once Fun can be interacted with
                           0.1 * student.getOverallBuildingHappinessRating() +
                           0.1 * student.getProfessorHappinessRating());
@@ -475,7 +476,7 @@ public class StudentManager {
         int rating; //The rating of the student
         if(initial) {
             //For the initial start, students have a rating of 0 so this needs to be set
-            rating = SimulatorUtilities.getRatingZeroToOneHundred(70000, 20000, college.getYearlyTuitionCost());
+            rating = SimulatorUtilities.getRatingZeroToOneHundred(70000, 25000, college.getYearlyTuitionCost());
         }
         else {
             rating = college.getYearlyTuitionRating(); //Previous rating the student had
@@ -490,26 +491,27 @@ public class StudentManager {
         Random r = new Random();
         int happinessRating;
         if (initial){
-            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(50, 15, 0, 100);
+            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(75, 15, 0, 100);
         }
         else{
             happinessRating = s.getAdvisorHappinessHappinessRating();
             if(s.getAdvisor().getPerformance() > 75){
-                int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
-                happinessRating += happinessIncrease;
+//                int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
+                happinessRating += 5;
             }
-            else if(s.getAdvisor().getPerformance() > 50){
-                double rand = Math.random();
-                int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
-                if(rand <= 0.5)
-                    happinessRating += happinessNumber;
-                else
-                    happinessRating -= happinessNumber;
+            else if(s.getAdvisor().getPerformance() < 50){
+//                double rand = Math.random();
+//                int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
+//                if(rand <= 0.5)
+//                    happinessRating += happinessNumber;
+//                else
+//                    happinessRating -= happinessNumber;
+                happinessRating -= 5;
             }
-            else{
-                int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
-                happinessRating -= happinessDecrease;
-            }
+//            else{
+//                int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
+//                happinessRating -= happinessDecrease;
+//            }
         }
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
@@ -517,17 +519,31 @@ public class StudentManager {
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
-        int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
-        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
-
-        happinessRating = Math.max(happinessRating, 0);
-        happinessRating = Math.min(happinessRating, 100);
+        int happiness =
+                (int) (0.4 * college.getStudentFacultyRatioRating() +
+                        0.2 * s.getAdvisorHappinessHappinessRating() +
+                        0.4 * s.getProfessorHappinessRating());
+        if(s.getNature() == "Studious"){
+            happiness += 10;
+        }
+        else if(s.getNature() == "Lazy" || s.getNature() == "Rebellious"){
+            happiness -= 10;
+        }
+        happiness = Math.min(100, happiness);
+        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 5, 0, 100);
 
         s.setAcademicHappinessRating(happinessRating);
     }
 
     private void setStudentProfessorHappiness(String collegeId, StudentModel s, int aveFacultyPerformance){
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(aveFacultyPerformance, 10, 0, 100);
+        if(s.getNature() == "Studious"){
+            happinessRating += 5;
+        }
+        else if(s.getNature() == "Lazy" || s.getNature() == "Rebellious"){
+            happinessRating -= 5;
+        }
+        Math.min(100, happinessRating);
         s.setProfessorHappinessRating(happinessRating);
     }
 
