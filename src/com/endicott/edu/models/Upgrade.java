@@ -4,29 +4,31 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Upgrade implements Serializable {
-    private String name;
-    private int cost;
-    private int happinessModifier;
-    private int level;
-    private String description;
-    private ArrayList<UpgradeEvents> events;
-    private int maxLevel;
+    protected String name;
+    protected int cost;
+    protected int happinessModifier;
+    protected int currentLevel;
+    protected String description;
+    protected ArrayList<UpgradeEvents> events;
+    protected int maxLevel;
+    protected boolean isInteriorChange;
 
     public Upgrade(String name, int cost, int happinessModifier){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
-        this.level = 0;
+        this.currentLevel = 0;
     }
 
-    public Upgrade(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel){
+    public Upgrade(String name, int cost, int happinessModifier, String description, ArrayList<UpgradeEvents> events, int maxLevel, boolean typeOfChange){
         this.name = name;
         this.cost = cost;
         this.happinessModifier = happinessModifier;
-        this.level = 0;
+        this.currentLevel = 0;
         this.description = description;
         this.events = events;
         this.maxLevel = maxLevel;
+        this.isInteriorChange = typeOfChange;
     }
 
     public String getName(){
@@ -47,12 +49,14 @@ public class Upgrade implements Serializable {
     //gives level to the upgrades, each building may have a max level of upgrade
     //each level increase should give more stats eg. student happiness, faculty happiness, college rating, etc
     public void increaseLevel(){
-        this.level++;
+        this.currentLevel++;
     }
 
-    public void decreaseLevel(){this.level--;}
+    public void decreaseLevel(){this.currentLevel--;}
 
     public int getMaxLevel(){
         return this.maxLevel;
     }
+
+    public Boolean getTypeOfChange(){ return this.isInteriorChange; }
 }
