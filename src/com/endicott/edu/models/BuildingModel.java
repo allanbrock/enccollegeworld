@@ -236,4 +236,11 @@ public class BuildingModel implements Serializable {
     public ArrayList<Upgrade> getUpgrades(){
         return this.upgrades;
     }
+    public String getUpgradesString() {
+        String msg = "";
+        for(int i = 0; i <= this.upgrades.size(); i++) {
+            msg = msg + this.upgrades.get(i).name + ": Level " + this.upgrades.get(i).currentLevel + "\n";
+        }
+        return msg;
+    }
 }

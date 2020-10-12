@@ -231,6 +231,17 @@ public class BuildingManager {
     }
 
     /**
+     * Author: Justen Koo
+     * FIXME: The popup only appears after the user advances by one day, not instantly
+     * Shows the current upgrades of the passed in building
+     * @param building
+     */
+    public static void viewUpgrades(String collegeId, BuildingModel building) {
+        String msg = building.getUpgradesString();
+        PopupEventManager.newPopupEvent(collegeId, building.getName(), msg, "Ok", "ok", "resources/images/rioticon.png", "icon");
+    }
+
+    /**
      * Repairs the quality of the building based on how damaged it is.
      *
      * @param collegeId
