@@ -43,10 +43,10 @@ public abstract class PersonModel {
     public void setGender(GenderModel gender) { this.gender = gender; }
     public String getGender() { //We don't want a GenderModel, instead just a string of the gender
         if(this.gender == GenderModel.FEMALE) {
-            return "FEMALE";
+            return "Female";
         }
         else {
-            return "MALE";
+            return "Male";
         }
     }
 
