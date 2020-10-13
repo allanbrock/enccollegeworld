@@ -675,8 +675,19 @@ public class SportManager {
 
     private static void assignCoach(String collegeId, SportModel team){
         String coachName = NameGenDao.generateName(false);
+//        CoachModel coach = new CoachModel();
+        AvatarModel avatar = new AvatarModel();
         CoachModel coach = new CoachModel(team.getSportName(), coachName, "Coach", "Athletics", collegeId, 100000);
+//        coach.setSportName(team.getSportName());
+//        coach.setFacultyName(coachName);
+//        coach.setTitle("Coach");
+//        coach.setDepartmentName("Athletics");
+//        coach.setCollegeID(collegeId);
+//        coach.setSalary(100000);
+        //Generates a random url for the student's avatar
+        coach.setAvatarIcon(avatar);
         team.setCoachName(coach.getFacultyName());
+
     }
 
     public static String generateCoachUnderPerformingScenario(String badCoachName){
