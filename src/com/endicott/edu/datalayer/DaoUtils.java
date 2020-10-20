@@ -1,14 +1,21 @@
 package com.endicott.edu.datalayer;
 
-import java.io.File;
+import com.endicott.edu.models.FacultyModel;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * Created by abrocken on 7/20/2017. 
  */
 public class DaoUtils {
-    private String REST_SERVICE_URL = "http://localhost:8080/College_sim3_war_exploded/finances";
     private static Logger logger = Logger.getLogger("DaoUtils");
+    private static File home = null;
+    private static final String collegeDir = System.getProperty("SystemDrive") + File.separator + "collegesim";
 
     static public String getFilePathPrefix(String collegeId) {
         //logger.info("Location of colleges: " + getCollegeStorageDirectory());
@@ -16,10 +23,82 @@ public class DaoUtils {
     }
 
     static private String getCollegeStorageDirectory() {
-        String collegeDir = System.getProperty("SystemDrive")+ File.separator +"collegesim";
-//        if (collegeDir == null)
-//            collegeDir = System.getenv("SystemDrive")+ File.separator +"collegesim";
+        String collegeDir = System.getProperty("SystemDrive") + File.separator + "collegesim";
         new File(collegeDir).mkdirs();
         return collegeDir;
     }
+    static private String getCollegeStorageDirectoryNew() {
+        // 'SystemDrive' is not a real System property.
+        //String collegeDir = System.getProperty("SystemDrive")+ File.separator +"collegesim";
+
+        // use a singleton instance to only make the folder on first run
+        if(home==null) {
+            home = new File(collegeDir);
+            home.mkdirs();
+        }
+
+        return collegeDir;
+    }
+
+    public static String getFilePath(String collegeId, String filename) {
+        return getFilePathPrefix(collegeId) +  filename;
+    }
+
+
+    /**
+     * This function returns a list of all the TYPE for a college
+     * The college is defined by its collegeId
+     * @param collegeId
+     * @return ArrayList<T>
+     * @param filename
+     */
+    public static <T> List<T> getListData(String collegeId, String filename) {
+        ArrayList<T> listOfData = new ArrayList<T>();
+        try {
+            File file = new File(getFilePath(collegeId, filename));
+            if (!file.exists()) {
+                return listOfData;  // No data exists
+            }
+            else{ //data exist lets return the objects....
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                listOfData = (ArrayList<T>) ois.readObject();
+                ois.close();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            logger.warning("IO exception in loading " + filename + ".. ");
+            e.printStackTrace();
+        }
+        return listOfData;
+    }
+
+    /**
+     * This function writes a list of TYPE objects to the disk...
+     * @param collegeId
+     * @param listOfData
+     * @param filename
+     */
+    public static <T> void saveAllListData(String collegeId, List<T> listOfData, String filename) {
+        try {
+            File file = new File(getFilePath(collegeId, filename));
+            file.createNewFile();
+            FileOutputStream fos;
+            fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(listOfData);
+            oos.close();
+        } catch (FileNotFoundException e) {
+            logger.info("Got FileNotFoundException when attempting to create: " + getFilePath(collegeId, filename));
+            e.printStackTrace();
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        } catch (IOException e) {
+            logger.info("Got IOException when attempting to create: " + getFilePath(collegeId, filename));
+            e.printStackTrace();
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        logger.info("Saved " + filename + "...");
+
+    }
+
 }

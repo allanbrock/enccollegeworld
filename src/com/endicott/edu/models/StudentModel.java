@@ -1,6 +1,7 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.simulators.CollegeManager;
+import org.glassfish.jersey.message.internal.Quality;
 
 import java.io.Serializable;
 
@@ -32,6 +33,9 @@ public class StudentModel extends PersonModel implements Serializable {
     private int overallBuildingHappinessRating = 0; //Student's happiness when it comes to the quality of building on campus (0-100)
     private FacultyModel advisor;                   //The advisor of a student
 
+    private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
+    private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy
+
     //Constructor to make a new student with preset fields (assumed to be set after creation)
     public StudentModel() {
     }
@@ -47,6 +51,11 @@ public class StudentModel extends PersonModel implements Serializable {
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
     }
+
+    public void setPersonality(PersonalityModel pm){ this.personality = pm; }
+    public PersonalityModel getPersonality() { return this.personality; }
+    public void setQuality(QualityModel qm){ this.quality = qm; }
+    public QualityModel getQuality() { return this.quality; }
 
     public boolean isAthlete() {
         return athlete;

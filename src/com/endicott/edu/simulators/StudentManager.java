@@ -191,6 +191,22 @@ public class StudentManager {
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
 
+            // assign a personality and a quality
+            // TODO: pass in the 'tier' and 'quality' of this newly created student
+            // for now, 5/8 of students will be basic,
+            //          2/8 will be one tier above
+            //          1/8 will be two tiers above
+            int tier = 0;
+            float percentage = i/(float)numNewStudents;
+            if(percentage > 7/8.0*numNewStudents){
+                tier = 2;
+            }
+            else if(percentage > 5/8.0*numNewStudents){
+                tier = 1;
+            }
+            student.setPersonality(PersonalityModel.generateRandomModel(tier));
+            student.setQuality(QualityModel.generateRandomModel(tier));
+
             //Generates a random url for the student's avatar
             AvatarModel avatar = new AvatarModel();
             student.setAvatarIcon(avatar);
@@ -228,9 +244,8 @@ public class StudentManager {
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
             student.setNature(assignRandomNature());
             students.add(student);
-            dao.saveAllStudentsJustToCache(collegeId, students);
         }
-
+        dao.saveAllStudentsJustToCache(collegeId, students);
     }
 
     /**

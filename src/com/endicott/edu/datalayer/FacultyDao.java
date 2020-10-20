@@ -16,36 +16,12 @@ import java.util.logging.Logger;
  *
  */
 public class FacultyDao {
-    private static String getFilePath(String collegeId) {
-        return DaoUtils.getFilePathPrefix(collegeId) +  "faculty.json";
-    }
+    private static final String filename = "faculty.json";
 
     private static Logger logger = Logger.getLogger("FacultyDao");
 
-    /**
-     * This function returns a list of all the faculty for a college
-     * The college is defined by its collegeId
-     * @param collegeId
-     * @return ArrayList<FacultyModel> faculty
-     */
     public static List<FacultyModel> getFaculty(String collegeId) {
-        ArrayList<FacultyModel> faculty = new ArrayList<>();
-        try {
-            File file = new File(getFilePath(collegeId));
-            if (!file.exists()) {
-                return faculty;  // No faculty exist
-            }
-            else{ //faculty exist lets return the objects....
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                faculty = (ArrayList<FacultyModel>) ois.readObject();
-                ois.close();
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            logger.warning("IO exception in retrieving faculty.. ");
-            e.printStackTrace();
-        }
-        return faculty;
+        return DaoUtils.<FacultyModel>getListData(collegeId, filename);
     }
 
     public static FacultyModel[] getFacultyArray(String collegeId) {
@@ -66,32 +42,8 @@ public class FacultyDao {
         saveAllFaculty(collegeId, faculty);
     }
 
-    /**
-     * This function writes a list of faculty objects to the disk...
-     * @param collegeId
-     * @param faculty
-     */
     public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
-        try {
-            File file = new File(getFilePath(collegeId));
-            file.createNewFile();
-            FileOutputStream fos;
-            fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(faculty);
-            oos.close();
-        } catch (FileNotFoundException e) {
-            logger.info("Got file not found when attempting to create: " + getFilePath(collegeId));
-            e.printStackTrace();
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-        } catch (IOException e) {
-            logger.info("Got io exceptionfound when attempting to create: " + getFilePath(collegeId));
-            e.printStackTrace();
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        logger.info("Saved faculty...");
-
+        DaoUtils.<FacultyModel>saveAllListData(collegeId, faculty, filename);
     }
 
     /**
@@ -99,7 +51,7 @@ public class FacultyDao {
      * @param collegeId
      */
     public static void removeAllFaculty(String collegeId){
-        File file = new File(getFilePath(collegeId));
+        File file = new File(DaoUtils.getFilePath(collegeId, filename));
         file.delete();
     }
 
@@ -195,7 +147,7 @@ public class FacultyDao {
 
 
 
-        File file = new File(fao.getFilePath(collegeId));
+        File file = new File(DaoUtils.getFilePath(collegeId, filename));
         assert (!file.exists());
 
         System.out.println("End of testing faculty successful.");
