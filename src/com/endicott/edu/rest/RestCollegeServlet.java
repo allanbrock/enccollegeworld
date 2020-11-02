@@ -97,13 +97,29 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
             String command = splits[2];  // only command is next day at the moment.
             logger.info("Servlet command: " + command + " " + collegeId);
             PopupEventManager popupMgr = new PopupEventManager();  // This is a stub.  Must be changed.
-            CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
 
+            /*MY CODE IDK IF THIS IS THE RIGHT PLACE FOR IT*/
+            if(splits[2].equalsIgnoreCase("calculateContract")) {
+                String amount = splits[3];
+                int integerAmount = Integer.parseInt(amount);
+                CollegeManager.calculateContract(integerAmount, collegeId);
+            }
+            else if(splits[2].equalsIgnoreCase("createContract")) {
+                CollegeManager.createContract(collegeId);
+            }
+            else if(splits[2].equalsIgnoreCase("temp2")) {
+                //CollegeManager.makePayment();
+            }
+            else {
+                CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
+            }
+            /* ********************************************** */
+
+            college = CollegeDao.getCollege(collegeId);
             EverythingModel everything = EverythingDao.getEverything(collegeId);
             sendAsJson(response, everything);
             return;
         }
-
         college = CollegeDao.getCollege(collegeId);
         sendAsJson(response, college);
     }

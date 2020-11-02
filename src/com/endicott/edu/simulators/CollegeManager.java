@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
@@ -45,6 +46,11 @@ public class CollegeManager {
         college = new CollegeModel();
         college.setRunId(collegeId);
         college.setHoursAlive(1);
+        LoanModel testModel = new LoanModel(1000, 10, 100);
+        college.getLoans().add(testModel);
+        LoanModel testModel2 = new LoanModel(2000, 25, 250);
+        college.getLoans().add(testModel2);
+        System.out.println("ADDED MODELS");
         college.setAvailableCash(STARTUP_FUNDING);
         CollegeDao.saveCollege(college);
 
@@ -101,10 +107,11 @@ public class CollegeManager {
         // If there is a popup, we are not going to advance the day.
         // The pop must be cleared through the user inteface first.
         List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);
-        if (popupEvents == null || popupEvents.size() > 0) {
-            logger.info("Not advancing day because there are pop ups.");
-            return college;
-        }
+        //I COMMENTED THIS OUT BECAUSE POPUPS ARE NOT GOING AWAY, WHEN FIXED UNCOMMENT THIS
+//        if (popupEvents == null || popupEvents.size() > 0) {
+//            logger.info("Not advancing day because there are pop ups.");
+//            return college;
+//        }
 
         college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
@@ -163,6 +170,25 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        //Run the loans every 7 days/week
+        if(college.getHoursAlive() % 169 == 0) {
+            logger.info("AdvanceTime Loans");
+            //Find the amount of money the user has to pay on their loans and add it up
+            int total = 0;
+            for(int i = 0; i < college.getLoans().size(); i++) {
+                total += makeWeeklyPayment(college.getLoans().get(i));
+                //Update the debt using the interest rate now!!!
+            }
+
+            //Pay off the loans, updating the college debt and their balance
+            college.setDebt(college.getDebt()-total);
+            college.setAvailableCash(college.getAvailableCash()-total);
+
+            //Update the college credit for paying these loans
+            int newCredit = updateCredit(total);
+            college.setCredit(college.getCredit() + newCredit);
+        }
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
@@ -274,6 +300,124 @@ public class CollegeManager {
         logger.info("Rating was: " + rating);
         college.setYearlyTuitionRating(rating);
         CollegeDao.saveCollege(college);
+    }
+
+    /**
+     * Creates the contract and places it in the college's loan list
+     */
+    static public void createContract(String collegeId) {
+        System.out.println("Creating a contract");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        LoanModel lm = college.getProposedLoan();   //Grab the saved loan
+        System.out.println("This is the model of it:" + lm.getValue() + lm.getInterest() + lm.getWeeklyPayment());
+        college.getLoans().add(lm);                 //Add it to the arraylist
+        System.out.println("Here are all the loans now: " + college.getLoans());
+        lm = new LoanModel(0, 0, 0);    //Make a default proposed loan
+        college.setProposedLoan(lm);                //Set the proposed loan to the default again
+        System.out.println("Just b4 we save, proposed loan is now empty see:" + college.getProposedLoan());
+        CollegeDao.saveCollege(college);
+    }
+
+    /**
+     * Function will start be generating an interest rate for the loan. This is based on how much a user borrows, their credit,
+     * plus their current debt. Lowest range is 2% while the cap is 20% even if it should be more based upon the algorithm.
+     * Finally, the function will also generate the average weekly payment the college must make to pay this off, which is also
+     * influenced by credit score and the amount of debt the college already has.
+     */
+    //Make this just take in the college model and the amount instead?
+    static public void calculateContract(int amount, String collegeId) {
+
+        //Algorithm should likely be rebalanced but these are rough parameters of how each should impact the interest rate
+        //Base percentage says there is 1% rate for every 15K taken out
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        LoanModel lm = college.getProposedLoan();
+        lm.setValue(amount);    //First set the value of the contract
+        lm.setInterest(amount/13000);
+
+        //Factor in the amount of debt your college is already in
+        //We will add an extra percent for every 50K the college is in debt right now
+        double debtAddon = college.getDebt()/25000;
+        lm.setInterest(lm.getInterest() + debtAddon);
+
+        //Factor in credit score now
+        //We will take off half a percent for every 50 points in the credit score
+        int temp = college.getCredit()/75;
+        double creditTakeoff = temp/2;
+        lm.setInterest(lm.getInterest() + creditTakeoff);
+
+        //Make sure it's between 2-20%
+        Math.min(20, lm.getInterest());
+        Math.max(2, lm.getInterest());
+
+        //Calculate weekly payment below
+        //We will first find a percentage they should pay based upon their credit, then calculate from there
+        //Based on standard credit score ranges of bad-excellent
+        int creditScore = college.getCredit();
+        double percentPayment = 0;
+        if(creditScore >= 300 && creditScore <= 579) {
+            percentPayment = 4.0;
+        }
+        else if(creditScore >= 580 && creditScore <= 669) {
+            percentPayment = 3.0;
+        }
+        else if(creditScore >= 670 && creditScore <= 739) {
+            percentPayment =  2.0;
+        }
+        else if(creditScore >= 740 && creditScore <= 799) {
+            percentPayment = 1.5;
+        }
+        else if(creditScore >= 800 && creditScore <= 850) {
+            percentPayment = 1.0;
+        }
+
+        //Every 50K we will add another .25 percent to the percentage
+        temp = amount/50000;
+        for(int i = 0; i < temp; i++) {
+            percentPayment += 0.25;
+        }
+
+        lm.setWeeklyPayment(Math.round(amount*(percentPayment/100)));
+
+        college.setProposedLoan(lm);
+        CollegeDao.saveCollege(college);
+    }
+
+    /**
+     * Function will determine how much needs to deducted from the loan, and remove it, also returning it for the college
+     * so it can remove it from the college balance
+     *
+     * @return Returns whether or not this loan has been fully paid off or not
+     */
+    static public double makeWeeklyPayment(LoanModel lm) {
+        double num = lm.getValue()*(100.0/lm.getWeeklyPayment());  //First grab the double value of what the user must pay
+        int valueToRemove = (int)num;                              //Cast it to an int since the college doesn't have cents counted
+        lm.setValue(lm.getValue() - valueToRemove);                //Subtract it from this loan's value
+
+        return valueToRemove;
+    }
+
+    /**
+     * Function allows user to pay the debt on this loan
+     *
+     * @param amount The amount the user wants to pay on the loan
+     *
+     * @return Returns the increase in credit score to update the credit with
+     */
+    static public int makePayment(int amount, LoanModel lm, int credit) {
+        lm.setValue(lm.getValue() - amount);
+        credit += updateCredit(amount);
+        return credit;
+    }
+
+    /**
+     * Function takes an amount of money paid on loans and increases the college's credit
+     *
+     * @param amount The amount the user just paid on one/all their loans
+     * @return The increase to credit
+     */
+    static public int updateCredit(int amount) {
+        int increase = (amount/1000);   //For every thousand dollars the user paid on their loans, they get 1 point
+        return increase;
     }
 
     static private void loadTips(String collegeId) {
