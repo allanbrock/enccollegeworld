@@ -46,11 +46,6 @@ public class CollegeManager {
         college = new CollegeModel();
         college.setRunId(collegeId);
         college.setHoursAlive(1);
-        LoanModel testModel = new LoanModel(1000, 10, 100);
-        college.getLoans().add(testModel);
-        LoanModel testModel2 = new LoanModel(2000, 25, 250);
-        college.getLoans().add(testModel2);
-        System.out.println("ADDED MODELS");
         college.setAvailableCash(STARTUP_FUNDING);
         CollegeDao.saveCollege(college);
 
@@ -404,9 +399,9 @@ public class CollegeManager {
      *
      * @return Returns the increase in credit score to update the college credit with
      */
-    static public void makePayment(String collegeId, int amount, LoanModel lm) {
-        System.out.println("PAYMENT FUNCTION:" + collegeId + " " + amount + " " + lm.getValue());
+    static public void makePayment(String collegeId, int amount, int loanNumber) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
+        LoanModel lm = college.getLoans().get(loanNumber);
         lm.setValue(lm.getValue() - amount);    //Remove the amount of cash from the specific loan
         college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt

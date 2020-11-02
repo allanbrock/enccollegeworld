@@ -109,13 +109,11 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
                 CollegeManager.createContract(collegeId);
             }
             else if(splits[2].equalsIgnoreCase("makePayment")) {
-                college = CollegeDao.getCollege(collegeId);
                 String amount = splits[3];
                 String loanNum = splits[4];
                 int integerAmount = Integer.parseInt(amount);
                 int integerLoanNum = Integer.parseInt(loanNum);
-                LoanModel lm = college.getLoans().get(integerLoanNum);
-                CollegeManager.makePayment(collegeId, integerAmount, lm);
+                CollegeManager.makePayment(collegeId, integerAmount, integerLoanNum);
             }
             else {
                 CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
