@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.EverythingModel;
+import com.endicott.edu.models.LoanModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.google.gson.Gson;
@@ -107,8 +108,14 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
             else if(splits[2].equalsIgnoreCase("createContract")) {
                 CollegeManager.createContract(collegeId);
             }
-            else if(splits[2].equalsIgnoreCase("temp2")) {
-                //CollegeManager.makePayment();
+            else if(splits[2].equalsIgnoreCase("makePayment")) {
+                college = CollegeDao.getCollege(collegeId);
+                String amount = splits[3];
+                String loanNum = splits[4];
+                int integerAmount = Integer.parseInt(amount);
+                int integerLoanNum = Integer.parseInt(loanNum);
+                LoanModel lm = college.getLoans().get(integerLoanNum);
+                CollegeManager.makePayment(collegeId, integerAmount, lm);
             }
             else {
                 CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);

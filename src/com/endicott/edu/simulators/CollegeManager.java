@@ -178,7 +178,7 @@ public class CollegeManager {
             int total = 0;
             for(int i = 0; i < college.getLoans().size(); i++) {
                 total += makeWeeklyPayment(college.getLoans().get(i));
-                //Update the debt using the interest rate now!!!
+                addInterest(college.getLoans().get(i));
             }
 
             //Pay off the loans, updating the college debt and their balance
@@ -303,35 +303,33 @@ public class CollegeManager {
     }
 
     /**
-     * Creates the contract and places it in the college's loan list
+     * Creates the contract and places it in the college's loan list, then resets the proposed loan
      */
     static public void createContract(String collegeId) {
-        System.out.println("Creating a contract");
         CollegeModel college = CollegeDao.getCollege(collegeId);
         LoanModel lm = college.getProposedLoan();   //Grab the saved loan
-        System.out.println("This is the model of it:" + lm.getValue() + lm.getInterest() + lm.getWeeklyPayment());
         college.getLoans().add(lm);                 //Add it to the arraylist
-        System.out.println("Here are all the loans now: " + college.getLoans());
+        college.setDebt(college.getDebt() + lm.getValue());    //Add the debt to the total college debt
         lm = new LoanModel(0, 0, 0);    //Make a default proposed loan
         college.setProposedLoan(lm);                //Set the proposed loan to the default again
-        System.out.println("Just b4 we save, proposed loan is now empty see:" + college.getProposedLoan());
         CollegeDao.saveCollege(college);
     }
 
     /**
-     * Function will start be generating an interest rate for the loan. This is based on how much a user borrows, their credit,
-     * plus their current debt. Lowest range is 2% while the cap is 20% even if it should be more based upon the algorithm.
-     * Finally, the function will also generate the average weekly payment the college must make to pay this off, which is also
-     * influenced by credit score and the amount of debt the college already has.
+     * Function will generate both the interest rate and predicted weekly payment on the loan the user is
+     * considering to take out. NOTE: This is not making a contract, instead calculating what the contact would look
+     * like for the user, letting them determine if they want to take out this loan or not
+     *
+     * @param amount The amount the user is considering to take out
+     * @param collegeId The id of the college currently in use
      */
-    //Make this just take in the college model and the amount instead?
     static public void calculateContract(int amount, String collegeId) {
-
-        //Algorithm should likely be rebalanced but these are rough parameters of how each should impact the interest rate
-        //Base percentage says there is 1% rate for every 15K taken out
+        //Feel free to balance numbers and change calculation algorithms, this is just a start for how they could be calculated
         CollegeModel college = CollegeDao.getCollege(collegeId);
         LoanModel lm = college.getProposedLoan();
         lm.setValue(amount);    //First set the value of the contract
+
+        //Base percentage: 13K equals a percent on the rate
         lm.setInterest(amount/13000);
 
         //Factor in the amount of debt your college is already in
@@ -345,13 +343,13 @@ public class CollegeManager {
         double creditTakeoff = temp/2;
         lm.setInterest(lm.getInterest() + creditTakeoff);
 
-        //Make sure it's between 2-20%
+        //Make sure it's between 2-20% (Change these if too high or low as caps)
         Math.min(20, lm.getInterest());
         Math.max(2, lm.getInterest());
 
         //Calculate weekly payment below
         //We will first find a percentage they should pay based upon their credit, then calculate from there
-        //Based on standard credit score ranges of bad-excellent
+        //Based on standard credit score ranges of bad-excellent online
         int creditScore = college.getCredit();
         double percentPayment = 0;
         if(creditScore >= 300 && creditScore <= 579) {
@@ -376,6 +374,7 @@ public class CollegeManager {
             percentPayment += 0.25;
         }
 
+        //Now take the amount they want a loan of and calculate how much based upon that percentage
         lm.setWeeklyPayment(Math.round(amount*(percentPayment/100)));
 
         college.setProposedLoan(lm);
@@ -386,7 +385,9 @@ public class CollegeManager {
      * Function will determine how much needs to deducted from the loan, and remove it, also returning it for the college
      * so it can remove it from the college balance
      *
-     * @return Returns whether or not this loan has been fully paid off or not
+     * @param lm The Loan that will be deducted from
+     *
+     * @return Returns the value that will be taken out of the college's debt total and balance
      */
     static public double makeWeeklyPayment(LoanModel lm) {
         double num = lm.getValue()*(100.0/lm.getWeeklyPayment());  //First grab the double value of what the user must pay
@@ -401,18 +402,34 @@ public class CollegeManager {
      *
      * @param amount The amount the user wants to pay on the loan
      *
-     * @return Returns the increase in credit score to update the credit with
+     * @return Returns the increase in credit score to update the college credit with
      */
-    static public int makePayment(int amount, LoanModel lm, int credit) {
-        lm.setValue(lm.getValue() - amount);
-        credit += updateCredit(amount);
-        return credit;
+    static public void makePayment(String collegeId, int amount, LoanModel lm) {
+        System.out.println("PAYMENT FUNCTION:" + collegeId + " " + amount + " " + lm.getValue());
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        lm.setValue(lm.getValue() - amount);    //Remove the amount of cash from the specific loan
+        college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
+        college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
+        college.setCredit(college.getCredit() + updateCredit(amount));  //Set the college credit to increase based upon payment
+        CollegeDao.saveCollege(college);
+    }
+
+    /**
+     * Function will add the amount of money that the interest rate determines. Called after a weekly payment is made
+     *
+     * @param lm The Loan that will have the interest added
+     */
+    static public void addInterest(LoanModel lm) {
+        int amount = 0;
+        amount = (int)(lm.getValue()*(lm.getInterest()/100));
+        lm.setValue(amount);
     }
 
     /**
      * Function takes an amount of money paid on loans and increases the college's credit
      *
      * @param amount The amount the user just paid on one/all their loans
+     *
      * @return The increase to credit
      */
     static public int updateCredit(int amount) {
