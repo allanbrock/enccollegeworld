@@ -51,6 +51,14 @@ public class CollegeModel implements Serializable {
     private int mBasketballChampionships = 0;
     private int wBasketballChampionships = 0;
 
+    // School Traits:
+    private int academicRating = 0;
+    private int athleticRating = 0;
+    private int socialRating = 0;
+    private int infrastructureRating = 0;
+    private int safetyRating = 0;
+    private int schoolValue = 0;
+
 
     private Date currentDate;
 
@@ -267,6 +275,31 @@ public class CollegeModel implements Serializable {
     public int getBaseballChampionships() { return baseballChampionships;}
 
     public int getSoftballChampionships() { return softballChampionships;}
+
+    public int getNumChampionshipsWon() {
+        return footballChampionships + mHockeyChampionships + wHockeyChampionships +
+                mSoccerChampionships + wSoccerChampionships + baseballChampionships +
+                softballChampionships + mBasketballChampionships + wBasketballChampionships;
+    }
+
+    // Getters / Setters for School Traits:
+    public int getAcademicRating() {return academicRating;}
+    public void setAcademicRating(int academicRating) {this.academicRating = academicRating;}
+
+    public int getAthleticRating() {return athleticRating;}
+    public void setAthleticRating(int athleticRating) {this.athleticRating = athleticRating;}
+
+    public int getSocialRating() {return socialRating;}
+    public void setSocialRating(int socialRating) {this.socialRating = socialRating;}
+
+    public int getInfrastructureRating() {return infrastructureRating;}
+    public void setInfrastructureRating(int infrastructureRating) {this.infrastructureRating = infrastructureRating;}
+
+    public int getSafetyRating() {return safetyRating;}
+    public void setSafetyRating(int safetyRating) {this.safetyRating = safetyRating;}
+
+    public int getSchoolValue() {return schoolValue;}
+    public void setSchoolValue(int schoolValue) {this.schoolValue = schoolValue;}
 
     public int getStudentAcademicHappiness() { return studentAcademicHappiness; }
 
