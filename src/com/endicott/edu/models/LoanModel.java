@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class LoanModel {
     private int value = 0;             //The amount the loan was
     private double interest = 0;       //The percentage of tax on the loan
-    private double weeklyPayment = 0;  //The amount of money the college must pay every week
+    private int weeklyPayment = 0;  //The amount of money the college must pay every week
 
     //Empty constructor assumes that these values will be assigned after creation on their own
     public LoanModel() {
@@ -29,7 +29,7 @@ public class LoanModel {
         this.interest = interest;
     }
 
-    public void setWeeklyPayment(double amount) {
+    public void setWeeklyPayment(int amount) {
         this.weeklyPayment = amount;
     }
 
@@ -41,7 +41,7 @@ public class LoanModel {
         return this.interest;
     }
 
-    public double getWeeklyPayment() {
+    public int getWeeklyPayment() {
         return this.weeklyPayment;
     }
 

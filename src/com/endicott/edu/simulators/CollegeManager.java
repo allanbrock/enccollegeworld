@@ -173,7 +173,8 @@ public class CollegeManager {
             int total = 0;
             for(int i = 0; i < college.getLoans().size(); i++) {
                 total += makeWeeklyPayment(college.getLoans().get(i));
-                addInterest(college.getLoans().get(i));
+                addInterest(college.getLoans().get(i), collegeId);
+                NewsManager.createNews(collegeId, college.getHoursAlive(), "Weekly debt paid: " + total, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
             }
 
             //Pay off the loans, updating the college debt and their balance
@@ -305,6 +306,7 @@ public class CollegeManager {
         LoanModel lm = college.getProposedLoan();   //Grab the saved loan
         college.getLoans().add(lm);                 //Add it to the arraylist
         college.setDebt(college.getDebt() + lm.getValue());    //Add the debt to the total college debt
+        college.setAvailableCash(college.getAvailableCash() + lm.getValue()); //Add the money to the college balance
         lm = new LoanModel(0, 0, 0);    //Make a default proposed loan
         college.setProposedLoan(lm);                //Set the proposed loan to the default again
         CollegeDao.saveCollege(college);
@@ -370,7 +372,7 @@ public class CollegeManager {
         }
 
         //Now take the amount they want a loan of and calculate how much based upon that percentage
-        lm.setWeeklyPayment(Math.round(amount*(percentPayment/100)));
+        lm.setWeeklyPayment((int)(amount*(percentPayment/100)));
 
         college.setProposedLoan(lm);
         CollegeDao.saveCollege(college);
@@ -385,11 +387,9 @@ public class CollegeManager {
      * @return Returns the value that will be taken out of the college's debt total and balance
      */
     static public double makeWeeklyPayment(LoanModel lm) {
-        double num = lm.getValue()*(100.0/lm.getWeeklyPayment());  //First grab the double value of what the user must pay
-        int valueToRemove = (int)num;                              //Cast it to an int since the college doesn't have cents counted
-        lm.setValue(lm.getValue() - valueToRemove);                //Subtract it from this loan's value
-
-        return valueToRemove;
+        int valueToRemove = lm.getWeeklyPayment();             //Find out how much many is due
+        lm.setValue(lm.getValue() - valueToRemove);           //Subtract it from this loan's value
+        return valueToRemove;                                 //Return the amount
     }
 
     /**
@@ -406,6 +406,8 @@ public class CollegeManager {
         college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
         college.setCredit(college.getCredit() + updateCredit(amount));  //Set the college credit to increase based upon payment
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Payment to loans: " + amount, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+        checkLoans(collegeId);            //Check to see if any loans are paid off
         CollegeDao.saveCollege(college);
     }
 
@@ -413,11 +415,15 @@ public class CollegeManager {
      * Function will add the amount of money that the interest rate determines. Called after a weekly payment is made
      *
      * @param lm The Loan that will have the interest added
+     * @param collegeId The ID of the college in use
      */
-    static public void addInterest(LoanModel lm) {
-        int amount = 0;
-        amount = (int)(lm.getValue()*(lm.getInterest()/100));
-        lm.setValue(amount);
+    static public void addInterest(LoanModel lm, String collegeId) {
+        int amount = 0;     //Original amount of interest
+        amount = (int)(lm.getValue()*(lm.getInterest()/100));   //Find the amount of interest to add on
+        lm.setValue(lm.getValue() + amount);                //Put that amount into the loan
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.setDebt(college.getDebt() + amount);        //Also put that amount into the total debt of the college
+        CollegeDao.saveCollege(college);
     }
 
     /**
@@ -430,6 +436,21 @@ public class CollegeManager {
     static public int updateCredit(int amount) {
         int increase = (amount/1000);   //For every thousand dollars the user paid on their loans, they get 1 point
         return increase;
+    }
+
+    /**
+     * Checks all the loans the college has to see if the player has paid one or more off
+     *
+     * @param collegeId The ID of the college in use
+     */
+    static public void checkLoans(String collegeId) {
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        for(int i = 0; i < college.getLoans().size(); i++) {
+            if(college.getLoans().get(i).getValue() <= 0) {
+                college.getLoans().remove(i);
+                NewsManager.createNews(collegeId, college.getHoursAlive(), "Your college has paid off a loan!", NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
+            }
+        }
     }
 
     static private void loadTips(String collegeId) {
