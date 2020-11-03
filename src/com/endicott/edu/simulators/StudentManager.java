@@ -242,7 +242,7 @@ public class StudentManager {
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
-            student.setNature(assignRandomNature());
+            student.setNature(StudentModel.assignRandomNature());
             students.add(student);
         }
         dao.saveAllStudentsJustToCache(collegeId, students);
@@ -860,19 +860,6 @@ public class StudentManager {
         return totalStudents / numStudents;
     }
 
-    private String assignRandomNature() {
-        if (rand.nextInt(10) > 8)
-            return "Impulsive";
-        else if (rand.nextInt(10) > 6)
-            return "Studious";
-        else if (rand.nextInt(10) > 4)
-            return "Lazy";
-        else if (rand.nextInt(10) > 2)
-            return "Rebellious";
-        else if (rand.nextInt(10) > 1)
-            return "Party Fiend";
-        else
-            return "Normal";
-    }
+
 }
 

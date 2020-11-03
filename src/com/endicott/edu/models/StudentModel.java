@@ -4,6 +4,7 @@ import com.endicott.edu.simulators.CollegeManager;
 import org.glassfish.jersey.message.internal.Quality;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Created by Connor Frazier on 9/12/2017.
@@ -183,5 +184,21 @@ public class StudentModel extends PersonModel implements Serializable {
     }
     public FacultyModel getAdvisor() {
         return this.advisor;
+    }
+
+    public static String assignRandomNature() {
+        Random rand = new Random();
+        if (rand.nextInt(10) > 8)
+            return "Impulsive";
+        else if (rand.nextInt(10) > 6)
+            return "Studious";
+        else if (rand.nextInt(10) > 4)
+            return "Lazy";
+        else if (rand.nextInt(10) > 2)
+            return "Rebellious";
+        else if (rand.nextInt(10) > 1)
+            return "Party Fiend";
+        else
+            return "Normal";
     }
 }

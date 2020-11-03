@@ -44,4 +44,15 @@ public class QualityModel implements Serializable {
     private QualityModel(){
     }
 
+    public int getAcademics() {
+        return academics;
+    }
+
+    public int getSports() {
+        return sports;
+    }
+
+    public int getSocial() {
+        return social;
+    }
 }
