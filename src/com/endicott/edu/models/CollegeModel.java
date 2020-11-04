@@ -23,7 +23,7 @@ public class CollegeModel implements Serializable {
     private int facultyBodyHappiness;            //Happiness of all faculty (0-100)
     private int studentFacultyRatio = 100;       //Number of students per faculty member
     private int numberStudentsAdmitted = 0;      //Total number of students admitted since college created.
-    private int numberStudentsAccepted = 0;      //Total number of students accepted to the school.
+    private int numberStudentsAccepted = 0;      //Total number of students accepted to the school (considering).
     private int numberStudentsWithdrew = 0;      //Total number of students withdrawn since college created.
     private int numberStudentsGraduated = 0;     //Total number of students graduate since college created
     private float retentionRate = 100f;          //Percentage of students retained (or graduated) since college created

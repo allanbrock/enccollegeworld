@@ -166,7 +166,7 @@ public class CollegeManager {
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        //Run the loans every 7 days/week
+        //Run the loans every week instead of day
         if(college.getHoursAlive() % 169 == 0) {
             logger.info("AdvanceTime Loans");
             //Find the amount of money the user has to pay on their loans and add it up
@@ -174,7 +174,7 @@ public class CollegeManager {
             for(int i = 0; i < college.getLoans().size(); i++) {
                 total += makeWeeklyPayment(college.getLoans().get(i));
                 addInterest(college.getLoans().get(i), collegeId);
-                NewsManager.createNews(collegeId, college.getHoursAlive(), "Weekly debt paid: " + total, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+                NewsManager.createNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $" + total, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
             }
 
             //Pay off the loans, updating the college debt and their balance
@@ -299,7 +299,10 @@ public class CollegeManager {
     }
 
     /**
-     * Creates the contract and places it in the college's loan list, then resets the proposed loan
+     * Function takes the user's proposed loan and "accepts" it by putting it into the array. The proposed loan now
+     * goes back to the default value after the additions of the debt/money
+     *
+     * @param collegeId The ID of the college in use
      */
     static public void createContract(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
@@ -314,7 +317,7 @@ public class CollegeManager {
 
     /**
      * Function will generate both the interest rate and predicted weekly payment on the loan the user is
-     * considering to take out. NOTE: This is not making a contract, instead calculating what the contact would look
+     * considering to take out. NOTE: This is not adding the contract, instead calculating what the contact would look
      * like for the user, letting them determine if they want to take out this loan or not
      *
      * @param amount The amount the user is considering to take out
@@ -380,7 +383,7 @@ public class CollegeManager {
 
     /**
      * Function will determine how much needs to deducted from the loan, and remove it, also returning it for the college
-     * so it can remove it from the college balance
+     * so it perform other operations
      *
      * @param lm The Loan that will be deducted from
      *
@@ -393,11 +396,10 @@ public class CollegeManager {
     }
 
     /**
-     * Function allows user to pay the debt on this loan
+     * Function allows user to pay the debt on this loan, it'll also run a check to see if the laon is fully paid off
      *
      * @param amount The amount the user wants to pay on the loan
      *
-     * @return Returns the increase in credit score to update the college credit with
      */
     static public void makePayment(String collegeId, int amount, int loanNumber) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
@@ -405,8 +407,7 @@ public class CollegeManager {
         lm.setValue(lm.getValue() - amount);    //Remove the amount of cash from the specific loan
         college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
-        college.setCredit(college.getCredit() + updateCredit(amount));  //Set the college credit to increase based upon payment
-        NewsManager.createNews(collegeId, college.getHoursAlive(), "Payment to loans: " + amount, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+        NewsManager.createNews(collegeId, college.getHoursAlive(), "Payment to loans: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
         checkLoans(collegeId);            //Check to see if any loans are paid off
         CollegeDao.saveCollege(college);
     }
@@ -431,7 +432,7 @@ public class CollegeManager {
      *
      * @param amount The amount the user just paid on one/all their loans
      *
-     * @return The increase to credit
+     * @return The increase to credit for the collegeManager to use
      */
     static public int updateCredit(int amount) {
         int increase = (amount/1000);   //For every thousand dollars the user paid on their loans, they get 1 point
