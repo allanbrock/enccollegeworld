@@ -43,7 +43,7 @@ public class FacultyDao {
     }
 
     public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
-        DaoUtils.<FacultyModel>saveAllListData(collegeId, faculty, filename);
+        DaoUtils.<List<FacultyModel>>saveData(collegeId, faculty, filename);
     }
 
     /**

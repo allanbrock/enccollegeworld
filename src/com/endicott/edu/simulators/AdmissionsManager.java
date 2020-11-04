@@ -1,6 +1,7 @@
 package com.endicott.edu.simulators;
 
 //import com.endicott.edu.datalayer.AdmissionsDao;
+import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.datalayer.StudentDao;
@@ -14,11 +15,12 @@ import java.util.logging.Logger;
  * Admissions simulates everything having to do with potential students considering
  * attending the virtual college.  The Admissions model generates potential students
  * and tracks their interest as we approach the admissions date
+ *
+ * NOTE: All simulator/Managers need to implement: handleTimeChange, establishCollege
+ *  --there should be an interface...
  */
 public class AdmissionsManager {
-//    static private AdmissionsDao dao = new AdmissionsDao();
-    static private Logger logger = Logger.getLogger("Admissions");
-    static private StudentDao studentDao = new StudentDao();
+    static private final Logger logger = Logger.getLogger("Admissions");
 
     /**
      * Simulate the changes in potential students interested in the college
@@ -33,18 +35,32 @@ public class AdmissionsManager {
     }
 
     /**
+     * Create the admissions/potential students for the new college.
+     *
+     * @param collegeId instance of the simulation
+     */
+    public static void establishCollege(String collegeId){
+        AdmissionsModel adm = new AdmissionsModel();
+        adm.setGroupA(generateNewCandidates(50, collegeId));
+        adm.setGroupB(generateNewCandidates(50, collegeId));
+        adm.setGroupC(generateNewCandidates(50, collegeId));
+        adm.setWeeksUntilAcceptance(15);
+        AdmissionsDao.saveAdmissionsData(collegeId,adm);
+    }
+
+    /**
      * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
      *
      * @param numNewStudents The number of new students to be made
      * @param collegeId The id of the college in use
      */
-    public static void generateNewCandidates(int numNewStudents, String collegeId){
+    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
         Random rand = new Random();
         ArrayList<PotentialStudentModel> students = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
 
             // assign a personality and a quality
-            // TODO: pass in the 'tier' and 'quality' of this newly created student
+            // TODO: determine 'tier' and 'quality' from the current level of the college
             // for now, 5/8 of students will be basic,
             //          2/8 will be one tier above
             //          1/8 will be two tiers above
@@ -83,7 +99,7 @@ public class AdmissionsManager {
             // TODO: Nature, too.
             students.add(student);
         }
-//        dao.saveAllStudentsJustToCache(collegeId, students);
+        return students;
     }
 
 }
