@@ -58,7 +58,7 @@ public class AdmissionsManager {
         Random rand = new Random();
         ArrayList<PotentialStudentModel> students = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
-
+            PotentialStudentModel student = new PotentialStudentModel();
             // assign a personality and a quality
             // TODO: determine 'tier' and 'quality' from the current level of the college
             // for now, 5/8 of students will be basic,
@@ -74,29 +74,24 @@ public class AdmissionsManager {
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
-            //Generates a random url for the student's avatar
-            AvatarModel avatar = new AvatarModel();
-
             String name;
             GenderModel gender;
 
             if (rand.nextInt(10) + 1 > 5) {
                 name = NameGenDao.generateName(false);
-                gender = GenderModel.MALE;
+                student.setGender(GenderModel.MALE);
+                student.getAvatar().generateStudentAvatar(false);
             } else {
                 name = NameGenDao.generateName(true);
-                gender = GenderModel.FEMALE;
+                student.setGender(GenderModel.FEMALE);
+                student.getAvatar().generateStudentAvatar(true);
             }
-            String firstName = name.substring(0, name.indexOf(" ") - 1);
-            String lastName = name.substring(name.indexOf(" ") + 1);
+            student.setFirstName(name.substring(0, name.indexOf(" ") - 1));
+            student.setLastName(name.substring(name.indexOf(" ") + 1));
 
-            int id = IdNumberGenDao.getID(collegeId);
-
-            String nature = StudentModel.assignRandomNature();
-
-            PotentialStudentModel student = new PotentialStudentModel(firstName, lastName, gender, id, 0, pm, qm);
-            student.setAvatarIcon(avatar);
-            // TODO: Nature, too.
+            student.setId(IdNumberGenDao.getID(collegeId));
+            student.setNature(StudentModel.assignRandomNature());
+            student.getAvatar().generateHappyAvatar();
             students.add(student);
         }
         return students;

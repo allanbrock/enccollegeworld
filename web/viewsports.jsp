@@ -169,7 +169,7 @@
                 <!-- Tips -->
                 <%if (tip != null){%>
                 <div class="col-md-5">
-                    <div class="well well-lg" style="background: white">
+                    <div class="well well-lg" style="background: #ffffff">
                         <%if (!tip.getImage().equals("")){%>
                         <img class="img-responsive" src="resources/images/<%=tip.getImage()%>">
                         <%}%>

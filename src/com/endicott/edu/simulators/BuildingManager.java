@@ -21,6 +21,7 @@ public class BuildingManager {
     static private Logger logger = Logger.getLogger("BuildingManager");
     static private StudentDao studentDao = new StudentDao();
     static private GateManager gateManager = new GateManager();
+    static private AchievementManager achievementManager = new AchievementManager();
     static private StudentManager studentManager = new StudentManager();
     static private BuildingModel buildingModel = new BuildingModel();
 
@@ -54,6 +55,8 @@ public class BuildingManager {
         calculateOverallBuildingHealth(runId, buildings);
         // Really important the we save the changes to disk.
         dao.saveAllBuildingsUsingCache(runId);
+
+        AchievementManager.checkAchievementStatus(runId);
     }
 
     /**
@@ -237,7 +240,8 @@ public class BuildingManager {
      * @param building
      */
     public static void viewUpgrades(String collegeId, BuildingModel building) {
-        String msg = building.getUpgradesString();
+        /*String msg = building.getUpgradesString();*/
+        String msg = "test";
         PopupEventManager.newPopupEvent(collegeId, building.getName(), msg, "Ok", "ok", "resources/images/rioticon.png", "icon");
     }
 
@@ -537,6 +541,20 @@ public class BuildingManager {
         gateManager.createGate(collegeId, "Football stadium", "To have a football team you need a football stadium.", "resources/images/FOOTBALL%20STADIUM.png", 2);
         gateManager.createGate(collegeId, "Baseball diamond", "To have a baseball team you need a football stadium.", "resources/images/BASEBALL%20DIAMOND.png", 3);
         gateManager.createGate(collegeId, "Hockey rink", "To have a hockey team you need a rink.", "resources/images/HOCKEY%20RINK.png", 4);
+
+        /**
+         * TODO: Achievements shouldn't be made in the BuildingManager, but should exist as soon as the player creates a college. These few lines of code should be moved somewhere else
+         */
+        // Achievements for the game
+        achievementManager.createAchievement(collegeId, "I'm Level 1", "Reach Level 1", "level", 5000,1, 0, 0);
+        achievementManager.createAchievement(collegeId,"Big Saver I", "Accumulate $300K or More", "money", 1500,1, 300000, 0);
+        achievementManager.createAchievement(collegeId,"Make Happy I", "Reach 85% Student Happiness for the First Time", "happiness", 15000, 1, 0, 85);
+        achievementManager.createAchievement(collegeId, "I'm Level 5", "Reach Level 5", "level", 10000,5, 0, 0);
+        achievementManager.createAchievement(collegeId,"Big Saver II", "Accumulate $500k or More", "money", 5000,1, 500000, 0);
+        achievementManager.createAchievement(collegeId,"Make Happy II", "Reach 90% Student Happiness for the First Time", "happiness", 50000, 1, 0, 90);
+        achievementManager.createAchievement(collegeId, "I'm Level 10", "Reach Level 5", "level", 10000,5, 0, 0);
+        achievementManager.createAchievement(collegeId,"Big Saver III", "Accumulate $750k or More", "money", 100000,1, 750000, 0);
+        achievementManager.createAchievement(collegeId,"Make Happy III", "Reach 95% Student Happiness for the First Time", "happiness", 150000, 1, 0, 90);
     }
 
     /**

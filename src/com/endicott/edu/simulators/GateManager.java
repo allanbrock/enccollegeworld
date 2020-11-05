@@ -1,8 +1,10 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.AchievementDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.models.AchievementModel;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.GateModel;
 import com.endicott.edu.models.ObjectivesModel;
@@ -90,6 +92,7 @@ public class GateManager {
         ObjectivesModel objectives = new ObjectivesModel();
         objectives.currentLevel = 0;
         objectives.gates = GateDao.getGates(collegeId).toArray(new GateModel[0]);
+        objectives.achievements = AchievementDao.getAchievements(collegeId).toArray(new AchievementModel[0]);
         objectives.studentsNeededForLevel = new int[GATE_LEVELS.size()];
 
         for(int i=0; i<GATE_LEVELS.size(); i++) {

@@ -33,6 +33,7 @@ public class StudentModel extends PersonModel implements Serializable {
     private int dormHappinessRating = 0;            //Student's happiness when it comes to their dorm building (0-100)
     private int overallBuildingHappinessRating = 0; //Student's happiness when it comes to the quality of building on campus (0-100)
     private FacultyModel advisor;                   //The advisor of a student
+    private int classYear;                          //The current year the student is in(1=freshman, 2=sophomore etc.)
 
     private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
     private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy
@@ -42,7 +43,7 @@ public class StudentModel extends PersonModel implements Serializable {
     }
 
     //Constructor to create a student with some defined values
-    public StudentModel(String firstName, String lastName, GenderModel gender, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String runId, int numberHoursLeftBeingSick, int hourLastUpdated, String nature) {
+    public StudentModel(String firstName, String lastName, GenderModel gender, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String runId, int numberHoursLeftBeingSick, int hourLastUpdated, String nature, int year) {
         super(firstName, lastName, gender, idNumber, happinessLevel);
         this.athlete = athlete;
         this.athleticAbility = athleticAbility;
@@ -51,6 +52,7 @@ public class StudentModel extends PersonModel implements Serializable {
         this.numberHoursLeftBeingSick = numberHoursLeftBeingSick;
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
+        this.classYear = year;
     }
 
     public void setPersonality(PersonalityModel pm){ this.personality = pm; }
@@ -200,5 +202,16 @@ public class StudentModel extends PersonModel implements Serializable {
             return "Party Fiend";
         else
             return "Normal";
+    }
+
+    public int getClassYear(){
+        return classYear;
+    }
+    public void setClassYear(int classYear){
+        this.classYear = classYear;
+    }
+
+    public AvatarModel getAvatar(){
+        return avatar;
     }
 }

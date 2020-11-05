@@ -97,7 +97,6 @@ public class StudentManager {
 
         if(isNewCollege) {
             numNewStudents = 140;
-            AvatarModel.generateAvatarOptions();
         }
         else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
             NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
@@ -188,6 +187,7 @@ public class StudentManager {
      * @param initial Check if this is the first time setup for the college
      */
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
+        Random rand = new Random();
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
 
@@ -207,16 +207,14 @@ public class StudentManager {
             student.setPersonality(PersonalityModel.generateRandomModel(tier));
             student.setQuality(QualityModel.generateRandomModel(tier));
 
-            //Generates a random url for the student's avatar
-            AvatarModel avatar = new AvatarModel();
-            student.setAvatarIcon(avatar);
-
             if (rand.nextInt(10) + 1 > 5) {
                 student.setName(NameGenDao.generateName(false));
                 student.setGender(GenderModel.MALE);
+                student.getAvatar().generateStudentAvatar(false);
             } else {
                 student.setName(NameGenDao.generateName(true));
                 student.setGender(GenderModel.FEMALE);
+                student.getAvatar().generateStudentAvatar(true);
             }
 
             student.setId(IdNumberGenDao.getID(collegeId));
@@ -242,7 +240,8 @@ public class StudentManager {
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
-            student.setNature(StudentModel.assignRandomNature());
+            student.setNature(assignRandomNature());
+            student.setClassYear(rand.nextInt(4) + 1);
             students.add(student);
         }
         dao.saveAllStudentsJustToCache(collegeId, students);
@@ -335,6 +334,7 @@ public class StudentManager {
         setHappinessForEachStudent(collegeId, initial, students);
         calculaterOverallStudentHealth(collegeId, students);
         calculateAllAverageHappiness(collegeId, students);
+
     }
 
     private void calculateAllAverageHappiness(String collegeId, List<StudentModel> students) {
@@ -438,7 +438,25 @@ public class StudentManager {
 
             students.get(i).setHappiness(happiness);
             setStudentFeedback(student, collegeId);
+
+            if(student.getHappiness() >= 95){
+                student.getAvatar().generateHappyAvatar();
+                student.getAvatar().setEyes("Hearts");
+            }
+            else if(student.getHappiness() >= 70){
+                student.getAvatar().generateHappyAvatar();
+            }
+            else if(student.getHappiness() <= 69 && student.getHappiness() >= 50){
+                student.getAvatar().setMouth("Serious");
+                student.getAvatar().setEyebrows("Default");
+                student.getAvatar().setEyes("Default");
+
+            }
+            else if(student.getHappiness() < 50){
+                student.getAvatar().generateUnhappyAvatar();
+            }
         }
+
 
         dao.saveAllStudents(collegeId, students);
     }
@@ -860,6 +878,19 @@ public class StudentManager {
         return totalStudents / numStudents;
     }
 
-
+    private String assignRandomNature() {
+        if (rand.nextInt(10) > 8)
+            return "Impulsive";
+        else if (rand.nextInt(10) > 6)
+            return "Studious";
+        else if (rand.nextInt(10) > 4)
+            return "Lazy";
+        else if (rand.nextInt(10) > 2)
+            return "Rebellious";
+        else if (rand.nextInt(10) > 1)
+            return "Party Fiend";
+        else
+            return "Normal";
+    }
 }
 
