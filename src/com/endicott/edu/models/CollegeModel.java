@@ -3,7 +3,6 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.CollegeManager;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -180,7 +179,7 @@ public class CollegeModel implements Serializable {
 
     public void setHoursAlive(int hoursAlive) {
         this.hoursAlive = hoursAlive;
-        this.currentDate = CollegeManager.hoursToDate(getHoursAlive());
+        this.currentDate = CollegeManager .hoursToDate(getHoursAlive());
     }
 
     public String getNote() {

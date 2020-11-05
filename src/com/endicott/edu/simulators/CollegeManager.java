@@ -3,8 +3,6 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
@@ -101,7 +99,7 @@ public class CollegeManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         // If there is a popup, we are not going to advance the day.
-        // The pop must be cleared through the user inteface first.
+        // The pop must be cleared through the user interface first.
         List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);
         //I COMMENTED THIS OUT BECAUSE POPUPS ARE NOT GOING AWAY, WHEN FIXED UNCOMMENT THIS
 //        if (popupEvents == null || popupEvents.size() > 0) {
@@ -275,7 +273,7 @@ public class CollegeManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         logger.info("Updating Tuition to: " + amount);
         if ((amount < 0) || (amount > 100000)) {
-            popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
+            popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tuition between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
             return college;
         }
 
@@ -397,7 +395,7 @@ public class CollegeManager {
     }
 
     /**
-     * Function allows user to pay the debt on this loan, it'll also run a check to see if the laon is fully paid off
+     * Function allows user to pay the debt on this loan, it'll also run a check to see if the loan is fully paid off
      *
      * @param amount The amount the user wants to pay on the loan
      *
