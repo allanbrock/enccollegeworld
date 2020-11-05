@@ -29,6 +29,7 @@ public class InterfaceUtils {
         BuildingModel[] buildings = BuildingDao.getBuildingsArray(collegeId);
         NewsFeedItemModel[] news = NewsFeedDao.getNews(collegeId);
         GateModel[] gates = GateDao.getGatesArray(collegeId);
+        AchievementModel[] achievements = AchievementDao.getAchievementArray(collegeId);
         SportModel[] sport = SportsDao.getSportsArray(collegeId);
         SportModel[] availableSports = SportManager.getAvailableSports(collegeId);
         StudentModel[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
@@ -53,6 +54,7 @@ public class InterfaceUtils {
         request.setAttribute("buildings",buildings);
         request.setAttribute("news",news);
         request.setAttribute("gates", gates);
+        request.setAttribute("achievements", achievements);
         request.setAttribute("sports", sport);
         request.setAttribute("availableSports",availableSports);
         request.setAttribute("students",students);

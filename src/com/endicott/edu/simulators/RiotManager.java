@@ -42,8 +42,8 @@ public class RiotManager {
         else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000 || sm.getNumRebelliousStudentsRatio(runId) > 5)
             createRowdyStudentBehaviour(runId, bm, currentRiot, popupManager, "The students are becoming visibly upset!");
         // Low faculty pay or happiness
-        else if(college.getStudentFacultyRatioRating() < 3 || college.getFacultyBodyHappiness() < 50)
-            createFacultyRiot(bm, runId, currentRiot, popupManager, "You Aren't Treating The Faculty Well");
+        /*else if(college.getStudentFacultyRatioRating() < 3 || college.getFacultyBodyHappiness() < 50)
+            createFacultyRiot(bm, runId, currentRiot, popupManager, "You Aren't Treating The Faculty Well");*/
         // Number of students drops below certain amount
         else if(college.getRetentionRate() < 60f)
             createStakeholderRiot(bm, runId, currentRiot, popupManager, "The Stakeholders are pissed you messed up the school");

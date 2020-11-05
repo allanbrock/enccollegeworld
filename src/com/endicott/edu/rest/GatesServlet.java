@@ -1,14 +1,17 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.GateDao;
+import com.endicott.edu.models.AchievementModel;
 import com.endicott.edu.models.GateModel;
 import com.endicott.edu.models.ObjectivesModel;
+import com.endicott.edu.simulators.AchievementManager;
 import com.endicott.edu.simulators.GateManager;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
