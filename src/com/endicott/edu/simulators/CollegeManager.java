@@ -66,6 +66,7 @@ public class CollegeManager {
         logger.info("Establish fire.");FireManager.establishCollege(collegeId);
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
+        logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
 
         return college;
     }

@@ -1,5 +1,6 @@
 package com.endicott.edu.datalayer;
 
+import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.FacultyModel;
 
 import javax.ws.rs.WebApplicationException;
@@ -44,13 +45,12 @@ public class DaoUtils {
         return getFilePathPrefix(collegeId) +  filename;
     }
 
-
     /**
      * This function returns a list of all the TYPE for a college
      * The college is defined by its collegeId
      * @param collegeId
-     * @return ArrayList<T>
      * @param filename
+     * @return list of data of type <T> loaded from the appropriate filename
      */
     public static <T> List<T> getListData(String collegeId, String filename) {
         ArrayList<T> listOfData = new ArrayList<T>();
@@ -73,19 +73,46 @@ public class DaoUtils {
     }
 
     /**
+     * This function returns the data of TYPE for a college
+     * The college is defined by its collegeId
+     * @param collegeId
+     * @param filename
+     * @return data of type <T> loaded from the appropriate filename
+     */
+    public static <T> T getData(String collegeId, String filename) {
+        T data = null;
+        try {
+            File file = new File(getFilePath(collegeId, filename));
+
+            if (!file.exists()) {
+                return null;
+            }
+            //data exist lets return the data object....
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            data = (T) ois.readObject();
+            ois.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    /**
      * This function writes a list of TYPE objects to the disk...
      * @param collegeId
-     * @param listOfData
+     * @param data
      * @param filename
      */
-    public static <T> void saveAllListData(String collegeId, List<T> listOfData, String filename) {
+    public static <T> void saveData(String collegeId, T data, String filename) {
         try {
             File file = new File(getFilePath(collegeId, filename));
             file.createNewFile();
             FileOutputStream fos;
             fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(listOfData);
+            oos.writeObject(data);
             oos.close();
         } catch (FileNotFoundException e) {
             logger.info("Got FileNotFoundException when attempting to create: " + getFilePath(collegeId, filename));
@@ -100,5 +127,6 @@ public class DaoUtils {
         logger.info("Saved " + filename + "...");
 
     }
+
 
 }
