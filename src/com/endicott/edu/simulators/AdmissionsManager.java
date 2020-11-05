@@ -74,9 +74,6 @@ public class AdmissionsManager {
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
-            //Generates a random url for the student's avatar
-            AvatarModel avatar = new AvatarModel();
-
             String name;
             GenderModel gender;
 
@@ -95,7 +92,6 @@ public class AdmissionsManager {
             String nature = StudentModel.assignRandomNature();
 
             PotentialStudentModel student = new PotentialStudentModel(firstName, lastName, gender, id, 0, pm, qm);
-            student.setAvatarIcon(avatar);
             // TODO: Nature, too.
             students.add(student);
         }

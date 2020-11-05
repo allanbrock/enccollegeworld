@@ -13,7 +13,7 @@ public abstract class PersonModel {
     protected GenderModel gender;         //The gender of the person (male/female)
     protected int id = 0;                     //ID of the person
     protected int happiness = 0;              //The overall happiness of the person
-    protected AvatarModel avatarIcon;     //The image icon of a person (https) (store all the attributes not just a string)
+    protected AvatarModel avatar = new AvatarModel();     //The image icon of a person
 
     //Default constructor for making empty people of any type (it is assumed you will set these right after creation!)
     protected PersonModel() {
@@ -56,6 +56,6 @@ public abstract class PersonModel {
     public void setHappiness(int i) {this.happiness = i;}
     public int getHappiness() {return this.happiness;}
 
-    public void setAvatarIcon(AvatarModel am) {this.avatarIcon = am;}
-    public AvatarModel getAvatarIcon() {return this.avatarIcon; }
+    public void setAvatar(AvatarModel am) {this.avatar = am;}
+    public AvatarModel getAvatar() {return this.avatar; }
 }
