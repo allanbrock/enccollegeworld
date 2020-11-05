@@ -543,7 +543,6 @@ public class BuildingManager {
         gateManager.createGate(collegeId, "Hockey rink", "To have a hockey team you need a rink.", "resources/images/HOCKEY%20RINK.png", 4);
 
         /**
-         * Author: Justen Koo
          * TODO: Achievements shouldn't be made in the BuildingManager, but should exist as soon as the player creates a college. These few lines of code should be moved somewhere else
          */
         // Achievements for the game

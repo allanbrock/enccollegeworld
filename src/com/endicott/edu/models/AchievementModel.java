@@ -8,6 +8,7 @@ public class AchievementModel implements Serializable {
     private String type;
     private int cashReward;
     private String runId;
+    private String iconPath;
     // private Experience expReward;
 
     private boolean locked;
@@ -39,7 +40,6 @@ public class AchievementModel implements Serializable {
     public void setDescription(String description){this.description = description;}
 
     public int getCashReward(){return this.cashReward;}
-    public void setCashReward(int cash){this.cashReward = cash;}
 
     public boolean getLock(){return this.locked;}
     public void setLock(boolean status){this.locked = status;}
@@ -47,14 +47,7 @@ public class AchievementModel implements Serializable {
     public String getType(){return this.type;}
     public void setType(String type){this.type = type;}
 
-    public int getLevelReq(String type){
-        if(type == "level")
-            return this.levelReq;
-        else if(type == "money")
-            return this.moneyReq;
-        else
-            return this.happinessReq;
-    }
-
     public void setRunId(String _runId){this.runId = _runId;}
+
+    public String getIconPath(){return this.iconPath;}
 }

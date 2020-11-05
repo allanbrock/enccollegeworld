@@ -1,13 +1,7 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.AchievementDao;
-import com.endicott.edu.datalayer.CollegeDao;
-import com.endicott.edu.datalayer.GateDao;
-import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.AchievementModel;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.GateModel;
-import com.endicott.edu.models.ObjectivesModel;
 
 import java.util.ArrayList;
 
