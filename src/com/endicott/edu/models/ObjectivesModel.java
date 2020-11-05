@@ -10,4 +10,5 @@ public class ObjectivesModel implements Serializable {
     public int studentCount;
     public int studentsNeededForLevel[];
     public GateModel[] gates;
+    public AchievementModel[] achievements;
 }
