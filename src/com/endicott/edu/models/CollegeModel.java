@@ -41,9 +41,12 @@ public class CollegeModel implements Serializable {
     private CollegeMode mode = CollegeMode.PLAY;        //Current mode of the game, used for play testing
     private int daysUntilNextEvent = 3;                 //Number of days until the next event
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
-    private ArrayList<LoanModel> loans = new ArrayList<>();  //Holds all of the loans the player currently has
-    private LoanModel proposedLoan = new LoanModel(0, 0, 0);    //Loan that is in progress of being made (Player hasn't accepted it yet)
+    private TipsModel collegeTips;
     //public PopupEventModel;
+
+    //Loan Fields
+    private ArrayList<LoanModel> loans = new ArrayList<>();  //Holds all of the loans the player currently has
+    private LoanModel proposedLoan = new LoanModel(0, 0, 0);    //Loan that is in progress of being accepted
 
     //Counts amount of total championships won to be tracked in the trophy case
     private int footballChampionships = 0;
