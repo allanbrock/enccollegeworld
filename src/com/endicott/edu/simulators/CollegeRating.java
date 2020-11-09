@@ -9,7 +9,6 @@ import com.endicott.edu.models.StudentModel;
 public class CollegeRating {
     private SportsDao sportDao = new SportsDao();
     private BuildingDao buildDao = new BuildingDao();
-    private FacultyDao facultyDao = new FacultyDao();
 
     private static int eventFactor = 5;
     private static int recentDeathCountdown = 0;
@@ -19,7 +18,7 @@ public class CollegeRating {
     public CollegeRating(){}
 
     /**
-     *
+     * Update School Traits on each new day
      * @param collegeId
      */
     public void handleTimeChange(String collegeId) {
@@ -57,7 +56,7 @@ public class CollegeRating {
         // Get overall academic building quality
         for(BuildingModel building : buildDao.getBuildings(collegeId)){
             String type = building.getKindOfBuilding();
-            if(type == "ACADEMIC" || type == "LIBRARY" ){
+            if(type == "ACADEMIC" || type == "LIBRARY"){
                 numBuildings++;
                 buildingQuality += building.getShownQuality();
             }
@@ -71,10 +70,10 @@ public class CollegeRating {
 
         // Calculate Rating
         int rating = (int) (0.2 * college.getStudentFacultyRatioRating() +
-                        0.2 * college.getFacultyBodyHappiness() +
-                        0.3 * FacultyManager.getAverageFacultyPerformance(collegeId) +
-                        0.1 * (academicQuality / Math.max(numStudents, 1)) +
-                        0.2 * (buildingQuality / Math.max(numBuildings, 1)));
+                            0.2 * college.getFacultyBodyHappiness() +
+                            0.3 * FacultyManager.getAverageFacultyPerformance(collegeId) +
+                            0.1 * (academicQuality / Math.max(numStudents, 1)) +
+                            0.2 * (buildingQuality / Math.max(numBuildings, 1)));
         college.setAcademicRating(checkBounds(rating));
     }
 
@@ -122,11 +121,11 @@ public class CollegeRating {
         // If teams, based on performance, number of teams, facility quality, student athletic quality
         if(numTeams != 0) {
             rating = (int) (0.2 * rating +
-                        0.2 * (100*(totalWins / Math.max(totalGames, 1))) +
-                        0.1 * (100*numTeams/9) +
-                        0.2 * (buildingQuality / Math.max(numBuildings, 1)) +
-                        0.2 * (athleticQuality / Math.max(numStudents, 1)) +
-                        0.1 * (100*college.getNumChampionshipsWon()/Math.max(1, numTeams)));
+                            0.2 * (100*(totalWins / Math.max(totalGames, 1))) +
+                            0.1 * (100*numTeams/9) +
+                            0.2 * (buildingQuality / Math.max(numBuildings, 1)) +
+                            0.2 * (athleticQuality / Math.max(numStudents, 1)) +
+                            0.1 * (100*college.getNumChampionshipsWon()/Math.max(1, numTeams)));
         }
         // If no teams based on existing rating, facility quality, and student athletic quality
         else {
@@ -189,6 +188,8 @@ public class CollegeRating {
 
         if(isDisaster){
             rating -= 3*eventFactor;
+            // Decrease College Safety trait (similar to riot)
+            CollegeRating.decreaseSafetyRating(collegeId, "SEVERE");
         }
         else {
             rating -= eventFactor;
@@ -203,7 +204,6 @@ public class CollegeRating {
      */
     private void updateSafetyRating(String collegeId){
         int rating = college.getSafetyRating();
-        PlagueDao plagueDao = new PlagueDao();
         int buildingQuality = 0;
         int numBuildings = 0;
 
@@ -245,8 +245,8 @@ public class CollegeRating {
         }
         else {
             rating = (int) (0.6 * rating +
-                    0.2 * college.getStudentHealthRating() +
-                    0.2 * (buildingQuality / Math.max(1, numBuildings)));
+                            0.2 * college.getStudentHealthRating() +
+                            0.2 * (buildingQuality / Math.max(1, numBuildings)));
         }
         college.setSafetyRating(checkBounds(rating));
 
@@ -278,15 +278,14 @@ public class CollegeRating {
 
         // decrease safety rating depending on size of riot
         if (riotType == "REGULAR") {
-            rating -= 4* eventFactor;
+            rating -= 2 * eventFactor;
         }
         else if (riotType == "SEVERE") {
-            rating -= 5* eventFactor;
+            rating -= 3 * eventFactor;
         }
         // riotSeverity == "ROWDY", faculty riot, etc.{
         else {
-            rating -= 3*eventFactor;
-
+            rating -= eventFactor;
         }
         recentRiot = true;
         college.setSafetyRating(checkBounds(rating));
@@ -310,7 +309,7 @@ public class CollegeRating {
         }
         // good average, increase school value
         else {
-            schoolValue = tuitionRating + (Math.abs(50 - avgRating)/4);
+            schoolValue = tuitionRating + (Math.abs(50 - avgRating)/2);
         }
         college.setSchoolValue(checkBounds(schoolValue));
     }
@@ -341,6 +340,5 @@ public class CollegeRating {
                             0.3 * college.getStudentBodyHappiness() +
                             0.1 * college.getFacultyBodyHappiness());
         college.setSocialRating(checkBounds(rating));
-
     }
 }
