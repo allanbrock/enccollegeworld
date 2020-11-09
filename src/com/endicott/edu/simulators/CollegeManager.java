@@ -67,6 +67,8 @@ public class CollegeManager {
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
         logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
 
+        CollegeRating collegeTraits = new CollegeRating();
+        collegeTraits.handleTimeChange(collegeId);
         return college;
     }
 
@@ -164,6 +166,10 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime College Traits");
+        CollegeRating collegeTraits = new CollegeRating();
+        collegeTraits.handleTimeChange(collegeId);
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
