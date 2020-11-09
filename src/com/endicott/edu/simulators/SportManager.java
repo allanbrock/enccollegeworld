@@ -507,6 +507,8 @@ public class SportManager {
 
         sportsDao.deleteSports(collegeId);
         noteDao.deleteNotes(collegeId);
+        // Decrease Athletic Rating when sell sports team
+        CollegeRating.decreaseAthleticRating(collegeId);
     }
 
     /**
@@ -587,6 +589,8 @@ public class SportManager {
     public static void deleteSelectedSport(String collegeId, String sportName){
         SportsDao dao = new SportsDao();
         dao.deleteSelectedSport(collegeId, sportName);
+        // Decrease Athletic Rating when sell sports team
+        CollegeRating.decreaseAthleticRating(collegeId);
     }
 
     /**

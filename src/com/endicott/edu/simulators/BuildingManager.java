@@ -324,6 +324,8 @@ public class BuildingManager {
                 buildings.remove(b);
                 // The students need to move to a new building
                 studentManager.removeFromBuildingAndReassignAfterDisaster(collegeId, buildingName, b.getKindOfBuilding());
+                // Decrease College Infrastructure rating in event of destroyed building
+                CollegeRating.decreaseInfrastructureRating(collegeId, true);
                 return;
             }
         }
