@@ -12,7 +12,6 @@ import java.util.logging.Logger;
  */
 public class AdmissionsDao {
     private static final String filename = "admissions.json";
-
     private static Logger logger = Logger.getLogger("AdmissionsDao");
 
     private AdmissionsDao(){

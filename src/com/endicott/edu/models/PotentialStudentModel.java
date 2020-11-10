@@ -17,9 +17,6 @@ public class PotentialStudentModel extends PersonModel implements Serializable {
         super(firstName,lastName, gender,id, happiness);
         setQuality(qm);
         setPersonality(pm);
-
-    }
-    public PotentialStudentModel() {
     }
 
     public void setPersonality(PersonalityModel pm){ this.personality = pm; }
