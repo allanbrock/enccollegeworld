@@ -240,8 +240,7 @@ public class BuildingManager {
      * @param building
      */
     public static void viewUpgrades(String collegeId, BuildingModel building) {
-        /*String msg = building.getUpgradesString();*/
-        String msg = "test";
+        String msg = building.getUpgradesString();
         PopupEventManager.newPopupEvent(collegeId, building.getName(), msg, "Ok", "ok", "resources/images/rioticon.png", "icon");
     }
 

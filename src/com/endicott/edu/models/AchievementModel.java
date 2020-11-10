@@ -40,6 +40,7 @@ public class AchievementModel implements Serializable {
     public void setDescription(String description){this.description = description;}
 
     public int getCashReward(){return this.cashReward;}
+    public void setCashReward(int cash){this.cashReward = cash;}
 
     public boolean getLock(){return this.locked;}
     public void setLock(boolean status){this.locked = status;}
@@ -50,4 +51,14 @@ public class AchievementModel implements Serializable {
     public void setRunId(String _runId){this.runId = _runId;}
 
     public String getIconPath(){return this.iconPath;}
+
+    public int getLevelReq(String type){
+        if(type == "level")
+            return this.levelReq;
+        else if(type == "money")
+            return this.moneyReq;
+        else
+            return this.happinessReq;
+    }
+
 }
