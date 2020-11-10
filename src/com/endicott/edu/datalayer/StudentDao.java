@@ -17,7 +17,7 @@ public class StudentDao {
         return DaoUtils.getFilePathPrefix(runId) +  "student.dat";
     }
     private static Logger logger = Logger.getLogger("StudentDao");
-    private  static HashMap<String, List<StudentModel>> cache = new HashMap<>();
+    private static HashMap<String, List<StudentModel>> cache = new HashMap<>();
 
     public static List<StudentModel> getStudents(String runId) {
         if (cache.containsKey(runId))

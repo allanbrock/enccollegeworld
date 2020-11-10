@@ -81,6 +81,7 @@ public class DaoUtils {
      */
     public static <T> T getData(String collegeId, String filename) {
         T data = null;
+        logger.info("Reading Potential Students from disk.");
         try {
             File file = new File(getFilePath(collegeId, filename));
 
@@ -91,11 +92,14 @@ public class DaoUtils {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             data = (T) ois.readObject();
+            logger.info("Read Object");
             ois.close();
 
         } catch (IOException | ClassNotFoundException e) {
+            logger.info("error in getData");
             e.printStackTrace();
         }
+        logger.info("Return Object");
         return data;
     }
 
