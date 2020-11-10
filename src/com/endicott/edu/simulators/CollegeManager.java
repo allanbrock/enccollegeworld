@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
@@ -66,6 +67,8 @@ public class CollegeManager {
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
         logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
 
+        CollegeRating collegeTraits = new CollegeRating();
+        collegeTraits.handleTimeChange(collegeId);
         return college;
     }
 
@@ -164,6 +167,10 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime College Traits");
+        CollegeRating collegeTraits = new CollegeRating();
+        collegeTraits.handleTimeChange(collegeId);
 
         //Run the loans every week instead of day
         if(college.getHoursAlive() % 169 == 0) {
