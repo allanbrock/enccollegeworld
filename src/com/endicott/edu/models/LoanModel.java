@@ -1,10 +1,10 @@
 package com.endicott.edu.models;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
 //Outline of the UI for this: https://builderx.io/app/j4wlwx6u7u0oooswc4w400o4ckc84k
 //Am I missing anything important for logic or in the UI?
-public class LoanModel {
+public class LoanModel implements Serializable {
     private int value = 0;             //The amount the loan was
     private double interest = 0;       //The percentage of tax on the loan
     private int weeklyPayment = 0;  //The amount of money the college must pay every week
