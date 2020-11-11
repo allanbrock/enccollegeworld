@@ -19,6 +19,7 @@ public class EverythingDao {
        model.coaches = CoachManager.getCollegeCoaches();
        model.popupEvent = PopupEventDao.getPopupEvents(collegeId);
        model.admissions = AdmissionsDao.getAdmissions(collegeId);
+       model.academics = AcademicsDao.getAcademics(collegeId);
        return model;
     }
 }

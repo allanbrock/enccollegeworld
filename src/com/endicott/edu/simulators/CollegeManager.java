@@ -3,11 +3,10 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.Date;
 
 /**
  * The CollegeManager is responsible for simulating all overall college functions,
@@ -54,6 +53,7 @@ public class CollegeManager {
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         logger.info("Establish buildings.");BuildingManager.establishCollege(collegeId, college);
+        logger.info("Establish academics.");AcademicsManager.establishCollege(collegeId);
         logger.info("Establish faculty.");FacultyManager.establishCollege(collegeId, college);
         logger.info("Establish student.");StudentManager studentManager = new StudentManager();
         logger.info("Establish student.");studentManager.establishCollege(collegeId);
@@ -66,6 +66,7 @@ public class CollegeManager {
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
         logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
+
 
         CollegeRating collegeTraits = new CollegeRating();
         collegeTraits.handleTimeChange(collegeId);
@@ -89,6 +90,8 @@ public class CollegeManager {
         IdNumberGenDao.deleteIDs(collegeId);
         InventoryDao.deleteItem(collegeId);
         SnowDao.deleteSnowStorm(collegeId);
+        AdmissionsDao.removeAdmissionsData(collegeId);
+        AcademicsDao.removeAcademicData(collegeId);
     }
 
     /**
@@ -161,6 +164,13 @@ public class CollegeManager {
         logger.info("AdvanceTime Students");
         StudentManager studentManager = new StudentManager();
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime Admissions");
+        AdmissionsManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime Academics");
+        AcademicsManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
 
         logger.info("AdvanceTime Faculty");
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
