@@ -33,7 +33,10 @@ public class TipsManager {
             tm.getAcademicTips().add("Try repairing up some of your academic buildings!");
         }
 
-        //Probably want a way to add at least 1 tip if the user is doing pretty well in all areas.
+        //If the player has done very well in this department, remind them of reason why it might not be a perfect rating
+        if(tm.getAcademicTips().size() == 0) {
+            tm.getAcademicTips().add("Good work, continue keeping your students and faculty happy!");
+        }
 
         college.setTips(tm);
     }
@@ -63,7 +66,10 @@ public class TipsManager {
             tm.getAthleticTips().add("Try helping your team win a championship!");
         }
 
-        //Probably want a way to add at least 1 tip if the user is doing pretty well in all areas.
+        //If the player has done very well in this department, remind them of reason why it might not be a perfect rating
+        if(tm.getAthleticTips().size() == 0) {
+            tm.getAthleticTips().add("Good work, ensure that your teams win more games and championships!");
+        }
         college.setTips(tm);
     }
 
@@ -88,7 +94,10 @@ public class TipsManager {
             tm.getInfrastructureTips().add("Try purchasing some upgrades for your buildings!");
         }
 
-        //Probably want a way to add at least 1 tip if the user is doing pretty well in all areas.
+        //If the player has done very well in this department, remind them of reason why it might not be a perfect rating
+        if(tm.getInfrastructureTips().size() == 0) {
+            tm.getInfrastructureTips().add("Good work, continue to purchase upgrades and keep your building quality up!");
+        }
         college.setTips(tm);
     }
 
@@ -110,7 +119,6 @@ public class TipsManager {
         if(buildingQuality < .8) {
             tm.getSafetyTips().add("Try repairing some of your buildings!");
         }
-
         if(healthRating < .6 || wasSick) {
             tm.getSafetyTips().add("Try improving your health rating by buying store items and spending money to help quarantine students!");
         }
@@ -120,8 +128,14 @@ public class TipsManager {
         if(recentRiot) {
             tm.getSafetyTips().add("Raise the happiness of your students and faculty to prevent rioting or recruit less destructive students!");
         }
+        if(overcrowded) {
+            tm.getSafetyTips().add("Your dorms are overcrowded, try building new ones or upgrading old ones!");
+        }
 
-        //Probably want a way to add at least 1 tip if the user is doing pretty well in all areas.
+        //If the player has done very well in this department, remind them of reason why it might not be a perfect rating
+        if(tm.getSafetyTips().size() == 0) {
+            tm.getSafetyTips().add("Good work, continue keeping your buildings and health up!");
+        }
         college.setTips(tm);
     }
 
@@ -134,7 +148,7 @@ public class TipsManager {
         TipsModel tm = college.getTips();
         tm.getValueTips().clear();
 
-        if(averageRating <= 50) {
+        if(averageRating <= 65) {
             tm.getValueTips().add("Try improving all aspects of the school or lower the tuition rating!");
         }
         college.setTips(tm);
@@ -162,7 +176,10 @@ public class TipsManager {
             tm.getSocialTips().add("Increase your student's and faculty's happiness!");
         }
 
-        //Probably want a way to add at least 1 tip if the user is doing pretty well in all areas.
+        //If the player has done very well in this department, remind them of reason why it might not be a perfect rating
+        if(tm.getSocialTips().size() == 0) {
+            tm.getSocialTips().add("Good work, continue keeping your students and faculty happy!");
+        }
         college.setTips(tm);
     }
 }
