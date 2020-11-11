@@ -8,29 +8,39 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TipsModel implements Serializable {
-    private static ArrayList<String> academicTips = new ArrayList<>();         //Holds all academic tips that the page will display
-    private static ArrayList<String> athleticTips = new ArrayList<>();         //Holds all athletic tips that the page will display
-    private static ArrayList<String> infrastructureTips = new ArrayList<>();   //Holds all infrastructure tips that the page will display
-    private static ArrayList<String> safetyTips = new ArrayList<>();           //Holds all safety tips that the page will display
-    private static ArrayList<String> valueTips = new ArrayList<>();            //Holds all value tips that the page will display
-    private static ArrayList<String> socialTips = new ArrayList<>();           //Holds all social tips that the page will display
 
-    public static void setAcademicTips(ArrayList<String> at) { academicTips = at; }
-    public static ArrayList<String> getAcademicTips(){ return academicTips; }
+    private ArrayList<String> academicTips;         //Holds all academic tips that the page will display
+    private ArrayList<String> athleticTips;         //Holds all athletic tips that the page will display
+    private ArrayList<String> infrastructureTips;   //Holds all infrastructure tips that the page will display
+    private ArrayList<String> safetyTips;           //Holds all safety tips that the page will display
+    private ArrayList<String> valueTips;            //Holds all value tips that the page will display
+    private ArrayList<String> socialTips;           //Holds all social tips that the page will display
 
-    public static void setAthleticTips(ArrayList<String> at) { athleticTips = at; }
-    public static ArrayList<String> getAthleticTips(){ return athleticTips; }
+    public TipsModel() {
+        academicTips = new ArrayList<>();
+        athleticTips = new ArrayList<>();
+        infrastructureTips = new ArrayList<>();
+        safetyTips = new ArrayList<>();
+        valueTips = new ArrayList<>();
+        socialTips = new ArrayList<>();
+    }
 
-    public static void setInfrastructureTips(ArrayList<String> it) { infrastructureTips = it; }
-    public static ArrayList<String> getInfrastructureTips(){ return infrastructureTips; }
+    public void setAcademicTips(ArrayList<String> at) { academicTips = at; }
+    public ArrayList<String> getAcademicTips(){ return academicTips; }
 
-    public static void setSafetyTips(ArrayList<String> st) { safetyTips = st; }
-    public static ArrayList<String> getSafetyTips(){ return safetyTips; }
+    public void setAthleticTips(ArrayList<String> at) { athleticTips = at; }
+    public ArrayList<String> getAthleticTips(){ return athleticTips; }
 
-    public static void setValueTips(ArrayList<String> vt) { valueTips = vt; }
-    public static ArrayList<String> getValueTips(){ return valueTips; }
+    public void setInfrastructureTips(ArrayList<String> it) { infrastructureTips = it; }
+    public ArrayList<String> getInfrastructureTips(){ return infrastructureTips; }
 
-    public static void setSocialTips(ArrayList<String> st) { socialTips = st; }
-    public static ArrayList<String> getSocialTips(){ return socialTips; }
+    public void setSafetyTips(ArrayList<String> st) { safetyTips = st; }
+    public ArrayList<String> getSafetyTips(){ return safetyTips; }
+
+    public void setValueTips(ArrayList<String> vt) { valueTips = vt; }
+    public ArrayList<String> getValueTips(){ return valueTips; }
+
+    public void setSocialTips(ArrayList<String> st) { socialTips = st; }
+    public ArrayList<String> getSocialTips(){ return socialTips; }
 
 }

@@ -41,7 +41,7 @@ public class CollegeModel implements Serializable {
     private CollegeMode mode = CollegeMode.PLAY;        //Current mode of the game, used for play testing
     private int daysUntilNextEvent = 3;                 //Number of days until the next event
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
-    private TipsModel collegeTips;
+    private TipsModel collegeTips = new TipsModel();    //Holds all the tips that the user should know about to improve trait ratings
     //public PopupEventModel;
 
     //Loan Fields
@@ -238,6 +238,10 @@ public class CollegeModel implements Serializable {
     public void setMode(CollegeMode mode) {
         this.mode = mode;
     }
+
+    public TipsModel getTips() { return this.collegeTips; }
+
+    public void setTips(TipsModel tm) { this.collegeTips = tm; }
 
     public  int getTotalIncome(){
         return totalIncome;
