@@ -3,42 +3,50 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.CollegeManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class CollegeModel implements Serializable {
-    private int hoursAlive = 0;              // hours the college has been in existence
-    private int availableCash = 20000;           // amount of money in college bank account
-    private int yearlyTuitionCost = 40000;   // the amount it costs to attend the school for a single year
-    private int previousTuitionCost = 0;    // the tuition amount the user previously set
-    private int reputation = 50;             // reputation of college based on 1-100
-    private int totalIncome = 0;             // the amount of money the college has
-    private int totalExpenditure = 0;        //the amount of money the college has spent
-    private String runId = "unknown";        // name of the college
-    private String note = "empty";           // note for debugging
-    private int studentBodyHappiness;        // out of 100, 0 is unhappy
-    private int facultyBodyHappiness;
-    private int studentFacultyRatio = 100;     // number of students per faculty member
-    private int numberStudentsAdmitted = 0;  // number of students admitted since college created.
-    private int numberStudentsAccepted = 0;  // number of students accepted to the school.
-    private int numberStudentsWithdrew = 0;  // number of students withdrawn since college created.
-    private int numberStudentsGraduated = 0; // number of students graduate since college created
-    private float retentionRate = 100f;        // percentage of students retained (or graduated) since college created
-    private int yearlyTuitionRating = 0;     // 0 to 100 rating of happiness corresponding to tuition.
-    private int studentFacultyRatioRating = 0; // 0 to 100 rating of student faculty ratio
-    private int studentHealthRating = 0;       // 0 to 100 rating of student health
-    private int studentHealthHappiness = 0;       // 0 to 100 rating of student health
-    private int studentRecreationalHappiness = 0; // 0 to 100 rating of student recreational happiness
-    private int studentFinancialHappiness = 0; // 0 to 100 rating of student recreational happiness
-    private int studentBuildingHappiness = 0;
-    private int studentProfessorHappiness = 0;
-    private int totalBuildingHealth = 0; // 0 to 100 average of all buildings health
-    private int departmentCount = 4;
-    private int studentAcademicHappiness = 0;
-    private int gate = 0;                    // This is the current gate or level that is open.
-    private CollegeMode mode = CollegeMode.PLAY;
-    private int daysUntilNextEvent = 3;
-    private boolean isTimePaused = true;
+    private int hoursAlive = 0;                  //Hours the college has existed for
+    private int reputation = 50;                 //Reputation of college based on 1-100
+    private int yearlyTuitionCost = 40000;       //Amount of money a student pays per year
+    private int previousTuitionCost = 0;         //The most recent previous tuition change
+    private int availableCash = 20000;           //The balance of the college
+    private int totalIncome = 0;                 //The amount of money that the college earned over the last period of time
+    private int totalExpenditure = 0;            //The amount of money that the college lost/spent over the last period of time
+    private int debt = 0;                        //the amount of debt the college is currently in
+    private int credit = 580;                    //The current credit score of the college (300-850 is the range)
+    private String runId = "unknown";            //Name of the college
+    private String note = "empty";               //Note for debugging
+    private int studentBodyHappiness;            //Happiness of all students (0-100)
+    private int facultyBodyHappiness;            //Happiness of all faculty (0-100)
+    private int studentFacultyRatio = 100;       //Number of students per faculty member
+    private int numberStudentsAdmitted = 0;      //Total number of students admitted since college created.
+    private int numberStudentsAccepted = 0;      //Total number of students accepted to the school (considering).
+    private int numberStudentsWithdrew = 0;      //Total number of students withdrawn since college created.
+    private int numberStudentsGraduated = 0;     //Total number of students graduate since college created
+    private float retentionRate = 100f;          //Percentage of students retained (or graduated) since college created
+    private int yearlyTuitionRating = 0;         //0 to 100 rating of happiness corresponding to tuition.
+    private int studentFacultyRatioRating = 0;   //0 to 100 rating of student faculty ratio
+    private int studentHealthRating = 0;            //0 to 100 rating of student health
+    private int studentHealthHappiness = 0;         //0 to 100 rating of student health
+    private int studentRecreationalHappiness = 0;   //0 to 100 rating of student recreational happiness
+    private int studentFinancialHappiness = 0;      //0 to 100 rating of student financial happiness
+    private int studentBuildingHappiness = 0;       //0 to 100 rating of student building happiness
+    private int studentProfessorHappiness = 0;      //0 to 100 rating of student professor happiness
+    private int totalBuildingHealth = 0;            //0 to 100 average of all buildings health
+    private int studentAcademicHappiness = 0;       //0 to 100 rating of student academic happiness
+    private int departmentCount = 4;                    //Number of departments/schools in the college
+    private int gate = 0;                               //This is the current gate or level that is open.
+    private CollegeMode mode = CollegeMode.PLAY;        //Current mode of the game, used for play testing
+    private int daysUntilNextEvent = 3;                 //Number of days until the next event
+    private boolean isTimePaused = true;                //Boolean for if the game is paused or not
+    private TipsModel collegeTips = new TipsModel();    //Holds all the tips that the user should know about to improve trait ratings
     //public PopupEventModel;
+
+    //Loan Fields
+    private ArrayList<LoanModel> loans = new ArrayList<>();  //Holds all of the loans the player currently has
+    private LoanModel proposedLoan = new LoanModel(0, 0, 0);    //Loan that is in progress of being accepted
 
     //Counts amount of total championships won to be tracked in the trophy case
     private int footballChampionships = 0;
@@ -91,6 +99,14 @@ public class CollegeModel implements Serializable {
     public void setStudentHealthHappiness(int studentHealthHappiness) {
         this.studentHealthHappiness = studentHealthHappiness;
     }
+
+    public int getDebt() {return this.debt;}
+
+    public void setDebt(int d) {this.debt = d;}
+
+    public int getCredit() {return this.credit;}
+
+    public void setCredit(int c) { this.credit = c;}
 
     public void setStudentRecreationalHappiness(int studentRecreationalHappiness) {this.studentRecreationalHappiness = studentRecreationalHappiness;}
 
@@ -166,7 +182,7 @@ public class CollegeModel implements Serializable {
 
     public void setHoursAlive(int hoursAlive) {
         this.hoursAlive = hoursAlive;
-        this.currentDate = CollegeManager.hoursToDate(getHoursAlive());
+        this.currentDate = CollegeManager .hoursToDate(getHoursAlive());
     }
 
     public String getNote() {
@@ -223,6 +239,10 @@ public class CollegeModel implements Serializable {
         this.mode = mode;
     }
 
+    public TipsModel getTips() { return this.collegeTips; }
+
+    public void setTips(TipsModel tm) { this.collegeTips = tm; }
+
     public  int getTotalIncome(){
         return totalIncome;
     }
@@ -238,6 +258,15 @@ public class CollegeModel implements Serializable {
     public void setTotalExpenditure(int totalExpenditure){
         this.totalExpenditure = totalExpenditure;
     }
+
+    public ArrayList<LoanModel> getLoans() {return this.loans;}
+
+    public void setLoans(ArrayList<LoanModel> l) {this.loans = l;}
+
+    public LoanModel getProposedLoan() {return this.proposedLoan;}
+
+    public void setProposedLoan(LoanModel lm) {this.proposedLoan = lm;}
+
     public void setMode(String mode) {
         //Testing the "PopupEventDao"
 //        if (mode.equals("Demo")){

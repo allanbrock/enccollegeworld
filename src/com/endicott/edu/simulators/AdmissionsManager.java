@@ -1,10 +1,8 @@
 package com.endicott.edu.simulators;
 
-//import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
@@ -29,9 +27,17 @@ public class AdmissionsManager {
      * @param collegeId  ID of the college currently in use
      * @param hoursAlive Amount of time the college has been open
      */
-    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         CollegeManager.logger.info("Admissions running handle time change - " + CollegeManager.getDate());
-
+        AdmissionsModel adm = AdmissionsDao.getAdmissions(collegeId);
+        int dayInCycle = (hoursAlive / 24);
+        int weekInCycle = (dayInCycle / 7) % 15;
+        if(weekInCycle == 0){
+            // this is the admissions week!!
+        }
+        else {
+            adm.setWeeksUntilAcceptance(15 - weekInCycle);
+        }
     }
 
     /**
@@ -41,9 +47,9 @@ public class AdmissionsManager {
      */
     public static void establishCollege(String collegeId){
         AdmissionsModel adm = new AdmissionsModel();
-        adm.setGroupA(generateNewCandidates(50, collegeId));
-        adm.setGroupB(generateNewCandidates(50, collegeId));
-        adm.setGroupC(generateNewCandidates(50, collegeId));
+        adm.setGroupA(generateNewCandidates(25, collegeId));
+        adm.setGroupB(generateNewCandidates(25, collegeId));
+        adm.setGroupC(generateNewCandidates(25, collegeId));
         adm.setWeeksUntilAcceptance(15);
         AdmissionsDao.saveAdmissionsData(collegeId,adm);
     }
@@ -54,11 +60,10 @@ public class AdmissionsManager {
      * @param numNewStudents The number of new students to be made
      * @param collegeId The id of the college in use
      */
-    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
+    private static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
         Random rand = new Random();
-        ArrayList<PotentialStudentModel> students = new ArrayList<PotentialStudentModel>();
+        ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
-            PotentialStudentModel student = new PotentialStudentModel();
             // assign a personality and a quality
             // TODO: determine 'tier' and 'quality' from the current level of the college
             // for now, 5/8 of students will be basic,
@@ -74,27 +79,30 @@ public class AdmissionsManager {
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
-            String name;
-            GenderModel gender;
-
-            if (rand.nextInt(10) + 1 > 5) {
-                name = NameGenDao.generateName(false);
-                student.setGender(GenderModel.MALE);
-                student.getAvatar().generateStudentAvatar(false);
-            } else {
-                name = NameGenDao.generateName(true);
-                student.setGender(GenderModel.FEMALE);
-                student.getAvatar().generateStudentAvatar(true);
+            String firstName = "";
+            String lastName = "";
+            if(rand.nextInt(10) + 1 > 5) {
+                firstName = NameGenDao.generateFirstName(false);
+                lastName = NameGenDao.generateLastName();
             }
-            student.setFirstName(name.substring(0, name.indexOf(" ") - 1));
-            student.setLastName(name.substring(name.indexOf(" ") + 1));
-
-            student.setId(IdNumberGenDao.getID(collegeId));
-            student.setNature(StudentModel.assignRandomNature());
-            student.getAvatar().generateHappyAvatar();
-            students.add(student);
+            else {
+                firstName = NameGenDao.generateFirstName(true);
+                lastName = NameGenDao.generateLastName();
+            }
+            int id = IdNumberGenDao.getID(collegeId);
+            PotentialStudentModel potentialStudent = new PotentialStudentModel(firstName,lastName,GenderModel.FEMALE,id,80,pm,qm);
+            if(rand.nextInt(10) + 1 > 5) {
+                potentialStudent.setGender(GenderModel.MALE);
+                potentialStudent.getAvatar().generateStudentAvatar(false);
+            }
+            else {
+                potentialStudent.setGender(GenderModel.FEMALE);
+                potentialStudent.getAvatar().generateStudentAvatar(true);
+            }
+            potentialStudent.getAvatar().generateHappyAvatar();
+            potentialStudent.setNature(StudentModel.assignRandomNature());
+            potentialStudents.add(potentialStudent);
         }
-        return students;
+        return potentialStudents;
     }
-
 }

@@ -1,18 +1,15 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.AdmissionsModel;
-import com.endicott.edu.models.FacultyModel;
 
 import java.io.File;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * This class should handle all Data access for Admissions/Potential students
  */
 public class AdmissionsDao {
-    private static final String filename = "admissions.json";
-
+    private static final String filename = "admissions.dat";
     private static Logger logger = Logger.getLogger("AdmissionsDao");
 
     private AdmissionsDao(){

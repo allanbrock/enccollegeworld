@@ -244,6 +244,8 @@ public class FireManager {
                 }
                 FacultyDao.saveAllFaculty(runId,faculty);
             }
+            // If there are deaths, immediately decrease the safety rating
+            CollegeRating.decreaseSafetyRating(runId, (numStudentDeaths + numFacultyDeaths));
             return;
         }
 

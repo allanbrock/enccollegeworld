@@ -8,7 +8,10 @@ public class AchievementModel implements Serializable {
     private String type;
     private int cashReward;
     private String runId;
+<<<<<<<<< Temporary merge branch 1
+=========
     private String iconPath;
+>>>>>>>>> Temporary merge branch 2
     // private Experience expReward;
 
     private boolean locked;
@@ -40,6 +43,10 @@ public class AchievementModel implements Serializable {
     public void setDescription(String description){this.description = description;}
 
     public int getCashReward(){return this.cashReward;}
+<<<<<<<<< Temporary merge branch 1
+    public void setCashReward(int cash){this.cashReward = cash;}
+=========
+>>>>>>>>> Temporary merge branch 2
 
     public boolean getLock(){return this.locked;}
     public void setLock(boolean status){this.locked = status;}
@@ -47,7 +54,20 @@ public class AchievementModel implements Serializable {
     public String getType(){return this.type;}
     public void setType(String type){this.type = type;}
 
+<<<<<<<<< Temporary merge branch 1
+    public int getLevelReq(String type){
+        if(type == "level")
+            return this.levelReq;
+        else if(type == "money")
+            return this.moneyReq;
+        else
+            return this.happinessReq;
+    }
+
+    public void setRunId(String _runId){this.runId = _runId;}
+=========
     public void setRunId(String _runId){this.runId = _runId;}
 
     public String getIconPath(){return this.iconPath;}
+>>>>>>>>> Temporary merge branch 2
 }

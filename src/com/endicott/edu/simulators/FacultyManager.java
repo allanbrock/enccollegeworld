@@ -67,7 +67,7 @@ public class FacultyManager {
         List<FacultyModel> facultyList = fao.getFaculty(collegeId);
         int total = 0;
         for(FacultyModel member : facultyList){
-            int paycheck = member.getSalary()/365;
+            int paycheck = CollegeManager.daysAdvance * member.getSalary()/365;
             total += paycheck;
         }
         Accountant.payBill(collegeId, "Faculty has been paid", total);

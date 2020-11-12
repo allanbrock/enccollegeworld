@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.endicott.edu.datalayer.BuildingDao;
 import com.endicott.edu.datalayer.CollegeDao;
-import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.*;
 import java.util.List;
 
@@ -64,6 +63,8 @@ public class RiotManager {
         riot.setName(cause);
         riot.setDescription("A riot has started on campus!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        // Decrease College Safety trait in event of riot
+        CollegeRating.decreaseSafetyRating(collegeId, "REGULAR");
     }
 
     /**
@@ -79,6 +80,8 @@ public class RiotManager {
         riot.setDescription("Mayhem has broken loose across the student body! They demand lower tuition and better quality of life!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "You really messed up.");
+        // Decrease College Safety trait in event of riot
+        CollegeRating.decreaseSafetyRating(collegeId, "SEVERE");
     }
 
     /**
@@ -93,6 +96,8 @@ public class RiotManager {
         riot.setDescription("The faculty are fed up with the administration! They have started to boycott teaching!");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "Professors aren't professing.");
+        // Decrease College Safety trait in event of riot
+        CollegeRating.decreaseSafetyRating(collegeId, "FACULTY");
     }
 
     /**
@@ -106,6 +111,8 @@ public class RiotManager {
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "This gang of hooligans were destructive.");
         popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        // Decrease College Safety trait in event of riot
+        CollegeRating.decreaseSafetyRating(collegeId, "ROWDY");
     }
 
     public void createStakeholderRiot(BuildingManager bm, String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {

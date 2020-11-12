@@ -1,12 +1,14 @@
 package com.endicott.edu.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Ryan Kelley, Marissa Patti, and Giana Nekitopoulos on 9/28/20
  */
 
 //Class is the Superclass for all people in the game
 //Implement this class in any class where your defining a new type of person in the college
-public abstract class PersonModel {
+public abstract class PersonModel implements Serializable {
     protected String name = "";                //The full name of the person
     protected String firstName = "";           //The first name of the person
     protected String lastName = "";            //The last name of the person
