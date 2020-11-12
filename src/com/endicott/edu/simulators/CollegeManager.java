@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 public class CollegeManager {
     static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
     public static Logger logger = Logger.getLogger("CollegeManager");
+    static public int daysAdvance = 7; // 1 week
+
     /**
      * Creates a new college.
      *
@@ -102,7 +104,7 @@ public class CollegeManager {
      *
      * @param collegeId college name
      */
-    static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
+    static public CollegeModel advanceTime(String collegeId, PopupEventManager popupManager) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         // If there is a popup, we are not going to advance the day.
@@ -114,7 +116,7 @@ public class CollegeManager {
 //            return college;
 //        }
 
-        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
+        college.setHoursAlive(college.getHoursAlive() + (24*daysAdvance));  //Advance time by 1 week
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -184,12 +186,10 @@ public class CollegeManager {
         TipsManager tManager = new TipsManager();
         collegeTraits.handleTimeChange(collegeId, tManager);
 
-        //Run the loans every week instead of day
-        if(college.getHoursAlive() % 169 == 0) {
-            logger.info("AdvanceTime Loans");
-            FinanceManager fm = new FinanceManager();
-            fm.handleTimeChange(collegeId);
-        }
+        logger.info("AdvanceTime Loans");
+        FinanceManager fm = new FinanceManager();
+        fm.handleTimeChange(collegeId);
+
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);

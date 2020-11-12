@@ -4,7 +4,6 @@ import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.EverythingModel;
-import com.endicott.edu.models.LoanModel;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.FinanceManager;
 import com.endicott.edu.simulators.PopupEventManager;
@@ -48,7 +47,7 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
             String command = splits[2];  // only command is next day at the moment.
             logger.info("Servlet command: " + command);
             PopupEventManager popupMgr = new PopupEventManager();  // This is a stub.  Must be changed.
-            CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
+            CollegeManager.advanceTime(collegeId, popupMgr);
 
             EverythingModel everything = EverythingDao.getEverything(collegeId);
             sendAsJson(response, everything);
@@ -116,7 +115,7 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
                 FinanceManager.makePayment(collegeId, integerAmount, integerLoanNum);
             }
             else {
-                CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
+                CollegeManager.advanceTime(collegeId, popupMgr);
             }
 
             EverythingModel everything = EverythingDao.getEverything(collegeId);
