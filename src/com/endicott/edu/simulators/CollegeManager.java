@@ -180,6 +180,7 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+        AchievementManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         logger.info("AdvanceTime College Traits and update tips");
         CollegeRating collegeTraits = new CollegeRating();

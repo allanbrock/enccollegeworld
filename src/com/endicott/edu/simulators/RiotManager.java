@@ -46,10 +46,6 @@ public class RiotManager {
         // Number of students drops below certain amount
         else if(college.getRetentionRate() < 60f)
             createStakeholderRiot(bm, runId, currentRiot, popupManager, "The Stakeholders are pissed you messed up the school");
-        // Acceptable happiness and tuition
-        else {
-            createRegularRiot(runId, currentRiot, popupManager, randomRiotDescription());
-        }
     }
 
     public void letPeopleRiot(BuildingManager bm, String runID, int mean, int stdDev, int min, int max, String msg) {

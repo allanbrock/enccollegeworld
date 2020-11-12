@@ -56,7 +56,7 @@ public class BuildingManager {
         // Really important the we save the changes to disk.
         dao.saveAllBuildingsUsingCache(runId);
 
-        AchievementManager.checkAchievementStatus(runId);
+        AchievementManager.checkAchievementStatus(runId, popupManager);
     }
 
     /**
@@ -543,13 +543,11 @@ public class BuildingManager {
         gateManager.createGate(collegeId, "Hockey rink", "To have a hockey team you need a rink.", "resources/images/HOCKEY%20RINK.png", 4);
 
         /**
-<<<<<<<<< Temporary merge branch 1
          * Author: Justen Koo
-=========
->>>>>>>>> Temporary merge branch 2
          * TODO: Achievements shouldn't be made in the BuildingManager, but should exist as soon as the player creates a college. These few lines of code should be moved somewhere else
          */
         // Achievements for the game
+        achievementManager.createAchievement(collegeId, "Rookie", "Create Your First College", "level", 2500, 0, 0, 0);
         achievementManager.createAchievement(collegeId, "I'm Level 1", "Reach Level 1", "level", 5000,1, 0, 0);
         achievementManager.createAchievement(collegeId,"Big Saver I", "Accumulate $300K or More", "money", 1500,1, 300000, 0);
         achievementManager.createAchievement(collegeId,"Make Happy I", "Reach 85% Student Happiness for the First Time", "happiness", 15000, 1, 0, 85);
