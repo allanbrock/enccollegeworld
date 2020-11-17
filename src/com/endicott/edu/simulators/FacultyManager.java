@@ -114,6 +114,7 @@ public class FacultyManager {
         else
             isFemale = false;
         member = new FacultyModel(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
+        member.getAvatar().generateStudentAvatar(isFemale);
         fao.saveNewFaculty(collegeID, member);
         return member;
     }

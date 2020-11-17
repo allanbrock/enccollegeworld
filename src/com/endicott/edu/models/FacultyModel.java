@@ -98,4 +98,8 @@ public class FacultyModel extends PersonModel implements Serializable{
     public void setRaiseRecentlyGiven(Boolean raiseRecentlyGiven){ this.raiseRecentlyGiven = raiseRecentlyGiven; }
     public Boolean getRaiseRecentlyGiven(){ return this.raiseRecentlyGiven; }
 
+    public AvatarModel getAvatar(){
+        return avatar;
+    }
+
 }
