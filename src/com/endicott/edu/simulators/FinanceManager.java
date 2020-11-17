@@ -15,12 +15,15 @@ public class FinanceManager {
         for(int i = 0; i < college.getLoans().size(); i++) {
             total += makeWeeklyPayment(college.getLoans().get(i));
             addInterest(college.getLoans().get(i), collegeId);
-            NewsManager.createNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $" + total, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+            NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $", total);
         }
 
         //Pay off the loans, updating the college debt and their balance
         college.setDebt(college.getDebt()-total);
         college.setAvailableCash(college.getAvailableCash()-total);
+
+        //Check to see if any of the loans had been paid off this week
+        checkLoans(collegeId);
 
         //Update the college credit for paying these loans
         int newCredit = updateCredit(total);
@@ -133,10 +136,23 @@ public class FinanceManager {
     static public void makePayment(String collegeId, int amount, int loanNumber) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         LoanModel lm = college.getLoans().get(loanNumber);
+
+        //Check to see if the user has the cash to make this payment in the first place
+        //They can't be allowed to go in debt to pay off debt (only when forced to pay weekly dues)
+        if(college.getAvailableCash() < amount) {
+            //DON'T MAKE THE PAYMENT THEY DON'T HAVE THE FUNDS
+            return;
+        }
+
+        //Check to see if the user inputted to high a value to pay off the loan
+        if(lm.getValue() < amount) {
+            amount = lm.getValue();
+        }
+
         lm.setValue(lm.getValue() - amount);    //Remove the amount of cash from the specific loan
         college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
-        NewsManager.createNews(collegeId, college.getHoursAlive(), "Payment to loans: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+        NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Payment to loans: $", amount);
         checkLoans(collegeId);            //Check to see if any loans are paid off
         CollegeDao.saveCollege(college);
     }
