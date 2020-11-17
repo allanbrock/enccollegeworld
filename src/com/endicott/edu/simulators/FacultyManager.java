@@ -113,7 +113,8 @@ public class FacultyManager {
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, collegeID, salary);
+        member = new FacultyModel(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
+        member.getAvatar().generateStudentAvatar(isFemale);
         fao.saveNewFaculty(collegeID, member);
         return member;
     }
