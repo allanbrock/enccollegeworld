@@ -8,6 +8,10 @@ import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;                  //Hours the college has existed for
+    private int timeLeftInSemester = 0;
+    private int numSemesters = 0;
+    static public int daysAdvance = 7; // 1 week
+    private String timeAdvanceBy = "Week"; // define based on daysAdvance
     private int reputation = 50;                 //Reputation of college based on 1-100
     private int yearlyTuitionCost = 40000;       //Amount of money a student pays per year
     private int previousTuitionCost = 0;         //The most recent previous tuition change
@@ -69,6 +73,20 @@ public class CollegeModel implements Serializable {
 
 
     private Date currentDate;
+
+    public int getTimeLeftInSemester() { return this.timeLeftInSemester; }
+    public void advanceTime() {
+        this.timeLeftInSemester -= 1;
+        // if semester has no weeks left, set new semester
+        if(this.timeLeftInSemester == 0){
+            setNewSemester();
+        }
+    }
+    public void setNewSemester(){
+        // reset time left in semester and increase number of semesters
+        this.timeLeftInSemester = 105 / CollegeModel.daysAdvance;
+        this.numSemesters += 1;
+    }
 
     public int getFacultyBodyHappiness() {return this.facultyBodyHappiness;}
     public void setFacultyBodyHappiness(int n) {this.facultyBodyHappiness = n;}

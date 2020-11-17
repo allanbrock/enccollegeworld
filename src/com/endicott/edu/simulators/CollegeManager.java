@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class CollegeManager {
     static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
     public static Logger logger = Logger.getLogger("CollegeManager");
-    static public int daysAdvance = 7; // 1 week
 
     /**
      * Creates a new college.
@@ -46,6 +45,7 @@ public class CollegeManager {
         college = new CollegeModel();
         college.setRunId(collegeId);
         college.setHoursAlive(1);
+        college.setNewSemester();
         college.setAvailableCash(STARTUP_FUNDING);
         CollegeDao.saveCollege(college);
 
@@ -116,7 +116,8 @@ public class CollegeManager {
 //            return college;
 //        }
 
-        college.setHoursAlive(college.getHoursAlive() + (24*daysAdvance));  //Advance time by 1 week
+        college.setHoursAlive(college.getHoursAlive() + (24*CollegeModel.daysAdvance));  //Advance time by 1 week
+        college.advanceTime();  // decrease number of weeks left in semester
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
