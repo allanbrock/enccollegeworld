@@ -151,7 +151,7 @@ public class FireManager {
         }
         for (int j = 0; j <facultyDeaths && (faculty.size() > 0); j++) {
             int facultyToRemove = new Random().nextInt(faculty.size());
-            victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
+            victims += faculty.get(facultyToRemove).getName().trim() + ", ";
         }
         return victims;
     }
@@ -265,7 +265,7 @@ public class FireManager {
                         }
                     }
                 }
-                victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
+                victims += faculty.get(facultyToRemove).getName().trim() + ", ";
                 faculty.remove(facultyToRemove);
             }
             FacultyDao.saveAllFaculty(runId,faculty);

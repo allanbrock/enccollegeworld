@@ -681,7 +681,15 @@ public class SportManager {
         String coachName = NameGenDao.generateName(false);
 //        CoachModel coach = new CoachModel();
         AvatarModel avatar = new AvatarModel();
-        CoachModel coach = new CoachModel(team.getSportName(), coachName, "Coach", "Athletics", collegeId, 100000);
+        CoachModel coach;
+        Boolean isFemale;
+        double r = Math.random();
+        if(r < 0.5)
+            isFemale = true;
+        else
+            isFemale = false;
+        coach = new CoachModel(team.getSportName(), "Coach", "Athletics", collegeId, 100000, isFemale);
+//        CoachModel coach = new CoachModel(team.getSportName(), coachName, "Coach", "Athletics", collegeId, 100000);
 //        coach.setSportName(team.getSportName());
 //        coach.setFacultyName(coachName);
 //        coach.setTitle("Coach");
@@ -690,7 +698,7 @@ public class SportManager {
 //        coach.setSalary(100000);
         //Generates a random url for the student's avatar
         coach.setAvatarIcon(avatar);
-        team.setCoachName(coach.getFacultyName());
+        team.setCoachName(coach.getName());
 
     }
 
