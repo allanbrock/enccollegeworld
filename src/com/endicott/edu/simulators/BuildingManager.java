@@ -38,9 +38,9 @@ public class BuildingManager {
 
         // Go through the buildings making changes based on elapsed time.
         for (BuildingModel building : buildings) {
-            building.updateTimeSinceLastRepair(24);
+            building.updateTimeSinceLastRepair(CollegeManager.daysAdvance *24);
             billRunningCostOfBuilding(runId, building); //charges daily maintenance cost
-            buildingDecayForOneDay(runId, building); //decays the building quality
+            buildingDecayForTimeAdvance(runId, building); //decays the building quality
             workOnBuilding(building, runId); //if the building is under construction for any reason, this advances construction
             setNewRepairCost(runId, building); //sets the repair cost based on the building quality
 
@@ -67,7 +67,7 @@ public class BuildingManager {
      */
     private void billRunningCostOfBuilding(String collegeId, BuildingModel building) {
         // Multiple the cost per day based on how much the building is decayed
-        int newCharge = ((int)(100 - building.getShownQuality())) * building.getCostPerDay();
+        int newCharge = ((int)(100 - building.getShownQuality())) * CollegeManager.daysAdvance *building.getCostPerDay();
         Accountant.payBill(collegeId, "Maintenance of building " + building.getName(), newCharge);
     }
 
@@ -90,8 +90,8 @@ public class BuildingManager {
      */
     private void workOnBuilding(BuildingModel building, String runId){
         if (building.getHoursToComplete() > 0) {
-            building.setHoursToComplete(building.getHoursToComplete() - 24);
-            surpriseEventDuringConstruction(runId, 24);
+            building.setHoursToComplete(building.getHoursToComplete() - (24 * CollegeManager.daysAdvance));
+            surpriseEventDuringConstruction(runId, CollegeManager.daysAdvance * 24);
         }
 
         //This is to check if the REPAIR is done and fix the building quality
@@ -298,14 +298,14 @@ public class BuildingManager {
      * @param collegeId
      * @param b
      */
-    private void buildingDecayForOneDay(String collegeId, BuildingModel b){
+    private void buildingDecayForTimeAdvance(String collegeId, BuildingModel b){
         // Only decay buildings that aren't under construction
         if((!(b.getHoursToComplete() > 0 || b.isUpgradeComplete() == false || b.isRepairComplete() == false))){
             float currentQuality = b.getHiddenQuality();
             //Generates a random number between 0-1
             //Multiply by .2 since One hidden quality point = Five shown quality points
             //It's impossible for a building to ever lose more than 1% per day
-            double randomDecay = Math.random() * 0.2;
+            double randomDecay = CollegeManager.daysAdvance * Math.random() * 0.2;
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
         dao.updateSingleBuildingInCache(collegeId, b);
@@ -557,6 +557,7 @@ public class BuildingManager {
         achievementManager.createAchievement(collegeId, "I'm Level 10", "Reach Level 5", "level", 10000,5, 0, 0);
         achievementManager.createAchievement(collegeId,"Big Saver III", "Accumulate $750k or More", "money", 100000,1, 750000, 0);
         achievementManager.createAchievement(collegeId,"Make Happy III", "Reach 95% Student Happiness for the First Time", "happiness", 150000, 1, 0, 90);
+        achievementManager.createAchievement(collegeId, "Millionaire", "Become a Millionaire", "money", 100000, 0, 1000000, 0);
     }
 
     /**

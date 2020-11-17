@@ -198,7 +198,7 @@
                 for (int j = 0; j < teamCoaches.size(); j++) {
             %>
             <tr>
-                <td><%=teamCoaches.get(j).getFacultyName()%>
+                <td><%=teamCoaches.get(j).getName()%>
                 </td>
                 <td>
                     <a href="#<%="coachDropdown"%>" class="btn btn-info" data-toggle="collapse">Details</a>
@@ -215,7 +215,7 @@
                     <input type="submit" class="btn btn-info" name="<%="coachRaise" + j%>" value="Give Raise" style="text-decoration-color: #000099">
                     <input type="submit" class="btn btn-info" name="<%="removeCoach" + j%>" value="Fire Coach">
                     <%if(teamCoaches.get(j).getUnderPerforming()){%>
-                        <label id="underPerformingCoaches"><%=SportManager.generateCoachUnderPerformingScenario(teamCoaches.get(j).getFacultyName())%></label>
+                        <label id="underPerformingCoaches"><%=SportManager.generateCoachUnderPerformingScenario(teamCoaches.get(j).getName())%></label>
                     <%}%>
                 </td>
             </tr>
