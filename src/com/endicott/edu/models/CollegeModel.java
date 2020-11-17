@@ -10,8 +10,8 @@ public class CollegeModel implements Serializable {
     private int hoursAlive = 0;                  //Hours the college has existed for
     private int timeLeftInSemester = 0;
     private int numSemesters = 0;
-    static public int daysAdvance = 7; // 1 week
-    private String timeAdvanceBy = "Week"; // define based on daysAdvance
+    public static final int daysAdvance = 7; // 1 week
+    private final String timeAdvanceBy = "Week"; // define based on daysAdvance
     private int reputation = 50;                 //Reputation of college based on 1-100
     private int yearlyTuitionCost = 40000;       //Amount of money a student pays per year
     private int previousTuitionCost = 0;         //The most recent previous tuition change
