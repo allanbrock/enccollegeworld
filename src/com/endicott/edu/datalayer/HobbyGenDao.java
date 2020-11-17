@@ -9,7 +9,9 @@ public class HobbyGenDao {
             "Karate", "Judo", "Pankration", "Jellyfishing", "Coloring", "Gambling", "Rubik's Cube", "Driving", "Surfing", "Sport Stacking",
             "Stand up Comedy", "Golfing", "Pranks", "Magic", "Cleaning", "Filmmaking", "Baking", "Social Media", "Hacking", "Tax evasion",
             "Puzzles", "Ice Skating", "Anime", "Metal Detecting", "Herping", "Whale Watching", "Rock Climbing", "Marbles", "Beyblades",
-            "Pokémon", "Club Penguin", "Sky Diving", "Car Enthusiast", "Strangling", "Watching Soap Operas", "Netflix", "Folding Laundry"};
+            "Pokémon", "Club Penguin", "Sky Diving", "Car Enthusiast", "Strangling", "Watching Soap Operas", "Netflix", "Folding Laundry",
+            "Bowling", "Clock Collecting", "Jump Roping", "Knitting", "Yoga", "Traveling", "Music", "Vibing", "Gymnastics", "Skateboarding",
+            "Star Gazing", "Jewelry Making", "Poetry", "Farming", "Coffee Making", "Street Racing", "Board Games", "Tie Dyeing"};
 
     /**
      * This function returns a first and last name, then combines them
