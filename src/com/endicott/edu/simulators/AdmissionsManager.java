@@ -4,7 +4,7 @@ import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.*;
-
+import com.endicott.edu.datalayer.HobbyGenDao;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -99,6 +99,7 @@ public class AdmissionsManager {
                 potentialStudent.setGender(GenderModel.FEMALE);
                 potentialStudent.getAvatar().generateStudentAvatar(true);
             }
+            potentialStudent.setHobbies(HobbyGenDao.generateHobbies());
             potentialStudent.getAvatar().generateHappyAvatar();
             potentialStudent.setNature(StudentModel.assignRandomNature());
             potentialStudents.add(potentialStudent);
