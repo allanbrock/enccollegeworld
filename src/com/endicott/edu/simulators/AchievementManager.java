@@ -37,22 +37,24 @@ public class AchievementManager {
         for(int i=0; i<achievementsList.size(); i++) {
             temp = achievementsList.get(i);
             if(temp.getType() == "level") {
-                if(temp.getLevelReq("level") == level)
+                if(level >= temp.getLevelReq("level"))
                     unlockAchievement(collegeId, temp, popupManager);
             } else if (temp.getType() == "money") {
-                if(temp.getLevelReq("money") >= money)
+                if(money >= temp.getLevelReq("money"))
                     unlockAchievement(collegeId, temp, popupManager);
             } else if (temp.getType() == "happiness") {
-                if(temp.getLevelReq("happiness") >= level)
+                if(level >= temp.getLevelReq("happiness"))
                     unlockAchievement(collegeId, temp, popupManager);
             }
         }
     }
 
     public static void unlockAchievement(String collegeId, AchievementModel achievement, PopupEventManager popupManager) {
-        achievement.setLock(false);
-        Accountant.receiveIncome(collegeId, achievement.getDescription(), achievement.getCashReward());
-        popupManager.newPopupEvent(collegeId, "Achievement Get!", "Congrats you've unlocked a new achievement:" + achievement.getName() + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+        if(achievement.getLock()==true) {
+            achievement.setLock(false);
+            Accountant.receiveIncome(collegeId, achievement.getDescription(), achievement.getCashReward());
+            popupManager.newPopupEvent(collegeId, "Achievement Get!", "Congrats you've unlocked a new achievement: " + achievement.getName() + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+        }
     }
 
     public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {

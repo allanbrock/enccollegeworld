@@ -557,6 +557,7 @@ public class BuildingManager {
         achievementManager.createAchievement(collegeId, "I'm Level 10", "Reach Level 5", "level", 10000,5, 0, 0);
         achievementManager.createAchievement(collegeId,"Big Saver III", "Accumulate $750k or More", "money", 100000,1, 750000, 0);
         achievementManager.createAchievement(collegeId,"Make Happy III", "Reach 95% Student Happiness for the First Time", "happiness", 150000, 1, 0, 90);
+        achievementManager.createAchievement(collegeId, "Millionaire", "Become a Millionaire", "money", 100000, 0, 1000000, 0);
     }
 
     /**
