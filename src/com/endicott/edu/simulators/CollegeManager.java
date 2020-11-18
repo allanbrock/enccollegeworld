@@ -181,6 +181,8 @@ public class CollegeManager {
                 total += makeWeeklyPayment(college.getLoans().get(i));
                 addInterest(college.getLoans().get(i), collegeId);
                 NewsManager.createNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $" + total, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
+                college.getExpensesGraph().setLoans(total);
+                college.getExpensesGraph().calculateExpenses();
             }
 
             //Pay off the loans, updating the college debt and their balance
@@ -191,6 +193,8 @@ public class CollegeManager {
             int newCredit = updateCredit(total);
             college.setCredit(college.getCredit() + newCredit);
         }
+
+        college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
@@ -415,6 +419,8 @@ public class CollegeManager {
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Payment to loans: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.BAD_NEWS);
         checkLoans(collegeId);            //Check to see if any loans are paid off
+        college.getExpensesGraph().setLoans(amount);
+        college.getExpensesGraph().calculateExpenses();
         CollegeDao.saveCollege(college);
     }
 

@@ -43,6 +43,8 @@ public class CollegeModel implements Serializable {
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
     private TipsModel collegeTips;
     //public PopupEventModel;
+    private FinancesModel financialGraph = new FinancesModel();
+    private ExpensesModel expensesGraph = new ExpensesModel();
 
     //Loan Fields
     private ArrayList<LoanModel> loans = new ArrayList<>();  //Holds all of the loans the player currently has
@@ -344,5 +346,13 @@ public class CollegeModel implements Serializable {
 
     public void setDaysUntilNextEvent(int daysUntilNextEvent) {
         this.daysUntilNextEvent = daysUntilNextEvent;
+    }
+
+    public FinancesModel getFinancialGraph(){
+        return financialGraph;
+    }
+
+    public ExpensesModel getExpensesGraph() {
+        return expensesGraph;
     }
 }
