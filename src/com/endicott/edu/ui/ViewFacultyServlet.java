@@ -1,7 +1,6 @@
 package com.endicott.edu.ui;
 
 
-import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
@@ -61,7 +60,7 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         String collegeId = InterfaceUtils.getCollegeIdFromSession(request);
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
+            CollegeManager.advanceTime(collegeId, popupManager);
         }
 
 

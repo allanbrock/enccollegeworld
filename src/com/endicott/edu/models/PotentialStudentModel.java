@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class PotentialStudentModel extends PersonModel implements Serializable {
     private String feedback = "";                   //The student's thoughts about the college (Based off of happiness)
+    private String[] hobbies;
 
     private String nature = "unknown";              //Trait of the student (a general idea of what kind of person the student is)
 
@@ -18,7 +19,8 @@ public class PotentialStudentModel extends PersonModel implements Serializable {
         setQuality(qm);
         setPersonality(pm);
     }
-
+    public void setHobbies(String[] hobbies){this.hobbies = hobbies;}
+    public String[] getHobbies(){return this.hobbies;}
     public void setPersonality(PersonalityModel pm){ this.personality = pm; }
     public PersonalityModel getPersonality() { return this.personality; }
     public void setQuality(QualityModel qm){ this.quality = qm; }

@@ -59,7 +59,13 @@
     List<FacultyModel> faculty = FacultyDao.getFaculty(college.getRunId());
     if (faculty == null) {
         faculty = new ArrayList<FacultyModel>();
-        faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", college.getRunId(), 100000)); // Default salary val for now
+        Boolean isFemale;
+        double r = Math.random();
+        if(r < 0.5)
+            isFemale = true;
+        else
+            isFemale = false;
+        faculty.add(new FacultyModel( "Dean", "Biology", college.getRunId(), 100000, isFemale)); // Default salary val for now
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
     ArrayList<Integer> salaryOptions = FacultyManager.getSalaryOptions();
@@ -177,7 +183,7 @@
                 %>
                 <tr>
                     <td><img class='icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Kurt&hairColor=BrownDark&facialHairType=Blank&facialHairColor=Brown&clotheType=ShirtScoopNeck&clotheColor=White&eyeType=Default&eyebrowType=FlatNatural&mouthType=Tongue&skinColor=Brown'/></td>
-                    <td><%=faculty.get(i).getFacultyName()%>
+                    <td><%=faculty.get(i).getName()%>
                     </td>
                     <td>
 
@@ -197,7 +203,7 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
                         <%}%>
                     </td>
                 </tr>
@@ -221,7 +227,7 @@
                 <tr>
 <%--                    <img class="img-responsive" src="resources/images/fun.png">--%>
                     <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairMiaWallace&accessoriesType=Round&hairColor=Platinum&facialHairType=MoustacheMagnum&facialHairColor=Black&clotheType=ShirtCrewNeck&clotheColor=Red&eyeType=Happy&eyebrowType=SadConcerned&mouthType=Tongue&skinColor=Tanned'/></td>
-                    <td><%=faculty.get(i).getFacultyName()%>
+                    <td><%=faculty.get(i).getName()%>
                     </td>
                     <td>
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
@@ -240,7 +246,7 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
                         <%}%>
                     </td>
                 </tr>
@@ -265,7 +271,7 @@
                 %>
                 <tr>
                     <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Prescription01&hairColor=Platinum&facialHairType=Blank&facialHairColor=Red&clotheType=Overall&clotheColor=Black&eyeType=Wink&eyebrowType=AngryNatural&mouthType=Concerned&skinColor=Black'/></td>
-                    <td><%=faculty.get(i).getFacultyName()%>
+                    <td><%=faculty.get(i).getName()%>
                     </td>
                     <td>
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
@@ -284,7 +290,7 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
                         <%}%>
                     </td>
                 </tr>
@@ -309,7 +315,7 @@
                 %>
                 <tr>
                     <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortRound&accessoriesType=Round&hairColor=Black&facialHairType=BeardMagestic&facialHairColor=Brown&clotheType=Hoodie&clotheColor=Black&eyeType=WinkWacky&eyebrowType=Angry&mouthType=Vomit&skinColor=Pale'/></td>
-                    <td><%=faculty.get(i).getFacultyName()%>
+                    <td><%=faculty.get(i).getName()%>
                     </td>
                     <td>
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
@@ -328,7 +334,7 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
                         <%}%>
                     </td>
                 </tr>

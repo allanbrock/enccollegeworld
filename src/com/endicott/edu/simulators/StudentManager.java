@@ -69,7 +69,7 @@ public class StudentManager {
         List<StudentModel> students = StudentDao.getStudents(collegeId);
         college = CollegeDao.getCollege(collegeId);
         int dailyTuitionSum = (college.getYearlyTuitionCost() / 365) * students.size();
-        Accountant.receiveIncome(collegeId,"Student tuition received.",dailyTuitionSum);
+        Accountant.receiveIncome(collegeId,"Student tuition received.", CollegeModel.daysAdvance * dailyTuitionSum);
     }
 
     /**

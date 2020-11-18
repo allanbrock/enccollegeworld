@@ -4,7 +4,7 @@ import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.models.*;
-
+import com.endicott.edu.datalayer.HobbyGenDao;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class AdmissionsManager {
     static private final Logger logger = Logger.getLogger("Admissions");
+
     /**
      * Simulate the changes in potential students interested in the college
      * due to passage of time at the college.
@@ -26,9 +27,17 @@ public class AdmissionsManager {
      * @param collegeId  ID of the college currently in use
      * @param hoursAlive Amount of time the college has been open
      */
-    public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
+    public static void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
         CollegeManager.logger.info("Admissions running handle time change - " + CollegeManager.getDate());
-
+        AdmissionsModel adm = AdmissionsDao.getAdmissions(collegeId);
+        int dayInCycle = (hoursAlive / 24);
+        int weekInCycle = (dayInCycle / 7) % 15;
+        if(weekInCycle == 0){
+            // this is the admissions week!!
+        }
+        else {
+            adm.setWeeksUntilAcceptance(15 - weekInCycle);
+        }
     }
 
     /**
@@ -51,7 +60,7 @@ public class AdmissionsManager {
      * @param numNewStudents The number of new students to be made
      * @param collegeId The id of the college in use
      */
-    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
+    private static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
         Random rand = new Random();
         ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
@@ -90,6 +99,7 @@ public class AdmissionsManager {
                 potentialStudent.setGender(GenderModel.FEMALE);
                 potentialStudent.getAvatar().generateStudentAvatar(true);
             }
+            potentialStudent.setHobbies(HobbyGenDao.generateHobbies());
             potentialStudent.getAvatar().generateHappyAvatar();
             potentialStudent.setNature(StudentModel.assignRandomNature());
             potentialStudents.add(potentialStudent);

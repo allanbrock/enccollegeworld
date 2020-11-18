@@ -1,10 +1,7 @@
 package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.*;
-import com.endicott.edu.models.BuildingModel;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.SportModel;
-import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.models.*;
 
 public class CollegeRating {
     private SportsDao sportDao = new SportsDao();
@@ -21,14 +18,15 @@ public class CollegeRating {
      * Update School Traits on each new day
      * @param collegeId
      */
-    public void handleTimeChange(String collegeId) {
+    public void handleTimeChange(String collegeId, TipsManager tManager) {
         college = CollegeDao.getCollege(collegeId);
-        updateAcademicRating(collegeId);
-        updateAthleticRating(collegeId);
-        updateInfrastructureRating(collegeId);
-        updateSafetyRating(collegeId);
-        updateSocialRating(collegeId);
-        updateSchoolValue(collegeId);
+        updateAcademicRating(collegeId, tManager);
+        updateAthleticRating(collegeId, tManager);
+        updateInfrastructureRating(collegeId, tManager);
+        updateSafetyRating(collegeId, tManager);
+        updateSocialRating(collegeId, tManager);
+        updateSchoolValue(collegeId, tManager);
+
     }
 
     /**
@@ -47,7 +45,7 @@ public class CollegeRating {
      * rating, academic building quality, faculty performance, and
      * @param collegeId
      */
-    private void updateAcademicRating(String collegeId) {
+    private void updateAcademicRating(String collegeId, TipsManager tManager) {
         int academicQuality = 0;
         int numStudents = 0;
         int numBuildings = 0;
@@ -68,13 +66,19 @@ public class CollegeRating {
             numStudents++;
         }
 
+        //Calculations for the rating
+        int academicQualityRating = academicQuality / Math.max(numStudents, 1);
+        int buildingQualityRating = buildingQuality / Math.max(numBuildings, 1);
+
         // Calculate Rating
         int rating = (int) (0.2 * college.getStudentFacultyRatioRating() +
                             0.2 * college.getFacultyBodyHappiness() +
                             0.3 * FacultyManager.getAverageFacultyPerformance(collegeId) +
-                            0.1 * (academicQuality / Math.max(numStudents, 1)) +
-                            0.2 * (buildingQuality / Math.max(numBuildings, 1)));
+                            0.1 * academicQualityRating +
+                            0.2 * buildingQualityRating);
         college.setAcademicRating(checkBounds(rating));
+
+        tManager.changeAcademicTips(college, academicQualityRating, buildingQualityRating);
     }
 
     /**
@@ -82,7 +86,7 @@ public class CollegeRating {
      *  athletic facilities, team performance, and student athletic quality
      * @param collegeId
      */
-    private void updateAthleticRating(String collegeId){
+    private void updateAthleticRating(String collegeId, TipsManager tManager){
         int totalWins = 0;
         int totalGames = 0;
         int numTeams = 0;
@@ -117,23 +121,32 @@ public class CollegeRating {
             numStudents++;
         }
 
+        //Calculations for the rating
+        int winPercentageRating = 100*(totalWins / Math.max(totalGames, 1));
+        int teamsRating = 100*numTeams/9;
+        int buildingQualityRating = buildingQuality / Math.max(numBuildings, 1);
+        int athleticQualityRating = athleticQuality / Math.max(numStudents, 1);
+        int championshipRating = 100*college.getNumChampionshipsWon()/Math.max(1, numTeams);
+
         // Calculate rating:
         // If teams, based on performance, number of teams, facility quality, student athletic quality
         if(numTeams != 0) {
             rating = (int) (0.2 * rating +
-                            0.2 * (100*(totalWins / Math.max(totalGames, 1))) +
-                            0.1 * (100*numTeams/9) +
-                            0.2 * (buildingQuality / Math.max(numBuildings, 1)) +
-                            0.2 * (athleticQuality / Math.max(numStudents, 1)) +
-                            0.1 * (100*college.getNumChampionshipsWon()/Math.max(1, numTeams)));
+                            0.2 * winPercentageRating +
+                            0.1 * teamsRating +
+                            0.2 * buildingQualityRating +
+                            0.2 * athleticQualityRating +
+                            0.1 * championshipRating);
         }
         // If no teams based on existing rating, facility quality, and student athletic quality
         else {
             rating = (int) (0.85 * rating +
-                            0.05 * (buildingQuality / Math.max(numBuildings, 1)) +
-                            0.1 * (athleticQuality / Math.max(numStudents, 1)));
+                            0.05 * buildingQualityRating +
+                            0.1 * athleticQualityRating);
         }
         college.setAthleticRating(checkBounds(rating));
+
+        tManager.changeAthleticTips(college, winPercentageRating, teamsRating, buildingQualityRating, athleticQualityRating, championshipRating);
     }
 
     /**
@@ -153,10 +166,13 @@ public class CollegeRating {
      * qualities, upgrades and capacity
      * @param collegeId
      */
-    private void updateInfrastructureRating(String collegeId){
+    private void updateInfrastructureRating(String collegeId, TipsManager tManager){
         int rating = college.getInfrastructureRating();
         int numBuildings = 0;
         int buildingQuality = 0;
+
+        boolean isovercrowded = false;
+        boolean isupgraded = false;
 
         for(BuildingModel building : buildDao.getBuildings(collegeId)){
             numBuildings++;
@@ -164,17 +180,25 @@ public class CollegeRating {
             // overcrowded buildings  = worse infrastructure rating
             if(building.getNumStudents() > building.getCapacity()){
                 rating -= eventFactor;
+                isovercrowded = true;
             }
             // upgraded buildings = better infrastructure rating
             if(building.getUpgrades() != null){
                 rating += eventFactor;
+                isupgraded = true;
             }
         }
+
+        //Calculations for the rating
+        int buildingQualityRating = buildingQuality/Math.max(1,numBuildings);
+
         // Calculate rating
         rating =
                 (int) (0.6 * rating +
-                        0.4 * (buildingQuality/Math.max(1,numBuildings)));
+                        0.4 * buildingQualityRating);
         college.setInfrastructureRating(checkBounds(rating));
+
+        tManager.changeInfrastructureTips(college, buildingQualityRating, isovercrowded, isupgraded);
     }
 
     /**
@@ -202,13 +226,18 @@ public class CollegeRating {
      * capacity and student illnesses
      * @param collegeId
      */
-    private void updateSafetyRating(String collegeId){
+    private void updateSafetyRating(String collegeId, TipsManager tManager){
         int rating = college.getSafetyRating();
         int buildingQuality = 0;
         int numBuildings = 0;
+        boolean wasDeath = false;
+        boolean overcrowded = false;
+        boolean isSick = false;
+
 
         // Decrease safety rating by small amount while recovering from "recent deaths"
         if(recentDeathCountdown > 0) {
+            wasDeath = true;
             if(recentDeathCountdown > eventFactor) {
                 rating -= Math.abs(eventFactor - recentDeathCountdown);
             }
@@ -226,6 +255,7 @@ public class CollegeRating {
             buildingQuality += building.getShownQuality();
             if(building.getNumStudents() > building.getCapacity()){
                 rating -= eventFactor;
+                overcrowded = true;
             }
         }
 
@@ -233,15 +263,18 @@ public class CollegeRating {
         for(StudentModel student : StudentDao.getStudents(collegeId)) {
             if(student.getNumberHoursLeftBeingSick() > 0){
                 rating--;
+                isSick = true;
             }
         }
+
+        //Calculations for the rating
+        int buildingQualityRating = buildingQuality / Math.max(1, numBuildings);
 
         // Calculate overall rating
         if(recentRiot) {
             rating = (int) (0.8 * rating +
                             0.1 * college.getStudentHealthRating() +
                             0.1 * (buildingQuality/Math.max(1, numBuildings)));
-            recentRiot = false;
         }
         else {
             rating = (int) (0.6 * rating +
@@ -250,6 +283,8 @@ public class CollegeRating {
         }
         college.setSafetyRating(checkBounds(rating));
 
+        tManager.changeSafetyTips(college, buildingQualityRating, college.getStudentHealthRating(), recentRiot, wasDeath, isSick, overcrowded);
+        recentRiot = false;
     }
 
     /**
@@ -295,7 +330,7 @@ public class CollegeRating {
      * Update the School's Value based on School Traits and Tuition
      * @param collegeId
      */
-    private void updateSchoolValue(String collegeId) {
+    private void updateSchoolValue(String collegeId, TipsManager tManager) {
         int schoolValue;
         int tuitionRating = college.getYearlyTuitionRating();
 
@@ -312,6 +347,8 @@ public class CollegeRating {
             schoolValue = tuitionRating + (Math.abs(50 - avgRating)/2);
         }
         college.setSchoolValue(checkBounds(schoolValue));
+
+        tManager.changeValueTips(college, avgRating);
     }
 
     /**
@@ -319,7 +356,7 @@ public class CollegeRating {
      * faculty happiness, sporting events, student social quality
      * @param collegeId
      */
-    private void updateSocialRating(String collegeId) {
+    private void updateSocialRating(String collegeId, TipsManager tManager) {
         int numStudents = 0;
         int socialQuality = 0;
         int numGames =  0;
@@ -334,11 +371,18 @@ public class CollegeRating {
             numStudents++;
         }
 
+        //Calculations for the rating
+        int socialQualityRating = socialQuality / Math.max(numStudents, 1);
+        int gamesRating = numGames * eventFactor/2;
+
         // calculate rating
-        int rating = (int) (0.4 * (socialQuality / Math.max(numStudents, 1)) +
-                            0.1 * (numGames * eventFactor/2) +
+        int rating = (int) (0.4 * socialQualityRating +
+                            0.1 * gamesRating +
                             0.3 * college.getStudentBodyHappiness() +
                             0.1 * college.getFacultyBodyHappiness());
         college.setSocialRating(checkBounds(rating));
+
+        tManager.changeSocialTips(college, socialQualityRating, gamesRating, college.getStudentBodyHappiness(),
+                college.getFacultyBodyHappiness());
     }
 }

@@ -68,7 +68,7 @@ public class FacultyManager {
         List<FacultyModel> facultyList = fao.getFaculty(collegeId);
         int total = 0;
         for(FacultyModel member : facultyList){
-            int paycheck = member.getSalary()/365;
+            int paycheck = CollegeModel.daysAdvance * member.getSalary()/365;
             total += paycheck;
         }
         Accountant.payBill(collegeId, "Faculty has been paid", total);
@@ -117,7 +117,8 @@ public class FacultyManager {
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, collegeID, salary);
+        member = new FacultyModel(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
+        member.getAvatar().generateStudentAvatar(isFemale);
         fao.saveNewFaculty(collegeID, member);
         return member;
     }

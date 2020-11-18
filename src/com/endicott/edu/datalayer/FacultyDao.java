@@ -61,7 +61,7 @@ public class FacultyDao {
         List<FacultyModel> newFacultyList = getFaculty(collegeId);
         for(FacultyModel faculty : newFacultyList){
             if(tmp.equals(faculty.getFacultyID())){
-                logger.info("removing " + faculty.getFacultyName());
+                logger.info("removing " + faculty.getName());
                 newFacultyList.remove(faculty);
                 break;
             }
@@ -91,87 +91,87 @@ public class FacultyDao {
 
 
 
-    public static void main(String[] args) {
-        testNotes();
-    }
+//    public static void main(String[] args) {
+//        testNotes();
+//    }
+//
+//    private static void testNotes(){
+//        final String collegeId = "testFaculty01";
+//        FacultyDao fao = new FacultyDao();
+//        List<FacultyModel> faculty = new ArrayList<>();
+//
+//        System.out.println("Checking id's");
+//
+//        FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
+//        FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
+//        FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
+//        f3.setFacultyID("-1");
+//        fao.saveNewFaculty(collegeId,f3);
+//        System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
+//        fao.saveNewFaculty(collegeId,f2);
+//        System.out.println( "ID of member 2: " + String.valueOf(f2.getFacultyID()));
+//        fao.saveNewFaculty(collegeId,f1);
+//        System.out.println( "ID of member 1: " + String.valueOf(f1.getFacultyID()));
+//        faculty.add(f1);
+//        faculty.add(f2);
+//        fao.removeSingleFaculty(collegeId,f3);
+//        fao.saveAllFaculty(collegeId,faculty);
+//        assert(fao.numberOfFaculty(collegeId) == 2);
+//        System.out.println(fao.numberOfFaculty(collegeId));
+//
+//        List<FacultyModel> outMsgs = fao.getFaculty(collegeId);
+//
+//        assert(outMsgs.size() == 2);
+//        assert (outMsgs.get(0).getName().equals("Dr. Test"));
+//
+//        FacultyModel f4 = new FacultyModel("Dr. Test23","LesserTitle","Programming",125000,"LSB",collegeId);
+//        fao.saveNewFaculty(collegeId,f4);
+//        outMsgs = fao.getFaculty(collegeId);
+//        System.out.println("Adding a new Faculty member..." + "ID: " + outMsgs.get(2).getFacultyID());
+//        assert(outMsgs.size() == 3);
+//
+//        System.out.println("Removing object:  " + f4.getName() + "ID: " + f4.getFacultyID());
+//        fao.removeSingleFaculty(collegeId,f4);
+//        outMsgs = fao.getFaculty(collegeId);
+//        faculty.clear();
+//        System.out.println("Clearing list... ");
+//
+//        System.out.println("Loading in faculty from list");
+//        faculty = fao.getFaculty(collegeId);
+//
+//
+//        assert (faculty.size() == 3);
+//        assert (faculty.get(2).getName().equals("Dr. Test23"));
+//        System.out.println("Lets remove all the faculty.... ");
+//        fao.removeAllFaculty(collegeId);
+//
+//
+//
+//        File file = new File(DaoUtils.getFilePath(collegeId, filename));
+//        assert (!file.exists());
+//
+//        System.out.println("End of testing faculty successful.");
+//    }
 
-    private static void testNotes(){
-        final String collegeId = "testFaculty01";
-        FacultyDao fao = new FacultyDao();
-        List<FacultyModel> faculty = new ArrayList<>();
-
-        System.out.println("Checking id's");
-
-        FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
-        FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-        FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-        f3.setFacultyID("-1");
-        fao.saveNewFaculty(collegeId,f3);
-        System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
-        fao.saveNewFaculty(collegeId,f2);
-        System.out.println( "ID of member 2: " + String.valueOf(f2.getFacultyID()));
-        fao.saveNewFaculty(collegeId,f1);
-        System.out.println( "ID of member 1: " + String.valueOf(f1.getFacultyID()));
-        faculty.add(f1);
-        faculty.add(f2);
-        fao.removeSingleFaculty(collegeId,f3);
-        fao.saveAllFaculty(collegeId,faculty);
-        assert(fao.numberOfFaculty(collegeId) == 2);
-        System.out.println(fao.numberOfFaculty(collegeId));
-
-        List<FacultyModel> outMsgs = fao.getFaculty(collegeId);
-
-        assert(outMsgs.size() == 2);
-        assert (outMsgs.get(0).getFacultyName().equals("Dr. Test"));
-
-        FacultyModel f4 = new FacultyModel("Dr. Test23","LesserTitle","Programming",125000,"LSB",collegeId);
-        fao.saveNewFaculty(collegeId,f4);
-        outMsgs = fao.getFaculty(collegeId);
-        System.out.println("Adding a new Faculty member..." + "ID: " + outMsgs.get(2).getFacultyID());
-        assert(outMsgs.size() == 3);
-
-        System.out.println("Removing object:  " + f4.getFacultyName() + "ID: " + f4.getFacultyID());
-        fao.removeSingleFaculty(collegeId,f4);
-        outMsgs = fao.getFaculty(collegeId);
-        faculty.clear();
-        System.out.println("Clearing list... ");
-
-        System.out.println("Loading in faculty from list");
-        faculty = fao.getFaculty(collegeId);
-
-
-        assert (faculty.size() == 3);
-        assert (faculty.get(2).getFacultyName().equals("Dr. Test23"));
-        System.out.println("Lets remove all the faculty.... ");
-        fao.removeAllFaculty(collegeId);
-
-
-
-        File file = new File(DaoUtils.getFilePath(collegeId, filename));
-        assert (!file.exists());
-
-        System.out.println("End of testing faculty successful.");
-    }
-
-private void testId(){
-    final String collegeId = "testFaculty01";
-    FacultyDao fao = new FacultyDao();
-    List<FacultyModel> faculty = new ArrayList<>();
-
-    System.out.println("Checking id's");
-    System.out.println("Checking id's");
-
-    FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
-    FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-    FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
-    f3.setFacultyID("-1");
-    fao.saveNewFaculty(collegeId,f3);
-    System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
-    fao.saveNewFaculty(collegeId,f2);
-    System.out.println( "ID of member 2: " + String.valueOf(f2.getFacultyID()));
-    fao.saveNewFaculty(collegeId,f1);
-    System.out.println( "ID of member 1: " + String.valueOf(f1.getFacultyID()));
-}
+//private void testId(){
+//    final String collegeId = "testFaculty01";
+//    FacultyDao fao = new FacultyDao();
+//    List<FacultyModel> faculty = new ArrayList<>();
+//
+//    System.out.println("Checking id's");
+//    System.out.println("Checking id's");
+//
+//    FacultyModel f1 = new FacultyModel("Dr. Test","Title","Comp",125000, "LSB",collegeId);
+//    FacultyModel f2 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
+//    FacultyModel f3 = new FacultyModel("Dr. Test2","LesserTitle","Programming",125000,"LSB",collegeId);
+//    f3.setFacultyID("-1");
+//    fao.saveNewFaculty(collegeId,f3);
+//    System.out.println( "ID of member 3: " + String.valueOf(f3.getFacultyID()));
+//    fao.saveNewFaculty(collegeId,f2);
+//    System.out.println( "ID of member 2: " + String.valueOf(f2.getFacultyID()));
+//    fao.saveNewFaculty(collegeId,f1);
+//    System.out.println( "ID of member 1: " + String.valueOf(f1.getFacultyID()));
+//}
 
 
 }

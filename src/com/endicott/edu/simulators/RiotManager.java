@@ -38,7 +38,7 @@ public class RiotManager {
         if(college.getStudentBodyHappiness() < 33 && college.getYearlyTuitionCost() > 80000)
             createSevereRiot(bm, runId, currentRiot, popupManager, "Student QoL Sucks and Tuition is too high!");
         // Low student happiness or High tuition or high percentage of Rebellious students
-        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000 || sm.getNumRebelliousStudentsRatio(runId) > 5)
+        else if(college.getStudentBodyHappiness() < 50 || college.getYearlyTuitionCost() > 60000/* || sm.getNumRebelliousStudentsRatio(runId) > 5*/)
             createRowdyStudentBehaviour(runId, bm, currentRiot, popupManager, "The students are becoming visibly upset!");
         // Low faculty pay or happiness
         /*else if(college.getStudentFacultyRatioRating() < 3 || college.getFacultyBodyHappiness() < 50)
@@ -46,10 +46,6 @@ public class RiotManager {
         // Number of students drops below certain amount
         else if(college.getRetentionRate() < 60f)
             createStakeholderRiot(bm, runId, currentRiot, popupManager, "The Stakeholders are pissed you messed up the school");
-        // Acceptable happiness and tuition
-        else {
-            createRegularRiot(runId, currentRiot, popupManager, randomRiotDescription());
-        }
     }
 
     public void letPeopleRiot(BuildingManager bm, String runID, int mean, int stdDev, int min, int max, String msg) {

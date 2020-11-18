@@ -48,10 +48,6 @@ public class AchievementModel implements Serializable {
     public String getType(){return this.type;}
     public void setType(String type){this.type = type;}
 
-    public void setRunId(String _runId){this.runId = _runId;}
-
-    public String getIconPath(){return this.iconPath;}
-
     public int getLevelReq(String type){
         if(type == "level")
             return this.levelReq;
@@ -61,4 +57,7 @@ public class AchievementModel implements Serializable {
             return this.happinessReq;
     }
 
+    public void setRunId(String _runId){this.runId = _runId;}
+
+    public String getIconPath(){return this.iconPath;}
 }

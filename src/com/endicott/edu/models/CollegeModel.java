@@ -8,6 +8,10 @@ import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;                  //Hours the college has existed for
+    private int timeLeftInSemester = 0;
+    private int numSemesters = 0;
+    public static final int daysAdvance = 7; // 1 week
+    private final String timeAdvanceBy = "Week"; // define based on daysAdvance
     private int reputation = 50;                 //Reputation of college based on 1-100
     private int yearlyTuitionCost = 40000;       //Amount of money a student pays per year
     private int previousTuitionCost = 0;         //The most recent previous tuition change
@@ -41,7 +45,7 @@ public class CollegeModel implements Serializable {
     private CollegeMode mode = CollegeMode.PLAY;        //Current mode of the game, used for play testing
     private int daysUntilNextEvent = 3;                 //Number of days until the next event
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
-    private TipsModel collegeTips;
+    private TipsModel collegeTips = new TipsModel();    //Holds all the tips that the user should know about to improve trait ratings
     //public PopupEventModel;
     private FinancesModel financialGraph = new FinancesModel();
     private ExpensesModel expensesGraph = new ExpensesModel();
@@ -71,6 +75,20 @@ public class CollegeModel implements Serializable {
 
 
     private Date currentDate;
+
+    public int getTimeLeftInSemester() { return this.timeLeftInSemester; }
+    public void advanceTime() {
+        this.timeLeftInSemester -= 1;
+        // if semester has no weeks left, set new semester
+        if(this.timeLeftInSemester == 0){
+            setNewSemester();
+        }
+    }
+    public void setNewSemester(){
+        // reset time left in semester and increase number of semesters
+        this.timeLeftInSemester = 105 / CollegeModel.daysAdvance;
+        this.numSemesters += 1;
+    }
 
     public int getFacultyBodyHappiness() {return this.facultyBodyHappiness;}
     public void setFacultyBodyHappiness(int n) {this.facultyBodyHappiness = n;}
@@ -240,6 +258,10 @@ public class CollegeModel implements Serializable {
     public void setMode(CollegeMode mode) {
         this.mode = mode;
     }
+
+    public TipsModel getTips() { return this.collegeTips; }
+
+    public void setTips(TipsModel tm) { this.collegeTips = tm; }
 
     public  int getTotalIncome(){
         return totalIncome;
