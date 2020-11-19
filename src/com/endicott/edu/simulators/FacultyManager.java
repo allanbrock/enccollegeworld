@@ -348,7 +348,7 @@ public class FacultyManager {
         return true; // Statement should never be hit
     }
 
-    public static FacultyModel assignAdvisorToStudent(String collegeId, StudentModel student){
+    public static FacultyModel assignAdvisorToStudent(String collegeId){
         Random r = new Random();
         int positionInFaculty = 0;
         FacultyModel newAdvisor = new FacultyModel();

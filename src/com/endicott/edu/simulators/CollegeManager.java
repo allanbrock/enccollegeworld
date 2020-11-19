@@ -117,7 +117,7 @@ public class CollegeManager {
 //        }
 
         college.setHoursAlive(college.getHoursAlive() + (24*CollegeModel.daysAdvance));  //Advance time by 1 week
-        college.advanceTime();  // decrease number of weeks left in semester
+        college.advanceTime(collegeId);  // decrease number of weeks left in semester
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
