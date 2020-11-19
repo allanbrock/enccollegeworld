@@ -308,7 +308,7 @@ public class BuildingManager {
             //Generates a random number between 0-1
             //Multiply by .2 since One hidden quality point = Five shown quality points
             //It's impossible for a building to ever lose more than 1% per day
-            double randomDecay = CollegeModel.daysAdvance * Math.random() * 1.5;
+            double randomDecay = CollegeModel.daysAdvance * Math.random() * 0.15;
             b.setHiddenQuality((float) (currentQuality - randomDecay));
         }
         dao.updateSingleBuildingInCache(collegeId, b);
