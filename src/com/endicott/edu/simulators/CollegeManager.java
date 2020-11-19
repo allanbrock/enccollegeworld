@@ -73,6 +73,7 @@ public class CollegeManager {
         CollegeRating collegeTraits = new CollegeRating();
         TipsManager tManager = new TipsManager();
         collegeTraits.handleTimeChange(collegeId, tManager);
+        college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
         return college;
     }
 
