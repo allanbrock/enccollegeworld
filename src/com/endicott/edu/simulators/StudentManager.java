@@ -528,23 +528,23 @@ public class StudentManager {
         }
         else{
             happinessRating = s.getAdvisorHappinessHappinessRating();
-            if(s.getAdvisor().getPerformance() > 75){
-//                int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
+            if((FacultyDao.getAdvisor(college.getRunId(), s.getAdvisor())).getPerformance() > 75){
+                int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
                 happinessRating += 5;
             }
-            else if(s.getAdvisor().getPerformance() < 50){
-//                double rand = Math.random();
-//                int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
-//                if(rand <= 0.5)
-//                    happinessRating += happinessNumber;
-//                else
-//                    happinessRating -= happinessNumber;
+            else if((FacultyDao.getAdvisor(college.getRunId(), s.getAdvisor())).getPerformance() < 50){
+                double rand = Math.random();
+                int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
+                if(rand <= 0.5)
+                    happinessRating += happinessNumber;
+                else
+                    happinessRating -= happinessNumber;
                 happinessRating -= 5;
             }
-//            else{
-//                int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
-//                happinessRating -= happinessDecrease;
-//            }
+            else{
+                int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
+                happinessRating -= happinessDecrease;
+            }
         }
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
