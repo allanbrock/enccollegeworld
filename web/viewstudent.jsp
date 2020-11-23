@@ -307,7 +307,7 @@
                                 <tr>
                                     <td></td>
                                     <td>Advisor: </td>
-                                    <td><%=student.getAdvisor().getFacultyName()%></td>
+                                    <td><%=student.getAdvisor().getName()%></td>
                                 </tr>
                                 <% if(!student.getTeam().equals("")){ %>
                                 <tr>

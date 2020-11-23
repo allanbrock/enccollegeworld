@@ -23,7 +23,7 @@ public class CoachManager {
         List<SportModel> newSports = SportsDao.getSports(collegeId);
         collegeCoaches.remove(coach);
         for(SportModel sport : newSports){
-            if(sport.getCoachName().equals(coach.getFacultyName()))
+            if(sport.getCoachName().equals(coach.getName()))
                 sport.setCoachName("noCoach");
         }
         dao.saveAllSports(collegeId, newSports);
@@ -34,7 +34,7 @@ public class CoachManager {
             return null;
 
         for(CoachModel c : collegeCoaches){
-            if(c.getFacultyName().equals(name))
+            if(c.getName().equals(name))
                 return c;
         }
         return null; // line should never be hit
