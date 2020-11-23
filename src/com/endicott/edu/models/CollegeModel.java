@@ -1,6 +1,7 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.StudentManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -75,10 +76,13 @@ public class CollegeModel implements Serializable {
     private Date currentDate;
 
     public int getTimeLeftInSemester() { return this.timeLeftInSemester; }
-    public void advanceTime() {
+    public void advanceTime(String collegeId) {
         this.timeLeftInSemester -= 1;
         // if semester has no weeks left, set new semester
         if(this.timeLeftInSemester == 0){
+            if(this.numSemesters % 2 == 0){
+                StudentManager.advanceStudentYears(collegeId);
+            }
             setNewSemester();
         }
     }
