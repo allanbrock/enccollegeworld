@@ -256,7 +256,7 @@ public class StudentManager {
             student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
-            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
+            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
             student.setNature(assignRandomNature());
             // Make that not random
             student.setClassYear(rand.nextInt(4) + 1);

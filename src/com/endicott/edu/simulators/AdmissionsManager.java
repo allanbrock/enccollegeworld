@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
 import com.endicott.edu.datalayer.NameGenDao;
+import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 import com.endicott.edu.datalayer.HobbyGenDao;
 import java.util.ArrayList;
@@ -105,5 +106,71 @@ public class AdmissionsManager {
             potentialStudents.add(potentialStudent);
         }
         return potentialStudents;
+    }
+
+    public static void acceptGroup(String collegeID, String group) {
+    //TODO: This code assumes that there is enough room in the college, (freshman that graduate + capacity should be the max allowed)
+        AdmissionsModel am = AdmissionsDao.getAdmissions(collegeID);
+        CollegeModel college = new CollegeModel();
+
+        //Check for the right group of students to pull from
+        if(group.equalsIgnoreCase("GroupA")) {
+            for(int i = 0; i < am.getGroupA().size(); i++) {
+                convertToStudent(collegeID, am.getGroupA().get(i));
+                college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupA().size());
+            }
+        }
+        else if(group.equalsIgnoreCase("GroupB")) {
+            for(int i = 0; i < am.getGroupB().size(); i++) {
+                convertToStudent(collegeID, am.getGroupB().get(i));
+                college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupB().size());
+            }
+        }
+        else {
+            for(int i = 0; i < am.getGroupC().size(); i++) {
+                convertToStudent(collegeID, am.getGroupC().get(i));
+                college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupC().size());
+            }
+        }
+        college.setNumberStudentsAccepted(0);   //Reset the
+    }
+
+    public static void convertToStudent(String collegeID, PotentialStudentModel psm) {
+        //Create the new model and setup all the extra managers and classes necessary to generate a student
+        StudentModel sm = new StudentModel();
+        BuildingManager bm = new BuildingManager();
+        StudentManager stuMgr = new StudentManager();
+        Random rand = new Random();
+
+        //Sets the PersonModel fields for the newly accepted student
+        sm.setName(psm.getName());
+        sm.setFirstName(psm.getFirstName());
+        sm.setLastName(psm.getLastName());
+        sm.setId(psm.getId());
+        if(psm.getGender().equalsIgnoreCase("Male")) {sm.setGender(GenderModel.MALE);}
+        else {sm.setGender(GenderModel.FEMALE);}
+        sm.setAvatar(psm.getAvatar());
+
+        //Assigns the newly accepted student to the specific buildings and advisor
+        sm.setAcademicBuilding(bm.assignAcademicBuilding(collegeID));
+        sm.setDiningHall(bm.assignDiningHall(collegeID));
+        sm.setDorm(bm.assignDorm(collegeID));
+        sm.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeID));
+
+        //Sets up the student's athletic fields
+        sm.setAthleticAbility(rand.nextInt(10));
+        if (sm.getAthleticAbility() > 6) { sm.setAthlete(true); }
+        else { sm.setAthlete(false); }
+        sm.setTeam("");
+
+        //Sets up the student year and passes in the rest of their qualities and characteristics
+        sm.setClassYear(1);
+        sm.setNature(psm.getNature());
+        sm.setPersonality(psm.getPersonality());
+        sm.setQuality(psm.getQuality());
+        sm.setRunId(collegeID);
+
+        StudentDao dao = new StudentDao();
+        dao.saveNewStudent(collegeID, sm);
     }
 }

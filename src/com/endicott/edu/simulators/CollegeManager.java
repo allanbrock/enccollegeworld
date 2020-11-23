@@ -181,7 +181,6 @@ public class CollegeManager {
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
-        AchievementManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
         logger.info("AdvanceTime College Traits and update tips");
         CollegeRating collegeTraits = new CollegeRating();
@@ -192,6 +191,8 @@ public class CollegeManager {
         FinanceManager fm = new FinanceManager();
         fm.handleTimeChange(collegeId);
 
+        logger.info("AdvanceTime Achievements");
+        AchievementManager.handleTimeChange(collegeId, popupManager);
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
