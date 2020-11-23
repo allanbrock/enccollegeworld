@@ -55,8 +55,6 @@ public class BuildingManager {
         calculateOverallBuildingHealth(runId, buildings);
         // Really important the we save the changes to disk.
         dao.saveAllBuildingsUsingCache(runId);
-
-        AchievementManager.checkAchievementStatus(runId, popupManager);
     }
 
     /**
