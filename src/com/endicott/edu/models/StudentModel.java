@@ -1,8 +1,5 @@
 package com.endicott.edu.models;
 
-import com.endicott.edu.simulators.CollegeManager;
-import org.glassfish.jersey.message.internal.Quality;
-
 import java.io.Serializable;
 import java.util.Random;
 
@@ -32,8 +29,8 @@ public class StudentModel extends PersonModel implements Serializable {
     private int academicCenterHappinessRating = 0;  //Student's happiness when it comes to their academic building (0-100)
     private int dormHappinessRating = 0;            //Student's happiness when it comes to their dorm building (0-100)
     private int overallBuildingHappinessRating = 0; //Student's happiness when it comes to the quality of building on campus (0-100)
-    private String advisor;                   //The advisor of a student
-    private int classYear;                          //The current year the student is in(1=freshman, 2=sophomore etc.)
+    private String advisor ="";                     //The advisor of a student
+    private int classYear = 0;                      //The current year the student is in(1=freshman, 2=sophomore etc.)
 
     private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
     private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy

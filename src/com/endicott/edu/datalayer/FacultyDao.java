@@ -2,10 +2,7 @@ package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.FacultyModel;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -61,7 +58,7 @@ public class FacultyDao {
         List<FacultyModel> newFacultyList = getFaculty(collegeId);
         for(FacultyModel faculty : newFacultyList){
             if(tmp.equals(faculty.getFacultyID())){
-                logger.info("removing " + faculty.getName());
+                logger.info("removing " + faculty.getFacultyName());
                 newFacultyList.remove(faculty);
                 break;
             }
@@ -73,11 +70,11 @@ public class FacultyDao {
 
     public static FacultyModel getAdvisor(String collegeId, String facultyId){
         logger.info("Getting specific faculty model based of faculty id");
-        FacultyModel tmp = new FacultyModel();
+        FacultyModel tmp = null;
         List<FacultyModel> newFacultyList = getFaculty(collegeId);
         for(FacultyModel faculty : newFacultyList){
             if(facultyId.equals(faculty.getFacultyID())){
-                logger.info("removing " + faculty.getFacultyName());
+                logger.info("found  " + faculty.getFacultyName());
                 tmp = faculty;
             }
 

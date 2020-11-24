@@ -2,8 +2,10 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
-import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.models.*;
+import com.endicott.edu.models.CoachModel;
+import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.DepartmentModel;
+import com.endicott.edu.models.FacultyModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -351,17 +353,11 @@ public class FacultyManager {
     public static FacultyModel assignAdvisorToStudent(String collegeId){
         Random r = new Random();
         int positionInFaculty = 0;
-        FacultyModel newAdvisor = new FacultyModel();
+        FacultyModel newAdvisor;
         List<FacultyModel> updatedFaculty = FacultyDao.getFaculty(collegeId);
-        int newAdvisorPosition = r.nextInt(FacultyDao.getFaculty(collegeId).size()) + 1;
-        for(FacultyModel faculty : updatedFaculty){
-            if(positionInFaculty == newAdvisorPosition) {
-                newAdvisor = faculty;
-                break;
-            }
-            positionInFaculty++;
-        }
-        return newAdvisor;
+        int newAdvisorIndex = r.nextInt(FacultyDao.getFaculty(collegeId).size());
+
+        return updatedFaculty.get(newAdvisorIndex);
     }
 
     private static void inspectFacultyPerformances(String collegeId){

@@ -3,6 +3,7 @@ import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Responsible for simulating students at the college.
@@ -551,6 +552,8 @@ public class StudentManager {
         }
         else{
             happinessRating = s.getAdvisorHappinessHappinessRating();
+            if(s.getAdvisor() == null)
+                Logger.getAnonymousLogger().warning("null advisor on student " + s.getName());
             if((FacultyDao.getAdvisor(college.getRunId(), s.getAdvisor())).getPerformance() > 75){
                 int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
                 happinessRating += 5;

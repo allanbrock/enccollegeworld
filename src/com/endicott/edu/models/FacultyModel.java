@@ -3,7 +3,6 @@ import com.endicott.edu.datalayer.NameGenDao;
 import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Implemented 9-28-17 by Mazlin Higbee
@@ -51,9 +50,9 @@ public class FacultyModel extends PersonModel implements Serializable{
     public Boolean getUnderPerforming(){ return underPerforming; }
     public void setUnderPerforming(Boolean underPerforming){ this.underPerforming = underPerforming; }
 
-//    public String getFacultyName() {
-//        return facultyName;
-//    }
+    public String getFacultyName() {
+        return name;
+    }
 
 //    public void setFacultyName(String facultyName) {
 //        this.facultyName = facultyName;
