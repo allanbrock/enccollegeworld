@@ -32,7 +32,7 @@ public class StudentModel extends PersonModel implements Serializable {
     private int academicCenterHappinessRating = 0;  //Student's happiness when it comes to their academic building (0-100)
     private int dormHappinessRating = 0;            //Student's happiness when it comes to their dorm building (0-100)
     private int overallBuildingHappinessRating = 0; //Student's happiness when it comes to the quality of building on campus (0-100)
-    private FacultyModel advisor;                   //The advisor of a student
+    private String advisor;                   //The advisor of a student
     private int classYear;                          //The current year the student is in(1=freshman, 2=sophomore etc.)
 
     private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
@@ -152,6 +152,7 @@ public class StudentModel extends PersonModel implements Serializable {
     public int getAdvisorHappinessHappinessRating() {
         return advisorHappinessRating;
     }
+
     public void setAdvisorHappinessHappinessRating(int advisorHappinessRating) {this.advisorHappinessRating = advisorHappinessRating;}
 
     public int getDiningHallHappinessRating() {
@@ -182,9 +183,9 @@ public class StudentModel extends PersonModel implements Serializable {
     public void setProfessorHappinessRating(int professorHappinessRating) {this.professorHappinessRating = professorHappinessRating;}
 
     public void setAdvisor(FacultyModel advisor) {
-        this.advisor = advisor;
+        this.advisor = advisor.getFacultyID();
     }
-    public FacultyModel getAdvisor() {
+    public String getAdvisor() {
         return this.advisor;
     }
 

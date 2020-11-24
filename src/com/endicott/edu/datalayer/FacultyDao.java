@@ -71,6 +71,20 @@ public class FacultyDao {
         logger.info("Faculty member removed: " + tmp);
     }
 
+    public static FacultyModel getAdvisor(String collegeId, String facultyId){
+        logger.info("Getting specific faculty model based of faculty id");
+        FacultyModel tmp = new FacultyModel();
+        List<FacultyModel> newFacultyList = getFaculty(collegeId);
+        for(FacultyModel faculty : newFacultyList){
+            if(facultyId.equals(faculty.getFacultyID())){
+                logger.info("removing " + faculty.getFacultyName());
+                tmp = faculty;
+            }
+
+        }
+        return tmp;
+    }
+
     public static void giveRaise(String collegeId, FacultyModel member){
         logger.info("Giving a raise...");
         int tmpSalary = member.getSalary();
