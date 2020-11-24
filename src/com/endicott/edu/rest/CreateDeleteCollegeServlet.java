@@ -99,8 +99,9 @@ public class CreateDeleteCollegeServlet extends javax.servlet.http.HttpServlet {
         if (!CollegeDao.doesCollegeExist(collegeName)){
             return "COLLEGE_DOES_NOT_EXIST";
         }
-
-        CollegeDao.deleteCollege(collegeName);
+        // this is not how you delete a college
+        // CollegeDao.deleteCollege(collegeName);
+        CollegeManager.sellCollege(collegeName);
 
         return "successfull";
     }
