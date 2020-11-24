@@ -142,6 +142,28 @@ public class StudentManager {
 
     }
 
+    public static void advanceStudentYears(String collegeId){
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        StudentDao dao = new StudentDao();
+        BuildingManager bManage = new BuildingManager();
+
+        List<StudentModel> students = dao.getStudents(collegeId);
+        System.out.println("Num students: " + students.size());
+
+        for(int i = students.size() - 1; i >= 0; i--){
+            students.get(i).setClassYear(students.get(i).getClassYear()+1);
+            // If student is past senior year, 'graduate'
+            if(students.get(i).getClassYear() > 4) {
+                bManage.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
+                students.remove(i);
+                college.setNumberStudentsGraduated(college.getNumberStudentsGraduated() + 1);
+            }
+        }
+        dao.saveAllStudents(collegeId, students);
+        dao.saveAllStudentsJustToCache(collegeId, students);
+    //     CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
+    }
+
     static public void setStudentIndex(int i) {
         studentIndex = i;
     }
@@ -241,6 +263,7 @@ public class StudentManager {
             student.setRunId(collegeId);
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
             student.setNature(assignRandomNature());
+            // Make that not random
             student.setClassYear(rand.nextInt(4) + 1);
             students.add(student);
         }
