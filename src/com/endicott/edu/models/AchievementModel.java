@@ -17,13 +17,14 @@ public class AchievementModel implements Serializable {
     private int moneyReq;
     private int happinessReq;
 
-    public AchievementModel(String name, String description, String type, int cashReward, int level, int money, int happiness) {
+    public AchievementModel(String name, String description, String type, int cashReward, int level, int money, int happiness, String iconPath) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.cashReward = cashReward;
         this.locked = true;
         this.runId = "unknown";
+        this.iconPath = iconPath;
 
         if(type == "level")
             this.levelReq = level;

@@ -69,7 +69,7 @@ public class StudentManager {
         List<StudentModel> students = StudentDao.getStudents(collegeId);
         college = CollegeDao.getCollege(collegeId);
         int dailyTuitionSum = (college.getYearlyTuitionCost() / 365) * students.size();
-        Accountant.receiveIncome(collegeId,"Student tuition received.", CollegeManager.daysAdvance * dailyTuitionSum);
+        Accountant.receiveIncome(collegeId,"Student tuition received.", CollegeModel.daysAdvance * dailyTuitionSum);
     }
 
     /**
@@ -239,7 +239,7 @@ public class StudentManager {
             student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
-            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
+            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
             student.setNature(assignRandomNature());
             student.setClassYear(rand.nextInt(4) + 1);
             students.add(student);

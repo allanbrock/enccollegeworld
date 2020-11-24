@@ -67,7 +67,7 @@ public class FacultyManager {
         List<FacultyModel> facultyList = fao.getFaculty(collegeId);
         int total = 0;
         for(FacultyModel member : facultyList){
-            int paycheck = CollegeManager.daysAdvance * member.getSalary()/365;
+            int paycheck = CollegeModel.daysAdvance * member.getSalary()/365;
             total += paycheck;
         }
         Accountant.payBill(collegeId, "Faculty has been paid", total);
@@ -348,7 +348,7 @@ public class FacultyManager {
         return true; // Statement should never be hit
     }
 
-    public static FacultyModel assignAdvisorToStudent(String collegeId, StudentModel student){
+    public static FacultyModel assignAdvisorToStudent(String collegeId){
         Random r = new Random();
         int positionInFaculty = 0;
         FacultyModel newAdvisor = new FacultyModel();

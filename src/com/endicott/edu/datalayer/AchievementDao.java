@@ -48,8 +48,7 @@ public class AchievementDao {
         saveAllAchievements(collegeId, achievements);
     }
 
-    public void saveAllAchievements(String collegeId, List<AchievementModel> notes){
-        logger.info("Saving all achievements...");
+    public static void saveAllAchievements(String collegeId, List<AchievementModel> notes){
 
         try {
             File file = new File(getFilePath(collegeId));
@@ -60,16 +59,13 @@ public class AchievementDao {
             oos.writeObject(notes);
             oos.close();
         } catch (FileNotFoundException e) {
-            logger.info("Got file not found when attempting to create: " + getFilePath(collegeId));
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         } catch (IOException e) {
-            logger.info("Got io exceptionfound when attempting to create: " + getFilePath(collegeId));
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        logger.info("Saved achievements...");
     }
 
     public static void main(String[] args) {
