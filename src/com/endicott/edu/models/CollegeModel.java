@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.AdmissionsDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.simulators.AdmissionsManager;
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.StudentManager;
 import com.sun.xml.internal.bind.v2.TODO;
 
 import java.io.Serializable;
@@ -82,10 +83,12 @@ public class CollegeModel implements Serializable {
 
     public void advanceTime(String collegeId) {
         this.timeLeftInSemester -= 1;
+        System.out.println("weeks till grad: " + timeLeftInSemester);
         // if semester has no weeks left, set new semester
         if(this.timeLeftInSemester == 0){
             //Check for a new year (graduation and acceptance should be done now)
             if(this.numSemesters % 2 == 0) {
+                StudentManager.advanceStudentYears(collegeId);
                 AdmissionsModel aModel = AdmissionsDao.getAdmissions(collegeId);
                 AdmissionsManager.acceptGroup(collegeId, aModel.getSelectedGroup());
                 //TODO: Need to generate new student pools at this point

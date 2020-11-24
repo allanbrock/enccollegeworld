@@ -376,7 +376,10 @@ public class BuildingManager {
                 return buildingName;
             }
         }
-        return "Commuter";
+        //         return "Commuter";
+        // Student was admitted, but there was no room for new students
+        // - previously commuter but they don't exist
+        throw new RuntimeException("No room for new student");
     }
 
     /**
