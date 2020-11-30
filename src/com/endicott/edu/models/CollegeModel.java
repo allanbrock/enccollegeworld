@@ -30,10 +30,11 @@ public class CollegeModel implements Serializable {
     private int studentBodyHappiness;            //Happiness of all students (0-100)
     private int facultyBodyHappiness;            //Happiness of all faculty (0-100)
     private int studentFacultyRatio = 100;       //Number of students per faculty member
-    private int numberStudentsAdmitted = 0;      //Total number of students admitted since college created.
+    private int studentsGraduating = 0;          //Number of students graduating from the college next semester (# of seniors)
+    private int numberStudentsAdmitted = 0;      //Total number of students admitted since college was created.
     private int numberStudentsAccepted = 0;      //Total number of students accepted to the school (considering).
-    private int numberStudentsWithdrew = 0;      //Total number of students withdrawn since college created.
-    private int numberStudentsGraduated = 0;     //Total number of students graduate since college created
+    private int numberStudentsWithdrew = 0;      //Total number of students withdrawn since college was created.
+    private int numberStudentsGraduated = 0;     //Total number of students graduate since college was created
     private float retentionRate = 100f;          //Percentage of students retained (or graduated) since college created
     private int yearlyTuitionRating = 0;         //0 to 100 rating of happiness corresponding to tuition.
     private int studentFacultyRatioRating = 0;   //0 to 100 rating of student faculty ratio
@@ -91,7 +92,9 @@ public class CollegeModel implements Serializable {
                 StudentManager.advanceStudentYears(collegeId);
                 AdmissionsModel aModel = AdmissionsDao.getAdmissions(collegeId);
                 AdmissionsManager.acceptGroup(collegeId, aModel.getSelectedGroup());
-                //TODO: Need to generate new student pools at this point
+                aModel.setGroupA(AdmissionsManager.generateNewCandidates(25, collegeId));
+                aModel.setGroupB(AdmissionsManager.generateNewCandidates(25, collegeId));
+                aModel.setGroupC(AdmissionsManager.generateNewCandidates(25, collegeId));
             }
             setNewSemester();
         }
@@ -139,6 +142,10 @@ public class CollegeModel implements Serializable {
     public int getCredit() {return this.credit;}
 
     public void setCredit(int c) { this.credit = c;}
+
+    public int getStudentsGraduating() { return this.studentsGraduating; }
+
+    public void setStudentsGraduating(int num) { this.studentsGraduating = num; }
 
     public void setStudentRecreationalHappiness(int studentRecreationalHappiness) {this.studentRecreationalHappiness = studentRecreationalHappiness;}
 

@@ -514,8 +514,8 @@ public class BuildingManager {
         // - One Dorm
         // - One Dining Hall
         // - One Academic Center
-        // - Once Admin Building
-        // - Once Sports Center
+        // - Onc Admin Building
+        // - Onc Sports Center
         DormModel startingDorm = new DormModel(NameGenDao.generateBuildingName()+" Hall",  0, "Medium");
         saveBuildingHelper(startingDorm, collegeId, college); // See above function
 

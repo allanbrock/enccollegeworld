@@ -99,29 +99,31 @@ public class StudentManager {
         if(isNewCollege) {
             numNewStudents = 140;
         }
-        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
-            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
-            leastOpenings = Math.min(leastOpenings, openPlates);
+        //OLD CODE FOR GAINING NEW STUDENTS, THIS IS NOW DONE VIA ADMISSIONS
 
-            numNewStudents = college.getNumberStudentsAccepted();
-            if (numNewStudents > leastOpenings) {
-                numNewStudents = leastOpenings;
-            }
-
-            if(adminBuildingQuality <= 90) {
-                // This will produce a number 1-10, representing every 10% BELOW 100%
-                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
-                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
-                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
-                // Take the students away
-                numNewStudents = numNewStudents - lostStudents;
-                // Notify the player that some students didn't end up coming due to admin office quality
-                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
-                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
-                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            }
-        }
+//        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
+//            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+//            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
+//            leastOpenings = Math.min(leastOpenings, openPlates);
+//
+//            numNewStudents = college.getNumberStudentsAccepted();
+//            if (numNewStudents > leastOpenings) {
+//                numNewStudents = leastOpenings;
+//            }
+//
+//            if(adminBuildingQuality <= 90) {
+//                // This will produce a number 1-10, representing every 10% BELOW 100%
+//                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
+//                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
+//                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
+//                // Take the students away
+//                numNewStudents = numNewStudents - lostStudents;
+//                // Notify the player that some students didn't end up coming due to admin office quality
+//                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
+//                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
+//                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+//            }
+//        }
 
         if (numNewStudents > 0) {
             createStudents(numNewStudents, collegeId, students, false);
@@ -150,10 +152,14 @@ public class StudentManager {
 
         List<StudentModel> students = dao.getStudents(collegeId);
         System.out.println("Num students: " + students.size());
+        college.setStudentsGraduating(0);
 
         for(int i = students.size() - 1; i >= 0; i--){
             students.get(i).setClassYear(students.get(i).getClassYear()+1);
             // If student is past senior year, 'graduate'
+            if(students.get(i).getClassYear() == 4) {
+                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+            }
             if(students.get(i).getClassYear() > 4) {
                 bManage.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
@@ -266,6 +272,9 @@ public class StudentManager {
             student.setNature(assignRandomNature());
             // Make that not random
             student.setClassYear(rand.nextInt(4) + 1);
+            if(student.getClassYear() == 4) {
+                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+            }
             students.add(student);
         }
         dao.saveAllStudentsJustToCache(collegeId, students);

@@ -1,12 +1,10 @@
 package com.endicott.edu.simulators;
 
-import com.endicott.edu.datalayer.AdmissionsDao;
-import com.endicott.edu.datalayer.IdNumberGenDao;
-import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
-import com.endicott.edu.datalayer.HobbyGenDao;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -33,6 +31,7 @@ public class AdmissionsManager {
         AdmissionsModel adm = AdmissionsDao.getAdmissions(collegeId);
         int dayInCycle = (hoursAlive / 24);
         int weekInCycle = (dayInCycle / 7) % 15;
+        adm.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
         if(weekInCycle == 0){
             // this is the admissions week!!
         }
@@ -48,9 +47,10 @@ public class AdmissionsManager {
      */
     public static void establishCollege(String collegeId){
         AdmissionsModel adm = new AdmissionsModel();
-        adm.setGroupA(generateNewCandidates(25, collegeId));
-        adm.setGroupB(generateNewCandidates(25, collegeId));
-        adm.setGroupC(generateNewCandidates(25, collegeId));
+        adm.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
+        adm.setGroupA(generateNewCandidates(adm.getOpenCapacity(), collegeId));
+        adm.setGroupB(generateNewCandidates(adm.getOpenCapacity(), collegeId));
+        adm.setGroupC(generateNewCandidates(adm.getOpenCapacity(), collegeId));
         adm.setWeeksUntilAcceptance(15);
         AdmissionsDao.saveAdmissionsData(collegeId,adm);
     }
@@ -61,7 +61,7 @@ public class AdmissionsManager {
      * @param numNewStudents The number of new students to be made
      * @param collegeId The id of the college in use
      */
-    private static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
+    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
         Random rand = new Random();
         ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
@@ -109,7 +109,6 @@ public class AdmissionsManager {
     }
 
     public static void acceptGroup(String collegeID, String group) {
-    //TODO: This code assumes that there is enough room in the college, (freshman that graduate + capacity should be the max allowed)
         AdmissionsModel am = AdmissionsDao.getAdmissions(collegeID);
         CollegeModel college = new CollegeModel();
 
@@ -159,6 +158,7 @@ public class AdmissionsManager {
 
         //Sets up the student's athletic fields
         sm.setAthleticAbility(rand.nextInt(10));
+        //DO THIS BASED UPON ATHLETIC QUALITY
         if (sm.getAthleticAbility() > 6) { sm.setAthlete(true); }
         else { sm.setAthlete(false); }
         sm.setTeam("");
@@ -172,5 +172,26 @@ public class AdmissionsManager {
 
         StudentDao dao = new StudentDao();
         dao.saveNewStudent(collegeID, sm);
+    }
+
+    /**
+     * Function finds the amount of spots open at the college. This factors in only on campus
+     * students, and this value will be used to generate student pools
+     *
+     * @param collegeId The college id currently opened
+     */
+    public static int findOpenCapacity(String collegeId) {
+        int capacity = 0;
+        int availableBeds = BuildingManager.getOpenBeds(collegeId);
+        int availableDesks = BuildingManager.getOpenDesks(collegeId);
+        int availablePlates = BuildingManager.getOpenPlates(collegeId);
+
+        //Find min between all 3
+        int min = Math.min(availableBeds, availableDesks);
+        capacity = Math.min(min, availablePlates);
+
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        capacity += college.getStudentsGraduating();    //THIS CODE ASSUMES NO COMMUTER STUDENTS AT THE MOMENT!
+        return capacity;
     }
 }
