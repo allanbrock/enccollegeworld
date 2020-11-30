@@ -217,6 +217,7 @@ public class StudentManager {
      */
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
         Random rand = new Random();
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
 
@@ -277,6 +278,7 @@ public class StudentManager {
             }
             students.add(student);
         }
+        CollegeDao.saveCollege(college);
         dao.saveAllStudentsJustToCache(collegeId, students);
     }
 
