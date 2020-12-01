@@ -31,13 +31,26 @@ public class AdmissionsManager {
         AdmissionsModel adm = AdmissionsDao.getAdmissions(collegeId);
         int dayInCycle = (hoursAlive / 24);
         int weekInCycle = (dayInCycle / 7) % 15;
+        int tempCapacity = adm.getOpenCapacity();
         adm.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
+
+        //This means we should add in new students to each of the groups ()
+        if(tempCapacity != adm.getOpenCapacity()) {
+            ArrayList<PotentialStudentModel> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
+            ArrayList<PotentialStudentModel> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
+            ArrayList<PotentialStudentModel> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
+            adm.getGroupA().addAll(listA);
+            adm.getGroupB().addAll(listB);
+            adm.getGroupC().addAll(listC);
+        }
+
         if(weekInCycle == 0){
             // this is the admissions week!!
         }
         else {
             adm.setWeeksUntilAcceptance(15 - weekInCycle);
         }
+        AdmissionsDao.saveAdmissionsData(collegeId,adm);
     }
 
     /**
@@ -181,17 +194,19 @@ public class AdmissionsManager {
      * @param collegeId The college id currently opened
      */
     public static int findOpenCapacity(String collegeId) {
+        System.out.println("Running capacity");
         int capacity = 0;
         int availableBeds = BuildingManager.getOpenBeds(collegeId);
         int availableDesks = BuildingManager.getOpenDesks(collegeId);
         int availablePlates = BuildingManager.getOpenPlates(collegeId);
-
+        System.out.println("Beds: " + availableBeds + " Desks: " + availableDesks + " Plates: " + availablePlates);
         //Find min between all 3
         int min = Math.min(availableBeds, availableDesks);
         capacity = Math.min(min, availablePlates);
 
         CollegeModel college = CollegeDao.getCollege(collegeId);
         capacity += college.getStudentsGraduating();    //THIS CODE ASSUMES NO COMMUTER STUDENTS AT THE MOMENT!
+        System.out.println("Min: " + min + " Students grad: " + college.getStudentsGraduating() + "Total: " + capacity);
         return capacity;
     }
 }

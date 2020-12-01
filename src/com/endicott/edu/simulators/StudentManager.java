@@ -38,8 +38,7 @@ public class StudentManager {
      * @param hoursAlive Amount of time the college has been open
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        //Order: Take in students, check their happiness, have them leave if they aren't happy, grab they're tuition, update time at college
-        acceptStudents(collegeId, hoursAlive);
+//        acceptStudents(collegeId, hoursAlive);  We no longer use this function
 
         CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
         admitStudents(collegeId, hoursAlive, false, popupManager);
@@ -179,33 +178,34 @@ public class StudentManager {
         return studentIndex;
     }
 
-    /**
-     * Determines how many students to accept in one day.
-     *
-     * @param collegeId Id of the college currently in use
-     * @param hoursAlive The amount of hours the college has been open (days)
-     */
-    private void acceptStudents(String collegeId, int hoursAlive){
-        int numNewStudents;
-
-        // The number of accepted students depends on the happiness of the student body.
-        college = CollegeDao.getCollege(collegeId);
-        int happiness = college.getStudentBodyHappiness();
-
-        if (happiness <= 50) {
-            numNewStudents = 0;
-        } else {
-            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
-            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
-        }
-
-        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
-        //CollegeDao.saveCollege(college);
-
-        if (numNewStudents > 0) {
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-        }
-    }
+    //OLD CODE: WE NOW ONLY ACCEPT NEW STUDENTS IN ADMISSIONS ON ADMISSIONS DAY
+//    /**
+//     * Determines how many students to accept in one day.
+//     *
+//     * @param collegeId Id of the college currently in use
+//     * @param hoursAlive The amount of hours the college has been open (days)
+//     */
+//    private void acceptStudents(String collegeId, int hoursAlive){
+//        int numNewStudents;
+//
+//        // The number of accepted students depends on the happiness of the student body.
+//        college = CollegeDao.getCollege(collegeId);
+//        int happiness = college.getStudentBodyHappiness();
+//
+//        if (happiness <= 50) {
+//            numNewStudents = 0;
+//        } else {
+//            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
+//            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
+//        }
+//
+//        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
+//        //CollegeDao.saveCollege(college);
+//
+//        if (numNewStudents > 0) {
+//            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+//        }
+//    }
 
     /**
      * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
@@ -302,8 +302,8 @@ public class StudentManager {
      * @param hoursAlive The number of hours the college has been open
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
-        // Commented out due to raising tuition or other events that'll make students want to leave
-        // This might be usuable if tuition is collected weekly as well
+        college = CollegeDao.getCollege(collegeId);
+        //College now goes by weeks so every next week click is withdraw day
         // if (!isWithdrawlDay(collegeId))
         // return;
 
@@ -317,9 +317,13 @@ public class StudentManager {
 
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappiness();
-            double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64% they stay)
+            double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64%)
+            System.out.println("Should we remove?: " + students.get(i).getHappiness());
             if (students.get(i).getHappiness() < 60 && didItHappen(odds)) {
-                CollegeManager.logger.info("A student withdrew!");
+                System.out.println("We are actually removing somebody: " + students.get(i).getName() + " " + students.get(i).getClassYear());
+                if(students.get(i).getClassYear() == 4) {
+                    college.setStudentsGraduating(college.getStudentsGraduating()-1);
+                }
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
                 studentsWithdrawn++;
@@ -328,14 +332,15 @@ public class StudentManager {
 
         dao.saveAllStudents(collegeId, students);
 
-        college = CollegeDao.getCollege(collegeId);
         college.setNumberStudentsAdmitted(Math.max(college.getNumberStudentsAdmitted(), nStudents));
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
         calculateRetentionRate(collegeId); //Calculate the retention rate since students have possibly left the college
 
         //CollegeDao.saveCollege(college);
         // Don't create a news story if no students leave
+        System.out.println("Comparisson: " + nStudents + " vs " + students.size());
         if ((nStudents - students.size()) > 0) {
+            System.out.println("We apparently removed some students somehow.");
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(nStudents - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
         }
     }
