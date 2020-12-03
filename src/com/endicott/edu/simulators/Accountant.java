@@ -20,6 +20,7 @@ public class Accountant {
     static public void payBill(String collegeId, String message, int amount) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         int newBalance = Math.max(college.getAvailableCash() - amount, MINIMUM_BALANCE);
+        college.setTotalExpenditure(amount);
         college.setAvailableCash(newBalance);
         CollegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId,college.getHoursAlive(), message, - amount);
@@ -33,8 +34,8 @@ public class Accountant {
      * @param amount
      */
     static public void receiveIncome(String collegeId, String message, int amount) {
-
         CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.setTotalIncome(amount);
         college.setAvailableCash(college.getAvailableCash() + amount);
         CollegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId, college.getHoursAlive(),message, + amount);

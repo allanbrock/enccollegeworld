@@ -31,7 +31,6 @@ public class ViewSportsServlet extends javax.servlet.http.HttpServlet {
         if (request.getParameter("showTips") != null){
             TutorialManager.showTips("viewSports", collegeId);
         }
-
         for(int i = 0; i < CoachManager.getCollegeCoaches().size(); i++){
             if (request.getParameter("coachRaise" + i) != null) {
                 FacultyManager.giveFacultyRaise(collegeId, CoachManager.getCollegeCoaches().get(i), true);

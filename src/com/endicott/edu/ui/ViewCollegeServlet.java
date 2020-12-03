@@ -1,13 +1,10 @@
 package com.endicott.edu.ui;// Created by abrocken on 8/25/2017.
 
 
-import com.endicott.edu.datalayer.PlagueDao;
-import com.endicott.edu.models.PlagueModel;
 import com.endicott.edu.simulators.*;
 
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
@@ -43,7 +40,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
 
         for (int i=0; i < advanceTimeDays && popupManager.isManagerEmpty(collegeId); i++) {
             logger.info("Advancing time.");
-            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
+            CollegeManager.advanceTime(collegeId, popupManager);
         }
 
         if(request.getParameter("updateTuitionButton") != null){
@@ -121,7 +118,7 @@ public class ViewCollegeServlet extends javax.servlet.http.HttpServlet {
         PopupEventManager popupManager = (PopupEventManager) request.getSession().getAttribute("popupMan");
 
         if (request.getParameter("nextDayButton") != null) {
-            CollegeManager.advanceTimeByOneDay(collegeId, popupManager);
+            CollegeManager.advanceTime(collegeId, popupManager);
         }
 
         // Attempt to fetch the college and load into

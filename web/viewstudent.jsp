@@ -224,6 +224,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <img class="img-responsive" src="resources/images/student.png">
+<%--                    <img class="img-responsive" src="<%=student.getAvatar()%>">--%>
                 </div>
                 <div class="col-md-5" style="padding: 10px">
                     <h2><%=student.getName()%></h2>
@@ -256,7 +257,7 @@
                             <div class="studentContainer">
                                 <%
                                     for (int i = 0; i < students.length; i++) {
-                                        int happiness = students[i].getHappinessLevel();
+                                        int happiness = students[i].getHappiness();
                                 %>
 
                                 <div class = "studentElement" id="<%=i%>"
@@ -273,6 +274,7 @@
                                      onclick="select(this)"
                                 >
                                     <img src="resources/images/student.png">
+<%--                                        <img src="<%=students[i].getAvatar()%>">--%>
                                     <p><%=students[i].getName().split(" ")[1]%>, <%=students[i].getName().split(" ")[0].charAt(0)%></p>
                                 </div>
                                 <% } %>
@@ -295,7 +297,7 @@
                                 <tr>
                                     <td></td>
                                     <td>ID Number: </td>
-                                    <td><%=student.getIdNumber()%></td>
+                                    <td><%=student.getId()%></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -305,7 +307,7 @@
                                 <tr>
                                     <td></td>
                                     <td>Advisor: </td>
-                                    <td><%=student.getAdvisor().getFacultyName()%></td>
+                                    <td><%=student.getAdvisor().getName()%></td>
                                 </tr>
                                 <% if(!student.getTeam().equals("")){ %>
                                 <tr>
@@ -327,7 +329,7 @@
                                     <td><%=student.getNumberHoursLeftBeingSick()%> more hours</td>
                                 <tr/>
                                 <% } %>
-                                    <tr><td><img class="img-responsive" src="resources/images/fun.png"><td><td><b>Overall Happiness</b></td><td><%=student.getHappinessLevel()%></td></tr>
+                                    <tr><td><img class="img-responsive" src="resources/images/fun.png"><td><td><b>Overall Happiness</b></td><td><%=student.getHappiness()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/books.png"></td></td><td>Academic Happiness</td><td><%=student.getAcademicHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/advisor.png"></td><td>Advisor Happiness</td><td><%=student.getAdvisorHappinessHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/HEALTH.png"></td><td>Health Happiness</td><td><%=student.getHealthHappinessRating()%></td></tr>
@@ -338,6 +340,7 @@
                                     <tr><td><img class="img-responsive" src="resources/images/DINING.png"></td><td>Dining Hall Happiness</td><td><%=student.getDiningHallHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/ACADEMIC.png"></td><td>Academic Center Happiness</td><td><%=student.getAcademicCenterHappinessRating()%></td></tr>
                                     <tr><td><img class="img-responsive" src="resources/images/DORM.png"></td><td>Dorm Happiness</td><td><%=student.getDormHappinessRating()%></td></tr>
+                                    <tr><td><img class=img-responsive" src="resources/images/DORM.png"></td><td>Personality</td><td><%=student.getNature()%></td></tr>
 
                             </table>
                         </div>

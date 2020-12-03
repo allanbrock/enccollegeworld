@@ -37,22 +37,6 @@ public class StudentsServlet extends javax.servlet.http.HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 
-        sendAsJson(response, students);
-    }
-
-    //a utility method to send object
-    //as JSON response
-    private void sendAsJson(
-            HttpServletResponse response,
-            Object obj) throws IOException {
-
-        response.setContentType("application/json");
-        Gson gson = new Gson();
-        String res = gson.toJson(obj);
-
-        PrintWriter out = response.getWriter();
-
-        out.print(res);
-        out.flush();
+        RestHelper.sendAsJson(response, students);
     }
 }

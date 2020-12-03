@@ -2,6 +2,7 @@ package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.PopupEventModel;
 import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.ui.InterfaceUtils;
 
 import javax.ws.rs.WebApplicationException;

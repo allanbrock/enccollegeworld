@@ -38,6 +38,13 @@
 
 
 </head>
+<style>
+    .icon{
+        width: 60px;
+        height: 60px;
+    }
+</style>
+
 <body>
 <%
     UiMessage msg = (UiMessage) request.getAttribute("message");
@@ -52,7 +59,13 @@
     List<FacultyModel> faculty = FacultyDao.getFaculty(college.getRunId());
     if (faculty == null) {
         faculty = new ArrayList<FacultyModel>();
-        faculty.add(new FacultyModel("Professor Sam Smith", "Dean", "Biology", college.getRunId(), 100000)); // Default salary val for now
+        Boolean isFemale;
+        double r = Math.random();
+        if(r < 0.5)
+            isFemale = true;
+        else
+            isFemale = false;
+        faculty.add(new FacultyModel( "Dean", "Biology", college.getRunId(), 100000, isFemale)); // Default salary val for now
         msg.setMessage(msg.getMessage() + " Attribute for faculty missing.");
     }
     ArrayList<Integer> salaryOptions = FacultyManager.getSalaryOptions();
@@ -158,17 +171,22 @@
             <table class="table table-condensed">
                 <thread>
                     <tr>
-                        <th>Name</th>
+                        <th>School of Arts and Sciences</th>
                     </tr>
                 </thread>
                 <tbody>
                 <%
                     for (int i = 0; i < faculty.size(); i++) {
                 %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Arts and Sciences")) {
+                %>
                 <tr>
-                    <td><%=faculty.get(i).getFacultyName()%>
+                    <td><img class='icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairFrida&accessoriesType=Kurt&hairColor=BrownDark&facialHairType=Blank&facialHairColor=Brown&clotheType=ShirtScoopNeck&clotheColor=White&eyeType=Default&eyebrowType=FlatNatural&mouthType=Tongue&skinColor=Brown'/></td>
+                    <td><%=faculty.get(i).getName()%>
                     </td>
                     <td>
+
                         <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
                         <div id="<%=i%>" class="collapse">
                             <div class="well well-sm">
@@ -185,14 +203,210 @@
                         <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
                         <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
                         <%if(faculty.get(i).getUnderPerforming()){%>
-                            <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getFacultyName())%></label>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
                         <%}%>
                     </td>
                 </tr>
+                <%}%>
                 <% } %>
                 </tbody>
             </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Business</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Business")) {
+                %>
+                <tr>
+<%--                    <img class="img-responsive" src="resources/images/fun.png">--%>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairMiaWallace&accessoriesType=Round&hairColor=Platinum&facialHairType=MoustacheMagnum&facialHairColor=Black&clotheType=ShirtCrewNeck&clotheColor=Red&eyeType=Happy&eyebrowType=SadConcerned&mouthType=Tongue&skinColor=Tanned'/></td>
+                    <td><%=faculty.get(i).getName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary1" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Nursing</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Nursing")){
+                %>
+                <tr>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Prescription01&hairColor=Platinum&facialHairType=Blank&facialHairColor=Red&clotheType=Overall&clotheColor=Black&eyeType=Wink&eyebrowType=AngryNatural&mouthType=Concerned&skinColor=Black'/></td>
+                    <td><%=faculty.get(i).getName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary2" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+            <table class="table table-condensed">
+                <thread>
+                    <tr>
+                        <th>School of Sports Science and Fitness</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <%
+                    for (int i = 0; i < faculty.size(); i++) {
+                %>
+                <%
+                    if(faculty.get(i).getDepartmentName().equals("Sports Science and Fitness")){
+                %>
+                <tr>
+                    <td><img class= 'icon' src='https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortRound&accessoriesType=Round&hairColor=Black&facialHairType=BeardMagestic&facialHairColor=Brown&clotheType=Hoodie&clotheColor=Black&eyeType=WinkWacky&eyebrowType=Angry&mouthType=Vomit&skinColor=Pale'/></td>
+                    <td><%=faculty.get(i).getName()%>
+                    </td>
+                    <td>
+                        <a href="#<%=i%>" class="btn btn-info" data-toggle="collapse">Details</a>
+                        <div id="<%=i%>" class="collapse">
+                            <div class="well well-sm">
+                                Title: <%=faculty.get(i).getTitle()%><br>
+                                Faculty ID: <%=faculty.get(i).getFacultyID()%><br>
+                                Department: <%=faculty.get(i).getDepartmentName()%><br>
+                                Happiness: <%=String.valueOf(faculty.get(i).getHappiness())%><br>
+                                Performance: <%=String.valueOf(faculty.get(i).getPerformance())%><br>
+                            </div>
+                        </div>
+                        <label id="facultySalary3" style="color: black"><%="Salary: $" + String.valueOf(faculty.get(i).getSalary())%> </label>
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-info" name="<%="facultyRaise" + i%>" value="Give Raise" style="text-decoration-color: #000099">
+                        <input type="submit" class="btn btn-info" name="<%="removeFaculty" + i%>" value="Fire Faculty">
+                        <%if(faculty.get(i).getUnderPerforming()){%>
+                        <label id="underPerformingFaculty"><%=FacultyManager.generateUnderperformingScenario(faculty.get(i).getName())%></label>
+                        <%}%>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+                <% } %>
+                </tbody>
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+
+
         <div class="col-sm-4">
             <div class="well well-sm">
                 <div class="form-group">
@@ -263,6 +477,11 @@
         </table>
     </div>
 </form>
+<script>
+    function checkTitle(){
+
+    }
+</script>
 
 </body>
 </html>

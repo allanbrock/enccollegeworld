@@ -15,17 +15,28 @@ public class NameGenDao {
     private static final String[] buildingNameList ={"Smith", "Langan", "Rawson", "Gates", "Clark", "Cowles", "Norris", "Read", "Haines", "James", "Cleveland", "Main", "Lazier", "Kershaw", "Rose", "Ross", "Branner", "Crothers", "Florence", "Casper", "Govenor", "Roble", "Stern", "Wilbur", "Barrows", "Dascomb", "Lewis", "Langston", "Talcott", "Burton", "Fairchild", "East", "Noah", "South", "Baldwin", "Bernard", "Price", "Bostwick", "Collins", "Johnson", "Luther", "Angelou", "Graham", "McLaughlin", "Clara", "Marshall", "Franklin", "Thomas", "West", "Rockwell"};
 
     /**
-     * This function returns a first and last name
+     * This function returns a first and last name, then combines them
      * @param isFemale do you want this name to be female? if no it will be male
      * @return a first and last name concat.. with a string.
      */
     public static String generateName(boolean isFemale){
+        String firstName = generateFirstName(isFemale);
+        String lastName = generateLastName();
+        String fullName = firstName + " " + lastName;
+        return fullName;
+    }
+
+    /**
+     * This function returns a first name based upon the gender
+     *
+     * @param isFemale Is the person a female or a male
+     *
+     * @return Returns a string containing the first name
+     */
+    public static String generateFirstName(boolean isFemale) {
         String firstName;
-        String lastName;
-        String fullName;
         Random r = new Random();
         int result = 0;
-
         if(isFemale){
             //generate a female name
             result = r.nextInt(girlFirstName.length);
@@ -35,12 +46,23 @@ public class NameGenDao {
             result = r.nextInt(boyFirstName.length );
             firstName = boyFirstName[result];
         }
+        return firstName;
+    }
 
+    /**
+     * This function generates a last name and returns it
+     *
+     * @return A string containing the last name
+     */
+    public static String generateLastName() {
+        String lastName;
+        Random r = new Random();
+        int result = 0;
         result = r.nextInt(lastNameList.length );
         lastName = lastNameList[result];
-        fullName = (firstName + " " + lastName);
-        return fullName;
+        return lastName;
     }
+
     public static String generateBuildingName(){
         Random r = new Random();
         int result = r.nextInt(buildingNameList.length);

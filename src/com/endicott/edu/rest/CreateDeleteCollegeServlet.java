@@ -1,9 +1,9 @@
 package com.endicott.edu.rest;
 import com.endicott.edu.datalayer.CollegeDao;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.ui.InterfaceUtils;
+import com.endicott.edu.simulators.CollegeManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -87,9 +87,11 @@ public class CreateDeleteCollegeServlet extends javax.servlet.http.HttpServlet {
         if (CollegeDao.doesCollegeExist(collegeName)){
             return "COLLEGE_EXIST";
         }
-        CollegeModel college =new CollegeModel();
-        college.setRunId(collegeName);
-        CollegeDao.saveCollege(college);
+        // for some reason College creation for this servlet didn't
+        // match what the WelcomeServlet was doing; now react creation works.
+        if (CollegeManager.establishCollege(collegeName) == null) {
+            return "COLLEGE_CREATE_FAILED";
+        }
         return "successfull";
     }
 
@@ -97,8 +99,9 @@ public class CreateDeleteCollegeServlet extends javax.servlet.http.HttpServlet {
         if (!CollegeDao.doesCollegeExist(collegeName)){
             return "COLLEGE_DOES_NOT_EXIST";
         }
-
-        CollegeDao.deleteCollege(collegeName);
+        // this is not how you delete a college
+        // CollegeDao.deleteCollege(collegeName);
+        CollegeManager.sellCollege(collegeName);
 
         return "successfull";
     }

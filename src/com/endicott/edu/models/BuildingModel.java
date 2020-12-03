@@ -1,20 +1,9 @@
 package com.endicott.edu.models;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class BuildingModel implements Serializable {
-    private final static String academicConst = "ACADEMIC";
-    private final static String adminConst = "ADMIN";
-    private final static String diningConst = "DINING";
-    private final static String dormConst = "DORM";
-    private final static String entertainmentConst = "ENTERTAINMENT";
-    private final static String healthConst = "HEALTH";
-    private final static String libraryConst = "LIBRARY";
-    private final static String sportsConst = "SPORTS";
-    private final static String baseballDiamond = "BASEBALL DIAMOND";
-    private final static String footballStadium = "FOOTBALL STADIUM";
-    private final static String hockeyRink = "HOCKEY RINK";
 
     // These are all changed when the building is made (in the order they're set).
     private String runId = "unknown";
@@ -28,6 +17,7 @@ public class BuildingModel implements Serializable {
     private int upgradeCost = 0;
     private int costPerDay = 0;
     private int capacity = 0;
+    protected ArrayList<Upgrade> upgrades;
 
     // These are all updated dynamically (as the game is played)
     private int timeSinceLastRepair = 0;
@@ -57,6 +47,7 @@ public class BuildingModel implements Serializable {
         this.kindOfBuilding = kindOfBuilding;
         setStatsBasedOnSize(size);
         this.capacity = setCapacityBasedOnSize(size);
+        this.upgrades = new ArrayList<Upgrade>();
     }
     //For Football Stadium, Hockey Rink, and Baseball Diamond
     public BuildingModel(String name, String kindOfBuilding, String size){
@@ -242,16 +233,14 @@ public class BuildingModel implements Serializable {
     public boolean isHasBeenAnnouncedAsComplete() {return hasBeenAnnouncedAsComplete;}
     public void setHasBeenAnnouncedAsComplete(boolean hasBeenAnnouncedAsComplete) {this.hasBeenAnnouncedAsComplete = hasBeenAnnouncedAsComplete;}
 
-    // Building consts
-    public static String getAcademicConst() {return academicConst;}
-    public static String getAdminConst() {return adminConst;}
-    public static String getDiningConst() {return diningConst;}
-    public static String getDormConst() {return dormConst;}
-    public static String getEntertainmentConst() {return entertainmentConst;}
-    public static String getHealthConst() {return healthConst;}
-    public static String getLibraryConst() {return libraryConst;}
-    public static String getSportsConst() {return sportsConst;}
-    public static String getBaseballDiamondConst() {return baseballDiamond;}
-    public static String getFootballStadiumConst() {return  footballStadium;}
-    public static String getHockeyRinkConst() {return hockeyRink;}
+    public ArrayList<Upgrade> getUpgrades(){
+        return this.upgrades;
+    }
+    public String getUpgradesString() {
+        String msg = "";
+        for(int i = 0; i <= this.upgrades.size(); i++) {
+            msg = msg + this.upgrades.get(i).name + ": Level " + this.upgrades.get(i).currentLevel + "\n";
+        }
+        return msg;
+    }
 }

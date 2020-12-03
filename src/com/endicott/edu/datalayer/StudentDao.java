@@ -17,7 +17,7 @@ public class StudentDao {
         return DaoUtils.getFilePathPrefix(runId) +  "student.dat";
     }
     private static Logger logger = Logger.getLogger("StudentDao");
-    private  static HashMap<String, List<StudentModel>> cache = new HashMap<>();
+    private static HashMap<String, List<StudentModel>> cache = new HashMap<>();
 
     public static List<StudentModel> getStudents(String runId) {
         if (cache.containsKey(runId))
@@ -42,7 +42,7 @@ public class StudentDao {
             e.printStackTrace();
         }
 
-        Collections.sort(students, (o1, o2) -> o2.getHappinessLevel() - o1.getHappinessLevel());
+        Collections.sort(students, (o1, o2) -> o2.getHappiness() - o1.getHappiness());
         cache.put(runId,students);
 
         return students;

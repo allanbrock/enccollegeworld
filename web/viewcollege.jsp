@@ -202,7 +202,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Balance $<%=numberFormatter.format(college.getAvailableCash())%>
+                    <h3>Total Income $<%=numberFormatter.format(college.getTotalIncome())%>
+                    </h3>
+                    <h3>Total Expenditure $<%=numberFormatter.format(college.getTotalExpenditure())%></h3>
+                    <h2>NetBalance $<%=numberFormatter.format(college.getAvailableCash())%>
                     </h2>
 
                     <p>Day <%=college.getCurrentDay()%>
@@ -324,13 +327,15 @@
                     <form id = "tuitionForm">
                         <div class="well well-sm">
                             <h3><strong>Tuition:</strong> $<%=college.getYearlyTuitionCost()%></h3>
+                            <h4><strong>Previous Tution:</strong> $<%=college.getPreviousTuitionCost()%></h4>
+                            <h4><strong>Average Tuition: $40000</strong></h4>
                             <form class="form-inline">
                                 <div class="form-group">
 
                                     <label class="sr-only" >Amount (in dollars)</label>
                                     <div class="input-group">
                                         <div class="input-group-addon">$</div>
-                                        <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount">
+                                        <input type="number" name="tuitionValue" class="form-control" id="tuitionValue" placeholder="Amount ($1-$100K)">
                                         <div class="input-group-addon">.00</div>
                                     </div>
                                 </div>

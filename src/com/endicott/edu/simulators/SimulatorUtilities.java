@@ -8,13 +8,14 @@ public class SimulatorUtilities {
      * Return a number between 0 and 100, based on a given value.
      * The result is scaled by 0 and 100 by making 0 correspond to
      * the given bottom value and 100 correspond to the given top value.
-     * If the bottom is larger than the top, then this method will return
+     * If the bottom is larger than the top, then this method will
      * still scale so that the bottom corresponds to 0 and 100 to the top.
      *
-     * @param bottom
-     * @param top
-     * @param value
-     * @return
+     * @param bottom Value to indicate a rating closer to 0
+     * @param top Value to indicate a rating closer to 100
+     * @param value The value to be examined
+     *
+     * @return A value from 0-100 depending on the inputs
      */
     public static int getRatingZeroToOneHundred(int bottom, int top, int value) {
         float range = Math.abs(top - bottom);

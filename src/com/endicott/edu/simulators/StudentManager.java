@@ -3,6 +3,7 @@ import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Responsible for simulating students at the college.
@@ -21,7 +22,7 @@ public class StudentManager {
      * The college has just been created. Add initial students and calculate
      * student statistics.
      *
-     * @param collegeId
+     * @param collegeId ID of the new college
      */
     public void establishCollege(String collegeId) {
         loadTips(collegeId);
@@ -33,23 +34,23 @@ public class StudentManager {
      * Simulate the changes in students and student finances
      * due to passage of time at the college.
      *
-     * @param collegeId
-     * @param hoursAlive
+     * @param collegeId ID of the college currently in use
+     * @param hoursAlive Amount of time the college has been open
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-        acceptStudents(collegeId, hoursAlive);
+//        acceptStudents(collegeId, hoursAlive);  We no longer use this function
 
         CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
         admitStudents(collegeId, hoursAlive, false, popupManager);
 
-        CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
-        receiveStudentTuition(collegeId);
+        CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
+        calculateStatistics(collegeId, false);
 
         CollegeManager.logger.info("Advance Time Students: withdraw - " + CollegeManager.getDate());
         withdrawStudents(collegeId, hoursAlive);
 
-        CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
-        calculateStatistics(collegeId, false);
+        CollegeManager.logger.info("Advance Time Students: tuition - " + CollegeManager.getDate());
+        receiveStudentTuition(collegeId);
 
         CollegeManager.logger.info("Advance Time Students: updateTime - " + CollegeManager.getDate());
         updateStudentsTime(collegeId, hoursAlive);
@@ -68,7 +69,7 @@ public class StudentManager {
         List<StudentModel> students = StudentDao.getStudents(collegeId);
         college = CollegeDao.getCollege(collegeId);
         int dailyTuitionSum = (college.getYearlyTuitionCost() / 365) * students.size();
-        Accountant.receiveIncome(collegeId,"Student tuition received.",dailyTuitionSum);
+        Accountant.receiveIncome(collegeId,"Student tuition received.", CollegeModel.daysAdvance * dailyTuitionSum);
     }
 
     /**
@@ -87,7 +88,7 @@ public class StudentManager {
         //Get the administrative building quality
         int adminBuildingQuality = 0;
         try {
-            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingModel.getAdminConst(), collegeId).get(0).getShownQuality();
+            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingType.admin().getType(), collegeId).get(0).getShownQuality();
         } catch (Exception e) {
         }
 
@@ -97,29 +98,31 @@ public class StudentManager {
         if(isNewCollege) {
             numNewStudents = 140;
         }
-        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
-            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
-            leastOpenings = Math.min(leastOpenings, openPlates);
+        //OLD CODE FOR GAINING NEW STUDENTS, THIS IS NOW DONE VIA ADMISSIONS
 
-            numNewStudents = college.getNumberStudentsAccepted();
-            if (numNewStudents > leastOpenings) {
-                numNewStudents = leastOpenings;
-            }
-
-            if(adminBuildingQuality <= 90) {
-                // This will produce a number 1-10, representing every 10% BELOW 100%
-                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
-                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
-                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
-                // Take the students away
-                numNewStudents = numNewStudents - lostStudents;
-                // Notify the player that some students didn't end up coming due to admin office quality
-                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
-                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
-                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-            }
-        }
+//        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
+//            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+//            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
+//            leastOpenings = Math.min(leastOpenings, openPlates);
+//
+//            numNewStudents = college.getNumberStudentsAccepted();
+//            if (numNewStudents > leastOpenings) {
+//                numNewStudents = leastOpenings;
+//            }
+//
+//            if(adminBuildingQuality <= 90) {
+//                // This will produce a number 1-10, representing every 10% BELOW 100%
+//                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
+//                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
+//                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
+//                // Take the students away
+//                numNewStudents = numNewStudents - lostStudents;
+//                // Notify the player that some students didn't end up coming due to admin office quality
+//                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
+//                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
+//                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+//            }
+//        }
 
         if (numNewStudents > 0) {
             createStudents(numNewStudents, collegeId, students, false);
@@ -138,6 +141,32 @@ public class StudentManager {
         }
 
         StudentDao.saveAllStudentsUsingCache(collegeId);
+
+    }
+
+    public static void advanceStudentYears(String collegeId){
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        StudentDao dao = new StudentDao();
+        BuildingManager bManage = new BuildingManager();
+
+        List<StudentModel> students = dao.getStudents(collegeId);
+        college.setStudentsGraduating(0);
+
+        for(int i = students.size() - 1; i >= 0; i--){
+            students.get(i).setClassYear(students.get(i).getClassYear()+1);
+            if(students.get(i).getClassYear() == 4) {
+                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+            }
+            // If student is past senior year, 'graduate'
+            if(students.get(i).getClassYear() > 4) {
+                bManage.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
+                students.remove(i);
+                college.setNumberStudentsGraduated(college.getNumberStudentsGraduated() + 1);
+            }
+        }
+        dao.saveAllStudents(collegeId, students);
+        dao.saveAllStudentsJustToCache(collegeId, students);
+        CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
     }
 
     static public void setStudentIndex(int i) {
@@ -148,44 +177,98 @@ public class StudentManager {
         return studentIndex;
     }
 
+    //OLD CODE: WE NOW ONLY ACCEPT NEW STUDENTS IN ADMISSIONS ON ADMISSIONS DAY
+//    /**
+//     * Determines how many students to accept in one day.
+//     *
+//     * @param collegeId Id of the college currently in use
+//     * @param hoursAlive The amount of hours the college has been open (days)
+//     */
+//    private void acceptStudents(String collegeId, int hoursAlive){
+//        int numNewStudents;
+//
+//        // The number of accepted students depends on the happiness of the student body.
+//        college = CollegeDao.getCollege(collegeId);
+//        int happiness = college.getStudentBodyHappiness();
+//
+//        if (happiness <= 50) {
+//            numNewStudents = 0;
+//        } else {
+//            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
+//            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
+//        }
+//
+//        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
+//        //CollegeDao.saveCollege(college);
+//
+//        if (numNewStudents > 0) {
+//            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
+//        }
+//    }
+
     /**
-     * Determine how many students to accept in one day.
+     * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
+     *
+     * @param numNewStudents The number of new students to be made
+     * @param collegeId The id of the college in use
+     * @param students The list of students currently at the college
+     * @param initial Check if this is the first time setup for the college
      */
-    private void acceptStudents(String collegeId, int hoursAlive){
-        int numNewStudents;
-
-        // The number of accepted students depends on the happiness of the student body.
-        college = CollegeDao.getCollege(collegeId);
-        int happiness = college.getStudentBodyHappiness();
-
-        if (happiness <= 50) {
-            numNewStudents = 0;
-        } else {
-            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
-            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
-        }
-
-        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
-        //CollegeDao.saveCollege(college);
-
-        if (numNewStudents > 0) {
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-        }
-    }
-
     private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
+        Random rand = new Random();
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
-            if (rand.nextInt(10) + 1 > 5) {
-                student.setName(NameGenDao.generateName(false));
-                student.setGender("Male");
-            } else {
-                student.setName(NameGenDao.generateName(true));
-                student.setGender("Female");
+
+            // Assign starting class year evenly
+            if(i < numNewStudents/4) {
+                student.setClassYear(1);
+            }
+            else if(i < numNewStudents/2){
+                student.setClassYear(2);
+            }
+            else if(i < 3*numNewStudents/4){
+                student.setClassYear(3);
+            }
+            else{
+                student.setClassYear(4);
+                college.setStudentsGraduating(college.getStudentsGraduating()+1);
             }
 
-            student.setIdNumber(IdNumberGenDao.getID(collegeId));
-            student.setHappinessLevel(70);
+            // generate random 0-3 tiers for personality/quality
+            int tier = rand.nextInt(4);
+            // decrease tiers greater than 0 based on chance - this is to make sure tiers are
+            // randomly distributed and weighted towards lower tiers
+            if(tier > 0){
+                double chance = Math.random();
+                // If tier is 1, you have a 50% chance of moving down
+                if(tier == 1) {
+                    if (chance > 0.5) {
+                        tier -= 1;
+                    }
+                }
+                // If your tier is 2, you have a higher chance of decreasing it
+                else {
+                    if (chance > 0.33) {
+                        tier -= 1;
+                    }
+                }
+            }
+            student.setPersonality(PersonalityModel.generateRandomModel(tier));
+            student.setQuality(QualityModel.generateRandomModel(tier));
+
+            if (rand.nextInt(10) + 1 > 5) {
+                student.setName(NameGenDao.generateName(false));
+                student.setGender(GenderModel.MALE);
+                student.getAvatar().generateStudentAvatar(false);
+            } else {
+                student.setName(NameGenDao.generateName(true));
+                student.setGender(GenderModel.FEMALE);
+                student.getAvatar().generateStudentAvatar(true);
+            }
+
+            student.setId(IdNumberGenDao.getID(collegeId));
+
             if(i <= 50 && initial) {
                 student.setAthleticAbility(rand.nextInt(5) + 5);
             }
@@ -206,29 +289,43 @@ public class StudentManager {
             student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
             student.setDorm(buildingMgr.assignDorm(collegeId));
             student.setRunId(collegeId);
-            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId, student));
+            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
+            student.setNature(assignRandomNature());
+            // Make that not random
+           // student.setClassYear(rand.nextInt(4) + 1);
+//            if(student.getClassYear() == 4) {
+//                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+//            }
             students.add(student);
-            dao.saveAllStudentsJustToCache(collegeId, students);
         }
+        CollegeDao.saveCollege(college);
+        dao.saveAllStudentsJustToCache(collegeId, students);
     }
 
     /**
      * Is this a day on which figure out which students are leaving the college?
+     * (Not in use as students are set to leave whenever if they are unhappy enough)
+     *
+     * @param collegeId The ID of the college currently in use
+     *
+     * @return True if the current day is divisible by 7, false if not
      */
     private boolean isWithdrawlDay(String collegeId) {
         int day = CollegeManager.getCollegeCurrentDay(collegeId);
         return (day % 7 == 0);
     }
+
     /**
-     * Withdraw students from the college.
+     * Withdraw students from the college, determine by overall happiness.
      *
-     * @param collegeId
-     * @param hoursAlive
+     * @param collegeId The ID of the college
+     * @param hoursAlive The number of hours the college has been open
      */
     private void withdrawStudents(String collegeId, int hoursAlive) {
-
-//        if (!isWithdrawlDay(collegeId))
-//            return;
+        college = CollegeDao.getCollege(collegeId);
+        //College now goes by weeks so every next week click is withdraw day
+        // if (!isWithdrawlDay(collegeId))
+        // return;
 
         float scalingFactor = .01f;
         List<StudentModel> students = dao.getStudents(collegeId);
@@ -239,9 +336,14 @@ public class StudentManager {
         int studentsWithdrawn = 0;
 
         for (int i = 0; i < students.size(); i++){
-            int h = students.get(i).getHappinessLevel();
-            float odds = Math.max(1f, (100f - h)/33f) * (1f/60f);
-            if (didItHappen(odds)) {
+            int h = students.get(i).getHappiness();
+            double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64%)
+            System.out.println("Should we remove?: " + students.get(i).getHappiness());
+            if (students.get(i).getHappiness() < 60 && didItHappen(odds)) {
+                System.out.println("We are actually removing somebody: " + students.get(i).getName() + " " + students.get(i).getClassYear());
+                if(students.get(i).getClassYear() == 4) {
+                    college.setStudentsGraduating(college.getStudentsGraduating()-1);
+                }
                 buildingMgr.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
                 studentsWithdrawn++;
@@ -250,13 +352,15 @@ public class StudentManager {
 
         dao.saveAllStudents(collegeId, students);
 
-        college = CollegeDao.getCollege(collegeId);
         college.setNumberStudentsAdmitted(Math.max(college.getNumberStudentsAdmitted(), nStudents));
         college.setNumberStudentsWithdrew(college.getNumberStudentsWithdrew() + studentsWithdrawn);
+        calculateRetentionRate(collegeId); //Calculate the retention rate since students have possibly left the college
 
         //CollegeDao.saveCollege(college);
         // Don't create a news story if no students leave
+        System.out.println("Comparisson: " + nStudents + " vs " + students.size());
         if ((nStudents - students.size()) > 0) {
+            System.out.println("We apparently removed some students somehow.");
             NewsManager.createNews(collegeId, hoursAlive, Integer.toString(nStudents - students.size()) + " students withdrew from college.", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
         }
     }
@@ -282,18 +386,58 @@ public class StudentManager {
      * @param collegeId
      */
     public void calculateStatistics(String collegeId, boolean initial) {
+        CollegeManager.logger.info("Calculating new student statistics");
         List<StudentModel> students = dao.getStudents(collegeId);
-        calculaterOverallStudentHealth(collegeId, students);
         calculateStudentFacultyRatio(collegeId, students);
         calculateStudentFacultyRatioRating(collegeId);
 
         setHappinessForEachStudent(collegeId, initial, students);
+        calculaterOverallStudentHealth(collegeId, students);
+        calculateAllAverageHappiness(collegeId, students);
 
-        calculateOverallStudentHappiness(collegeId, students);
-        calculateOverallStudentRecreationalHappiness(collegeId, students);
-        calculateOverallStudentFinancialHappiness(collegeId, students);
+    }
 
-        calculateRetentionRate(collegeId);
+    private void calculateAllAverageHappiness(String collegeId, List<StudentModel> students) {
+        CollegeManager.logger.info("StudentManager: Calculating average happinesses");
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        //Variables to find sums of total student happinesses
+        int healthHappinessSum = 0;
+        int happinessSum = 0;
+        int recHappinessSum = 0;
+        int finHappinessSum = 0;
+        int acaHappinessSum = 0;
+        int buildHappinessSum = 0;
+        int profHappinessSum = 0;
+
+        //Loop through and find individual student's happiness in every category
+        for (int i = 0; i < students.size(); i++) {
+            healthHappinessSum += students.get(i).getHealthHappinessRating();
+            happinessSum += students.get(i).getHappiness();
+            recHappinessSum += students.get(i).getFunHappinessRating();
+            finHappinessSum += students.get(i).getMoneyHappinessRating();
+            acaHappinessSum += students.get(i).getAcademicHappinessRating();
+            buildHappinessSum += students.get(i).getOverallBuildingHappinessRating();
+            profHappinessSum += students.get(i).getProfessorHappinessRating();
+        }
+
+        //Calculate the average happiness of student population for all
+        int avgHealthHappiness = healthHappinessSum/Math.max(1, students.size());
+        int avgHappiness = happinessSum/Math.max(1,students.size());
+        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
+        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
+        int avgAcaHappiness = acaHappinessSum/Math.max(1,students.size());
+        int avgBuildHappiness = buildHappinessSum/Math.max(1,students.size());
+        int avgProfHappiness = profHappinessSum/Math.max(1,students.size());
+
+        //Set the happinesses averages accordingly, making sure they stay at 100 or below
+        college.setStudentHealthHappiness(Math.min(100, avgHealthHappiness));
+        college.setStudentBodyHappiness(Math.min(100, avgHappiness));
+        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness));
+        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness));
+        college.setStudentAcademicHappiness(Math.min(100, avgAcaHappiness));
+        college.setStudentBuildingHappiness(avgBuildHappiness);
+        college.setStudentProfessorHappiness(avgProfHappiness);
     }
 
     private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
@@ -307,61 +451,12 @@ public class StudentManager {
             }
         }
 
-        int percentageWell = 100 - (2*(nSick * 100) / Math.max(students.size(), 1));
+        int percentageWell = ((Math.max(students.size(), 1) - nSick) * 100) / Math.max(students.size(), 1);
         int rating = Math.max(0, percentageWell);
         rating = Math.min(rating, 100);
-        //int rating = SimulatorUtilities.getRatingZeroToOneHundred(50, 95, percentageWell);
         college.setStudentHealthRating(rating);
 
         //CollegeDao.saveCollege(college);
-    }
-
-    private void calculateOverallStudentHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int happinessSum = 0;
-        for (int i = 0; i < students.size(); i++) {
-            happinessSum += students.get(i).getHappinessLevel();
-        }
-
-        int aveHappiness = happinessSum/Math.max(1,students.size());
-        // Add a little randomness. Currently happiness doesn't seem to
-        // vary much from day to day.  That is an issue.
-        Random rand = new Random();
-        college.setStudentBodyHappiness(Math.min(100, aveHappiness + rand.nextInt(8)));
-
-        //CollegeDao.saveCollege(college);
-    }
-
-    private void calculateOverallStudentRecreationalHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: recreational happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int recHappinessSum = 0;
-        for (int i=0; i<students.size(); i++) {
-            recHappinessSum += students.get(i).getFunHappinessRating();
-        }
-
-        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
-
-        Random rand = new Random();
-        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness + rand.nextInt(8)));
-    }
-
-    private void calculateOverallStudentFinancialHappiness(String collegeId, List<StudentModel> students) {
-        CollegeManager.logger.info("StudentManager: financial happiness statistics");
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-
-        int finHappinessSum = 0;
-        for (int i=0; i<students.size(); i++) {
-            finHappinessSum += students.get(i).getMoneyHappinessRating();
-        }
-
-        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
-
-        Random rand = new Random();
-        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness + rand.nextInt(8)));
     }
 
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
@@ -372,31 +467,56 @@ public class StudentManager {
 
         for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
-           setStudentHealthHappiness(student);
-           setStudentAcademicHappiness(student, college);
+           setStudentHealthHappiness(student, initial);
            setStudentAdvisorHappiness(student, college, initial);
-           setStudentMoneyHappiness(student, college);
+           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
+           setStudentAcademicHappiness(student, college);
+           setStudentMoneyHappiness(student, college, initial);
            setStudentFunHappiness(student, college);
            setDiningHallHappinessRating(student, college);
            setAcademicCenterHappinessRating(student, college);
            setDormHappinessRating(student, college);
-           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
            setStudentOverallBuildingHappinessRating(student, college);
-           setStudentFeedback(student, collegeId);
 
            // Below if you add up the factors on happiness, they sum to 1.0
 
            int happiness =
-                   (int) (0.1 * student.getAcademicHappinessRating() +
-                          0.1 * student.getHealthHappinessRating() +
-                          0.5 * student.getMoneyHappinessRating() +
-                          0.1 * student.getFunHappinessRating() +
+                   // adjust percentages when building/professor happinesses are less random
+                   (int) (0.3 * student.getAcademicHappinessRating() +
+                          0.2 * student.getHealthHappinessRating() +
+                          0.3 * student.getMoneyHappinessRating() +
+                          //0.1 * student.getFunHappinessRating() +     Uncomment this once Fun can be interacted with
                           0.1 * student.getOverallBuildingHappinessRating() +
                           0.1 * student.getProfessorHappinessRating());
+
+           //If the rating of any one happiness is very low, their overall happiness will drop further
+            if(checkForUnhappiness(student)) {
+                happiness -= 30;
+            }
             happiness = Math.min(happiness, 100);
             happiness = Math.max(happiness, 0);
-            students.get(i).setHappinessLevel(happiness);
+
+            students.get(i).setHappiness(happiness);
+            setStudentFeedback(student, collegeId);
+
+            if(student.getHappiness() >= 95){
+                student.getAvatar().generateHappyAvatar();
+                student.getAvatar().setEyes("Hearts");
+            }
+            else if(student.getHappiness() >= 70){
+                student.getAvatar().generateHappyAvatar();
+            }
+            else if(student.getHappiness() <= 69 && student.getHappiness() >= 50){
+                student.getAvatar().setMouth("Serious");
+                student.getAvatar().setEyebrows("Default");
+                student.getAvatar().setEyes("Default");
+
+            }
+            else if(student.getHappiness() < 50){
+                student.getAvatar().generateUnhappyAvatar();
+            }
         }
+
 
         dao.saveAllStudents(collegeId, students);
     }
@@ -415,7 +535,6 @@ public class StudentManager {
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
-        setStudentFeedback(student, college.getRunId());
     }
 
     private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
@@ -424,7 +543,6 @@ public class StudentManager {
         int acadmicBuildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(academicBuildingQuality, 15, 0, 100);
 
         student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
-        setStudentFeedback(student, college.getRunId());
     }
 
     private void setDormHappinessRating(StudentModel student,CollegeModel college){
@@ -433,19 +551,29 @@ public class StudentManager {
         int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
 
         student.setDormHappinessRating(dormHappinessLevel);
-        setStudentFeedback(student, college.getRunId());
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
-        // TODO: how do we decide if students are having fun?
+         //TODO: how do we decide if students are having fun?
         s.setFunHappinessRating(50);
     }
 
-    private void setStudentMoneyHappiness(StudentModel s, CollegeModel college) {
-
-        // TODO: Bug-fix function to set value that isn't 0.
-
-        int rating = college.getYearlyTuitionRating(); // This is rating 0 to 100
+    /**
+     * Sets the money/financial happiness of a single student
+     *
+     * @param s The student having their happiness updated
+     * @param college The college that is currently in use
+     * @param initial Value to determine if this is the first time setup of the college
+     */
+    private void setStudentMoneyHappiness(StudentModel s, CollegeModel college, Boolean initial) {
+        int rating; //The rating of the student
+        if(initial) {
+            //For the initial start, students have a rating of 0 so this needs to be set
+            rating = SimulatorUtilities.getRatingZeroToOneHundred(70000, 25000, college.getYearlyTuitionCost());
+        }
+        else {
+            rating = college.getYearlyTuitionRating(); //Previous rating the student had
+        }
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
     }
 
@@ -456,21 +584,24 @@ public class StudentManager {
         Random r = new Random();
         int happinessRating;
         if (initial){
-            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(50, 15, 0, 100);
+            happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(75, 15, 0, 100);
         }
         else{
             happinessRating = s.getAdvisorHappinessHappinessRating();
-            if(s.getAdvisor().getPerformance() > 75){
+            if(s.getAdvisor() == null)
+                Logger.getAnonymousLogger().warning("null advisor on student " + s.getName());
+            if((FacultyDao.getAdvisor(college.getRunId(), s.getAdvisor())).getPerformance() > 75){
                 int happinessIncrease = r.nextInt((5 - 2) + 1) + 2;
-                happinessRating += happinessIncrease;
+                happinessRating += 5;
             }
-            else if(s.getAdvisor().getPerformance() > 50){
+            else if((FacultyDao.getAdvisor(college.getRunId(), s.getAdvisor())).getPerformance() < 50){
                 double rand = Math.random();
                 int happinessNumber = r.nextInt((3 - 1) + 1) + 1;
                 if(rand <= 0.5)
                     happinessRating += happinessNumber;
                 else
                     happinessRating -= happinessNumber;
+                happinessRating -= 5;
             }
             else{
                 int happinessDecrease = r.nextInt((5 - 2) + 1) + 2;
@@ -480,30 +611,55 @@ public class StudentManager {
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
         s.setAdvisorHappinessHappinessRating(happinessRating);
-        setStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
-        int rating = college.getStudentFacultyRatioRating(); // This is rating 0 to 100
-        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100);
-
-        happinessRating = Math.max(happinessRating, 0);
-        happinessRating = Math.min(happinessRating, 100);
+        int happiness =
+                (int) (0.4 * college.getStudentFacultyRatioRating() +
+                        0.2 * s.getAdvisorHappinessHappinessRating() +
+                        0.4 * s.getProfessorHappinessRating());
+        if(s.getNature() == "Studious"){
+            happiness += 10;
+        }
+        else if(s.getNature() == "Lazy" || s.getNature() == "Rebellious"){
+            happiness -= 10;
+        }
+        happiness = Math.min(100, happiness);
+        int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 5, 0, 100);
 
         s.setAcademicHappinessRating(happinessRating);
-        setStudentFeedback(s, college.getRunId());
     }
 
     private void setStudentProfessorHappiness(String collegeId, StudentModel s, int aveFacultyPerformance){
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(aveFacultyPerformance, 10, 0, 100);
+        if(s.getNature() == "Studious"){
+            happinessRating += 5;
+        }
+        else if(s.getNature() == "Lazy" || s.getNature() == "Rebellious"){
+            happinessRating -= 5;
+        }
+        Math.min(100, happinessRating);
         s.setProfessorHappinessRating(happinessRating);
-        setStudentFeedback(s, college.getRunId());
     }
 
-    private void setStudentHealthHappiness(StudentModel s) {
-        s.setHealthHappinessRating(100);
-        if (s.getNumberHoursLeftBeingSick() > 0){
-            s.setHealthHappinessRating(0);
+    /**
+     * Changed!!!
+     * Set the health happiness of a single student
+     *
+     * @param s The student to update
+     * @param initial If this is a first time setup of the college
+     */
+    private void setStudentHealthHappiness(StudentModel s, boolean initial) {
+        if (initial) {
+            //When college starts
+            s.setHealthHappinessRating(100);
+        }
+        else {
+            //Calculation: Everyday they are sick is -48 happiness, plus a bit of random deviation
+            System.out.println("HOURS LEFT: " + s.getNumberHoursLeftBeingSick());
+            int happiness = (100-2*s.getNumberHoursLeftBeingSick());
+            happiness = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 10, 0, 100);
+            s.setHealthHappinessRating(happiness);
         }
     }
 
@@ -534,15 +690,15 @@ public class StudentManager {
         for(BuildingModel b : allBuildings){
             // Certain buildings have to be added to the student no matter what
             // These include Health Center, Library, Sports Center, Baseball Diamond, Football Stadium, and Hockey Rink
-            if(b.getKindOfBuilding().equals(BuildingModel.getHealthConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getLibraryConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getSportsConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getBaseballDiamondConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getFootballStadiumConst()) ||
-                    b.getKindOfBuilding().equals(BuildingModel.getHockeyRinkConst())){
+            if(b.getKindOfBuilding().equals(BuildingType.health().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.library().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.sports().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.baseballDiamond().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.footballStadium().getType()) ||
+                    b.getKindOfBuilding().equals(BuildingType.hockeyRink().getType())){
                 studentsBuildingsOnly.add(b);
             }
-            else if(b.getKindOfBuilding().equals(BuildingModel.getEntertainmentConst())){
+            else if(b.getKindOfBuilding().equals(BuildingType.entertainment().getType())){
                 // The entertainment center always adds happiness, but will add more for a higher quality center
                 entertainmentHappiness += (int)b.getShownQuality()/25; //Should never be more than 4
             }
@@ -569,7 +725,6 @@ public class StudentManager {
         buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
         buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
-        setStudentFeedback(s, college.getRunId());
     }
 
     private void calculateStudentFacultyRatio(String collegeId, List<StudentModel> students) {
@@ -606,15 +761,42 @@ public class StudentManager {
         //CollegeDao.saveCollege(college);
     }
 
-    private boolean didItHappen(float oddsBetween0And1) {
-        return (Math.random() < oddsBetween0And1);
+    /**
+     * Rolls a number and returns whether or not the roll was higher than the odds
+     *
+     * @param oddsBetween0And1 The odds of success (.64 = 64% of returning false)
+     *
+     * @return True if the roll was higher, false if lower
+     */
+    private boolean didItHappen(double oddsBetween0And1) {
+        double roll = Math.random();
+        return (roll > oddsBetween0And1);
     }
 
+    /**
+     * Check if a student is very unhappy in any of the overallHappiness categories
+     *
+     * @param s The student to be checked
+     *
+     * @return True if a student is very unhappy in any category, false if not
+     */
+    private boolean checkForUnhappiness(StudentModel s) {
+        return s.getAcademicHappinessRating() < 20 || s.getHealthHappinessRating() < 20 ||
+                s.getMoneyHappinessRating() < 20 || s.getOverallBuildingHappinessRating() < 20
+                || s.getProfessorHappinessRating() < 20;
+    }
+
+    /**
+     * Load up the tips in the Students Tab
+     *
+     * @param collegeId The id of the college in use
+     */
     private void loadTips(String collegeId) {
         // Only the first tip should be set to true.
+        //Add any new tips in here to be displayed in the Student tab
         TutorialManager.saveNewTip(collegeId, 0,"viewStudent", "If the students aren't happy they might leave.", true, "student.png");
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Click on different students to see how they feel.", false);
-        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "There are many different things that makes a student happy.", false);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Click on different students to see how they are feeling.", false);
+        TutorialManager.saveNewTip(collegeId, 1,"viewStudent", "Tuition is a major factor in student happiness.", false);
     }
 
     /**
@@ -627,17 +809,17 @@ public class StudentManager {
     public void removeFromBuildingAndReassignAfterDisaster(String collegeId, String buildingName, String buildingType){
         List<StudentModel> students = dao.getStudents(collegeId);
         for(StudentModel s : students){
-            if(buildingType.equals(buildingModel.getDormConst())){
+            if(buildingType.equals(BuildingType.dorm().getType())){
                 if(buildingName.equals(s.getDorm())){
                     buildingMgr.assignDorm(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getDiningConst())){
+            else if(buildingType.equals(BuildingType.dining().getType())){
                 if(buildingName.equals(s.getDiningHall())){
                     buildingMgr.assignDiningHall(collegeId);
                 }
             }
-            else if(buildingType.equals(buildingModel.getAcademicConst())){
+            else if(buildingType.equals(BuildingType.academic().getType())){
                 if(buildingName.equals(s.getAcademicBuilding())){
                     buildingMgr.assignAcademicBuilding(collegeId);
                 }
@@ -647,9 +829,8 @@ public class StudentManager {
 
     /**
      * @param student   The student who's giving feedback
-     * @return          The feedback based on the students happiness levels
      */
-    private static String setStudentFeedback(StudentModel student, String collegeId) {
+    private static void setStudentFeedback(StudentModel student, String collegeId) {
         Boolean usesVerb        = (Math.random() >= 0.5);
         Boolean useNoun         = true;
         String feedback         = (usesVerb ? "I " : "The ");
@@ -660,6 +841,8 @@ public class StudentManager {
 
         HashMap<String, Integer> happinessLevels = new HashMap<>();
 
+
+
         happinessLevels.put("academic", student.getAcademicHappinessRating());
 //      happinessLevels.put("advisor", student.getAdvisorHappinessHappinessRating());
         happinessLevels.put("health", student.getHealthHappinessRating());
@@ -667,12 +850,12 @@ public class StudentManager {
 //      happinessLevels.put("fun" , student.getFunHappinessRating());
 
         // Negative feedback
-        if(student.getHappinessLevel() < 50) {
+        if(student.getHappiness() < 50) {
             Collections.addAll(verbs,"hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
             Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
 
         // Positive feedback
-        } else if(student.getHappinessLevel() > 70) {
+        } else if(student.getHappiness() > 70) {
             Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
             Collections.addAll(adjectives, "great ", "fantastic ", "super ", "surprisingly well ");
 
@@ -687,38 +870,37 @@ public class StudentManager {
 
             if(useNeutralIntro==neutralIntro.length-1) {
                 feedback = neutralMidro[new Random().nextInt(neutralMidro.length)];
-            } else {
+            }
+            else {
                 feedback =  neutralIntro[useNeutralIntro] +
                             neutralMidro[new Random().nextInt(neutralMidro.length)].toLowerCase();
             }
                 feedback += neutralOutro[new Random().nextInt(neutralOutro.length)];
-
         }
 
-        if(useNoun)
-            if (usesVerb)
+        if(useNoun) {       //If it was not a neutral response
+            if (usesVerb) {     //If random chance when usesVerb was assigned was true
                 feedback += verbs.get(new Random().nextInt(verbs.size())) +
-                            "the " + getFeedbackNoun(happinessLevels, true);
-            else
+                        "the " + getFeedbackNoun(happinessLevels, true);
+            }
+            else {
                 feedback += getFeedbackNoun(happinessLevels, true) + "is " +
-                            adjectives.get(new Random().nextInt(adjectives.size()));
-
+                        adjectives.get(new Random().nextInt(adjectives.size()));
+            }
+        }
         // Conclusion
         String[] conclusion =  {" here", " at this school", " at "+collegeId, ""};
         feedback += conclusion[new Random().nextInt(conclusion.length)];
         String[] positivePunctuation = {"!", "!!", "!!!"};
         String[] negativePunctuation = {".", "..", "..."};
-        if(student.getHappinessLevel() < 50) {
+        if(student.getHappiness() < 50) {
             feedback += negativePunctuation[new Random().nextInt(negativePunctuation.length)];
-        } else if (student.getHappinessLevel() > 70) {
+        } else if (student.getHappiness() > 70) {
             feedback += positivePunctuation[new Random().nextInt(positivePunctuation.length)];
         } else {
             feedback += ".";
         }
-
         student.setFeedback(feedback);
-
-        return feedback;
     }
 
 
@@ -744,6 +926,33 @@ public class StudentManager {
             Collections.addAll(nouns,"health care ", "healthiness ", "health system ");
 
         return nouns.get(new Random().nextInt(nouns.size()));
+    }
+
+    public int getNumRebelliousStudentsRatio(String collegeId) {
+        int numStudents=0;
+        int totalStudents=0;
+        List<StudentModel> students = dao.getStudents(collegeId);
+        for(StudentModel s : students) {
+            if (s.getNature() == "Rebellious")
+                numStudents += 1;
+            totalStudents += 1;
+        }
+        return totalStudents / numStudents;
+    }
+
+    private String assignRandomNature() {
+        if (rand.nextInt(10) > 8)
+            return "Impulsive";
+        else if (rand.nextInt(10) > 6)
+            return "Studious";
+        else if (rand.nextInt(10) > 4)
+            return "Lazy";
+        else if (rand.nextInt(10) > 2)
+            return "Rebellious";
+        else if (rand.nextInt(10) > 1)
+            return "Party Fiend";
+        else
+            return "Normal";
     }
 }
 

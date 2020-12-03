@@ -3,11 +3,10 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.Date;
 
 /**
  * The CollegeManager is responsible for simulating all overall college functions,
@@ -18,6 +17,7 @@ import java.util.Date;
 public class CollegeManager {
     static public final int STARTUP_FUNDING = 200000;  // Amount of money initially in college bank account.
     public static Logger logger = Logger.getLogger("CollegeManager");
+
     /**
      * Creates a new college.
      *
@@ -45,6 +45,7 @@ public class CollegeManager {
         college = new CollegeModel();
         college.setRunId(collegeId);
         college.setHoursAlive(1);
+        college.setNewSemester();
         college.setAvailableCash(STARTUP_FUNDING);
         CollegeDao.saveCollege(college);
 
@@ -54,6 +55,7 @@ public class CollegeManager {
         NewsManager.createNews(collegeId, college.getCurrentDay(),"The college was established today.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
 
         logger.info("Establish buildings.");BuildingManager.establishCollege(collegeId, college);
+        logger.info("Establish academics.");AcademicsManager.establishCollege(collegeId);
         logger.info("Establish faculty.");FacultyManager.establishCollege(collegeId, college);
         logger.info("Establish student.");StudentManager studentManager = new StudentManager();
         logger.info("Establish student.");studentManager.establishCollege(collegeId);
@@ -65,7 +67,12 @@ public class CollegeManager {
         logger.info("Establish fire.");FireManager.establishCollege(collegeId);
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
+        logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
 
+
+        CollegeRating collegeTraits = new CollegeRating();
+        TipsManager tManager = new TipsManager();
+        collegeTraits.handleTimeChange(collegeId, tManager);
         return college;
     }
 
@@ -86,6 +93,8 @@ public class CollegeManager {
         IdNumberGenDao.deleteIDs(collegeId);
         InventoryDao.deleteItem(collegeId);
         SnowDao.deleteSnowStorm(collegeId);
+        AdmissionsDao.removeAdmissionsData(collegeId);
+        AcademicsDao.removeAcademicData(collegeId);
     }
 
     /**
@@ -95,18 +104,20 @@ public class CollegeManager {
      *
      * @param collegeId college name
      */
-    static public CollegeModel advanceTimeByOneDay(String collegeId, PopupEventManager popupManager) {
+    static public CollegeModel advanceTime(String collegeId, PopupEventManager popupManager) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         // If there is a popup, we are not going to advance the day.
-        // The pop must be cleared through the user inteface first.
+        // The pop must be cleared through the user interface first.
         List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);
-        if (popupEvents == null || popupEvents.size() > 0) {
-            logger.info("Not advancing day because there are pop ups.");
-            return college;
-        }
+        //I COMMENTED THIS OUT BECAUSE POPUPS ARE NOT GOING AWAY, WHEN FIXED UNCOMMENT THIS
+//        if (popupEvents == null || popupEvents.size() > 0) {
+//            logger.info("Not advancing day because there are pop ups.");
+//            return college;
+//        }
 
-        college.setHoursAlive(college.getHoursAlive() + 24);  // We are advancing x days.
+        college.setHoursAlive(college.getHoursAlive() + (24*CollegeModel.daysAdvance));  //Advance time by 1 week
+        college.advanceTime(collegeId);  // decrease number of weeks left in semester
         CollegeDao.saveCollege(college);  // Notice that after setting fields in college we need to save.
 
         // How many hours has the college been alive (counting from hour 0).
@@ -117,6 +128,10 @@ public class CollegeManager {
         // last called.  They are given the current time.
 
         InventoryManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime Calculate Tuition Rating");
+        //Before anything else, the tuition rating it changed for the college
+        calculateTuitionRating(collegeId);
 
         logger.info("AdvanceTime Disasters");
         EventManager disasterManager = new EventManager(collegeId);
@@ -154,16 +169,30 @@ public class CollegeManager {
         StudentManager studentManager = new StudentManager();
         studentManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
+        logger.info("AdvanceTime Admissions");
+        AdmissionsManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+        logger.info("AdvanceTime Academics");
+        AcademicsManager.handleTimeChange(collegeId, hoursAlive, popupManager);
+
+
         logger.info("AdvanceTime Faculty");
         FacultyManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         DepartmentManager.handleTimeChange(collegeId, popupManager);
         PlayManager.handleTimeChange(collegeId, hoursAlive, popupManager);
         GateManager.handleTimeChange(collegeId, hoursAlive, popupManager);
 
-        logger.info("AdvanceTime Calculate Stats");
-        // After all the simulators are run, there is a final
-        // calculation of the college statistics.
-        calculateTuitionRating(collegeId);
+        logger.info("AdvanceTime College Traits and update tips");
+        CollegeRating collegeTraits = new CollegeRating();
+        TipsManager tManager = new TipsManager();
+        collegeTraits.handleTimeChange(collegeId, tManager);
+
+        logger.info("AdvanceTime Loans");
+        FinanceManager fm = new FinanceManager();
+        fm.handleTimeChange(collegeId);
+
+        logger.info("AdvanceTime Achievements");
+        AchievementManager.handleTimeChange(collegeId, popupManager);
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);
@@ -251,11 +280,13 @@ public class CollegeManager {
      */
     public static CollegeModel updateCollegeTuition(String collegeId, int amount, PopupEventManager popupManager){
         CollegeModel college = CollegeDao.getCollege(collegeId);
+        logger.info("Updating Tuition to: " + amount);
         if ((amount < 0) || (amount > 100000)) {
-            popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tutuion between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
+            popupManager.newPopupEvent(collegeId,"Invalid tuition", "Please enter a tuition between 0 and 100000 dollars.", "Ok", "done", "resources/images/money.jpg", "Money");
             return college;
         }
 
+        college.setPreviousTuitionCost(college.getYearlyTuitionCost());
         college.setYearlyTuitionCost(amount);
         CollegeDao.saveCollege(college);
 
@@ -263,16 +294,14 @@ public class CollegeManager {
 
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Tuition Updated to: $" + amount, NewsType.FINANCIAL_NEWS, NewsLevel.GOOD_NEWS);
 
-        StudentManager studentManager = new StudentManager();
-        studentManager.calculateStatistics(collegeId, false);
-
         return college;
     }
 
     private static void calculateTuitionRating(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
-        int rating = SimulatorUtilities.getRatingZeroToOneHundred(60000, 24000, college.getYearlyTuitionCost());
+        int rating = SimulatorUtilities.getRatingZeroToOneHundred(75000, 25000, college.getYearlyTuitionCost());
+        logger.info("Rating was: " + rating);
         college.setYearlyTuitionRating(rating);
         CollegeDao.saveCollege(college);
     }

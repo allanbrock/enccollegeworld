@@ -105,6 +105,16 @@
         <url-pattern>/rest/college/*</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>admissionServlet</servlet-name>
+        <servlet-class>com.endicott.edu.rest.AdmissionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>admissionServlet</servlet-name>
+        <url-pattern>/rest/admission/*</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>buildingServlet</servlet-name>
         <servlet-class>com.endicott.edu.rest.BuildingServlet</servlet-class>

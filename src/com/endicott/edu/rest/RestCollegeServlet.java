@@ -5,6 +5,7 @@ import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.simulators.CollegeManager;
+import com.endicott.edu.simulators.FinanceManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.google.gson.Gson;
 
@@ -46,7 +47,7 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
             String command = splits[2];  // only command is next day at the moment.
             logger.info("Servlet command: " + command);
             PopupEventManager popupMgr = new PopupEventManager();  // This is a stub.  Must be changed.
-            CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
+            CollegeManager.advanceTime(collegeId, popupMgr);
 
             EverythingModel everything = EverythingDao.getEverything(collegeId);
             sendAsJson(response, everything);
@@ -97,13 +98,30 @@ public class RestCollegeServlet extends javax.servlet.http.HttpServlet {
             String command = splits[2];  // only command is next day at the moment.
             logger.info("Servlet command: " + command + " " + collegeId);
             PopupEventManager popupMgr = new PopupEventManager();  // This is a stub.  Must be changed.
-            CollegeManager.advanceTimeByOneDay(collegeId, popupMgr);
+
+            if(splits[2].equalsIgnoreCase("calculateContract")) {
+                String amount = splits[3];
+                int integerAmount = Integer.parseInt(amount);
+                FinanceManager.calculateContract(integerAmount, collegeId);
+            }
+            else if(splits[2].equalsIgnoreCase("createContract")) {
+                FinanceManager.createContract(collegeId);
+            }
+            else if(splits[2].equalsIgnoreCase("makePayment")) {
+                String amount = splits[3];
+                String loanNum = splits[4];
+                int integerAmount = Integer.parseInt(amount);
+                int integerLoanNum = Integer.parseInt(loanNum);
+                FinanceManager.makePayment(collegeId, integerAmount, integerLoanNum);
+            }
+            else {
+                CollegeManager.advanceTime(collegeId, popupMgr);
+            }
 
             EverythingModel everything = EverythingDao.getEverything(collegeId);
             sendAsJson(response, everything);
             return;
         }
-
         college = CollegeDao.getCollege(collegeId);
         sendAsJson(response, college);
     }

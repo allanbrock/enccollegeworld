@@ -112,7 +112,7 @@ public class FireManager {
 
         if (!isCatastrophic){
             fire.setDescription(victims, hasUpgradeBeenPurchased());
-            buildingManager.acceleratedDecayAfterDisaster(runId,fire.getBuildingBurned().getName());
+            buildingManager.acceleratedDecay(runId,fire.getBuildingBurned().getName(), "disaster");
             fires.add(fire);
             FireDAO.saveNewFire(runId, fire);
             StudentDao.saveAllStudents(runId, students);
@@ -151,7 +151,7 @@ public class FireManager {
         }
         for (int j = 0; j <facultyDeaths && (faculty.size() > 0); j++) {
             int facultyToRemove = new Random().nextInt(faculty.size());
-            victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
+            victims += faculty.get(facultyToRemove).getName().trim() + ", ";
         }
         return victims;
     }
@@ -244,6 +244,8 @@ public class FireManager {
                 }
                 FacultyDao.saveAllFaculty(runId,faculty);
             }
+            // If there are deaths, immediately decrease the safety rating
+            CollegeRating.decreaseSafetyRating(runId, (numStudentDeaths + numFacultyDeaths));
             return;
         }
 
@@ -263,7 +265,7 @@ public class FireManager {
                         }
                     }
                 }
-                victims += faculty.get(facultyToRemove).getFacultyName().trim() + ", ";
+                victims += faculty.get(facultyToRemove).getName().trim() + ", ";
                 faculty.remove(facultyToRemove);
             }
             FacultyDao.saveAllFaculty(runId,faculty);

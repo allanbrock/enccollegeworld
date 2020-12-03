@@ -2,8 +2,10 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
-import com.endicott.edu.datalayer.NameGenDao;
-import com.endicott.edu.models.*;
+import com.endicott.edu.models.CoachModel;
+import com.endicott.edu.models.CollegeModel;
+import com.endicott.edu.models.DepartmentModel;
+import com.endicott.edu.models.FacultyModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +69,7 @@ public class FacultyManager {
         List<FacultyModel> facultyList = fao.getFaculty(collegeId);
         int total = 0;
         for(FacultyModel member : facultyList){
-            int paycheck = member.getSalary()/365;
+            int paycheck = CollegeModel.daysAdvance * member.getSalary()/365;
             total += paycheck;
         }
         Accountant.payBill(collegeId, "Faculty has been paid", total);
@@ -113,7 +115,8 @@ public class FacultyManager {
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel("Dr. " + NameGenDao.generateName(isFemale), facultyTitle, facultyDepartment, collegeID, salary);
+        member = new FacultyModel(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
+        member.getAvatar().generateStudentAvatar(isFemale);
         fao.saveNewFaculty(collegeID, member);
         return member;
     }
@@ -347,20 +350,14 @@ public class FacultyManager {
         return true; // Statement should never be hit
     }
 
-    public static FacultyModel assignAdvisorToStudent(String collegeId, StudentModel student){
+    public static FacultyModel assignAdvisorToStudent(String collegeId){
         Random r = new Random();
         int positionInFaculty = 0;
-        FacultyModel newAdvisor = new FacultyModel();
+        FacultyModel newAdvisor;
         List<FacultyModel> updatedFaculty = FacultyDao.getFaculty(collegeId);
-        int newAdvisorPosition = r.nextInt(FacultyDao.getFaculty(collegeId).size()) + 1;
-        for(FacultyModel faculty : updatedFaculty){
-            if(positionInFaculty == newAdvisorPosition) {
-                newAdvisor = faculty;
-                break;
-            }
-            positionInFaculty++;
-        }
-        return newAdvisor;
+        int newAdvisorIndex = r.nextInt(FacultyDao.getFaculty(collegeId).size());
+
+        return updatedFaculty.get(newAdvisorIndex);
     }
 
     private static void inspectFacultyPerformances(String collegeId){
@@ -400,7 +397,7 @@ public class FacultyManager {
         for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
             sum += f.getPerformance();
         }
-        return sum / FacultyDao.getFaculty(collegeId).size();
+        return sum/FacultyDao.getFaculty(collegeId).size();
     }
 
     private static void loadTips(String collegeId) {

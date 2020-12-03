@@ -1,8 +1,10 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.AchievementDao;
 import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.GateDao;
 import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.models.AchievementModel;
 import com.endicott.edu.models.CollegeModel;
 import com.endicott.edu.models.GateModel;
 import com.endicott.edu.models.ObjectivesModel;
@@ -18,12 +20,13 @@ public class GateManager {
 
     public static final Map GATE_LEVELS = new HashMap() {
         {
-        put(0,0);
-        put(1, 150);
-        put(2, 200);
-        put(3, 300);
-        put(4, 400);
-        put(5, 500);
+        put(0, -1); //Never use, just here to satisfy the REACT version to not crash, always start at level 1
+        put(1, 0);
+        put(2, 150);
+        put(3, 200);
+        put(4, 300);
+        put(5, 400);
+        put(6, 500);
         }
     };
 
@@ -88,8 +91,9 @@ public class GateManager {
     public static ObjectivesModel getObjectives(String collegeId) {
         int studentCount = StudentDao.getStudents(collegeId).size();;
         ObjectivesModel objectives = new ObjectivesModel();
-        objectives.currentLevel = 0;
+        objectives.currentLevel = 1;
         objectives.gates = GateDao.getGates(collegeId).toArray(new GateModel[0]);
+        objectives.achievements = AchievementDao.getAchievements(collegeId).toArray(new AchievementModel[0]);
         objectives.studentsNeededForLevel = new int[GATE_LEVELS.size()];
 
         for(int i=0; i<GATE_LEVELS.size(); i++) {
@@ -127,7 +131,7 @@ public class GateManager {
 
     public static void establishCollege(String collegeId){
         CollegeModel college = CollegeDao.getCollege(collegeId);
-        college.setGate(0);
+        college.setGate(1);
         CollegeDao.saveCollege(college);
     }
 

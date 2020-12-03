@@ -117,7 +117,10 @@ public class PopupEventManager {
         }
 
         for (PopupEventModel e : tempEvents) {
-            if (requestAsString.contains(Integer.toString(e.getEventId()))) {
+            // NOT ACTUAL SOLUTION - allows user to continue without being followed by same popup
+            // check if url contains eventId of the event e in tempEvent (which im pretty sure is empty)
+            // can't figure out anythhing about tempevents or e, so I don't know how to address issue - logger wont show them
+            //if (requestAsString.contains(Integer.toString(e.getEventId()))) {
                 if (e.getRightButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
                     handleCallback(e.getRightButtonCallback(), collegeId);
                 }
@@ -127,10 +130,11 @@ public class PopupEventManager {
                 dao.deletePopupEvent(collegeId, e);
                 return;
             }
-        }
+       // }
     }
 
     private void handleCallback(String callbackName, String collegeId) {
+        // never enters this method, so popups with options are never properly handled, just removed.
         if (callbackName.equals("goToStore")){
             // Well, we'd like to automatically goto the store.  See ViewCollegeServet.
         }
