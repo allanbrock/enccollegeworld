@@ -235,24 +235,17 @@ public class StudentManager {
                 college.setStudentsGraduating(college.getStudentsGraduating()+1);
             }
 
-            // generate random 0-3 tiers for personality/quality
-            int tier = rand.nextInt(4);
-            // decrease tiers greater than 0 based on chance - this is to make sure tiers are
-            // randomly distributed and weighted towards lower tiers
-            if(tier > 0){
-                double chance = Math.random();
-                // If tier is 1, you have a 50% chance of moving down
-                if(tier == 1) {
-                    if (chance > 0.5) {
-                        tier -= 1;
-                    }
-                }
-                // If your tier is 2, you have a higher chance of decreasing it
-                else {
-                    if (chance > 0.33) {
-                        tier -= 1;
-                    }
-                }
+            // generate number 0-9 to decide on tier  for personality/quality
+            int tier = rand.nextInt(10);
+            // Assign tier based on generated number - weighted towards lower tiers
+            if(tier < 5){
+                tier = 0;
+            }
+            else if(tier < 8){
+                tier = 1;
+            }
+            else {
+                tier = 2;
             }
             student.setPersonality(PersonalityModel.generateRandomModel(tier));
             student.setQuality(QualityModel.generateRandomModel(tier));
@@ -291,11 +284,6 @@ public class StudentManager {
             student.setRunId(collegeId);
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
             student.setNature(assignRandomNature());
-            // Make that not random
-           // student.setClassYear(rand.nextInt(4) + 1);
-//            if(student.getClassYear() == 4) {
-//                college.setStudentsGraduating(college.getStudentsGraduating()+1);
-//            }
             students.add(student);
         }
         CollegeDao.saveCollege(college);

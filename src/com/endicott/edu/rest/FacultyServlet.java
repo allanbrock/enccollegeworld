@@ -36,22 +36,23 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
         }
 
         String collegeId = splits[1];
-        String facultyIndex = splits[3];
-        int index = Integer.parseInt(facultyIndex);
-        List<FacultyModel> faculty;
-        faculty = FacultyDao.getFaculty(collegeId);
-        FacultyModel facultyMember = faculty.get(index);
-
-        if(splits[2].equalsIgnoreCase("fire")){
-            FacultyDao.removeSingleFaculty(collegeId, facultyMember);
-        }
-        else if(splits[2].equalsIgnoreCase("raise")){
-            FacultyDao.giveRaise(collegeId, index);
-        }
-        else if(splits[2].equalsIgnoreCase("hire")){
+        if(splits[2].equalsIgnoreCase("hire")){
             int salary = Integer.parseInt(splits[3]);
             String department = splits[4];
             FacultyDao.createFacultyMember(collegeId, salary, department);
+        }
+        else {
+            String facultyIndex = splits[3];
+            int index = Integer.parseInt(facultyIndex);
+            List<FacultyModel> faculty;
+            faculty = FacultyDao.getFaculty(collegeId);
+            FacultyModel facultyMember = faculty.get(index);
+            if (splits[2].equalsIgnoreCase("fire")) {
+                FacultyDao.removeSingleFaculty(collegeId, facultyMember);
+            }
+            else if (splits[2].equalsIgnoreCase("raise")) {
+                FacultyDao.giveRaise(collegeId, index);
+            }
         }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
