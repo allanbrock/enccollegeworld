@@ -1,6 +1,7 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.simulators.FacultyManager;
 
 import java.io.File;
 import java.util.List;
@@ -37,6 +38,19 @@ public class FacultyDao {
         List<FacultyModel> faculty = getFaculty(collegeId);
         faculty.add(member);
         saveAllFaculty(collegeId, faculty);
+    }
+
+    /**
+     * This creates a new faculty member from the react end and saves them
+     * to the master list
+     * @param collegeId
+     * @param salary
+     * @param department
+     */
+    public static void createFacultyMember(String collegeId, int salary, String department){
+        FacultyModel member = FacultyManager.addFaculty(collegeId, salary, "Dr.", department);
+        FacultyDao dao = new FacultyDao();
+        dao.saveNewFaculty(collegeId, member);
     }
 
     public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
@@ -82,10 +96,11 @@ public class FacultyDao {
         return tmp;
     }
 
-    public static void giveRaise(String collegeId, FacultyModel member){
+    public static void giveRaise(String collegeId, int index){
         logger.info("Giving a raise...");
-        int tmpSalary = member.getSalary();
-        member.setSalary(tmpSalary + 25000);
+        List<FacultyModel> FacultyList = getFaculty(collegeId);
+        FacultyList.get(index).setSalary(FacultyList.get(index).getSalary() + 25000);
+        saveAllFaculty(collegeId, FacultyList);
     }
 
     /**

@@ -46,7 +46,12 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
             FacultyDao.removeSingleFaculty(collegeId, facultyMember);
         }
         else if(splits[2].equalsIgnoreCase("raise")){
-            FacultyDao.giveRaise(collegeId, facultyMember);
+            FacultyDao.giveRaise(collegeId, index);
+        }
+        else if(splits[2].equalsIgnoreCase("hire")){
+            int salary = Integer.parseInt(splits[3]);
+            String department = splits[4];
+            FacultyDao.createFacultyMember(collegeId, salary, department);
         }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
