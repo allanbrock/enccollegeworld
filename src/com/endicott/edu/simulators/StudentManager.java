@@ -220,18 +220,39 @@ public class StudentManager {
         for (int i = 0; i < numNewStudents; i++) {
             StudentModel student = new StudentModel();
 
-            // assign a personality and a quality
-            // TODO: pass in the 'tier' and 'quality' of this newly created student
-            // for now, 5/8 of students will be basic,
-            //          2/8 will be one tier above
-            //          1/8 will be two tiers above
-            int tier = 0;
-            float percentage = i/(float)numNewStudents;
-            if(percentage > 7/8.0*numNewStudents){
-                tier = 2;
+            // Assign starting class year evenly
+            if(i < numNewStudents/4) {
+                student.setClassYear(1);
             }
-            else if(percentage > 5/8.0*numNewStudents){
-                tier = 1;
+            else if(i < numNewStudents/2){
+                student.setClassYear(2);
+            }
+            else if(i < 3*numNewStudents/4){
+                student.setClassYear(3);
+            }
+            else{
+                student.setClassYear(4);
+                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+            }
+
+            // generate random 0-3 tiers for personality/quality
+            int tier = rand.nextInt(4);
+            // decrease tiers greater than 0 based on chance - this is to make sure tiers are
+            // randomly distributed and weighted towards lower tiers
+            if(tier > 0){
+                double chance = Math.random();
+                // If tier is 1, you have a 50% chance of moving down
+                if(tier == 1) {
+                    if (chance > 0.5) {
+                        tier -= 1;
+                    }
+                }
+                // If your tier is 2, you have a higher chance of decreasing it
+                else {
+                    if (chance > 0.33) {
+                        tier -= 1;
+                    }
+                }
             }
             student.setPersonality(PersonalityModel.generateRandomModel(tier));
             student.setQuality(QualityModel.generateRandomModel(tier));
@@ -271,10 +292,10 @@ public class StudentManager {
             student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
             student.setNature(assignRandomNature());
             // Make that not random
-            student.setClassYear(rand.nextInt(4) + 1);
-            if(student.getClassYear() == 4) {
-                college.setStudentsGraduating(college.getStudentsGraduating()+1);
-            }
+           // student.setClassYear(rand.nextInt(4) + 1);
+//            if(student.getClassYear() == 4) {
+//                college.setStudentsGraduating(college.getStudentsGraduating()+1);
+//            }
             students.add(student);
         }
         CollegeDao.saveCollege(college);
