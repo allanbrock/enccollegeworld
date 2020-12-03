@@ -1,12 +1,12 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.AchievementModel;
-import com.endicott.edu.models.GateModel;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AchievementDao {
@@ -66,6 +66,11 @@ public class AchievementDao {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public static void delete(String collegeId) {
+        File file = new File(getFilePath(collegeId));
+        file.delete();
     }
 
     public static void main(String[] args) {

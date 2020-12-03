@@ -1,10 +1,9 @@
 package com.endicott.edu.models;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
-public class DepartmentModel {
+public class DepartmentModel implements Serializable {
     private String departmentName;
     private int departmentRating;
     private HashMap<String, Integer> employeeCounts;
@@ -12,6 +11,7 @@ public class DepartmentModel {
 
     public DepartmentModel(String name){
         this.departmentName = name;
+        departmentRating = 0;
         employeeCounts = new HashMap<>();
         employeeCounts.put("Dean", 0);
         employeeCounts.put("Assistant Dean", 0);
@@ -31,7 +31,7 @@ public class DepartmentModel {
     }
     public int getOverallEmployeeCount(){ return employeeCounts.get("Dean") + employeeCounts.get("Assistant Dean") + employeeCounts.get("Faculty"); }
     public int getDepartmentRating(){ return this.departmentRating; }
-    public void setDepartmentRationg(int departmentRating){ this.departmentRating = departmentRating; }
+    public void setDepartmentRating(int departmentRating){ this.departmentRating = departmentRating; }
     public Boolean getBonusGiven() { return bonusGiven; }
     public void setBonusGiven(Boolean bonusGiven) { this.bonusGiven = bonusGiven; }
 }

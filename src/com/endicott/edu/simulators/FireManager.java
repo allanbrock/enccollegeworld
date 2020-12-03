@@ -1,9 +1,6 @@
 package com.endicott.edu.simulators;
 
-import com.endicott.edu.datalayer.BuildingDao;
-import com.endicott.edu.datalayer.FacultyDao;
-import com.endicott.edu.datalayer.FireDAO;
-import com.endicott.edu.datalayer.StudentDao;
+import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
@@ -229,12 +226,15 @@ public class FireManager {
                 }
             }
             StudentDao.saveAllStudents(runId,students);
+
+            AcademicModel academics = AcademicModel.getFromDAO(runId);
+
             for (int j = 0; j <numFacultyDeaths; j++){
                 int nFaculty = faculty.size();
                 if (nFaculty > 0) {
                     int facultyToRemove = new Random().nextInt(faculty.size());
                     if (faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")) {
-                        for (DepartmentModel d : DepartmentManager.getUnlockedDepts()) {
+                        for (DepartmentModel d : academics.getUnlockedDepts()) {
                             if (faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())) {
                                 d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
                             }
@@ -242,8 +242,10 @@ public class FireManager {
                     }
                     faculty.remove(facultyToRemove);
                 }
-                FacultyDao.saveAllFaculty(runId,faculty);
             }
+            FacultyDao.saveAllFaculty(runId,faculty);
+            academics.saveToDAO(runId);
+
             // If there are deaths, immediately decrease the safety rating
             CollegeRating.decreaseSafetyRating(runId, (numStudentDeaths + numFacultyDeaths));
             return;
@@ -256,10 +258,11 @@ public class FireManager {
                 students.remove(studentToRemove);
             }
             StudentDao.saveAllStudents(runId,students);
+            AcademicModel academics = AcademicModel.getFromDAO(runId);
             for (int j = 0; j <numFacultyDeaths && (faculty.size() > 0); j++){
                 int facultyToRemove = new Random().nextInt(faculty.size());
                 if(faculty.get(facultyToRemove).getTitle().equals("Dean") || faculty.get(facultyToRemove).getTitle().equals("Assistant Dean")){
-                    for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
+                    for(DepartmentModel d : academics.getUnlockedDepts()){
                         if(faculty.get(facultyToRemove).getDepartmentName().equals(d.getDepartmentName())){
                             d.setEmployeeCount(faculty.get(facultyToRemove).getTitle(), 0);
                         }
@@ -269,6 +272,7 @@ public class FireManager {
                 faculty.remove(facultyToRemove);
             }
             FacultyDao.saveAllFaculty(runId,faculty);
+            academics.saveToDAO(runId);
             //fire.setDescription(victims, hasUpgradeBeenPurchased());
         }
     }

@@ -17,4 +17,5 @@ public class EverythingModel implements Serializable {
     public List<CoachModel> coaches;
     public List<PopupEventModel> popupEvent;
     public AdmissionsModel admissions;
+    public List<DepartmentModel> departments;
 }

@@ -1,11 +1,9 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.AcademicsDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
-import com.endicott.edu.models.CoachModel;
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.DepartmentModel;
-import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +26,10 @@ public class FacultyManager {
         inspectFacultyPerformances(collegeId);
         // Haven't tested this line yet
         //DepartmentManager.checkDepartmentRatingsForBonuses(collegeId, DepartmentManager.getRatingsForDepartments(collegeId));
-        ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
-        ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
+
+        // MO: don't understand why you would do this...
+//        ArrayList<DepartmentModel> deanCheck = checkDepartmentsForDeans("Dean");
+//        ArrayList<DepartmentModel> assistantDeanCheck = checkDepartmentsForDeans("Assistant Dean");
 
 //        if(deanCheck.size() > 0){
 //            for(DepartmentModel d : deanCheck){
@@ -81,12 +81,14 @@ public class FacultyManager {
      * @param collegeId instance of the simulation
      */
     public static void establishCollege(String collegeId, CollegeModel college){
-        DepartmentManager.createDeptNameChoices(college.getDepartmentCount());
-        for (int i=0; i<22; i++) {
-            String deptName = getQuasiRandomUnlockedDeptName();
-            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTile(deptName), deptName);
+        // academic model needs to exist.
+        AcademicModel am = AcademicsDao.getAcademics(collegeId);
 
-            for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
+        for (int i=0; i<22; i++) {
+            DepartmentModel dept = getQuasiRandomUnlockedDeptName(am);
+            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTitle(dept), dept.getDepartmentName());
+
+            for(DepartmentModel d : am.getUnlockedDepts()){
                 if(member.getDepartmentName().equals(d.getDepartmentName())){
                     if(d.getOverallEmployeeCount() > 2) {
                         d.putInEmployeeCounts(member.getTitle(), d.getOverallEmployeeCount() - 1);
@@ -101,6 +103,7 @@ public class FacultyManager {
        }
        inspectFacultyPerformances(collegeId);
        loadTips(collegeId);
+
    }
 
     /**
@@ -121,34 +124,28 @@ public class FacultyManager {
         return member;
     }
 
-    public static String generateFacultyTile(String departmentName){
+    public static String generateFacultyTitle(DepartmentModel department){
         String title;
-        DepartmentModel curDept = new DepartmentModel("tempName");
-        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
-            if(d.getDepartmentName().equals(departmentName)){
-                curDept = d;
-                break;
-            }
-        }
-        if(curDept.getEmployeeCounts().get("Dean") == 0)
+
+        if(department.getEmployeeCounts().get("Dean") == 0)
             title = "Dean";
-        else if(curDept.getEmployeeCounts().get("Assistant Dean") == 0)
+        else if(department.getEmployeeCounts().get("Assistant Dean") == 0)
             title = "Assistant Dean";
         else
             title = "Faculty";
         return title;
     }
 
-    private static String getQuasiRandomUnlockedDeptName(){
+    private static DepartmentModel getQuasiRandomUnlockedDeptName(AcademicModel academicModel){
         Random r = new Random();
-        ArrayList<String> deptsWithoutDeans = new ArrayList<>();
-        ArrayList<String> deptsWithoutAssistantDeans = new ArrayList<>();
+        ArrayList<DepartmentModel> deptsWithoutDeans = new ArrayList<>();
+        ArrayList<DepartmentModel> deptsWithoutAssistantDeans = new ArrayList<>();
 
-        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
+        for(DepartmentModel d : academicModel.getUnlockedDepts()){
             if(d.getEmployeeCounts().get("Dean") == 0)
-                deptsWithoutDeans.add(d.getDepartmentName());
+                deptsWithoutDeans.add(d);
             else if(d.getEmployeeCounts().get("Assistant Dean") == 0)
-                deptsWithoutAssistantDeans.add(d.getDepartmentName());
+                deptsWithoutAssistantDeans.add(d);
         }
 
         if (deptsWithoutDeans.size() > 0 ){
@@ -161,8 +158,8 @@ public class FacultyManager {
             return deptsWithoutAssistantDeans.get(rand);
         }
 
-        int rand = r.nextInt(DepartmentManager.getUnlockedDepts().size());
-        return DepartmentManager.getUnlockedDepts().get(rand).getDepartmentName();
+        int rand = r.nextInt(academicModel.getUnlockedDepts().size());
+        return academicModel.getUnlockedDepts().get(rand);
     }
 
     public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
@@ -211,16 +208,6 @@ public class FacultyManager {
         String[] titleOptions = {"Dean", "Assistant Dean", "Faculty"};
         return titleOptions;
     }
-
-    public static String[] getDepartmentOptionStrings (){
-        String[] names = new String[DepartmentManager.getUnlockedDepts().size()];
-        for(int i = 0; i < DepartmentManager.getUnlockedDepts().size(); i++){
-            names[i] = DepartmentManager.getUnlockedDepts().get(i).getDepartmentName();
-        }
-        return names;
-    }
-
-    public static ArrayList<DepartmentModel> getDepartmentOptions() { return DepartmentManager.getUnlockedDepts(); }
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness
@@ -289,18 +276,21 @@ public class FacultyManager {
     }
 
     public static void removeFaculty(String collegeID, FacultyModel member, Boolean coach){
-        FacultyDao fao = new FacultyDao();
+        AcademicModel academics = AcademicsDao.getAcademics(collegeID);
+
         if(!coach) {
-            for (DepartmentModel d : DepartmentManager.getUnlockedDepts()) {
+            for (DepartmentModel d : academics.getUnlockedDepts()) {
                 if (member.getDepartmentName().equals(d.getDepartmentName())) {
                     DepartmentManager.removeEmployeeFromDepartment(member, d);
                     break;
                 }
             }
-            fao.removeSingleFaculty(collegeID, member);
+            FacultyDao.removeSingleFaculty(collegeID, member);
         }
         else
             CoachManager.removeCoach(collegeID, (CoachModel) member);
+
+        AcademicsDao.saveAcademicsData(collegeID,academics);
     }
 
     public static String generateFacultyID(FacultyModel member){
@@ -382,15 +372,6 @@ public class FacultyManager {
         return scenarios[rand];
     }
 
-    private static ArrayList<DepartmentModel> checkDepartmentsForDeans(String deanPosition){
-        ArrayList<DepartmentModel> deanlessDepartments = new ArrayList<>();
-        for(DepartmentModel d : DepartmentManager.getUnlockedDepts()){
-            if(d.getEmployeeCounts().get(deanPosition) < 1){
-                deanlessDepartments.add(d);
-            }
-        }
-        return deanlessDepartments;
-    }
 
     public static int getAverageFacultyPerformance(String collegeId){
         int sum = 0;

@@ -2,6 +2,7 @@ package com.endicott.edu.ui;
 
 
 import com.endicott.edu.datalayer.FacultyDao;
+import com.endicott.edu.models.AcademicModel;
 import com.endicott.edu.models.DepartmentModel;
 import com.endicott.edu.models.FacultyModel;
 import com.endicott.edu.simulators.*;
@@ -87,12 +88,15 @@ public class ViewFacultyServlet extends javax.servlet.http.HttpServlet {
         }
         else {
             FacultyManager.addFaculty(collegeId, salary, title, department);
-            for(DepartmentModel d : FacultyManager.getDepartmentOptions()){
+            AcademicModel academics = AcademicModel.getFromDAO(collegeId);
+
+            for(DepartmentModel d : academics.getUnlockedDepts()){
                 if(department.equals(d.getDepartmentName())){
                     int newCount = d.getEmployeeCounts().get(title) + 1;
                     d.putInEmployeeCounts(title, newCount);
                 }
             }
+            academics.saveToDAO(collegeId);
         }
 
         InterfaceUtils.openCollegeAndStoreInRequest(collegeId, request);

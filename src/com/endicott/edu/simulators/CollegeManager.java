@@ -356,8 +356,11 @@ public class CollegeManager {
         CollegeDao.saveCollege(college);
     }
 
-    public static void recieveDepartmentPerformanceBonus(String collegeId, CollegeModel college, String departmentName, PopupEventManager popupManager){
-        college.setAvailableCash(college.getAvailableCash() + 10000);
-        //popupManager.newPopupEvent(collegeId, "Department Award", departmentName + " has won an award for it's academic success!", "ok", "done", "resources/images/money.jpg", "Department Award");
+    public static void recieveDepartmentPerformanceBonus(String collegeId, String departmentName, PopupEventManager popupManager){
+        int award = (int)(1 + Math.random() * 10);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.setAvailableCash(college.getAvailableCash() + (award) * 1000);
+        popupManager.newPopupEvent(collegeId, "Academic Grant awarded", departmentName + " has been awarded an Academic grant of $" + award + " for their great work!", "ok", "done", "resources/images/money.jpg", "Department Award");
+        // OK to not save to DAO because a save is coming after this call.
     }
 }

@@ -15,6 +15,7 @@
 <%@ page import="com.endicott.edu.simulators.*" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="com.endicott.edu.models.*" %>
+<%@ page import="com.endicott.edu.datalayer.AcademicsDao" %>
 <html>
 <head>
     <title>College World Faculty</title>
@@ -78,15 +79,10 @@
         titleOptions = new String[FacultyManager.getTitleOptions().length];
     }
 
-    String[] departmentOptions = FacultyManager.getDepartmentOptionStrings();
-    if (departmentOptions == null) {
-        departmentOptions = new String[FacultyManager.getDepartmentOptionStrings().length];
-    }
-
-    String[] lockedDepartmentNames = DepartmentManager.getLockedDepartmentNames();
-    if(lockedDepartmentNames == null){
-        lockedDepartmentNames = new String[DepartmentManager.getLockedDepartmentNames().length];
-    }
+    // breaking this code because jsp is deprecated anyway..?
+    AcademicModel am = AcademicsDao.getAcademics(college.getRunId());
+    DepartmentModel[] departmentOptions = (DepartmentModel[]) am.getUnlockedDepts().toArray();
+    DepartmentModel[] lockedDepartmentNames = (DepartmentModel[]) am.getLockedDepts().toArray();
 
     NumberFormat numberFormatter = NumberFormat.getInstance();
     numberFormatter.setGroupingUsed(true);
@@ -424,7 +420,7 @@
                     <select class="form-control" id="departmentDropdown" name="departmentDropdown">
                         <% for(int i = 0; i < departmentOptions.length; i++) { %>
                         <tr>
-                            <option><%= departmentOptions[i] %></option>
+                            <option><%= departmentOptions[i].getDepartmentName() %></option>
                         </tr>
                         <% } %>
                     </select>
@@ -433,11 +429,11 @@
                     <br>
                 </div>
                 <div class="form-group">
-                    <%if(DepartmentManager.getNewDepartmentReady()){%>
+                    <%if(DepartmentManager.getNewDepartmentReady(college.getRunId())){%>
                         <select class="form-control" id="newDepartmentDropdown" name="newDepartmentDropdown">
                             <% for(int i = 0; i < lockedDepartmentNames.length; i++) { %>
                             <tr>
-                                <option><%= lockedDepartmentNames[i] %></option>
+                                <option><%= lockedDepartmentNames[i].getDepartmentName() %></option>
                             </tr>
                             <% } %>
                         </select><br>
@@ -459,7 +455,8 @@
             </thread>
             <tbody>
             <%
-                HashMap<String, Integer> departmentRatingsMap = DepartmentManager.getRatingsForDepartments(college.getRunId());
+                // REMOVED -- this was only used in JSP not Servlet.
+                HashMap<String, Integer> departmentRatingsMap = new HashMap<>();//DepartmentManager.getRatingsForDepartments(college.getRunId());
                 for (String s : departmentRatingsMap.keySet()) {
                     if(!s.equals("Overall Academic Happiness")){
             %>
