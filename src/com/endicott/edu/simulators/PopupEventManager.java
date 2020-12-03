@@ -122,14 +122,11 @@ public class PopupEventManager {
             // can't figure out anythhing about tempevents or e, so I don't know how to address issue - logger wont show them
             //if (requestAsString.contains(Integer.toString(e.getEventId()))) {
                 if (e.getRightButtonCallback() != null && requestAsString.contains(e.getRightButtonCallback())) {
-                    //CollegeManager.logger.info("GIANA NEKITOPOULOS right");
                     handleCallback(e.getRightButtonCallback(), collegeId);
                 }
                 else if (e.getLeftButtonCallback() != null && requestAsString.contains(e.getLeftButtonCallback())) {
-                    //CollegeManager.logger.info("GIANA NEKITOPOULOS left");
                     handleCallback(e.getLeftButtonCallback(), collegeId);
                 }
-                // CollegeManager.logger.info("GIANA NEKITOPOULOS delete");
                 dao.deletePopupEvent(collegeId, e);
                 return;
             }
@@ -137,7 +134,6 @@ public class PopupEventManager {
     }
 
     private void handleCallback(String callbackName, String collegeId) {
-        // CollegeManager.logger.info("GIANA NEKITOPOULOS handler");
         // never enters this method, so popups with options are never properly handled, just removed.
         if (callbackName.equals("goToStore")){
             // Well, we'd like to automatically goto the store.  See ViewCollegeServet.

@@ -92,7 +92,6 @@ public class PopupEventDao {
     }
 
     public static void deletePopupEvent(String runId, PopupEventModel pem) {
-        //CollegeManager.logger.info("GIANA NEKITOPOULOS delete DAO");
         List<PopupEventModel> popupEvents = getPopupEvents(runId);
         popupEvents.remove(pem);
         deletePopupEvents(runId);

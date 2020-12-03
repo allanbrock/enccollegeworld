@@ -84,7 +84,6 @@ public class CollegeModel implements Serializable {
 
     public void advanceTime(String collegeId) {
         this.timeLeftInSemester -= 1;
-        System.out.println("weeks till grad: " + timeLeftInSemester);
         // if semester has no weeks left, set new semester
         if(this.timeLeftInSemester == 0){
             //Check for a new year (graduation and acceptance should be done now)

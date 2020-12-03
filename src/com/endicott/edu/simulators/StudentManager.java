@@ -150,15 +150,14 @@ public class StudentManager {
         BuildingManager bManage = new BuildingManager();
 
         List<StudentModel> students = dao.getStudents(collegeId);
-        System.out.println("Num students: " + students.size());
         college.setStudentsGraduating(0);
 
         for(int i = students.size() - 1; i >= 0; i--){
             students.get(i).setClassYear(students.get(i).getClassYear()+1);
-            // If student is past senior year, 'graduate'
             if(students.get(i).getClassYear() == 4) {
                 college.setStudentsGraduating(college.getStudentsGraduating()+1);
             }
+            // If student is past senior year, 'graduate'
             if(students.get(i).getClassYear() > 4) {
                 bManage.removeStudent(collegeId, students.get(i).getDorm(), students.get(i).getDiningHall(), students.get(i).getAcademicBuilding());
                 students.remove(i);
@@ -167,7 +166,7 @@ public class StudentManager {
         }
         dao.saveAllStudents(collegeId, students);
         dao.saveAllStudentsJustToCache(collegeId, students);
-    //     CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
+        CollegeDao.saveCollege(CollegeDao.getCollege(collegeId));
     }
 
     static public void setStudentIndex(int i) {
