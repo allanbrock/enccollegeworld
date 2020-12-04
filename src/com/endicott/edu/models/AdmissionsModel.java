@@ -17,6 +17,9 @@ public class AdmissionsModel implements Serializable {
     private int numberOfRegenerationsLeft;
     private String selectedGroup;
     private int openCapacity;
+    private int academicRatingImpact;
+    private int athleticRatingImpact;
+    private int socialRatingImpact;
 
     public AdmissionsModel(){
         selectedGroup = "GroupA";           //The currently selected group of students to accept at the end of the year
@@ -42,4 +45,28 @@ public class AdmissionsModel implements Serializable {
     public void setWeeksUntilAcceptance(int numWeeksUntilAcceptance){ this.weeksUntilAcceptance = numWeeksUntilAcceptance; }
     public void setSelectedGroup(String group) { this.selectedGroup = group; }
     public void setOpenCapacity(int num) { this.openCapacity = num; }
+
+    public void getAcademicImpact(List<PotentialStudentModel> studentGroup){
+        academicRatingImpact = 0;
+        for (PotentialStudentModel student : studentGroup){
+            academicRatingImpact += student.getQuality().getAcademicQuality();
+        }
+        academicRatingImpact = (academicRatingImpact/studentGroup.size());
+    }
+
+    public void getAthleticImpact(List<PotentialStudentModel> studentGroup){
+        athleticRatingImpact = 0;
+        for (PotentialStudentModel student : studentGroup){
+            athleticRatingImpact += student.getQuality().getAthleticQuality();
+        }
+        athleticRatingImpact = (athleticRatingImpact/studentGroup.size());
+    }
+
+    public void getSocialImpact(List<PotentialStudentModel> studentGroup){
+        socialRatingImpact = 0;
+        for (PotentialStudentModel student : studentGroup){
+            socialRatingImpact += student.getQuality().getSocialQuality();
+        }
+        socialRatingImpact = (socialRatingImpact/studentGroup.size());
+    }
 }
