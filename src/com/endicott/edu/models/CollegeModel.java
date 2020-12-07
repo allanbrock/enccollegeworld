@@ -223,6 +223,14 @@ public class CollegeModel implements Serializable {
         this.currentDate = CollegeManager .hoursToDate(getHoursAlive());
     }
 
+    public void setNumSemesters(int num) {
+        this.numSemesters = num;
+    }
+
+    public int getNumSemesters() {
+        return this.numSemesters;
+    }
+
     public String getNote() {
         return note;
     }
