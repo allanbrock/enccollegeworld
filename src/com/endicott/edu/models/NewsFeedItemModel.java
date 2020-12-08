@@ -1,5 +1,7 @@
 package com.endicott.edu.models;
 
+import com.endicott.edu.datalayer.CollegeDao;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
 
 public class NewsFeedItemModel implements Serializable {
     int hour = 0;
+    int semester = 0;
     String message = "Nothing is new.";
     NewsType noteType = NewsType.UNKNOWN_NOTE;
     String runId = "unknown";
@@ -25,18 +28,20 @@ public class NewsFeedItemModel implements Serializable {
         this.noteLevel = message_level;
     }
 
-    public NewsFeedItemModel(int dayNumber, String message, NewsType message_type, NewsLevel message_level) {
+    public NewsFeedItemModel(int dayNumber, String message, NewsType message_type, NewsLevel message_level, String collegeId) {
         this.hour = dayNumber;
         this.message = message;
         this.noteType = message_type;
         this.noteLevel = message_level;
+        this.semester = CollegeDao.getCollege(collegeId).getNumSemesters();
     }
 
-    public NewsFeedItemModel(int dayNumber, String message, int amount, NewsType message_type) {
+    public NewsFeedItemModel(int dayNumber, String message, int amount, NewsType message_type, String collegeId) {
         this.hour = dayNumber;
         this.message = message;
         this.amount = amount;
         this.noteType = message_type;
+        this.semester = CollegeDao.getCollege(collegeId).getNumSemesters();
     }
 
     public int getAmount() {

@@ -6,6 +6,7 @@ import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.EventsModel;
 import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.simulators.FacultyManager;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +40,7 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
         if(splits[2].equalsIgnoreCase("hire")){
             int salary = Integer.parseInt(splits[3]);
             String department = splits[4];
-            FacultyDao.createFacultyMember(collegeId, salary, department);
+            FacultyManager.addFaculty(collegeId, salary, "Dr.", department);
         }
         else {
             String facultyIndex = splits[3];
