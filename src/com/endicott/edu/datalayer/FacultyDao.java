@@ -40,19 +40,6 @@ public class FacultyDao {
         saveAllFaculty(collegeId, faculty);
     }
 
-    /**
-     * This creates a new faculty member from the react end and saves them
-     * to the master list
-     * @param collegeId
-     * @param salary
-     * @param department
-     */
-    public static void createFacultyMember(String collegeId, int salary, String department){
-        FacultyModel member = FacultyManager.addFaculty(collegeId, salary, "Dr.", department);
-        FacultyDao dao = new FacultyDao();
-        dao.saveNewFaculty(collegeId, member);
-    }
-
     public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
         DaoUtils.<List<FacultyModel>>saveData(collegeId, faculty, filename);
     }
