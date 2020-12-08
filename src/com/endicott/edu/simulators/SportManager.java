@@ -60,11 +60,6 @@ public class SportManager {
             }
         }
 
-        // If the net has been bought, create women's volleyball
-        if (InventoryManager.isPurchased("Volley Ball Net", collegeId)) {
-            createWomenVolleyball(collegeId, sports, popupManager);
-        }
-
         for (SportModel sport : sports) {
             calculateNumberOfPlayersOnTeam(collegeId, sport);
             if(!sport.getCoachName().equals("noCoach"))
@@ -195,6 +190,9 @@ public class SportManager {
     }
 
     private static void createWomenVolleyball(String collegeId, List<SportModel> sports, PopupEventManager popupManager) {
+        if (!InventoryManager.isPurchased("Volley Ball Net", collegeId)) {
+            return;
+        }
         if (!isSportAlreadyThere("Women's Volleyball", sports)) {
             SportModel team = new SportModel(11, 0, 25, 100, 0, 0, 0, 20, 0, 50, 0, "Women's Volleyball", collegeId, 0, 48, "Female", 3, "Fall", 96);
             assignCoach(collegeId, team);
@@ -343,6 +341,11 @@ public class SportManager {
             if (sportCenterBuilt == false){
                 //error: cannot create building, must create football stadium first
                 addTeamResult = "Cannot create Women's Volleyball until Sports Center is built!";
+                return addTeamResult;
+            }
+            //requires volleyball net
+            else if (!InventoryManager.isPurchased("Volley Ball Net", collegeId)) {
+                addTeamResult = "Cannot create Women's Volleyball until you buy a Volleyball Net!";
                 return addTeamResult;
             }
             else {
