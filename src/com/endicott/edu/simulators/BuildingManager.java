@@ -177,6 +177,8 @@ public class BuildingManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         NewsManager.createNews(collegeId, college.getHoursAlive(), "Construction of " + buildingName +" has started! ", NewsType.RES_LIFE_NEWS, NewsLevel.GOOD_NEWS);
         newBuilding.setNote("A new building has been created.");
+        college.getExpensesGraph().setBuildings(newBuilding.getTotalBuildCost());
+        college.getExpensesGraph().calculateExpenses();
 
         // Save building
         BuildingDao buildingDao = new BuildingDao();
@@ -230,6 +232,9 @@ public class BuildingManager {
         building.setHoursToComplete(336); //always take two weeks to upgrade
         building.setIsUpgradeComplete(false);
         Accountant.payBill(collegeId, "Upgrade to " + building.getName(), building.getUpgradeCost());//pay for upgrade
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.getExpensesGraph().setBuildings(building.getUpgradeCost());
+        college.getExpensesGraph().calculateExpenses();
         BuildingDao.updateSingleBuildingInCache(collegeId, building);
         BuildingDao.saveAllBuildingsUsingCache(collegeId);
     }
@@ -255,9 +260,10 @@ public class BuildingManager {
     public static void repairBuilding(String collegeId, BuildingModel building){
         float qualityDecayed = 100 - building.getShownQuality(); //100 is starting quality, take away the current building quality
         int numDays;
-
+        CollegeModel college = CollegeDao.getCollege(collegeId);
         Accountant.payBill(collegeId, "Repair to " + building.getName(), building.getRepairCost());//pay for repair
-
+        college.getExpensesGraph().setBuildings(building.getRepairCost());
+        college.getExpensesGraph().calculateExpenses();
         if(qualityDecayed > 10){
             numDays = (int)qualityDecayed/10; //The repair time will be one day for every 10% below 90%
             building.setIsRepairComplete(false);

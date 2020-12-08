@@ -36,6 +36,7 @@ public class Accountant {
     static public void receiveIncome(String collegeId, String message, int amount) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
         college.setTotalIncome(amount);
+        college.getExpensesGraph().setIncome(college.getTotalIncome());
         college.setAvailableCash(college.getAvailableCash() + amount);
         CollegeDao.saveCollege(college);
         NewsManager.createFinancialNews(collegeId, college.getHoursAlive(),message, + amount);

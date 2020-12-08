@@ -1,5 +1,6 @@
 package com.endicott.edu.simulators;
 
+import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.datalayer.AcademicsDao;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.datalayer.IdNumberGenDao;
@@ -73,6 +74,9 @@ public class FacultyManager {
             total += paycheck;
         }
         Accountant.payBill(collegeId, "Faculty has been paid", total);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.getExpensesGraph().setFaculty(total);
+        college.getExpensesGraph().calculateExpenses();
    }
 
     /**
@@ -103,7 +107,6 @@ public class FacultyManager {
        }
        inspectFacultyPerformances(collegeId);
        loadTips(collegeId);
-
    }
 
     /**

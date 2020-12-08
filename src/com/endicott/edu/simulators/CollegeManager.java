@@ -73,6 +73,7 @@ public class CollegeManager {
         CollegeRating collegeTraits = new CollegeRating();
         TipsManager tManager = new TipsManager();
         collegeTraits.handleTimeChange(collegeId, tManager);
+        college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
         return college;
     }
 
@@ -193,6 +194,8 @@ public class CollegeManager {
 
         logger.info("AdvanceTime Achievements");
         AchievementManager.handleTimeChange(collegeId, popupManager);
+
+        college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
 
         TutorialManager.advanceTip("viewBuildings",collegeId);
         TutorialManager.advanceTip("viewCollege",collegeId);

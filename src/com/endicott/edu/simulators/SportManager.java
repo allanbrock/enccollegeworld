@@ -187,6 +187,9 @@ public class SportManager {
         {
             Accountant.payBill(collegeId,"Charge for " + sport.getName(), newCharge);
         }
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+        college.getExpensesGraph().setSports(newCharge);
+        college.getExpensesGraph().calculateExpenses();
     }
 
     private static void createWomenVolleyball(String collegeId, List<SportModel> sports, PopupEventManager popupManager) {
@@ -226,6 +229,7 @@ public class SportManager {
     public static String addNewTeam(String sportName, String collegeId){
         SportsDao newSportDao = new SportsDao();
         SportModel result = null;
+        CollegeModel college = CollegeDao.getCollege(collegeId);
 
         //variables for bulidings check
         boolean stadiumBuilt = false;
@@ -361,6 +365,8 @@ public class SportManager {
         calculateNumberOfPlayersOnTeam(collegeId, result);
         fillUpTeamAndSetActiveStatus(collegeId, result);
         newSportDao.saveNewSport(collegeId, result);
+        college.getExpensesGraph().setSports(result.getStartupCost());
+        college.getExpensesGraph().calculateExpenses();
 
         return addTeamResult;
     }
