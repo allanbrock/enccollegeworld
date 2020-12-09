@@ -34,8 +34,13 @@ public class AdmissionsManager {
         int tempCapacity = adm.getOpenCapacity();
         adm.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
 
-        //This means we should add in new students to each of the groups ()
-        if(tempCapacity != adm.getOpenCapacity()) {
+        //90 old student cap
+        //5 withdrew
+        //95 new student cap
+        //Make 5 new if old is less than new
+
+        //This means we should add in new students to each of the groups
+        if(tempCapacity < adm.getOpenCapacity()) {
             ArrayList<PotentialStudentModel> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
             ArrayList<PotentialStudentModel> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
             ArrayList<PotentialStudentModel> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
@@ -78,6 +83,7 @@ public class AdmissionsManager {
         Random rand = new Random();
         ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
         for (int i = 0; i < numNewStudents; i++) {
+            PotentialStudentModel potentialStudent = new PotentialStudentModel();
             // assign a personality and a quality
             // TODO: determine 'tier' and 'quality' from the current level of the college
             // for now, 5/8 of students will be basic,
@@ -93,29 +99,28 @@ public class AdmissionsManager {
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
-            String firstName = "";
-            String lastName = "";
-            if(rand.nextInt(10) + 1 > 5) {
-                firstName = NameGenDao.generateFirstName(false);
-                lastName = NameGenDao.generateLastName();
-            }
-            else {
-                firstName = NameGenDao.generateFirstName(true);
-                lastName = NameGenDao.generateLastName();
-            }
-            int id = IdNumberGenDao.getID(collegeId);
-            PotentialStudentModel potentialStudent = new PotentialStudentModel(firstName,lastName,GenderModel.FEMALE,id,80,pm,qm);
             if(rand.nextInt(10) + 1 > 5) {
                 potentialStudent.setGender(GenderModel.MALE);
                 potentialStudent.getAvatar().generateStudentAvatar(false);
+                potentialStudent.setFirstName(NameGenDao.generateFirstName(false));
+                potentialStudent.setLastName(NameGenDao.generateLastName());
             }
             else {
+                potentialStudent.setFirstName(NameGenDao.generateFirstName(true));
+                potentialStudent.setLastName(NameGenDao.generateLastName());
                 potentialStudent.setGender(GenderModel.FEMALE);
                 potentialStudent.getAvatar().generateStudentAvatar(true);
             }
+            potentialStudent.setName(potentialStudent.getFirstName(), potentialStudent.getLastName());
+            int id = IdNumberGenDao.getID(collegeId);
+
+            potentialStudent.setId(id);
             potentialStudent.setHobbies(HobbyGenDao.generateHobbies());
             potentialStudent.getAvatar().generateHappyAvatar();
             potentialStudent.setNature(StudentModel.assignRandomNature());
+            potentialStudent.setHappiness(80);
+            potentialStudent.setPersonality(pm);
+            potentialStudent.setQuality(qm);
             potentialStudents.add(potentialStudent);
         }
         return potentialStudents;
@@ -144,7 +149,26 @@ public class AdmissionsManager {
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupC().size());
             }
         }
-        college.setNumberStudentsAccepted(0);   //Reset the
+        college.setNumberStudentsAccepted(0);
+    }
+
+    /**
+     * Clear out all 3 groups to make room for newly generated students
+     *
+     * @param collegeId The id of the college currently in use
+     */
+    public static void resetGroups(String collegeId) {
+        AdmissionsModel am = AdmissionsDao.getAdmissions(collegeId);
+        List<PotentialStudentModel> tempA =  am.getGroupA();
+        List<PotentialStudentModel> tempB =  am.getGroupB();
+        List<PotentialStudentModel> tempC =  am.getGroupC();
+        tempA.clear();
+        tempB.clear();
+        tempC.clear();
+        am.setGroupA(tempA);
+        am.setGroupB(tempB);
+        am.setGroupC(tempC);
+        AdmissionsDao.saveAdmissionsData(collegeId, am);
     }
 
     public static void convertToStudent(String collegeID, PotentialStudentModel psm) {
@@ -159,8 +183,14 @@ public class AdmissionsManager {
         sm.setFirstName(psm.getFirstName());
         sm.setLastName(psm.getLastName());
         sm.setId(psm.getId());
-        if(psm.getGender().equalsIgnoreCase("Male")) {sm.setGender(GenderModel.MALE);}
-        else {sm.setGender(GenderModel.FEMALE);}
+        System.out.println("This is the student gender: " + psm.getGender());
+        sm.setGender(psm.getGenderType());
+//        if(psm.getGender().equalsIgnoreCase("Male")) {
+//            sm.setGender(GenderModel.FEMALE);
+//        }
+//        else {
+//            sm.setGender(GenderModel.MALE);
+//        }
         sm.setAvatar(psm.getAvatar());
 
         //Assigns the newly accepted student to the specific buildings and advisor
@@ -171,7 +201,7 @@ public class AdmissionsManager {
 
         //Sets up the student's athletic fields
         sm.setAthleticAbility(rand.nextInt(10));
-        //DO THIS BASED UPON ATHLETIC QUALITY
+        //TODO: Instead of randomizing it, base their ability off of their quality
         if (sm.getAthleticAbility() > 6) { sm.setAthlete(true); }
         else { sm.setAthlete(false); }
         sm.setTeam("");
@@ -194,7 +224,6 @@ public class AdmissionsManager {
      * @param collegeId The college id currently opened
      */
     public static int findOpenCapacity(String collegeId) {
-        System.out.println("Running capacity");
         int capacity = 0;
         int availableBeds = BuildingManager.getOpenBeds(collegeId);
         int availableDesks = BuildingManager.getOpenDesks(collegeId);

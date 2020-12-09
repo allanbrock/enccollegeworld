@@ -11,6 +11,10 @@ public class PotentialStudentModel extends PersonModel implements Serializable {
     private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
     private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy
 
+    //Empty constructor, expects you to fill in all fields that a normal constructor will
+    public PotentialStudentModel() {
+
+    }
 
     public PotentialStudentModel(String firstName, String lastName, GenderModel gender, int id, int happiness,
                                  PersonalityModel pm, QualityModel qm) {

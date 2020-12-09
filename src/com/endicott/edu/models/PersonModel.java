@@ -43,8 +43,9 @@ public abstract class PersonModel implements Serializable {
     public void setName(String fullName) {this.name = fullName;}
 
     public void setGender(GenderModel gender) { this.gender = gender; }
-    public String getGender() { //We don't want a GenderModel, instead just a string of the gender
-        if(this.gender == GenderModel.FEMALE) {
+    public GenderModel getGenderType() { return this.gender; }
+    public String getGender() {
+        if(this.gender.equals(GenderModel.FEMALE)) {
             return "Female";
         }
         else {

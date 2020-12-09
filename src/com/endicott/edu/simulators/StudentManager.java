@@ -326,7 +326,6 @@ public class StudentManager {
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappiness();
             double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64%)
-            System.out.println("Should we remove?: " + students.get(i).getHappiness());
             if (students.get(i).getHappiness() < 60 && didItHappen(odds)) {
                 System.out.println("We are actually removing somebody: " + students.get(i).getName() + " " + students.get(i).getClassYear());
                 if(students.get(i).getClassYear() == 4) {
@@ -644,7 +643,6 @@ public class StudentManager {
         }
         else {
             //Calculation: Everyday they are sick is -48 happiness, plus a bit of random deviation
-            System.out.println("HOURS LEFT: " + s.getNumberHoursLeftBeingSick());
             int happiness = (100-2*s.getNumberHoursLeftBeingSick());
             happiness = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 10, 0, 100);
             s.setHealthHappinessRating(happiness);

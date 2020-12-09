@@ -93,9 +93,12 @@ public class CollegeModel implements Serializable {
                 StudentManager.advanceStudentYears(collegeId);
                 AdmissionsModel aModel = AdmissionsDao.getAdmissions(collegeId);
                 AdmissionsManager.acceptGroup(collegeId, aModel.getSelectedGroup());
-                aModel.setGroupA(AdmissionsManager.generateNewCandidates(25, collegeId));
-                aModel.setGroupB(AdmissionsManager.generateNewCandidates(25, collegeId));
-                aModel.setGroupC(AdmissionsManager.generateNewCandidates(25, collegeId));
+                AdmissionsManager.resetGroups(collegeId);
+                aModel.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
+                aModel.setGroupA(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
+                aModel.setGroupB(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
+                aModel.setGroupC(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
+                AdmissionsDao.saveAdmissionsData(collegeId, aModel);
             }
             setNewSemester();
         }
