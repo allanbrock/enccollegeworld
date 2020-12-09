@@ -57,6 +57,8 @@ public class CollegeManager {
         logger.info("Establish buildings.");BuildingManager.establishCollege(collegeId, college);
         logger.info("Establish academics.");AcademicsManager.establishCollege(collegeId);
         logger.info("Establish faculty.");FacultyManager.establishCollege(collegeId, college);
+        logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId, 140);
+
         logger.info("Establish student.");StudentManager studentManager = new StudentManager();
         logger.info("Establish student.");studentManager.establishCollege(collegeId);
         logger.info("Establish sports.");SportManager.establishCollege(collegeId);
@@ -67,7 +69,6 @@ public class CollegeManager {
         logger.info("Establish fire.");FireManager.establishCollege(collegeId);
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
-        logger.info("Establish admissions.");AdmissionsManager.establishCollege(collegeId);
 
 
         CollegeRating collegeTraits = new CollegeRating();

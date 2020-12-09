@@ -18,6 +18,12 @@ import java.util.logging.Logger;
  */
 public class AdmissionsManager {
     static private final Logger logger = Logger.getLogger("Admissions");
+    static private float class_tier_distributions[][] = {  {0.45f, 0.35f, 0.15f, 0.0f },  // initial school
+                                                            {0.35f, 0.35f, 0.20f, 0.10f}, // level 1
+                                                            {0.25f, 0.40f, 0.25f, 0.10f}, // level 2
+                                                            {0.15f, 0.35f, 0.35f, 0.15f}, // level 3
+                                                            {0.05f, 0.30f, 0.45f, 0.20f}, // level 4
+                                                            {0.00f, 0.20f, 0.50f, 0.30f}};// level 5
 
     /**
      * Simulate the changes in potential students interested in the college
@@ -41,9 +47,12 @@ public class AdmissionsManager {
 
         //This means we should add in new students to each of the groups
         if(tempCapacity < adm.getOpenCapacity()) {
-            ArrayList<PotentialStudentModel> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
-            ArrayList<PotentialStudentModel> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
-            ArrayList<PotentialStudentModel> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId);
+            CollegeModel cm = CollegeDao.getCollege(collegeId);
+            int level = Math.min(cm.getGate(),5);
+
+            ArrayList<PotentialStudentModel> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
+            ArrayList<PotentialStudentModel> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
+            ArrayList<PotentialStudentModel> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
             adm.getGroupA().addAll(listA);
             adm.getGroupB().addAll(listB);
             adm.getGroupC().addAll(listC);
@@ -63,12 +72,28 @@ public class AdmissionsManager {
      *
      * @param collegeId instance of the simulation
      */
-    public static void establishCollege(String collegeId){
+    public static void establishCollege(String collegeId, int numStudents){
         AdmissionsModel adm = new AdmissionsModel();
+        CollegeModel college = CollegeDao.getCollege(collegeId);
+
+        // BUILD THE EXISTING STUDENT BODY!
+        int numStudentsAdded = 0;
+        // create potential students and convert them
+        for(int yr = 1; yr <= 4; yr++) {
+            ArrayList<PotentialStudentModel> studentClass = generateNewCandidates(numStudents / 4, collegeId, 0);
+            for(PotentialStudentModel potentialStudent : studentClass){
+                convertToStudent(collegeId, potentialStudent, yr);
+                numStudentsAdded++;
+            }
+        }
+        college.setNumberStudentsAdmitted(numStudentsAdded);
+        StudentDao.saveAllStudentsUsingCache(collegeId);
+        // Existing student body done
+
         adm.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
-        adm.setGroupA(generateNewCandidates(adm.getOpenCapacity(), collegeId));
-        adm.setGroupB(generateNewCandidates(adm.getOpenCapacity(), collegeId));
-        adm.setGroupC(generateNewCandidates(adm.getOpenCapacity(), collegeId));
+        adm.setGroupA(generateNewCandidates(adm.getOpenCapacity(), collegeId, 1));
+        adm.setGroupB(generateNewCandidates(adm.getOpenCapacity(), collegeId, 1));
+        adm.setGroupC(generateNewCandidates(adm.getOpenCapacity(), collegeId, 1));
         adm.setWeeksUntilAcceptance(15);
         AdmissionsDao.saveAdmissionsData(collegeId,adm);
     }
@@ -77,24 +102,34 @@ public class AdmissionsManager {
      * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
      *
      * @param numNewStudents The number of new students to be made
+     * @param collegeLevelForTierDistributions used to determine the quality of students generated
      * @param collegeId The id of the college in use
      */
-    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId){
+    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId, int collegeLevelForTierDistributions){
         Random rand = new Random();
         ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
+        float tierDistributions[] = new float[4];
+        tierDistributions[0] = class_tier_distributions[collegeLevelForTierDistributions][0];
+        tierDistributions[1] = class_tier_distributions[collegeLevelForTierDistributions][1] + tierDistributions[0];
+        tierDistributions[2] = class_tier_distributions[collegeLevelForTierDistributions][2] + tierDistributions[1];
+        tierDistributions[3] = 1 - tierDistributions[2];
+
         for (int i = 0; i < numNewStudents; i++) {
             PotentialStudentModel potentialStudent = new PotentialStudentModel();
             // assign a personality and a quality
-            // TODO: determine 'tier' and 'quality' from the current level of the college
-            // for now, 5/8 of students will be basic,
-            //          2/8 will be one tier above
-            //          1/8 will be two tiers above
-            int tier = 0;
+
+            int tier;
             float percentage = i / (float) numNewStudents;
-            if (percentage > 7 / 8.0 * numNewStudents) {
-                tier = 2;
-            } else if (percentage > 5 / 8.0 * numNewStudents) {
+            if (percentage <  tierDistributions[0] * numNewStudents) {
+                tier = 0;
+            } else if (percentage < tierDistributions[1] * numNewStudents) {
                 tier = 1;
+            }
+            else if (percentage < tierDistributions[2] * numNewStudents){
+                tier = 2;
+            }
+            else{
+                tier = 3;
             }
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
@@ -128,24 +163,24 @@ public class AdmissionsManager {
 
     public static void acceptGroup(String collegeID, String group) {
         AdmissionsModel am = AdmissionsDao.getAdmissions(collegeID);
-        CollegeModel college = new CollegeModel();
+        CollegeModel college = CollegeDao.getCollege(collegeID);
 
         //Check for the right group of students to pull from
         if(group.equalsIgnoreCase("GroupA")) {
             for(int i = 0; i < am.getGroupA().size(); i++) {
-                convertToStudent(collegeID, am.getGroupA().get(i));
+                convertToStudent(collegeID, am.getGroupA().get(i),1);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupA().size());
             }
         }
         else if(group.equalsIgnoreCase("GroupB")) {
             for(int i = 0; i < am.getGroupB().size(); i++) {
-                convertToStudent(collegeID, am.getGroupB().get(i));
+                convertToStudent(collegeID, am.getGroupB().get(i),1);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupB().size());
             }
         }
         else {
             for(int i = 0; i < am.getGroupC().size(); i++) {
-                convertToStudent(collegeID, am.getGroupC().get(i));
+                convertToStudent(collegeID, am.getGroupC().get(i), 1);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupC().size());
             }
         }
@@ -171,7 +206,7 @@ public class AdmissionsManager {
         AdmissionsDao.saveAdmissionsData(collegeId, am);
     }
 
-    public static void convertToStudent(String collegeID, PotentialStudentModel psm) {
+    public static void convertToStudent(String collegeID, PotentialStudentModel psm, int year) {
         //Create the new model and setup all the extra managers and classes necessary to generate a student
         StudentModel sm = new StudentModel();
         BuildingManager bm = new BuildingManager();
@@ -183,7 +218,6 @@ public class AdmissionsManager {
         sm.setFirstName(psm.getFirstName());
         sm.setLastName(psm.getLastName());
         sm.setId(psm.getId());
-        System.out.println("This is the student gender: " + psm.getGender());
         sm.setGender(psm.getGenderType());
 //        if(psm.getGender().equalsIgnoreCase("Male")) {
 //            sm.setGender(GenderModel.FEMALE);
@@ -207,7 +241,7 @@ public class AdmissionsManager {
         sm.setTeam("");
 
         //Sets up the student year and passes in the rest of their qualities and characteristics
-        sm.setClassYear(1);
+        sm.setClassYear(year);
         sm.setNature(psm.getNature());
         sm.setPersonality(psm.getPersonality());
         sm.setQuality(psm.getQuality());

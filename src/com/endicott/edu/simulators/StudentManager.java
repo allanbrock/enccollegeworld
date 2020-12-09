@@ -26,7 +26,8 @@ public class StudentManager {
      */
     public void establishCollege(String collegeId) {
         loadTips(collegeId);
-        admitStudents(collegeId, college.getCurrentDay()/24, true, null);
+
+        // Don't generate students; let the AdmissionsManager do it.
         calculateStatistics(collegeId, true);
     }
 
@@ -38,11 +39,6 @@ public class StudentManager {
      * @param hoursAlive Amount of time the college has been open
      */
     public void handleTimeChange(String collegeId, int hoursAlive, PopupEventManager popupManager) {
-//        acceptStudents(collegeId, hoursAlive);  We no longer use this function
-
-        CollegeManager.logger.info("Advance Time Students: admit - " + CollegeManager.getDate());
-        admitStudents(collegeId, hoursAlive, false, popupManager);
-
         CollegeManager.logger.info("Advance Time Students: statistics - " + CollegeManager.getDate());
         calculateStatistics(collegeId, false);
 
@@ -72,77 +68,6 @@ public class StudentManager {
         Accountant.receiveIncome(collegeId,"Student tuition received.", CollegeModel.daysAdvance * dailyTuitionSum);
     }
 
-    /**
-     * Admit new students to the college.
-     *  @param collegeId
-     * @param hoursAlive
-     * @param isNewCollege
-     * @param popupManager
-     */
-    public void admitStudents(String collegeId, int hoursAlive, boolean isNewCollege, PopupEventManager popupManager) {
-        int openBeds = buildingMgr.getOpenBeds(collegeId);
-        int openPlates = buildingMgr.getOpenPlates(collegeId);
-        int openDesks = buildingMgr.getOpenDesks(collegeId);
-        int numNewStudents = 0;
-
-        //Get the administrative building quality
-        int adminBuildingQuality = 0;
-        try {
-            adminBuildingQuality = (int) BuildingManager.getBuildingListByType(BuildingType.admin().getType(), collegeId).get(0).getShownQuality();
-        } catch (Exception e) {
-        }
-
-        List<StudentModel> students = StudentDao.getStudents(collegeId);
-        //Date currDate = CollegeManager.getCollegeDate(collegeId);
-
-        if(isNewCollege) {
-            numNewStudents = 140;
-        }
-        //OLD CODE FOR GAINING NEW STUDENTS, THIS IS NOW DONE VIA ADMISSIONS
-
-//        else if(CollegeManager.getDaysOpen(collegeId) % 7 == 0){   // Students admitted every 7 days
-//            NewsManager.createNews(collegeId, hoursAlive, "This is admissions day!", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-//            int leastOpenings = Math.min(openBeds, openDesks); //Since math.min doesn't take 3 params, continue onto next line
-//            leastOpenings = Math.min(leastOpenings, openPlates);
-//
-//            numNewStudents = college.getNumberStudentsAccepted();
-//            if (numNewStudents > leastOpenings) {
-//                numNewStudents = leastOpenings;
-//            }
-//
-//            if(adminBuildingQuality <= 90) {
-//                // This will produce a number 1-10, representing every 10% BELOW 100%
-//                int adminQualityLossByTens = (100 - adminBuildingQuality) / 10;
-//                // The college should LOSE 5% of the accepted students for every 10% under 100% quality of the admin building
-//                int lostStudents = (int)(numNewStudents * (0.05 * adminQualityLossByTens));
-//                // Take the students away
-//                numNewStudents = numNewStudents - lostStudents;
-//                // Notify the player that some students didn't end up coming due to admin office quality
-//                NewsManager.createNews(collegeId, hoursAlive, "The administrative building lost papers and "
-//                        + lostStudents + " students weren't enrolled! Be sure to repair your administrative building!",
-//                        NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
-//            }
-//        }
-
-        if (numNewStudents > 0) {
-            createStudents(numNewStudents, collegeId, students, false);
-
-            college = CollegeDao.getCollege(collegeId);
-            college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + numNewStudents);
-            college.setNumberStudentsAccepted(0);
-            //CollegeDao.saveCollege(college);
-            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) +
-                    " students joined the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-//            if (popupManager != null)
-//                popupManager.newPopupEvent(collegeId, "Admissions Day",
-//                    "" + numNewStudents +" new students joined!","Ok",
-//                    "ok", "resources/images/students.png", "Admissions");
-
-        }
-
-        StudentDao.saveAllStudentsUsingCache(collegeId);
-
-    }
 
     public static void advanceStudentYears(String collegeId){
         CollegeModel college = CollegeDao.getCollege(collegeId);
@@ -177,118 +102,6 @@ public class StudentManager {
         return studentIndex;
     }
 
-    //OLD CODE: WE NOW ONLY ACCEPT NEW STUDENTS IN ADMISSIONS ON ADMISSIONS DAY
-//    /**
-//     * Determines how many students to accept in one day.
-//     *
-//     * @param collegeId Id of the college currently in use
-//     * @param hoursAlive The amount of hours the college has been open (days)
-//     */
-//    private void acceptStudents(String collegeId, int hoursAlive){
-//        int numNewStudents;
-//
-//        // The number of accepted students depends on the happiness of the student body.
-//        college = CollegeDao.getCollege(collegeId);
-//        int happiness = college.getStudentBodyHappiness();
-//
-//        if (happiness <= 50) {
-//            numNewStudents = 0;
-//        } else {
-//            int meanAdmittedStudents = happiness/10; // Example: happiness = 50, then 5 students
-//            numNewStudents =  SimulatorUtilities.getRandomNumberWithNormalDistribution(meanAdmittedStudents,1, 0, 10);
-//        }
-//
-//        college.setNumberStudentsAccepted(college.getNumberStudentsAccepted() + numNewStudents);
-//        //CollegeDao.saveCollege(college);
-//
-//        if (numNewStudents > 0) {
-//            NewsManager.createNews(collegeId, hoursAlive, Integer.toString(numNewStudents) + " students have been accepted to the college.", NewsType.COLLEGE_NEWS, NewsLevel.GOOD_NEWS);
-//        }
-//    }
-
-    /**
-     * Creates students for the college by making a model filled with nothing, then calling functions to fill the fields
-     *
-     * @param numNewStudents The number of new students to be made
-     * @param collegeId The id of the college in use
-     * @param students The list of students currently at the college
-     * @param initial Check if this is the first time setup for the college
-     */
-    private void createStudents(int numNewStudents, String collegeId, List<StudentModel>students, boolean initial){
-        Random rand = new Random();
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-        for (int i = 0; i < numNewStudents; i++) {
-            StudentModel student = new StudentModel();
-
-            // Assign starting class year evenly
-            if(i < numNewStudents/4) {
-                student.setClassYear(1);
-            }
-            else if(i < numNewStudents/2){
-                student.setClassYear(2);
-            }
-            else if(i < 3*numNewStudents/4){
-                student.setClassYear(3);
-            }
-            else{
-                student.setClassYear(4);
-                college.setStudentsGraduating(college.getStudentsGraduating()+1);
-            }
-
-            // generate number 0-9 to decide on tier  for personality/quality
-            int tier = rand.nextInt(10);
-            // Assign tier based on generated number - weighted towards lower tiers
-            if(tier < 5){
-                tier = 0;
-            }
-            else if(tier < 8){
-                tier = 1;
-            }
-            else {
-                tier = 2;
-            }
-            student.setPersonality(PersonalityModel.generateRandomModel(tier));
-            student.setQuality(QualityModel.generateRandomModel(tier));
-
-            if (rand.nextInt(10) + 1 > 5) {
-                student.setName(NameGenDao.generateName(false));
-                student.setGender(GenderModel.MALE);
-                student.getAvatar().generateStudentAvatar(false);
-            } else {
-                student.setName(NameGenDao.generateName(true));
-                student.setGender(GenderModel.FEMALE);
-                student.getAvatar().generateStudentAvatar(true);
-            }
-
-            student.setId(IdNumberGenDao.getID(collegeId));
-
-            if(i <= 50 && initial) {
-                student.setAthleticAbility(rand.nextInt(5) + 5);
-            }
-            else if (i > 50 && initial){
-                student.setAthleticAbility(rand.nextInt(5));
-            }
-            else{
-                student.setAthleticAbility(rand.nextInt(10));
-            }
-
-            if (student.getAthleticAbility() > 6) {
-                student.setAthlete(true);
-            } else {
-                student.setAthlete(false);
-            }
-            student.setTeam("");
-            student.setAcademicBuilding(buildingMgr.assignAcademicBuilding(collegeId));
-            student.setDiningHall(buildingMgr.assignDiningHall(collegeId));
-            student.setDorm(buildingMgr.assignDorm(collegeId));
-            student.setRunId(collegeId);
-            student.setAdvisor(FacultyManager.assignAdvisorToStudent(collegeId));
-            student.setNature(assignRandomNature());
-            students.add(student);
-        }
-        CollegeDao.saveCollege(college);
-        dao.saveAllStudentsJustToCache(collegeId, students);
-    }
 
     /**
      * Is this a day on which figure out which students are leaving the college?

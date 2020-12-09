@@ -9,9 +9,6 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="com.google.code.gson:gson:2.7" />
-          <element id="library" level="project" name="javax.ws.rs:javax.ws.rs-api:2.0.1" />
-          <element id="library" level="project" name="org.glassfish.jersey.core:jersey-client:2.25.1" />
-          <element id="library" level="project" name="org.glassfish.jersey.media:jersey-media-moxy:2.25.1" />
           <element id="library" level="project" name="org.glassfish:javax.json:1.1" />
         </element>
       </element>

@@ -16,10 +16,10 @@ public class QualityModel implements Serializable {
 
     private static final int[][] qualityTiers =
             {       // mean   stddev    min     max
-                    {   20,      5,      10,       50}, /* tier 0: not great */
-                    {   45,     10,      20,       60}, /* tier 1: ok */
-                    {   60,     15,      30,       85}, /* tier 2: good */
-                    {   80,     20,      45,      100}, /* tier 3: very good */
+                    {   30,      5,      20,       60}, /* tier 0: not great */
+                    {   45,     10,      35,       70}, /* tier 1: ok */
+                    {   60,     15,      40,       85}, /* tier 2: good */
+                    {   80,     20,      50,      100}, /* tier 3: very good */
             };
 
     private static int generateNumberAtTier(int tier){

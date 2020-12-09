@@ -1,11 +1,9 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.datalayer.AdmissionsDao;
-import com.endicott.edu.datalayer.CollegeDao;
 import com.endicott.edu.simulators.AdmissionsManager;
 import com.endicott.edu.simulators.CollegeManager;
 import com.endicott.edu.simulators.StudentManager;
-import com.sun.xml.internal.bind.v2.TODO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,9 +93,12 @@ public class CollegeModel implements Serializable {
                 AdmissionsManager.acceptGroup(collegeId, aModel.getSelectedGroup());
                 AdmissionsManager.resetGroups(collegeId);
                 aModel.setOpenCapacity(AdmissionsManager.findOpenCapacity(collegeId));
-                aModel.setGroupA(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
-                aModel.setGroupB(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
-                aModel.setGroupC(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId));
+
+                int level = Math.min(getGate(),5);
+
+                aModel.setGroupA(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId, level));
+                aModel.setGroupB(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId, level));
+                aModel.setGroupC(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId, level));
                 AdmissionsDao.saveAdmissionsData(collegeId, aModel);
             }
             setNewSemester();
