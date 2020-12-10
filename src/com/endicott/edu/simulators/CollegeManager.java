@@ -108,6 +108,10 @@ public class CollegeManager {
     static public CollegeModel advanceTime(String collegeId, PopupEventManager popupManager) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
+        //Reset both the daily expenses and income (Since setter is += we will subtract current amt)
+        college.setTotalExpenditure(-1*college.getTotalExpenditure());
+        college.setTotalIncome(-1*college.getTotalIncome());
+
         // If there is a popup, we are not going to advance the day.
         // The pop must be cleared through the user interface first.
         List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);

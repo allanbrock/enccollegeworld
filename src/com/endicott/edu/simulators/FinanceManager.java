@@ -15,7 +15,7 @@ public class FinanceManager {
         for(int i = 0; i < college.getLoans().size(); i++) {
             total += makeWeeklyPayment(college.getLoans().get(i));
             addInterest(college.getLoans().get(i), collegeId);
-            NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $", total);
+            NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Weekly debt paid: $", -1*total);
         }
 
         //Pay off the loans, updating the college debt and their balance
@@ -76,8 +76,8 @@ public class FinanceManager {
         lm.setInterest(lm.getInterest() + creditTakeoff);
 
         //Make sure it's between 2-20% (Change these if too high or low as caps)
-        Math.min(20, lm.getInterest());
-        Math.max(2, lm.getInterest());
+        lm.setInterest(Math.min(20, lm.getInterest()));
+        lm.setInterest(Math.max(2, lm.getInterest()));
 
         //Calculate weekly payment below
         //We will first find a percentage they should pay based upon their credit, then calculate from there
@@ -152,7 +152,7 @@ public class FinanceManager {
         lm.setValue(lm.getValue() - amount);    //Remove the amount of cash from the specific loan
         college.setAvailableCash(college.getAvailableCash()-amount);    //Remove the cash from the college balance
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
-        NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Payment to loans: $", amount);
+        NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Payment to loans: $", -1*amount);
         checkLoans(collegeId);            //Check to see if any loans are paid off
         CollegeDao.saveCollege(college);
     }

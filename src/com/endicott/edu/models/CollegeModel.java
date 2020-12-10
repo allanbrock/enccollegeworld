@@ -49,7 +49,7 @@ public class CollegeModel implements Serializable {
     private CollegeMode mode = CollegeMode.PLAY;        //Current mode of the game, used for play testing
     private int daysUntilNextEvent = 3;                 //Number of days until the next event
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
-    private TipsModel collegeTips = new TipsModel();                      //Holds all the tips that the user should know about to improve trait ratings
+    private TipsModel collegeTips = new TipsModel();    //Holds all the tips that the user should know about to improve trait ratings
     //public PopupEventModel;
     private FinancesModel financialGraph = new FinancesModel();
     private ExpensesModel expensesGraph = new ExpensesModel();
@@ -300,7 +300,7 @@ public class CollegeModel implements Serializable {
     }
 
     public void setTotalIncome(int totalIncome) {
-        this.totalIncome = totalIncome;
+        this.totalIncome += totalIncome;
     }
 
     public int getTotalExpenditure(){
@@ -308,7 +308,7 @@ public class CollegeModel implements Serializable {
     }
 
     public void setTotalExpenditure(int totalExpenditure){
-        this.totalExpenditure = totalExpenditure;
+        this.totalExpenditure += totalExpenditure;
     }
 
     public ArrayList<LoanModel> getLoans() {return this.loans;}
