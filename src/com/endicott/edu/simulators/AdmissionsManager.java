@@ -87,6 +87,7 @@ public class AdmissionsManager {
             }
         }
         college.setNumberStudentsAdmitted(numStudentsAdded);
+        college.setStudentsGraduating(numStudents/4);
         StudentDao.saveAllStudentsUsingCache(collegeId);
         // Existing student body done
 
@@ -262,14 +263,12 @@ public class AdmissionsManager {
         int availableBeds = BuildingManager.getOpenBeds(collegeId);
         int availableDesks = BuildingManager.getOpenDesks(collegeId);
         int availablePlates = BuildingManager.getOpenPlates(collegeId);
-        System.out.println("Beds: " + availableBeds + " Desks: " + availableDesks + " Plates: " + availablePlates);
         //Find min between all 3
         int min = Math.min(availableBeds, availableDesks);
         capacity = Math.min(min, availablePlates);
 
         CollegeModel college = CollegeDao.getCollege(collegeId);
         capacity += college.getStudentsGraduating();    //THIS CODE ASSUMES NO COMMUTER STUDENTS AT THE MOMENT!
-        System.out.println("Min: " + min + " Students grad: " + college.getStudentsGraduating() + "Total: " + capacity);
         return capacity;
     }
 }
