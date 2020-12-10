@@ -18,15 +18,16 @@ public class CollegeRating {
      * Update School Traits on each new day
      * @param collegeId
      */
-    public void handleTimeChange(String collegeId, TipsManager tManager) {
+    public void handleTimeChange(String collegeId) {
         college = CollegeDao.getCollege(collegeId);
-        updateAcademicRating(collegeId, tManager);
-        updateAthleticRating(collegeId, tManager);
-        updateInfrastructureRating(collegeId, tManager);
-        updateSafetyRating(collegeId, tManager);
-        updateSocialRating(collegeId, tManager);
-        updateSchoolValue(collegeId, tManager);
-
+        updateAcademicRating(collegeId);
+        updateAthleticRating(collegeId);
+        updateInfrastructureRating(collegeId);
+        updateSafetyRating(collegeId);
+        updateSocialRating(collegeId);
+        updateSchoolValue(collegeId);
+        TipsManager.changeGeneralTips(college);
+        TipsManager.changeAdmissionsTips(college);
     }
 
     /**
@@ -45,7 +46,7 @@ public class CollegeRating {
      * rating, academic building quality, faculty performance, and
      * @param collegeId
      */
-    private void updateAcademicRating(String collegeId, TipsManager tManager) {
+    private void updateAcademicRating(String collegeId) {
         int academicQuality = 0;
         int numStudents = 0;
         int numBuildings = 0;
@@ -78,7 +79,7 @@ public class CollegeRating {
                             0.2 * buildingQualityRating);
         college.setAcademicRating(checkBounds(rating));
 
-        tManager.changeAcademicTips(college, academicQualityRating, buildingQualityRating);
+        TipsManager.changeAcademicTips(college, academicQualityRating, buildingQualityRating);
     }
 
     /**
@@ -86,7 +87,7 @@ public class CollegeRating {
      *  athletic facilities, team performance, and student athletic quality
      * @param collegeId
      */
-    private void updateAthleticRating(String collegeId, TipsManager tManager){
+    private void updateAthleticRating(String collegeId){
         int totalWins = 0;
         int totalGames = 0;
         int numTeams = 0;
@@ -146,7 +147,7 @@ public class CollegeRating {
         }
         college.setAthleticRating(checkBounds(rating));
 
-        tManager.changeAthleticTips(college, winPercentageRating, teamsRating, buildingQualityRating, athleticQualityRating, championshipRating);
+        TipsManager.changeAthleticTips(college, winPercentageRating, teamsRating, buildingQualityRating, athleticQualityRating, championshipRating);
     }
 
     /**
@@ -166,7 +167,7 @@ public class CollegeRating {
      * qualities, upgrades and capacity
      * @param collegeId
      */
-    private void updateInfrastructureRating(String collegeId, TipsManager tManager){
+    private void updateInfrastructureRating(String collegeId){
         int rating = college.getInfrastructureRating();
         int numBuildings = 0;
         int buildingQuality = 0;
@@ -198,7 +199,7 @@ public class CollegeRating {
                         0.4 * buildingQualityRating);
         college.setInfrastructureRating(checkBounds(rating));
 
-        tManager.changeInfrastructureTips(college, buildingQualityRating, isovercrowded, isupgraded);
+        TipsManager.changeInfrastructureTips(college, buildingQualityRating, isovercrowded, isupgraded);
     }
 
     /**
@@ -226,7 +227,7 @@ public class CollegeRating {
      * capacity and student illnesses
      * @param collegeId
      */
-    private void updateSafetyRating(String collegeId, TipsManager tManager){
+    private void updateSafetyRating(String collegeId){
         int rating = college.getSafetyRating();
         int buildingQuality = 0;
         int numBuildings = 0;
@@ -283,7 +284,7 @@ public class CollegeRating {
         }
         college.setSafetyRating(checkBounds(rating));
 
-        tManager.changeSafetyTips(college, buildingQualityRating, college.getStudentHealthRating(), recentRiot, wasDeath, isSick, overcrowded);
+        TipsManager.changeSafetyTips(college, buildingQualityRating, college.getStudentHealthRating(), recentRiot, wasDeath, isSick, overcrowded);
         recentRiot = false;
     }
 
@@ -330,7 +331,7 @@ public class CollegeRating {
      * Update the School's Value based on School Traits and Tuition
      * @param collegeId
      */
-    private void updateSchoolValue(String collegeId, TipsManager tManager) {
+    private void updateSchoolValue(String collegeId) {
         int schoolValue;
         int tuitionRating = college.getYearlyTuitionRating();
 
@@ -348,7 +349,7 @@ public class CollegeRating {
         }
         college.setSchoolValue(checkBounds(schoolValue));
 
-        tManager.changeValueTips(college, avgRating);
+        TipsManager.changeValueTips(college, avgRating);
     }
 
     /**
@@ -356,7 +357,7 @@ public class CollegeRating {
      * faculty happiness, sporting events, student social quality
      * @param collegeId
      */
-    private void updateSocialRating(String collegeId, TipsManager tManager) {
+    private void updateSocialRating(String collegeId) {
         int numStudents = 0;
         int socialQuality = 0;
         int numGames =  0;
@@ -382,7 +383,7 @@ public class CollegeRating {
                             0.1 * college.getFacultyBodyHappiness());
         college.setSocialRating(checkBounds(rating));
 
-        tManager.changeSocialTips(college, socialQualityRating, gamesRating, college.getStudentBodyHappiness(),
+        TipsManager.changeSocialTips(college, socialQualityRating, gamesRating, college.getStudentBodyHappiness(),
                 college.getFacultyBodyHappiness());
     }
 }

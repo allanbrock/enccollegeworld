@@ -14,7 +14,7 @@ public class TipsManager {
      * @param academicQuality The average academic quality of a student
      * @param buildingQuality The average quality of all the academic buildings in the college
      */
-    public void changeAcademicTips(CollegeModel college, int academicQuality, int buildingQuality) {
+    public static void changeAcademicTips(CollegeModel college, int academicQuality, int buildingQuality) {
         TipsModel tm = college.getTips();
         tm.getAcademicTips().clear();
 
@@ -48,7 +48,7 @@ public class TipsManager {
      * @param buildingQuality The quality of the athletic buildings on campus
      * @param championships The number of championships per team (1 team with no championships is 0/1 = 0%)
      */
-    public void changeAthleticTips(CollegeModel college, int winPercentage, int amountOfTeams, int buildingQuality, int athleticQuality, int championships) {
+    public static void changeAthleticTips(CollegeModel college, int winPercentage, int amountOfTeams, int buildingQuality, int athleticQuality, int championships) {
         TipsModel tm = college.getTips();
         tm.getAthleticTips().clear();
 
@@ -80,7 +80,7 @@ public class TipsManager {
      * @param overcrowded A boolean to tell if any dorm is overcrowded
      * @param upgraded A boolean to tell if there are upgraded buildings
      */
-    public void changeInfrastructureTips(CollegeModel college, int buildingQuality, boolean overcrowded, boolean upgraded) {
+    public static void changeInfrastructureTips(CollegeModel college, int buildingQuality, boolean overcrowded, boolean upgraded) {
         TipsModel tm = college.getTips();
         tm.getInfrastructureTips().clear();
 
@@ -102,6 +102,30 @@ public class TipsManager {
     }
 
     /**
+     * Function will add/delete tips on how to improve the admissions score of the college
+     */
+    public static void changeAdmissionsTips(CollegeModel college) {
+        TipsModel tm = college.getTips();
+        //In the future if you decide to make these tips dynamic add line below
+        //tm.getAdmissionsTips().clear();
+        tm.getAdmissionsTips().add("Pick the group with the best impact on your school");
+        tm.getAdmissionsTips().add("Level up to improve the quality of students in your future admission pools.");
+        college.setTips(tm);
+    }
+
+    /**
+     * Function will add/delete tips on how to improve the admissions score of the college
+     */
+    public static void changeGeneralTips(CollegeModel college) {
+        TipsModel tm = college.getTips();
+        //In the future if you decide to make these tips dynamic add line below
+        //tm.getGeneralTips().clear();
+        tm.getGeneralTips().add("Focus on Budgeting your Money.");
+        tm.getGeneralTips().add("Checkout Potential Student's Applications in Admissions!");
+        college.setTips(tm);
+    }
+
+    /**
      * Function will add/delete tips on how to improve the safety score of the college
      *
      * @param buildingQuality The quality of all the buildings on campus
@@ -111,7 +135,7 @@ public class TipsManager {
      * @param wasSick A boolean to tell if there are still sick students on campus
      * @param overcrowded A boolean to tell if there are any dorms that are over capacity
      */
-    public void changeSafetyTips(CollegeModel college, int buildingQuality, int healthRating, boolean recentRiot, boolean wasDeath,
+    public static void changeSafetyTips(CollegeModel college, int buildingQuality, int healthRating, boolean recentRiot, boolean wasDeath,
                                  boolean wasSick, boolean overcrowded) {
         TipsModel tm = college.getTips();
         tm.getSafetyTips().clear();
@@ -144,7 +168,7 @@ public class TipsManager {
      *
      * @param averageRating The average rating of all college traits put together
      */
-    public void changeValueTips(CollegeModel college, int averageRating) {
+    public static void changeValueTips(CollegeModel college, int averageRating) {
         TipsModel tm = college.getTips();
         tm.getValueTips().clear();
 
@@ -162,7 +186,7 @@ public class TipsManager {
      * @param studentHappiness The average happiness of all the students on campus
      * @param facultyHappiness The average happiness of all the faculty on campus
      */
-    public void changeSocialTips(CollegeModel college, int socialQuality, int gameNum, int studentHappiness, int facultyHappiness) {
+    public static void changeSocialTips(CollegeModel college, int socialQuality, int gameNum, int studentHappiness, int facultyHappiness) {
         TipsModel tm = college.getTips();
         tm.getSocialTips().clear();
 

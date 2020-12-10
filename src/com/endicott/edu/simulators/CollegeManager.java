@@ -72,8 +72,7 @@ public class CollegeManager {
 
 
         CollegeRating collegeTraits = new CollegeRating();
-        TipsManager tManager = new TipsManager();
-        collegeTraits.handleTimeChange(collegeId, tManager);
+        collegeTraits.handleTimeChange(collegeId);
         college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
         return college;
     }
@@ -186,8 +185,7 @@ public class CollegeManager {
 
         logger.info("AdvanceTime College Traits and update tips");
         CollegeRating collegeTraits = new CollegeRating();
-        TipsManager tManager = new TipsManager();
-        collegeTraits.handleTimeChange(collegeId, tManager);
+        collegeTraits.handleTimeChange(collegeId);
 
         logger.info("AdvanceTime Loans");
         FinanceManager fm = new FinanceManager();
@@ -231,7 +229,6 @@ public class CollegeManager {
         if (college != null) {
             hoursAlive = college.getHoursAlive();
         }
-
         return(hoursToDate(hoursAlive));
     }
 
@@ -241,7 +238,6 @@ public class CollegeManager {
         cal.set(Calendar.MONTH, 8);
         cal.set(Calendar.YEAR, 2018);
         cal.add(Calendar.DAY_OF_MONTH, hoursAlive/24);
-
         return cal.getTime();
     }
 
