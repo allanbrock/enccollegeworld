@@ -539,6 +539,9 @@ public class BuildingManager {
         SportsCenterModel startingSportsCenter = new SportsCenterModel(NameGenDao.generateBuildingName()+" Sports Center");
         saveBuildingHelper(startingSportsCenter, collegeId, college);
 
+        BuildingManager bmanager = new BuildingManager();
+        bmanager.calculateOverallBuildingHealth(collegeId, dao.getBuildings(collegeId));
+
         // Necessary gates for buildings
         // Sizes
         gateManager.createGate(collegeId, "Large Size", "With Large Size you can house more students!", "resources/images/DORM.png", 1);
