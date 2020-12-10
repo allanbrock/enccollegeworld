@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class AdmissionsManager {
     static private final Logger logger = Logger.getLogger("Admissions");
-    static private float class_tier_distributions[][] = {  {0.45f, 0.35f, 0.15f, 0.0f },  // initial school
+    static private float class_tier_distributions[][] = {   {0.45f, 0.35f, 0.15f, 0.05f },  // initial school
                                                             {0.35f, 0.35f, 0.20f, 0.10f}, // level 1
                                                             {0.25f, 0.40f, 0.25f, 0.10f}, // level 2
                                                             {0.15f, 0.35f, 0.35f, 0.15f}, // level 3
@@ -121,12 +121,12 @@ public class AdmissionsManager {
 
             int tier;
             float percentage = i / (float) numNewStudents;
-            if (percentage <  tierDistributions[0] * numNewStudents) {
+            if (percentage <=  tierDistributions[0]) {
                 tier = 0;
-            } else if (percentage < tierDistributions[1] * numNewStudents) {
+            } else if (percentage <= tierDistributions[1]) {
                 tier = 1;
             }
-            else if (percentage < tierDistributions[2] * numNewStudents){
+            else if (percentage <= tierDistributions[2]){
                 tier = 2;
             }
             else{
