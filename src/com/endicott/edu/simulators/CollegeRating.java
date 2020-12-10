@@ -12,7 +12,10 @@ public class CollegeRating {
     private static Boolean recentRiot = false;
     private CollegeModel college;
 
-    public CollegeRating(){}
+    public CollegeRating(){
+        TipsManager.changeGeneralTips(college);
+        TipsManager.changeAdmissionsTips(college);
+    }
 
     /**
      * Update School Traits on each new day
@@ -26,8 +29,6 @@ public class CollegeRating {
         updateSafetyRating(collegeId);
         updateSocialRating(collegeId);
         updateSchoolValue(collegeId);
-        TipsManager.changeGeneralTips(college);
-        TipsManager.changeAdmissionsTips(college);
     }
 
     /**
