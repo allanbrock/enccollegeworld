@@ -11,9 +11,10 @@ import java.util.Date;
 
 public class CollegeModel implements Serializable {
     private int hoursAlive = 0;                  //Hours the college has existed for
-    private int timeLeftInSemester = 0;
-    private int numSemesters = 0;
-    public static final int daysAdvance = 7; // 1 week
+    private int timeLeftInSemester = 0;          //Amount of week left in the semester (15 total)
+    private int year = 1;                        //The year the college is currently in (start at year 1)
+    private int numSemesters = 0;                //Number of semesters completed at the college (15 weeks per)
+    public static final int daysAdvance = 7;     // 1 week
     private final String timeAdvanceBy = "Week"; // define based on daysAdvance
     private int reputation = 50;                 //Reputation of college based on 1-100
     private int yearlyTuitionCost = 40000;       //Amount of money a student pays per year
@@ -100,6 +101,7 @@ public class CollegeModel implements Serializable {
                 aModel.setGroupB(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId, level));
                 aModel.setGroupC(AdmissionsManager.generateNewCandidates(aModel.getOpenCapacity(), collegeId, level));
                 AdmissionsDao.saveAdmissionsData(collegeId, aModel);
+                setYear(1); //Incrementing by 1
             }
             setNewSemester();
         }
@@ -120,6 +122,9 @@ public class CollegeModel implements Serializable {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
+
+    public int getYear() { return this.year;}
+    public void setYear(int y) { this.year += y;}
 
     public int getDepartmentCount(){ return departmentCount; }
     public void setDepartmentCount(int departmentCount){ this.departmentCount = departmentCount; }
