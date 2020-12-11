@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -78,16 +79,18 @@ public class AdmissionsManager {
 
         // BUILD THE EXISTING STUDENT BODY!
         int numStudentsAdded = 0;
+        List<StudentModel> students = StudentDao.getStudents(collegeId); //Returns an empty List for us
         // create potential students and convert them
         for(int yr = 1; yr <= 4; yr++) {
             ArrayList<PotentialStudentModel> studentClass = generateNewCandidates(numStudents / 4, collegeId, 0);
             for(PotentialStudentModel potentialStudent : studentClass){
-                convertToStudent(collegeId, potentialStudent, yr);
+                students = convertToStudent(collegeId, potentialStudent, yr, students);
                 numStudentsAdded++;
             }
         }
         college.setNumberStudentsAdmitted(numStudentsAdded);
         college.setStudentsGraduating(numStudents/4);
+        StudentDao.saveAllStudents(collegeId, students);
         StudentDao.saveAllStudentsUsingCache(collegeId);
         // Existing student body done
 
@@ -165,26 +168,29 @@ public class AdmissionsManager {
     public static void acceptGroup(String collegeID, String group) {
         AdmissionsModel am = AdmissionsDao.getAdmissions(collegeID);
         CollegeModel college = CollegeDao.getCollege(collegeID);
+        List<StudentModel> students = StudentDao.getStudents(collegeID);
 
         //Check for the right group of students to pull from
         if(group.equalsIgnoreCase("GroupA")) {
             for(int i = 0; i < am.getGroupA().size(); i++) {
-                convertToStudent(collegeID, am.getGroupA().get(i),1);
+                students = convertToStudent(collegeID, am.getGroupA().get(i),1, students);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupA().size());
             }
         }
         else if(group.equalsIgnoreCase("GroupB")) {
             for(int i = 0; i < am.getGroupB().size(); i++) {
-                convertToStudent(collegeID, am.getGroupB().get(i),1);
+                students = convertToStudent(collegeID, am.getGroupB().get(i),1, students);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupB().size());
             }
         }
         else {
             for(int i = 0; i < am.getGroupC().size(); i++) {
-                convertToStudent(collegeID, am.getGroupC().get(i), 1);
+                students = convertToStudent(collegeID, am.getGroupC().get(i), 1, students);
                 college.setNumberStudentsAdmitted(college.getNumberStudentsAdmitted() + am.getGroupC().size());
             }
         }
+        StudentDao.saveAllStudents(collegeID, students);
+        StudentDao.saveAllStudentsUsingCache(collegeID);
         college.setNumberStudentsAccepted(0);
     }
 
@@ -207,7 +213,18 @@ public class AdmissionsManager {
         AdmissionsDao.saveAdmissionsData(collegeId, am);
     }
 
-    public static void convertToStudent(String collegeID, PotentialStudentModel psm, int year) {
+    /**
+     * Function takes a potential student and converts them to the college as a normal student. Requires the current list
+     * of students so it can be added and then saved all at once at your own leisure instead of saving each individual student
+     *
+     * @param collegeID ID of the college that the player is on
+     * @param psm The potential student
+     * @param year The year of that student (1-4)
+     * @param students The arraylist of current students (when college is established, is an empty array)
+     *
+     * @return Returns the arraylist for the programmer to save on their own so we are not saving so many times
+     */
+    public static List<StudentModel> convertToStudent(String collegeID, PotentialStudentModel psm, int year, List<StudentModel> students) {
         //Create the new model and setup all the extra managers and classes necessary to generate a student
         StudentModel sm = new StudentModel();
         BuildingManager bm = new BuildingManager();
@@ -220,12 +237,6 @@ public class AdmissionsManager {
         sm.setLastName(psm.getLastName());
         sm.setId(psm.getId());
         sm.setGender(psm.getGenderType());
-//        if(psm.getGender().equalsIgnoreCase("Male")) {
-//            sm.setGender(GenderModel.FEMALE);
-//        }
-//        else {
-//            sm.setGender(GenderModel.MALE);
-//        }
         sm.setAvatar(psm.getAvatar());
 
         //Assigns the newly accepted student to the specific buildings and advisor
@@ -248,8 +259,9 @@ public class AdmissionsManager {
         sm.setQuality(psm.getQuality());
         sm.setRunId(collegeID);
 
-        StudentDao dao = new StudentDao();
-        dao.saveNewStudent(collegeID, sm);
+        students.add(sm);
+
+        return students;
     }
 
     /**

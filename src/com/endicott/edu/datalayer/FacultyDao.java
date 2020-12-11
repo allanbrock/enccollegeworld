@@ -70,12 +70,10 @@ public class FacultyDao {
     }
 
     public static FacultyModel getAdvisor(String collegeId, String facultyId){
-        logger.info("Getting specific faculty model based of faculty id");
         FacultyModel tmp = null;
         List<FacultyModel> newFacultyList = getFaculty(collegeId);
         for(FacultyModel faculty : newFacultyList){
             if(facultyId.equals(faculty.getFacultyID())){
-                logger.info("found  " + faculty.getFacultyName());
                 tmp = faculty;
             }
 
