@@ -51,6 +51,11 @@ public class BuildingManager {
                 building.setHasBeenAnnouncedAsComplete(true);
                 BuildingDao.updateSingleBuildingInCache(runId, building);
             }
+
+            if(building.getShownQuality() <= 60) {
+                popupManager.newPopupEvent(runId, "Warning!", building.getName() + " is in need of repairs!", "Close", "OK",
+                        "resources/images/" + building.getKindOfBuilding() + ".png", building.getKindOfBuilding());
+            }
         }
         calculateOverallBuildingHealth(runId, buildings);
         // Really important the we save the changes to disk.
