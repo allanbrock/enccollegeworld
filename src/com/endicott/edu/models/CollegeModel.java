@@ -43,6 +43,12 @@ public class CollegeModel implements Serializable {
     private int studentFinancialHappiness = 0;      //0 to 100 rating of student financial happiness
     private int studentBuildingHappiness = 0;       //0 to 100 rating of student building happiness
     private int studentProfessorHappiness = 0;      //0 to 100 rating of student professor happiness
+    private int studentSafetyHappiness = 0;
+    private int studentSportsHappiness = 0;
+    private int studentInfrastructuresHappiness = 0;
+    private int studentSocialHappiness = 0;
+    private int studentCostHappiness = 0;
+    private int studentAcademicsHappiness = 0;
     private int totalBuildingHealth = 0;            //0 to 100 average of all buildings health
     private int studentAcademicHappiness = 0;       //0 to 100 rating of student academic happiness
     private int departmentCount = 4;                    //Number of departments/schools in the college
@@ -52,6 +58,8 @@ public class CollegeModel implements Serializable {
     private boolean isTimePaused = true;                //Boolean for if the game is paused or not
     private TipsModel collegeTips = new TipsModel();    //Holds all the tips that the user should know about to improve trait ratings
     //public PopupEventModel;
+
+    //Financial Graphs
     private FinancesModel financialGraph = new FinancesModel();
     private ExpensesModel expensesGraph = new ExpensesModel();
 
@@ -110,6 +118,54 @@ public class CollegeModel implements Serializable {
         // reset time left in semester and increase number of semesters
         this.timeLeftInSemester = 105 / CollegeModel.daysAdvance;
         this.numSemesters += 1;
+    }
+
+    public int getStudentAcademicsHappiness() {
+        return studentAcademicsHappiness;
+    }
+
+    public void setStudentAcademicsHappiness(int studentAcademicsHappiness) {
+        this.studentAcademicsHappiness = studentAcademicsHappiness;
+    }
+
+    public int getStudentCostHappiness() {
+        return studentCostHappiness;
+    }
+
+    public void setStudentCostHappiness(int studentCostHappiness) {
+        this.studentCostHappiness = studentCostHappiness;
+    }
+
+    public int getStudentSocialHappiness() {
+        return studentSocialHappiness;
+    }
+
+    public void setStudentSocialHappiness(int studentSocialHappiness) {
+        this.studentSocialHappiness = studentSocialHappiness;
+    }
+
+    public int getStudentInfrastructuresHappiness() {
+        return studentInfrastructuresHappiness;
+    }
+
+    public void setStudentInfrastructuresHappiness(int studentInfrastructuresHappiness) {
+        this.studentInfrastructuresHappiness = studentInfrastructuresHappiness;
+    }
+
+    public int getStudentSportsHappiness() {
+        return studentSportsHappiness;
+    }
+
+    public void setStudentSportsHappiness(int studentSportsHappiness) {
+        this.studentSportsHappiness = studentSportsHappiness;
+    }
+
+    public int getStudentSafetyHappiness() {
+        return studentSafetyHappiness;
+    }
+
+    public void setStudentSafetyHappiness(int studentSafetyHappiness) {
+        this.studentSafetyHappiness = studentSafetyHappiness;
     }
 
     public int getFacultyBodyHappiness() {return this.facultyBodyHappiness;}

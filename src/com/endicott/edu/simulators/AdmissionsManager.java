@@ -77,6 +77,7 @@ public class AdmissionsManager {
         AdmissionsModel adm = new AdmissionsModel();
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
+
         // BUILD THE EXISTING STUDENT BODY!
         int numStudentsAdded = 0;
         List<StudentModel> students = StudentDao.getStudents(collegeId); //Returns an empty List for us
@@ -118,6 +119,7 @@ public class AdmissionsManager {
         tierDistributions[2] = class_tier_distributions[collegeLevelForTierDistributions][2] + tierDistributions[1];
         tierDistributions[3] = 1 - tierDistributions[2];
 
+        int[] tiers = {3, 1, 2, 1, 1, 0};
         for (int i = 0; i < numNewStudents; i++) {
             PotentialStudentModel potentialStudent = new PotentialStudentModel();
             // assign a personality and a quality
@@ -135,7 +137,8 @@ public class AdmissionsManager {
             else{
                 tier = 3;
             }
-            PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
+            //PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
+            PersonalityModel pm = PersonalityModel.generateRandomModel(tiers);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
             if(rand.nextInt(10) + 1 > 5) {
