@@ -462,16 +462,16 @@ public class StudentManager {
 
         for(int i = 0; i < students.size(); i++){
            StudentModel student = students.get(i);
-           setStudentHealthHappiness(student, initial);
-           setStudentAdvisorHappiness(student, college, initial);
-           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
-           setStudentAcademicHappiness(student, college);
-           setStudentMoneyHappiness(student, college, initial);
-           setStudentFunHappiness(student, college);
-           setDiningHallHappinessRating(student, college);
-           setAcademicCenterHappinessRating(student, college);
-           setDormHappinessRating(student, college);
-           setStudentOverallBuildingHappinessRating(student, college);
+//           setStudentHealthHappiness(student, initial);
+//           setStudentAdvisorHappiness(student, college, initial);
+//           setStudentProfessorHappiness(collegeId, student, aveFacultyRating);
+//           setStudentAcademicHappiness(student, college);
+//           setStudentMoneyHappiness(student, college, initial);
+//           setStudentFunHappiness(student, college);
+//           setDiningHallHappinessRating(student, college);
+//           setAcademicCenterHappinessRating(student, college);
+//           setDormHappinessRating(student, college);
+//           setStudentOverallBuildingHappinessRating(student, college);
 
            student.setAcademicRating(student.getPersonality().getAcademics() - college.getAcademicRating());
            student.setCostRating(student.getPersonality().getCost() - college.getSchoolValue());

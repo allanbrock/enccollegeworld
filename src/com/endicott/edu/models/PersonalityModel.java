@@ -37,25 +37,15 @@ public class PersonalityModel implements Serializable {
     }
 
     // generates a completely random model for the given tier of student
-    public static PersonalityModel generateRandomModel(int[] tier){
+    public static PersonalityModel generateRandomModel(int tier){
         PersonalityModel p = new PersonalityModel();
-        p.academics = generateNumberAtTier(tier[0]);
-        p.sports = generateNumberAtTier(tier[1]);
-        p.infrastructures = generateNumberAtTier(tier[2]);
-        p.campusLife = generateNumberAtTier(tier[3]);
-        p.cost = generateNumberAtTier(tier[4]);
-        p.safety = generateNumberAtTier(tier[5]);
+        p.academics = generateNumberAtTier(tier);
+        p.sports = generateNumberAtTier(tier);
+        p.infrastructures = generateNumberAtTier(tier);
+        p.campusLife = generateNumberAtTier(tier);
+        p.cost = generateNumberAtTier(tier);
+        p.safety = generateNumberAtTier(tier);
         return p;
-    }
-
-    public static String assignRandomTier() {
-        double rand = Math.random();
-        if (rand >= .66)
-            return "Athletic";
-        else if (rand >= .33)
-            return "Studious";
-        else
-            return "Social";
     }
 
     private PersonalityModel(){
