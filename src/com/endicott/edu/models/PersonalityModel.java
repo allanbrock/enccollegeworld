@@ -3,7 +3,6 @@ package com.endicott.edu.models;
 import com.endicott.edu.simulators.SimulatorUtilities;
 
 import java.io.Serializable;
-import java.util.Random;
 
 /***
  * defines the interests/values of a Person --these are the coefficients for their happiness
@@ -16,6 +15,8 @@ public class PersonalityModel implements Serializable {
     private int campusLife;
     private int cost; // i.e., value
     private int safety;
+    private int overall; // the sum of the individual personalities (used to compute offsets)
+                        // NOTE: IF YOU ADD MORE FIELDS, UPDATE reComputeOverall() and generateRandomModel() below
 
 
     private static final int[][] personalityTiers =
@@ -45,58 +46,65 @@ public class PersonalityModel implements Serializable {
         p.campusLife = generateNumberAtTier(tier);
         p.cost = generateNumberAtTier(tier);
         p.safety = generateNumberAtTier(tier);
+        p.reComputeOverall();
         return p;
     }
 
     private PersonalityModel(){
     }
 
+    private void reComputeOverall(){
+        overall = academics+sports+infrastructures+campusLife+cost+safety;
+    }
+
     public int getAcademics() {
         return academics;
     }
+    public int getSports() {
+        return sports;
+    }
+    public int getInfrastructures() {
+        return infrastructures;
+    }
+    public int getCampusLife() {
+        return campusLife;
+    }
+    public int getCost() {
+        return cost;
+    }
+    public int getSafety() {
+        return safety;
+    }
+    public int getOverall() { return overall; }
 
     public void setAcademics(int academics) {
         this.academics = academics;
-    }
-
-    public int getSports() {
-        return sports;
+        this.reComputeOverall();
     }
 
     public void setSports(int sports) {
         this.sports = sports;
-    }
-
-    public int getInfrastructures() {
-        return infrastructures;
+        this.reComputeOverall();
     }
 
     public void setInfrastructures(int infrastructures) {
         this.infrastructures = infrastructures;
-    }
-
-    public int getCampusLife() {
-        return campusLife;
+        this.reComputeOverall();
     }
 
     public void setCampusLife(int campusLife) {
         this.campusLife = campusLife;
-    }
-
-    public int getCost() {
-        return cost;
+        this.reComputeOverall();
     }
 
     public void setCost(int cost) {
         this.cost = cost;
-    }
-
-    public int getSafety() {
-        return safety;
+        this.reComputeOverall();
     }
 
     public void setSafety(int safety) {
         this.safety = safety;
+        this.reComputeOverall();
     }
 
 
