@@ -77,6 +77,7 @@ public class AdmissionsManager {
         AdmissionsModel adm = new AdmissionsModel();
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
+
         // BUILD THE EXISTING STUDENT BODY!
         int numStudentsAdded = 0;
         List<StudentModel> students = StudentDao.getStudents(collegeId); //Returns an empty List for us
@@ -135,6 +136,7 @@ public class AdmissionsManager {
             else{
                 tier = 3;
             }
+            //PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             QualityModel qm = QualityModel.generateRandomModel(tier);
 

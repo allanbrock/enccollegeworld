@@ -14,13 +14,17 @@ public class PersonalityModel implements Serializable {
     private int infrastructures; // buildings
     private int campusLife;
     private int cost; // i.e., value
+    private int safety;
+    private int overall; // the sum of the individual personalities (used to compute offsets)
+                        // NOTE: IF YOU ADD MORE FIELDS, UPDATE reComputeOverall() and generateRandomModel() below
+
 
     private static final int[][] personalityTiers =
             {       // mean   stddev    min     max
-                    {   10,      5,       0,       40},  /* tier 0: basic --easily impressed */
-                    {   30,     10,      10,       60},  /* tier 1: moderate --less easily impressed */
-                    {   50,     15,      30,       80},  /* tier 2: medium -- students require achievements in this area */
-                    {   75,     20,      45,       90},  /* tier 3: tough -- hard to recruit */
+                    {   10,      5,       5,       15},  /* tier 0: basic --easily impressed */
+                    {   30,     10,      20,       40},  /* tier 1: moderate --less easily impressed */
+                    {   50,     15,      35,       65},  /* tier 2: medium -- students require achievements in this area */
+                    {   75,     20,      55,       95},  /* tier 3: tough -- hard to recruit */
             };
 
     private static int generateNumberAtTier(int tier){
@@ -41,10 +45,67 @@ public class PersonalityModel implements Serializable {
         p.infrastructures = generateNumberAtTier(tier);
         p.campusLife = generateNumberAtTier(tier);
         p.cost = generateNumberAtTier(tier);
+        p.safety = generateNumberAtTier(tier);
+        p.reComputeOverall();
         return p;
     }
 
     private PersonalityModel(){
     }
+
+    private void reComputeOverall(){
+        overall = academics+sports+infrastructures+campusLife+cost+safety;
+    }
+
+    public int getAcademics() {
+        return academics;
+    }
+    public int getSports() {
+        return sports;
+    }
+    public int getInfrastructures() {
+        return infrastructures;
+    }
+    public int getCampusLife() {
+        return campusLife;
+    }
+    public int getCost() {
+        return cost;
+    }
+    public int getSafety() {
+        return safety;
+    }
+    public int getOverall() { return overall; }
+
+    public void setAcademics(int academics) {
+        this.academics = academics;
+        this.reComputeOverall();
+    }
+
+    public void setSports(int sports) {
+        this.sports = sports;
+        this.reComputeOverall();
+    }
+
+    public void setInfrastructures(int infrastructures) {
+        this.infrastructures = infrastructures;
+        this.reComputeOverall();
+    }
+
+    public void setCampusLife(int campusLife) {
+        this.campusLife = campusLife;
+        this.reComputeOverall();
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+        this.reComputeOverall();
+    }
+
+    public void setSafety(int safety) {
+        this.safety = safety;
+        this.reComputeOverall();
+    }
+
 
 }

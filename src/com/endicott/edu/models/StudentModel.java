@@ -34,6 +34,13 @@ public class StudentModel extends PersonModel implements Serializable {
 
     private QualityModel quality = null;            // the quality (stats) of the student -- how much the student contributes
     private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy
+    private int academicRating = 0;
+    private int sportsRating = 0;
+    private int socialRating = 0;
+    private int infrastructuresRating = 0;
+    private int costRating = 0;
+    private int safetyRating = 0;
+
 
     //Constructor to make a new student with preset fields (assumed to be set after creation)
     public StudentModel() {
@@ -50,6 +57,54 @@ public class StudentModel extends PersonModel implements Serializable {
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
         this.classYear = year;
+    }
+
+    public int getAcademicRating() {
+        return academicRating;
+    }
+
+    public void setAcademicRating(int academicRating) {
+        this.academicRating = academicRating;
+    }
+
+    public int getSportsRating() {
+        return sportsRating;
+    }
+
+    public void setSportsRating(int sportsRating) {
+        this.sportsRating = sportsRating;
+    }
+
+    public int getSocialRating() {
+        return socialRating;
+    }
+
+    public void setSocialRating(int socialRating) {
+        this.socialRating = socialRating;
+    }
+
+    public int getInfrastructuresRating() {
+        return infrastructuresRating;
+    }
+
+    public void setInfrastructuresRating(int infrastructuresRating) {
+        this.infrastructuresRating = infrastructuresRating;
+    }
+
+    public int getCostRating() {
+        return costRating;
+    }
+
+    public void setCostRating(int costRating) {
+        this.costRating = costRating;
+    }
+
+    public int getSafetyRating() {
+        return safetyRating;
+    }
+
+    public void setSafetyRating(int safetyRating) {
+        this.safetyRating = safetyRating;
     }
 
     public void setPersonality(PersonalityModel pm){ this.personality = pm; }

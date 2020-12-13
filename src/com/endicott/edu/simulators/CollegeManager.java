@@ -74,6 +74,7 @@ public class CollegeManager {
         CollegeRating collegeTraits = new CollegeRating();
         collegeTraits.handleTimeChange(collegeId);
         college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
+        studentManager.calculateStatistics(collegeId, true);
         return college;
     }
 
