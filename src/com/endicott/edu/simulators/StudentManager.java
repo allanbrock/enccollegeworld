@@ -406,7 +406,10 @@ public class StudentManager {
             student.setSafetyRating(newSafetyRating);
             student.setSocialRating(newSocialRating);
             student.setSportsRating(newSportsRating);
-            CollegeManager.logger.info("student academic happiness: " + student.getAcademicRating());
+
+            // TIP: try to avoid logging any info per student; it slows down the system, you can debug if you need
+            // to check it once, and you can find this info in the JSON if you need to verify it
+            //CollegeManager.logger.info("student academic happiness: " + student.getAcademicRating());
 
             // how much the student cares about everything (the sum of all personality numbers, 0..100)
             int overall = studentNeeds.getOverall();
@@ -421,8 +424,8 @@ public class StudentManager {
 
             student.setHappiness((int)(academicFactor + costFactor + infrastructureFactor + safetyFactor + socialFactor + sportsFactor));
 
-            CollegeManager.logger.info("student happiness: " + student.getHappiness());
-            CollegeManager.logger.info("academicRating: " + student.getAcademicRating());
+            //CollegeManager.logger.info("student happiness: " + student.getHappiness());
+            //CollegeManager.logger.info("academicRating: " + student.getAcademicRating());
             setStudentFeedback(student, collegeId);
 
             if(student.getHappiness() >= 95){
