@@ -639,8 +639,6 @@ public class BuildingManager {
         }
 
         int avgHealth = healthSum/Math.max(1,buildings.size());
-
-        Random rand = new Random();
-        college.setTotalBuildingHealth(Math.min(100, avgHealth + rand.nextInt(8)));
+        college.setTotalBuildingHealth(Math.min(100, avgHealth));
     }
 }
