@@ -300,14 +300,10 @@ public class StudentManager {
      */
     public void calculateStatistics(String collegeId, boolean initial) {
         CollegeManager.logger.info("Calculating new student statistics");
-        System.out.println("Calculating new student statistics");
         List<StudentModel> students = dao.getStudents(collegeId);
         calculateStudentFacultyRatio(collegeId, students);
         calculateStudentFacultyRatioRating(collegeId);
         setHappinessForEachStudent(collegeId, initial, students);
-
-        calculateHappinessRatings(collegeId, students);
-
         calculaterOverallStudentHealth(collegeId, students);
         calculateAllAverageHappiness(collegeId, students);
     }
@@ -317,42 +313,42 @@ public class StudentManager {
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
         //Variables to find sums of total student happinesses
-        int healthHappinessSum = 0;
+        int safetySum = 0;
         int happinessSum = 0;
-        int recHappinessSum = 0;
-        int finHappinessSum = 0;
+        int sportsSum = 0;
+        int costSum = 0;
         int acaHappinessSum = 0;
         int buildHappinessSum = 0;
-        int profHappinessSum = 0;
+        int socialSum = 0;
 
         //Loop through and find individual student's happiness in every category
         for (int i = 0; i < students.size(); i++) {
-            healthHappinessSum += students.get(i).getHealthHappinessRating();
+            safetySum += students.get(i).getSafetyRating();
             happinessSum += students.get(i).getHappiness();
-            recHappinessSum += students.get(i).getFunHappinessRating();
-            finHappinessSum += students.get(i).getMoneyHappinessRating();
-            acaHappinessSum += students.get(i).getAcademicHappinessRating();
-            buildHappinessSum += students.get(i).getOverallBuildingHappinessRating();
-            profHappinessSum += students.get(i).getProfessorHappinessRating();
+            sportsSum += students.get(i).getSportsRating();
+            costSum += students.get(i).getCostRating();
+            acaHappinessSum += students.get(i).getAcademicRating();
+            buildHappinessSum += students.get(i).getInfrastructuresRating();
+            socialSum += students.get(i).getSocialRating();
         }
 
         //Calculate the average happiness of student population for all
-        int avgHealthHappiness = healthHappinessSum/Math.max(1, students.size());
+        int avgSafety = safetySum/Math.max(1, students.size());
         int avgHappiness = happinessSum/Math.max(1,students.size());
-        int avgRecHappiness = recHappinessSum/Math.max(1,students.size());
-        int avgFinHappiness = finHappinessSum/Math.max(1,students.size());
+        int avgSports = sportsSum/Math.max(1,students.size());
+        int avgCost = costSum/Math.max(1,students.size());
         int avgAcaHappiness = acaHappinessSum/Math.max(1,students.size());
         int avgBuildHappiness = buildHappinessSum/Math.max(1,students.size());
-        int avgProfHappiness = profHappinessSum/Math.max(1,students.size());
+        int avgSocial = socialSum/Math.max(1,students.size());
 
         //Set the happinesses averages accordingly, making sure they stay at 100 or below
-        college.setStudentHealthHappiness(Math.min(100, avgHealthHappiness));
+        college.setStudentSafetyHappiness(Math.min(100, avgSafety));
         college.setStudentBodyHappiness(Math.min(100, avgHappiness));
-        college.setStudentRecreationalHappiness(Math.min(100, avgRecHappiness));
-        college.setStudentFinancialHappiness(Math.min(100, avgFinHappiness));
+        college.setStudentSportsHappiness(Math.min(100, avgSports));
+        college.setStudentCostHappiness(Math.min(100, avgCost));
         college.setStudentAcademicHappiness(Math.min(100, avgAcaHappiness));
-        college.setStudentBuildingHappiness(avgBuildHappiness);
-        college.setStudentProfessorHappiness(avgProfHappiness);
+        college.setStudentInfrastructuresHappiness(Math.min(100, avgBuildHappiness));
+        college.setStudentSocialHappiness(Math.min(100, avgSocial));
     }
 
     private void calculaterOverallStudentHealth(String collegeId, List<StudentModel> students) {
@@ -372,77 +368,6 @@ public class StudentManager {
         college.setStudentHealthRating(rating);
 
         //CollegeDao.saveCollege(college);
-    }
-
-    /**
-     * Calculates the student happiness based on their tier minus the school trait rating(the difference).
-     * This function compares the difference and if it is higher than -1, the student is considered happy in that category.
-     * @param collegeId the current college
-     * @param students the list of students
-     */
-    private void  calculateHappinessRatings(String collegeId, List<StudentModel> students){
-        //i know, this is coded badly
-        System.out.println("num students " + students.size());
-        CollegeModel college = CollegeDao.getCollege(collegeId);
-        int total = 0;
-        int counter = 0; // I don't understand the purpose of these counters
-        int bCounter = 0;
-        int sportsCounter = 0;
-        int socialCounter = 0;
-        int costCounter = 0;
-        int academicCounter = 0;
-        int safetyCounter = 0;
-
-        for(int i = 0; i < students.size(); i++){
-            StudentModel student = students.get(i);
-            if(student.getAcademicRating() > -1){
-                academicCounter++;
-                total += student.getAcademicRating();
-                counter++;
-
-            }
-            if(student.getInfrastructuresRating() > -1){
-                bCounter++;
-                total += student.getInfrastructuresRating();
-                counter++;
-            }
-            if(student.getSocialRating() > -1){
-                socialCounter++;
-                total += student.getSocialRating();
-                counter++;
-            }
-            if(student.getSportsRating() > -1){
-                sportsCounter++;
-                total += student.getSportsRating();
-                counter++;
-            }
-            if(student.getCostRating() > -1){
-                costCounter++;
-                total += student.getCostRating();
-                counter++;
-            }
-            if(student.getSafetyRating() > -1){
-                safetyCounter++;
-                total += student.getSafetyRating();
-                counter++;
-            }
-        }
-
-
-        college.setStudentAcademicsHappiness((academicCounter / students.size()) * 100);
-        college.setStudentInfrastructuresHappiness((bCounter / students.size()) * 100);
-        college.setStudentSocialHappiness((socialCounter / students.size()) * 100);
-        college.setStudentSportsHappiness((sportsCounter / students.size()) * 100);
-        college.setStudentCostHappiness((costCounter / students.size()) * 100);
-        college.setStudentSafetyHappiness((safetyCounter / students.size()) * 100);
-        college.setStudentBodyHappiness((total / counter) / 100);
-        //System.out.println("overall " + college.getStudentBodyHappiness());
-        CollegeManager.logger.info("overall happiness: academics " + college.getStudentAcademicsHappiness());
-        CollegeManager.logger.info("overall happiness: buildings " + college.getStudentInfrastructuresHappiness());
-        CollegeManager.logger.info("overall happiness: safety " + college.getStudentSafetyHappiness());
-        CollegeManager.logger.info("overall happiness: sports " + college.getStudentSportsHappiness());
-        CollegeManager.logger.info("overall happiness: cost " + college.getStudentCostHappiness());
-        CollegeManager.logger.info("overall happiness: social " + college.getStudentSocialHappiness());
     }
 
     private void setHappinessForEachStudent(String collegeId, boolean initial, List<StudentModel> students){
@@ -481,6 +406,7 @@ public class StudentManager {
             student.setSafetyRating(newSafetyRating);
             student.setSocialRating(newSocialRating);
             student.setSportsRating(newSportsRating);
+            CollegeManager.logger.info("student academic happiness: " + student.getAcademicRating());
 
             // how much the student cares about everything (the sum of all personality numbers, 0..100)
             int overall = studentNeeds.getOverall();
@@ -495,6 +421,8 @@ public class StudentManager {
 
             student.setHappiness((int)(academicFactor + costFactor + infrastructureFactor + safetyFactor + socialFactor + sportsFactor));
 
+            CollegeManager.logger.info("student happiness: " + student.getHappiness());
+            CollegeManager.logger.info("academicRating: " + student.getAcademicRating());
             setStudentFeedback(student, collegeId);
 
             if(student.getHappiness() >= 95){
