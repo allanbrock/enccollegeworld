@@ -56,15 +56,19 @@ public class InventoryManager {
 
     public static void buyItem(String name, String collegeId){
         List<ItemModel> items = getItems(collegeId);
+        CollegeModel college = CollegeDao.getCollege(collegeId);
 
         if(items.size() > 0) {
             for (int i = 0; i < items.size(); i++){
                 if(items.get(i).getName().equals(name)){
                     items.get(i).setPurchased(true);
                     Accountant.payBill(collegeId,"Upgrade: "+items.get(i).getName()+". Cost: ", items.get(i).getCost());
+                    college.getExpensesGraph().setStore(items.get(i).getCost());
                 }
             }
         }
+        college.getExpensesGraph().calculateExpenses();
+
         inventory.saveAllItems(collegeId, items);
     }
     

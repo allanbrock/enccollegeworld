@@ -154,6 +154,8 @@ public class FinanceManager {
         college.setDebt(college.getDebt()-amount);        //Remove the cash from the total college debt
         NewsManager.createFinancialNews(collegeId, college.getHoursAlive(), "Payment to loans: $", -1*amount);
         checkLoans(collegeId);            //Check to see if any loans are paid off
+        college.getExpensesGraph().setLoans(amount);
+        college.getExpensesGraph().calculateExpenses();
         CollegeDao.saveCollege(college);
     }
 
