@@ -70,7 +70,7 @@ public class CollegeManager {
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
 
-
+        calculateTuitionRating(collegeId);
         CollegeRating collegeTraits = new CollegeRating();
         collegeTraits.handleTimeChange(collegeId);
         college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
@@ -304,7 +304,6 @@ public class CollegeManager {
 
     private static void calculateTuitionRating(String collegeId) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
-
         int rating = SimulatorUtilities.getRatingZeroToOneHundred(75000, 25000, college.getYearlyTuitionCost());
         logger.info("Rating was: " + rating);
         college.setYearlyTuitionRating(rating);
