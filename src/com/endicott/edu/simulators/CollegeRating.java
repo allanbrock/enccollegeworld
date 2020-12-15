@@ -131,20 +131,19 @@ public class CollegeRating {
 
         // Calculate rating:
         // If teams, based on performance, number of teams, facility quality, student athletic quality
-        if(numTeams != 0) {
-            rating = (int) (0.2 * rating +
-                            0.2 * winPercentageRating +
-                            0.1 * teamsRating +
-                            0.2 * buildingQualityRating +
+//        if(numTeams != 0) {
+            rating = (int) (0.3 * winPercentageRating +
+                            0.3 * teamsRating +
+                            0.1 * buildingQualityRating +
                             0.2 * athleticQualityRating +
                             0.1 * championshipRating);
-        }
-        // If no teams based on existing rating, facility quality, and student athletic quality
-        else {
-            rating = (int) (0.85 * rating +
-                            0.05 * buildingQualityRating +
-                            0.1 * athleticQualityRating);
-        }
+//        }
+//        // If no teams based on existing rating, facility quality, and student athletic quality
+//        else {
+//            rating = (int) (0.85 * rating +
+//                            0.05 * buildingQualityRating +
+//                            0.1 * athleticQualityRating);
+//        }
         college.setAthleticRating(checkBounds(rating));
 
         TipsManager.changeAthleticTips(college, winPercentageRating, teamsRating, buildingQualityRating, athleticQualityRating, championshipRating);
@@ -195,8 +194,10 @@ public class CollegeRating {
 
         // Calculate rating
         rating =
-                (int) (0.6 * rating +
-                        0.4 * buildingQualityRating);
+                (int) (0.3 * rating +
+                        0.7 * buildingQualityRating);
+        //100 vs 50 == 80 happy
+        //80 vs 50
         college.setInfrastructureRating(checkBounds(rating));
 
         TipsManager.changeInfrastructureTips(college, buildingQualityRating, isovercrowded, isupgraded);

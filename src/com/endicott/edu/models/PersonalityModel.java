@@ -21,10 +21,10 @@ public class PersonalityModel implements Serializable {
 
     private static final int[][] personalityTiers =
             {       // mean   stddev    min     max
-                    {   10,      5,       5,       15},  /* tier 0: basic --easily impressed */
-                    {   30,     10,      20,       40},  /* tier 1: moderate --less easily impressed */
-                    {   50,     15,      35,       65},  /* tier 2: medium -- students require achievements in this area */
-                    {   75,     20,      55,       95},  /* tier 3: tough -- hard to recruit */
+                    {   25,     5,       20,       30},  /* tier 0: basic --easily impressed */
+                    {   45,     10,      35,       55},  /* tier 1: moderate --less easily impressed */
+                    {   70,     10,      60,       80},  /* tier 2: medium -- students require achievements in this area */
+                    {   80,     10,      70,       90},  /* tier 3: tough -- hard to recruit */
             };
 
     private static int generateNumberAtTier(int tier){
