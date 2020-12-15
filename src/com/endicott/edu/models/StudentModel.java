@@ -235,7 +235,7 @@ public class StudentModel extends PersonModel implements Serializable {
     public void setProfessorHappinessRating(int professorHappinessRating) {this.professorHappinessRating = professorHappinessRating;}
 
     public void setAdvisor(FacultyModel advisor) {
-        this.advisor = advisor.getFacultyID();
+        this.advisor = advisor.getFacultyName();
     }
     public String getAdvisor() {
         return this.advisor;
