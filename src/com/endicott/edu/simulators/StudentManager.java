@@ -252,7 +252,7 @@ public class StudentManager {
         for (int i = 0; i < students.size(); i++){
             int h = students.get(i).getHappiness();
             double odds = Math.max(0, h/100.0); //Odds are just a percentage of happiness (.64 = 64%)
-            if (students.get(i).getHappiness() < 60 && didItHappen(odds)) {
+            if (students.get(i).getHappiness() < 50 && didItHappen(odds)) {
                 System.out.println("We are actually removing somebody: " + students.get(i).getName() + " " + students.get(i).getClassYear());
                 if(students.get(i).getClassYear() == 4) {
                     college.setStudentsGraduating(college.getStudentsGraduating()-1);
