@@ -73,10 +73,10 @@ public class CollegeRating {
 
         // Calculate Rating
         int rating = (int) (0.2 * college.getStudentFacultyRatioRating() +
-                            0.2 * college.getFacultyBodyHappiness() +
-                            0.3 * FacultyManager.getAverageFacultyPerformance(collegeId) +
-                            0.1 * academicQualityRating +
-                            0.2 * buildingQualityRating);
+                            0.1 * college.getFacultyBodyHappiness() +
+                            0.2 * FacultyManager.getAverageFacultyPerformance(collegeId) +
+                            0.4 * academicQualityRating +
+                            0.1 * buildingQualityRating);
         college.setAcademicRating(checkBounds(rating));
 
         TipsManager.changeAcademicTips(college, academicQualityRating, buildingQualityRating);
@@ -93,7 +93,6 @@ public class CollegeRating {
         int numTeams = 0;
         int numBuildings = 0;
         int buildingQuality = 0;
-        int rating = college.getAthleticRating();
         int athleticQuality = 0;
         int numStudents = 0;
 
@@ -130,22 +129,13 @@ public class CollegeRating {
         int championshipRating = 100*college.getNumChampionshipsWon()/Math.max(1, numTeams);
 
         // Calculate rating:
-        // If teams, based on performance, number of teams, facility quality, student athletic quality
-//        if(numTeams != 0) {
-            rating = (int) (0.3 * winPercentageRating +
-                            0.3 * teamsRating +
+        int  rating = (int) (0.2 * winPercentageRating +
+                            0.2 * teamsRating +
                             0.1 * buildingQualityRating +
-                            0.2 * athleticQualityRating +
+                            0.4 * athleticQualityRating +
                             0.1 * championshipRating);
-//        }
-//        // If no teams based on existing rating, facility quality, and student athletic quality
-//        else {
-//            rating = (int) (0.85 * rating +
-//                            0.05 * buildingQualityRating +
-//                            0.1 * athleticQualityRating);
-//        }
-        college.setAthleticRating(checkBounds(rating));
 
+        college.setAthleticRating(checkBounds(rating));
         TipsManager.changeAthleticTips(college, winPercentageRating, teamsRating, buildingQualityRating, athleticQualityRating, championshipRating);
     }
 
@@ -194,8 +184,8 @@ public class CollegeRating {
 
         // Calculate rating
         rating =
-                (int) (0.3 * rating +
-                        0.7 * buildingQualityRating);
+                (int) (0.2 * rating +
+                        0.8 * buildingQualityRating);
         //100 vs 50 == 80 happy
         //80 vs 50
         college.setInfrastructureRating(checkBounds(rating));
@@ -378,9 +368,9 @@ public class CollegeRating {
         int gamesRating = numGames * eventFactor/2;
 
         // calculate rating
-        int rating = (int) (0.4 * socialQualityRating +
+        int rating = (int) (0.6 * socialQualityRating +
                             0.1 * gamesRating +
-                            0.3 * college.getStudentBodyHappiness() +
+                            0.2 * college.getStudentBodyHappiness() +
                             0.1 * college.getFacultyBodyHappiness());
         college.setSocialRating(checkBounds(rating));
 
