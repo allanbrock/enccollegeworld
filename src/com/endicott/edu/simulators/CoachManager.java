@@ -4,6 +4,7 @@ import com.endicott.edu.datalayer.SportsDao;
 import com.endicott.edu.models.CoachModel;
 import com.endicott.edu.models.SportModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class CoachManager {
                 sport.setCoachName("noCoach");
         }
         dao.saveAllSports(collegeId, newSports);
+    }
+    public static void removeAllCollegeCoaches(String collegeId){
+        collegeCoaches.clear();
     }
 
     public static CoachModel getCoachByName(String name){

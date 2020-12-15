@@ -3,6 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -598,6 +599,7 @@ public class SportManager {
     public static void deleteSelectedSport(String collegeId, String sportName){
         SportsDao dao = new SportsDao();
         dao.deleteSelectedSport(collegeId, sportName);
+
         // Decrease Athletic Rating when sell sports team
         CollegeRating.decreaseAthleticRating(collegeId);
     }
@@ -687,8 +689,6 @@ public class SportManager {
     }
 
     private static void assignCoach(String collegeId, SportModel team){
-        String coachName = NameGenDao.generateName(false);
-
         CoachModel coach;
         Boolean isFemale;
         double r = Math.random();
