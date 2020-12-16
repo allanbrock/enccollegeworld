@@ -391,14 +391,32 @@ public class StudentManager {
 
             PersonalityModel studentNeeds = student.getPersonality();
 
-            // happiness as the gap between the two values, normalized on 0 to 100.
+            int raw_score_range = 20;
 
-            int newAcademicRating = (int) Math.min(100 * (college.getAcademicRating() / (float) studentNeeds.getAcademics()), 100);
-            int newCostRating = (int) Math.min(100 * (college.getSchoolValue() / (float) studentNeeds.getCost()), 100);
-            int newInfrastructuresRating = (int) Math.min(100 * (college.getInfrastructureRating() / (float) studentNeeds.getInfrastructures()), 100);
-            int newSafetyRating = (int) Math.min(100 * (college.getSafetyRating() / (float) studentNeeds.getSafety()), 100);
-            int newSocialRating = (int) Math.min(100 * (college.getSocialRating() / (float) studentNeeds.getCampusLife()), 100);
-            int newSportsRating = (int) Math.min(100 * (college.getAthleticRating() / (float) studentNeeds.getSports()), 100);
+            // happiness as the gap between the student need and school value in the range of 20 points below the need, normalized as 0 to 100.
+            int newAcademicRating = (int)(100*(college.getAcademicRating() - (studentNeeds.getAcademics() - raw_score_range)) / (float) raw_score_range);
+            newAcademicRating = Math.min(100,newAcademicRating);
+            newAcademicRating = Math.max(0,newAcademicRating);
+
+            int newCostRating = (int)(100*(college.getSchoolValue() - (studentNeeds.getCost() - raw_score_range)) / (float) raw_score_range);
+            newCostRating = Math.min(100,newCostRating);
+            newCostRating = Math.max(0,newCostRating);
+
+            int newInfrastructuresRating = (int)(100*(college.getInfrastructureRating() - (studentNeeds.getInfrastructures() - raw_score_range)) / (float) raw_score_range);
+            newInfrastructuresRating = Math.min(100,newInfrastructuresRating);
+            newInfrastructuresRating = Math.max(0,newInfrastructuresRating);
+
+            int newSafetyRating = (int)(100*(college.getSafetyRating() - (studentNeeds.getSafety() - raw_score_range)) / (float) raw_score_range);
+            newSafetyRating = Math.min(100,newSafetyRating);
+            newSafetyRating = Math.max(0,newSafetyRating);
+
+            int newSocialRating = (int)(100*(college.getSocialRating() - (studentNeeds.getCampusLife() - raw_score_range)) / (float) raw_score_range);
+            newSocialRating = Math.min(100,newSocialRating);
+            newSocialRating = Math.max(0,newSocialRating);
+
+            int newSportsRating = (int)(100*(college.getAthleticRating() - (studentNeeds.getSports() - raw_score_range)) / (float) raw_score_range);
+            newSportsRating = Math.min(100,newSportsRating);
+            newSportsRating = Math.max(0,newSportsRating);
 
             student.setAcademicRating(newAcademicRating);
             student.setCostRating(newCostRating);
