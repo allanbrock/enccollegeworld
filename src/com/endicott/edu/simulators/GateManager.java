@@ -142,7 +142,7 @@ public class GateManager {
         if(newGateLevel > oldGateLevel) {
             college.setGate(newGateLevel);
             CollegeDao.saveCollege(college);
-            popupManager.newPopupEvent(collegeId, "Level Up!", "Congrats you've reached enough students for level " + newGateLevel + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+            popupManager.newPopupEvent(collegeId, "Level Up!", "Congrats you've reached enough students for level " + newGateLevel + "!", "Close", "okGate", "resources/images/star.png", "icon");
         }
     }
 }

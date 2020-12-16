@@ -6,6 +6,7 @@ import com.endicott.edu.datalayer.PopupEventDao;
 import com.endicott.edu.models.BuildingModel;
 import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.models.PopupEventModel;
+import com.endicott.edu.simulators.FinanceManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.google.gson.Gson;
 
@@ -45,6 +46,12 @@ public class EventOptionChosenServlet extends javax.servlet.http.HttpServlet {
         popupManager.removePopupIfButtonPressed(collegeId, request);
 //        PopupEventModel[] popupEvents;
 //        popupEvents = PopupEventDao.getPopupEventsArray(collegeId);
+
+        if(splits[2].equalsIgnoreCase("deleteEvents")) {
+            List<PopupEventModel> popupEvents = PopupEventDao.getPopupEvents(collegeId);
+            popupEvents.clear();
+            PopupEventDao.saveAllPopupEvents(collegeId, popupEvents);
+        }
 
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");

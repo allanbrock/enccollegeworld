@@ -60,7 +60,7 @@ public class AchievementManager {
         if(achievement.getLock()==true) {
             achievement.setLock(false);
             Accountant.receiveIncome(collegeId, achievement.getDescription(), achievement.getCashReward());
-            popupManager.newPopupEvent(collegeId, "Achievement Get!", "Congrats you've unlocked a new achievement: " + achievement.getName() + "!", "Okay", "okGate", "resources/images/star.png", "icon");
+            popupManager.newPopupEvent(collegeId, "Achievement Get!", "Congrats you've unlocked a new achievement: " + achievement.getName() + "!", "Close", "okGate", "resources/images/star.png", "icon");
         }
     }
 

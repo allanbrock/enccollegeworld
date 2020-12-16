@@ -45,7 +45,7 @@ public class RiotManager {
     public void createRegularRiot(String collegeId, RiotModel riot, PopupEventManager popupManager, String cause) {
         riot.setName(cause);
         riot.setDescription("A riot has started on campus!");
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         // Decrease College Safety trait in event of riot
         CollegeRating.decreaseSafetyRating(collegeId, "REGULAR");
     }
@@ -55,7 +55,7 @@ public class RiotManager {
         riot.setName(cause);
         riot.setRiotCost(250000);
         riot.setDescription("Mayhem has broken loose across the student body! They demand lower tuition and better quality of life!");
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "You really messed up.");
         // Decrease College Safety trait in event of riot
         CollegeRating.decreaseSafetyRating(collegeId, "SEVERE");
@@ -66,7 +66,7 @@ public class RiotManager {
         riot.setName(cause);
         riot.setRiotCost(150000);
         riot.setDescription("The faculty are fed up with the administration! They have started to boycott teaching!");
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "Professors aren't professing.");
         // Decrease College Safety trait in event of riot
         CollegeRating.decreaseSafetyRating(collegeId, "FACULTY");
@@ -78,7 +78,7 @@ public class RiotManager {
         riot.setRiotCost(5000);
         riot.setDescription("A group of rowdy students defaced school property!");
         letPeopleRiot(bm, collegeId, 5000, 2000, 0, riot.getRiotCost(), "This gang of hooligans were destructive.");
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         // Decrease College Safety trait in event of riot
         CollegeRating.decreaseSafetyRating(collegeId, "ROWDY");
     }
@@ -88,7 +88,7 @@ public class RiotManager {
         riot.setName(cause);
         riot.setRiotCost(50000);
         riot.setDescription("Your stakeholders aren't happy with your management");
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         letPeopleRiot(bm, collegeId, riot.getRiotCost(), 25000, 0, riot.getRiotCost(), "They did a lot of damage.");
     }
 
@@ -116,10 +116,9 @@ public class RiotManager {
             riot.setName("Softball Riot");
             riot.setDescription("Your Softball team has won a conference championship! A riot has broke out on campus");
         }
-        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Ok", "ok", "resources/images/rioticon.png", "icon");
+        popupManager.newPopupEvent(collegeId, riot.getName(), riot.getDescription(), "Close", "ok", "resources/images/rioticon.png", "icon");
         // FIXME: Add support in SportManager so that createSportsRiot is passed a BuildingManager reference
         // letPeopleRiot(bm, collegeId, riot.getRiotCost(), 25000, 0, riot.getRiotCost(), "They did a lot of damage.");
-
     }
 
     // chooses a random building for the riot to have occurred in or nearby, and damages it
