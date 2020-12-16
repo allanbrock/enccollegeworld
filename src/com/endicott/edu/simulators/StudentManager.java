@@ -439,45 +439,27 @@ public class StudentManager {
             float safetyFactor = newSafetyRating * studentNeeds.getSafety() / (float) overall;
             float socialFactor = newSocialRating * studentNeeds.getCampusLife() / (float) overall;
             float sportsFactor = newSportsRating * studentNeeds.getSports() / (float) overall;
-            int lastHappiness = student.getHappiness();
             student.setHappiness((int) (academicFactor + costFactor + infrastructureFactor + safetyFactor + socialFactor + sportsFactor));
 
             //CollegeManager.logger.info("student happiness: " + student.getHappiness());
             //CollegeManager.logger.info("academicRating: " + student.getAcademicRating());
             setStudentFeedback(student, collegeId);
-            //Last Range is checking to see if the last happiness changed at all,
-            //If it isn't changed, the avatars shouldn't change or generate a different happy face
-            int lastRange = checkHappinessRange(lastHappiness);
-            if (student.getHappiness() >= 95 && !(lastRange >= 95)) {
+            if (student.getHappiness() >= 95) {
                 student.getAvatar().generateHappyAvatar();
                 student.getAvatar().setEyes("Hearts");
-            } else if (student.getHappiness() >= 70 && !(lastRange >= 70)) {
+            } else if (student.getHappiness() >= 70) {
                 student.getAvatar().generateHappyAvatar();
-            } else if (student.getHappiness() <= 69 && student.getHappiness() >= 50 && !(lastRange <= 69 && lastRange >= 50)) {
+            } else if (student.getHappiness() <= 69 && student.getHappiness() >= 50) {
                 student.getAvatar().setMouth("Serious");
                 student.getAvatar().setEyebrows("Default");
                 student.getAvatar().setEyes("Default");
-            } else if (student.getHappiness() < 50 && !(lastRange < 50)) {
+            } else if (student.getHappiness() < 50) {
                 student.getAvatar().generateUnhappyAvatar();
             }
         }
 
 
         dao.saveAllStudents(collegeId, students);
-    }
-
-    private int checkHappinessRange(int lastHappiness){
-        int range = 0;
-        if (lastHappiness >= 95) {
-            range = 96;
-        } else if (lastHappiness >= 70) {
-            range = 71;
-        } else if (lastHappiness <= 69 && lastHappiness >= 50) {
-            range = 68;
-        } else if (lastHappiness < 50) {
-            range = 49;
-        }
-        return range;
     }
 
     private void setDiningHallHappinessRating(StudentModel student, CollegeModel college) {
