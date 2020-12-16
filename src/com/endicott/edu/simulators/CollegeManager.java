@@ -69,12 +69,12 @@ public class CollegeManager {
         logger.info("Establish fire.");FireManager.establishCollege(collegeId);
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
-        //CoachManager.removeAllCollegeCoaches(collegeId);
         calculateTuitionRating(collegeId);
         CollegeRating collegeTraits = new CollegeRating();
         collegeTraits.handleTimeChange(collegeId);
         college.getFinancialGraph().getTuitionCosts().add(college.getYearlyTuitionCost());
         studentManager.calculateStatistics(collegeId, true);
+        CoachManager.removeAllCollegeCoaches(collegeId);
         return college;
     }
 
@@ -84,7 +84,6 @@ public class CollegeManager {
      * @param collegeId college name
      */
     static public void sellCollege(String collegeId) {
-        //CoachManager.removeAllCollegeCoaches(collegeId);
         CollegeDao.deleteCollege(collegeId);
         BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
@@ -98,6 +97,7 @@ public class CollegeManager {
         SnowDao.deleteSnowStorm(collegeId);
         AdmissionsDao.removeAdmissionsData(collegeId);
         AcademicsDao.removeAcademicData(collegeId);
+        CoachManager.removeAllCollegeCoaches(collegeId);
 
     }
 
