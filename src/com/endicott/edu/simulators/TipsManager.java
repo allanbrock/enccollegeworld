@@ -106,7 +106,6 @@ public class TipsManager {
      */
     public static void changeAdmissionsTips(CollegeModel college) {
         TipsModel tm = college.getTips();
-        //In the future if you decide to make these tips dynamic add line below
         tm.getAdmissionsTips().clear();
         tm.getAdmissionsTips().add("Pick the group with the best impact on your school");
         tm.getAdmissionsTips().add("Level up to improve the quality of students in your future admission pools.");
@@ -118,7 +117,6 @@ public class TipsManager {
      */
     public static void changeGeneralTips(CollegeModel college) {
         TipsModel tm = college.getTips();
-        //In the future if you decide to make these tips dynamic add line below
         tm.getGeneralTips().clear();
         tm.getGeneralTips().add("Focus on Budgeting your Money.");
         tm.getGeneralTips().add("Checkout Potential Student's Applications in Admissions!");
