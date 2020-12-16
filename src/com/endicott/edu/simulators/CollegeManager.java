@@ -69,7 +69,7 @@ public class CollegeManager {
         logger.info("Establish fire.");FireManager.establishCollege(collegeId);
         logger.info("Establish play.");PlayManager.establishCollege(collegeId);
         logger.info("Establish inventory.");InventoryManager.establishCollege(collegeId);
-        CoachManager.removeAllCollegeCoaches(collegeId);
+        //CoachManager.removeAllCollegeCoaches(collegeId);
         calculateTuitionRating(collegeId);
         CollegeRating collegeTraits = new CollegeRating();
         collegeTraits.handleTimeChange(collegeId);
@@ -84,7 +84,7 @@ public class CollegeManager {
      * @param collegeId college name
      */
     static public void sellCollege(String collegeId) {
-        CoachManager.removeAllCollegeCoaches(collegeId);
+        //CoachManager.removeAllCollegeCoaches(collegeId);
         CollegeDao.deleteCollege(collegeId);
         BuildingDao.deleteBuilding(collegeId);
         FacultyDao.removeAllFaculty(collegeId);
