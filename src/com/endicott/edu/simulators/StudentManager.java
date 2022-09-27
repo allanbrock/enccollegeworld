@@ -771,8 +771,9 @@ public class StudentManager {
      * @param student   The student who's giving feedback
      */
     private static void setStudentFeedback(StudentModel student, String collegeId) {
-        Boolean usesVerb        = (Math.random() >= 0.5);
-        Boolean useNoun         = true;
+        boolean usesVerb        = (Math.random() >= 0.5);
+        boolean useNoun         = true;
+        boolean isNegative      = false;
         String feedback         = (usesVerb ? "I " : "The ");
         int useNeutralIntro;
 
@@ -782,22 +783,24 @@ public class StudentManager {
         HashMap<String, Integer> happinessLevels = new HashMap<>();
 
 
-
-        happinessLevels.put("academic", student.getAcademicHappinessRating());
-//      happinessLevels.put("advisor", student.getAdvisorHappinessHappinessRating());
-        happinessLevels.put("health", student.getHealthHappinessRating());
-        happinessLevels.put("money", student.getMoneyHappinessRating());
-//      happinessLevels.put("fun" , student.getFunHappinessRating());
+        happinessLevels.put("academic", student.getAcademicRating());
+        happinessLevels.put("safety", student.getSafetyRating());
+        happinessLevels.put("money", student.getCostRating());
+        happinessLevels.put("infrastructure", student.getInfrastructuresRating());
+        happinessLevels.put("social", student.getSocialRating());
+        happinessLevels.put("sports", student.getSportsRating());
 
         // Negative feedback
         if(student.getHappiness() < 50) {
             Collections.addAll(verbs,"hate ", "don't like ", "dislike ", "am displeased with ", "am not a fan of ");
             Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
+            isNegative = true;
 
         // Positive feedback
         } else if(student.getHappiness() > 70) {
             Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
-            Collections.addAll(adjectives, "great ", "fantastic ", "super ", "surprisingly well ");
+            Collections.addAll(adjectives, "great ", "fantastic ", "super ");
+            isNegative = false;
 
         // Neutral feedback
         } else {
@@ -821,10 +824,10 @@ public class StudentManager {
         if(useNoun) {       //If it was not a neutral response
             if (usesVerb) {     //If random chance when usesVerb was assigned was true
                 feedback += verbs.get(new Random().nextInt(verbs.size())) +
-                        "the " + getFeedbackNoun(happinessLevels, true);
+                        "the " + getFeedbackNoun(happinessLevels, isNegative);
             }
             else {
-                feedback += getFeedbackNoun(happinessLevels, true) + "is " +
+                feedback += getFeedbackNoun(happinessLevels, isNegative) + "is " +
                         adjectives.get(new Random().nextInt(adjectives.size()));
             }
         }
@@ -844,7 +847,7 @@ public class StudentManager {
     }
 
 
-    private static String getFeedbackNoun(HashMap<String, Integer> vals, Boolean isNegative) {
+    private static String getFeedbackNoun(HashMap<String, Integer> vals, boolean isNegative) {
 
         Map.Entry<String, Integer> current = vals.entrySet().iterator().next();
         List<String> nouns = new ArrayList<>();
@@ -862,8 +865,17 @@ public class StudentManager {
         else if(current.getKey().equals("academic"))
             Collections.addAll(nouns,"number of professors ", "student professor ratio ");
 
-        else if(current.getKey().equals("health"))
-            Collections.addAll(nouns,"health care ", "healthiness ", "health system ");
+        else if(current.getKey().equals("safety"))
+            Collections.addAll(nouns,"safety ", "level of safety ", "health and safety ");
+
+        else if(current.getKey().equals("infrastructure"))
+            Collections.addAll(nouns, "infrastructure ", "infrastructure system ", "upkeep of buildings and roads ");
+
+        else if(current.getKey().equals("social"))
+            Collections.addAll(nouns, "social life ", "student life ");
+
+        else if(current.getKey().equals("sports"))
+            Collections.addAll(nouns, "sports ", "athletics department ");
 
         return nouns.get(new Random().nextInt(nouns.size()));
     }
