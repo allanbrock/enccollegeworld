@@ -165,11 +165,11 @@ public class FacultyManager {
         return academicModel.getUnlockedDepts().get(rand);
     }
 
-    public static void computeFacultyHappiness(FacultyModel faculty, Boolean daileyComputation){
+    public static void computeFacultyHappiness(FacultyModel faculty, Boolean dailyComputation){
         if (faculty == null)  // This is defensive programming.  Very important in public methods.
             return;
 
-        if(!daileyComputation) {
+        if(!dailyComputation) {
             int tempHappiness = computeTemporaryHappiness(faculty.getSalary());
             for (int i = 0; i < FacultyManager.getSalaryOptions().size(); i++) {
                 if (faculty.getSalary() == FacultyManager.getSalaryOptions().get(i)) {
@@ -196,6 +196,8 @@ public class FacultyManager {
         }
         if(faculty.getHappiness() > 100)
             faculty.setHappiness(100);
+        if(faculty.getHappiness() < 0)
+            faculty.setHappiness(0);
     }
 
     public static ArrayList<Integer> getSalaryOptions(){
@@ -237,6 +239,8 @@ public class FacultyManager {
             curPerformance -= randGenerator;
         if(curPerformance > 100)
             curPerformance = 100;
+        if(curPerformance < 0)
+            curPerformance = 0;
         member.setPerformance(curPerformance);
     }
 
