@@ -4,96 +4,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <welcome-file-list>
-        <welcome-file>welcome</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <servlet>
-        <servlet-name>viewCollegeServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewCollegeServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewCollegeServlet</servlet-name>
-        <url-pattern>/viewCollege</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>welcomeServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.WelcomeServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>welcomeServlet</servlet-name>
-        <url-pattern>/welcome</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewBuildingsServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewBuildingsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewBuildingsServlet</servlet-name>
-        <url-pattern>/viewBuilding</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewAboutServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewAboutServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewAboutServlet</servlet-name>
-        <url-pattern>/viewAbout</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewStudentServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewStudentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewStudentServlet</servlet-name>
-        <url-pattern>/viewStudent</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewSportsServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewSportsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewSportsServlet</servlet-name>
-        <url-pattern>/viewSports</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewFacultyServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewFacultyServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewFacultyServlet</servlet-name>
-        <url-pattern>/viewFaculty</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewGatesServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewGatesServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewGatesServlet</servlet-name>
-        <url-pattern>/viewGates</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewAdminServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewAdminServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewAdminServlet</servlet-name>
-        <url-pattern>/viewAdmin</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewBalanceServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewBalanceServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewBalanceServlet</servlet-name>
-        <url-pattern>/viewBalance</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>viewStoreServlet</servlet-name>
-        <servlet-class>com.endicott.edu.ui.ViewStoreServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>viewStoreServlet</servlet-name>
-        <url-pattern>/viewStore</url-pattern>
-    </servlet-mapping>
 
     <!-- Restful Servlets -->
     <servlet>
@@ -104,7 +16,6 @@
         <servlet-name>restCollegeServlet</servlet-name>
         <url-pattern>/rest/college/*</url-pattern>
     </servlet-mapping>
-
 
     <servlet>
         <servlet-name>admissionServlet</servlet-name>
@@ -142,14 +53,14 @@
         <url-pattern>/rest/eventsCalendar/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>eventsServlet</servlet-name>
-        <servlet-class>com.endicott.edu.rest.EventsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>eventsServlet</servlet-name>
-        <url-pattern>/rest/events/*</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>eventsServlet</servlet-name>-->
+<!--        <servlet-class>com.endicott.edu.rest.EventsServlet</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>eventsServlet</servlet-name>-->
+<!--        <url-pattern>/rest/events/*</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <servlet>
         <servlet-name>eventOptionChosenServlet</servlet-name>
@@ -223,5 +134,4 @@
         <servlet-name>createDeleteCollegeServlet</servlet-name>
         <url-pattern>/rest/createOrDeleteCollege/</url-pattern>
     </servlet-mapping>
-
 </web-app>
