@@ -1,5 +1,7 @@
 package com.endicott.edu.rest;
 
+import com.endicott.edu.datalayer.EverythingDao;
+import com.endicott.edu.models.EverythingModel;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,5 +24,16 @@ public class RestHelper {
 
         out.print(res);
         out.flush();
+    }
+
+    public static void sendEverything(
+            HttpServletResponse response,
+            String collegeId) throws IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+
+        EverythingModel allOfEverything = EverythingDao.getEverything(collegeId);
+        RestHelper.sendAsJson(response, allOfEverything);
     }
 }
