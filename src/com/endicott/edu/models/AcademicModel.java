@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class AcademicModel implements Serializable {
     private int level = 0;
-    private int[] facultySalaries = {60000, 70000, 80000, 90000, 100000}; // non-static so it is in the REST data
+    private int[] facultySalaries = {100000, 125000, 150000, 175000, 200000}; // non-static so it is in the REST data
 
     private ArrayList<DepartmentModel> unlockedDepts;
     private ArrayList<DepartmentModel> lockedDepts;
