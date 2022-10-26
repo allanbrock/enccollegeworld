@@ -4,6 +4,8 @@ import com.endicott.edu.simulators.CollegeManager;
 
 import java.io.Serializable;
 import java.lang.Math;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AvatarModel implements Serializable {
     private String accessory;      //The accessory the person has
@@ -18,6 +20,28 @@ public class AvatarModel implements Serializable {
     private String mouth;          //The type of mouth the person has
     private String skinColor;      //The color of the person's skin
     private String top;            //The top that the person is wearing(hair, hats, etc.)
+
+    private String code;
+
+    private static final String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final Map<String, Integer> numStylesPerAttribute = new HashMap<String, Integer>() {
+        private static final long serialVersionUID = -7794936286092854441L;
+
+        {
+        put("accessory", 7);
+        put("clothesColor", 15);
+        put("clothesType", 9);
+        put("eyeType", 12);
+        put("eyebrowType", 12);
+        put("facialHairColor", 8);
+        put("facialHairType", 6);
+        put("graphicType", 11);
+        put("hairColor", 11);
+        put("mouthType", 12);
+        put("skinColor", 7);
+        put("topType", 35);
+    }};
+
 
     //Following are arrays holding all the options
     private static String[] accessories = {"Blank", "Kurt", "Prescription01", "Prescription02", "Round", "Sunglasses", "Wayfarers"};
@@ -56,6 +80,7 @@ public class AvatarModel implements Serializable {
         mouth = "";
         skinColor = "";
         top = "";
+        code = "";
     }
 
     /**
@@ -78,6 +103,12 @@ public class AvatarModel implements Serializable {
         skinColor = skinColors[(int)(Math.random() * 100) % skinColors.length];
         hatColor = clothesColors[(int)(Math.random() * 100) % clothesColors.length];
         hairColor = hairColors[(int)(Math.random() * 100) % hairColors.length];
+
+        StringBuilder str = new StringBuilder();
+        for (int numStyles : numStylesPerAttribute.values()) {
+            str.append(alphanumeric.charAt((int) (Math.random() * numStyles)));
+        }
+        code = str.toString();
     }
 
     public void generateHappyAvatar(){

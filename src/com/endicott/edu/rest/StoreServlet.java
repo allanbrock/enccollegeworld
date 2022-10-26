@@ -1,6 +1,8 @@
 package com.endicott.edu.rest;
 
+import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.datalayer.InventoryDao;
+import com.endicott.edu.models.EverythingModel;
 import com.endicott.edu.models.ItemModel;
 import com.endicott.edu.simulators.InventoryManager;
 import com.google.gson.Gson;
@@ -35,15 +37,14 @@ public class StoreServlet extends javax.servlet.http.HttpServlet {
         if (splits.length >=2 && splits[2]!=null){
             String name = splits[2];
             InventoryManager.buyItem(name, collegeId);
-
-            return;
         }
-        List<ItemModel> items;
-        items = InventoryDao.getItems(collegeId);
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
-        RestHelper.sendAsJson(response, items);
+        // it is insufficient to only send back the inventory; the front-end
+        // will not have the new college's balance after spending the money on
+        // this item
+        //        List<ItemModel> items;
+        //        items = InventoryDao.getItems(collegeId);
+        //        RestHelper.sendAsJson(response, items);
+        RestHelper.sendEverything(response, collegeId);
     }
 
 }
