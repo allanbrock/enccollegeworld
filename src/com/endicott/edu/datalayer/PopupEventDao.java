@@ -1,15 +1,11 @@
 package com.endicott.edu.datalayer;
 
 import com.endicott.edu.models.PopupEventModel;
-import com.endicott.edu.models.StudentModel;
-import com.endicott.edu.simulators.CollegeManager;
-import com.endicott.edu.ui.InterfaceUtils;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
