@@ -50,7 +50,9 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
                 FacultyDao.removeSingleFaculty(collegeId, facultyMember);
             }
             else if (splits[2].equalsIgnoreCase("raise")) {
-                FacultyDao.giveRaise(collegeId, index);
+                String raiseValueString = splits[4];
+                int raiseValue = Integer.parseInt(raiseValueString);
+                FacultyDao.giveRaise(collegeId, index, raiseValue);
             }
         }
 
