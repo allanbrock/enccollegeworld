@@ -118,6 +118,11 @@ public class AdmissionsManager {
         tierDistributions[2] = class_tier_distributions[collegeLevelForTierDistributions][2] + tierDistributions[1];
         tierDistributions[3] = 1 - tierDistributions[2];
 
+        // Formula for generating random number: (int)Math.random() * (max - min + 1) + min (min is inclusive while the max is exclusive)
+        int academicTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+        int sportsTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+        int socialTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+
         for (int i = 0; i < numNewStudents; i++) {
             PotentialStudent potentialStudent = new PotentialStudent();
             // assign a personality and a quality
@@ -137,7 +142,7 @@ public class AdmissionsManager {
             }
             //PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
             PersonalityModel pm = PersonalityModel.generateRandomModel(tier);
-            QualityModel qm = QualityModel.generateRandomModel(tier);
+            QualityModel qm = QualityModel.generateRandomModel(collegeId, academicTier, sportsTier, socialTier);
 
             if(rand.nextInt(10) + 1 > 5) {
                 potentialStudent.setGender(Gender.CISGENDER_MALE);

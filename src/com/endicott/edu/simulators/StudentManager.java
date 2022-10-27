@@ -143,6 +143,11 @@ public class StudentManager {
         Random rand = new Random();
         CollegeModel college = CollegeDao.getCollege(collegeId);
 
+        // Formula for generating random number: (int)Math.random() * (max - min + 1) + min (min is inclusive while the max is exclusive)
+        int academicTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+        int sportsTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+        int socialTier = (int)Math.random()*(4)+1; // Simplified from  -->  (int)Math.random() * (4 - 1 + 1) + 1;
+
         for (int i = 0; i < numNewStudents; i++) {
             Student student = new Student();
 
@@ -174,7 +179,7 @@ public class StudentManager {
                 tier = 2;
             }
 
-            student.setQuality(QualityModel.generateRandomModel(tier));
+            student.setQuality(QualityModel.generateRandomModel(collegeId, academicTier, sportsTier, socialTier));
 
             if (rand.nextInt(10) + 1 > 5) {
                 student.setFullName(NameGenDao.generateName(false));
