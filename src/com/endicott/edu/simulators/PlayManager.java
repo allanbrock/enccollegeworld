@@ -2,9 +2,6 @@ package com.endicott.edu.simulators;
 
 import com.endicott.edu.datalayer.PlayDao;
 import com.endicott.edu.models.PlayModel;
-import com.endicott.edu.models.StudentModel;
-
-import java.util.ArrayList;
 
 public class PlayManager {
     private static PlayDao playDao = new PlayDao();

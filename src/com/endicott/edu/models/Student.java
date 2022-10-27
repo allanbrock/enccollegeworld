@@ -7,7 +7,7 @@ import java.util.Random;
  * Created by Connor Frazier on 9/12/2017.
  * Edited by Ryan Kelley, Marissa Patti, and Giana Nekitopoulos on 10/5/20
  */
-public class StudentModel extends PersonModel implements Serializable {
+public class Student extends Person implements Serializable {
     private boolean athlete = false;                //Set if they are on a team or not (Based upon athleticAbility)
     private int athleticAbility = 0;                //Rating of 0-10, 10 being best (Randomized when created then set)
     private String team = "unknown";                //Team that the student is apart of (When created, set to empty)
@@ -45,11 +45,11 @@ public class StudentModel extends PersonModel implements Serializable {
 
 
     //Constructor to make a new student with preset fields (assumed to be set after creation)
-    public StudentModel() {
+    public Student() {
     }
 
     //Constructor to create a student with some defined values
-    public StudentModel(String firstName, String lastName, GenderModel gender, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String runId, int numberHoursLeftBeingSick, int hourLastUpdated, String nature, int year) {
+    public Student(String firstName, String lastName, Gender gender, int idNumber, int happinessLevel, boolean athlete, int athleticAbility, String dorm, String runId, int numberHoursLeftBeingSick, int hourLastUpdated, String nature, int year) {
         super(firstName, lastName, gender, idNumber, happinessLevel);
         this.athlete = athlete;
         this.athleticAbility = athleticAbility;
@@ -238,7 +238,7 @@ public class StudentModel extends PersonModel implements Serializable {
     }
     public void setProfessorHappinessRating(int professorHappinessRating) {this.professorHappinessRating = professorHappinessRating;}
 
-    public void setAdvisor(FacultyModel advisor) {
+    public void setAdvisor(Faculty advisor) {
         this.advisor = advisor.getFacultyName();
     }
     public String getAdvisor() {
@@ -266,9 +266,5 @@ public class StudentModel extends PersonModel implements Serializable {
     }
     public void setClassYear(int classYear){
         this.classYear = classYear;
-    }
-
-    public AvatarModel getAvatar(){
-        return avatar;
     }
 }

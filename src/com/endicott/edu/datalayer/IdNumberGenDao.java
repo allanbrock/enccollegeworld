@@ -1,7 +1,6 @@
 package com.endicott.edu.datalayer;
 
 
-import com.endicott.edu.models.FacultyModel;
 import com.google.gson.Gson;
 
 import java.io.*;

@@ -62,7 +62,7 @@ public class CollegeRating {
         }
 
         // Get overall academic ability of student body
-        for(StudentModel student : StudentDao.getStudents(collegeId)){
+        for(Student student : StudentDao.getStudents(collegeId)){
             academicQuality += student.getQuality().getAcademicQuality();
             numStudents++;
         }
@@ -116,7 +116,7 @@ public class CollegeRating {
         }
 
         // Get overall athletic ability of student body
-        for(StudentModel student : StudentDao.getStudents(collegeId)){
+        for(Student student : StudentDao.getStudents(collegeId)){
             athleticQuality += student.getQuality().getAthleticQuality();
             numStudents++;
         }
@@ -252,7 +252,7 @@ public class CollegeRating {
         }
 
         // Decrease rating for each sick student
-        for(StudentModel student : StudentDao.getStudents(collegeId)) {
+        for(Student student : StudentDao.getStudents(collegeId)) {
             if(student.getNumberHoursLeftBeingSick() > 0){
                 rating--;
                 isSick = true;
@@ -358,7 +358,7 @@ public class CollegeRating {
             numGames += (sport.getNumGames());
         }
         // get student social quality
-        for(StudentModel student : StudentDao.getStudents(collegeId)){
+        for(Student student : StudentDao.getStudents(collegeId)){
             socialQuality += student.getQuality().getSocialQuality();
             numStudents++;
         }

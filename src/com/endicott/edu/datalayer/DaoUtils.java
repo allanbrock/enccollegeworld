@@ -1,8 +1,5 @@
 package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.FacultyModel;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.*;

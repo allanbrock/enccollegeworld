@@ -1,5 +1,6 @@
 package com.endicott.edu.rest;
 
+import com.endicott.edu.api.ServletTemplate;
 import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.models.EverythingModel;
 

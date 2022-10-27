@@ -47,8 +47,8 @@ public class FacultyManager {
 //            popupManager.newPopupEvent("New Assistant Deans", assistantDeanCheck.size() + " departments Assistant Deans have been replaced", "ok", "done", "resources/images/student.png", "Assistant Dean Replacement");
 //        }
 
-        List<FacultyModel> editableFaculty = FacultyDao.getFaculty(collegeId);
-        for(FacultyModel member : editableFaculty){
+        List<Faculty> editableFaculty = FacultyDao.getFaculty(collegeId);
+        for(Faculty member : editableFaculty){
             computeFacultyHappiness(member, true);
             computeFacultyPerformance(collegeId, member);
             if(member.getRaiseRecentlyGiven()){
@@ -67,9 +67,9 @@ public class FacultyManager {
      * @param hoursAlive  number of hours college has existed.
      */
    private static void payFaculty(String collegeId, int hoursAlive, FacultyDao fao){
-        List<FacultyModel> facultyList = fao.getFaculty(collegeId);
+        List<Faculty> facultyList = fao.getFaculty(collegeId);
         int total = 0;
-        for(FacultyModel member : facultyList){
+        for(Faculty member : facultyList){
             int paycheck = CollegeModel.daysAdvance * member.getSalary()/365;
             total += paycheck;
         }
@@ -90,7 +90,7 @@ public class FacultyManager {
 
         for (int i=0; i<22; i++) {
             DepartmentModel dept = getQuasiRandomUnlockedDeptName(am);
-            FacultyModel member = addFaculty(collegeId, 100000, generateFacultyTitle(dept), dept.getDepartmentName());
+            Faculty member = addFaculty(collegeId, 100000, generateFacultyTitle(dept), dept.getDepartmentName());
 
             for(DepartmentModel d : am.getUnlockedDepts()){
                 if(member.getDepartmentName().equals(d.getDepartmentName())){
@@ -112,17 +112,17 @@ public class FacultyManager {
     /**
      * Add new faculty to the college.
      */
-    public static FacultyModel addFaculty(String collegeID, int salary, String facultyTitle, String facultyDepartment) {
+    public static Faculty addFaculty(String collegeID, int salary, String facultyTitle, String facultyDepartment) {
         Boolean isFemale;
-        FacultyModel member;
+        Faculty member;
         FacultyDao fao = new FacultyDao();
         double r = Math.random();
         if(r < 0.5)
             isFemale = true;
         else
             isFemale = false;
-        member = new FacultyModel(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
-        member.getAvatar().generateStudentAvatar(isFemale);
+        member = new Faculty(facultyTitle, facultyDepartment, collegeID, salary, isFemale);
+        member.generateNewAvatar();
         fao.saveNewFaculty(collegeID, member);
         return member;
     }
@@ -165,7 +165,7 @@ public class FacultyManager {
         return academicModel.getUnlockedDepts().get(rand);
     }
 
-    public static void computeFacultyHappiness(FacultyModel faculty, Boolean dailyComputation){
+    public static void computeFacultyHappiness(Faculty faculty, Boolean dailyComputation){
         if (faculty == null)  // This is defensive programming.  Very important in public methods.
             return;
 
@@ -216,7 +216,7 @@ public class FacultyManager {
 
     // Computes an algorithm to generate a daily performance for an employee member
     // The algorithm is based primarily on member happiness but also randomness
-    public static void computeFacultyPerformance(String collegeID, FacultyModel member){
+    public static void computeFacultyPerformance(String collegeID, Faculty member){
         Random r = new Random();
         int randGenerator = r.nextInt((4-1) + 1) + 1;
         Boolean increase = computeDirection(member);
@@ -244,7 +244,7 @@ public class FacultyManager {
         member.setPerformance(curPerformance);
     }
 
-    private static Boolean computeDirection(FacultyModel member){
+    private static Boolean computeDirection(Faculty member){
         double direction = Math.random();
         if (member == null)
             return false;
@@ -272,17 +272,17 @@ public class FacultyManager {
     // Used specifically for initial happiness computation
     private static int computeTemporaryHappiness(int salary){
         Random r = new Random();
-        if(salary == 100000)
+        if(salary <= 100000)
             return r.nextInt(100 - 50) + 50;
-        else if(salary == 125000)
+        else if(salary <= 125000)
             return r.nextInt(100 - 65) + 50;
-        else if(salary == 150000)
+        else if(salary <= 150000)
             return r.nextInt(100 - 75) + 50;
         else
             return r.nextInt(100 - 90) + 50;
     }
 
-    public static void removeFaculty(String collegeID, FacultyModel member, Boolean coach){
+    public static void removeFaculty(String collegeID, Faculty member, Boolean coach){
         AcademicModel academics = AcademicsDao.getAcademics(collegeID);
 
         if(!coach) {
@@ -295,12 +295,12 @@ public class FacultyManager {
             FacultyDao.removeSingleFaculty(collegeID, member);
         }
         else
-            CoachManager.removeCoach(collegeID, (CoachModel) member);
+            CoachManager.removeCoach(collegeID, (Coach) member);
 
         AcademicsDao.saveAcademicsData(collegeID,academics);
     }
 
-    public static String generateFacultyID(FacultyModel member){
+    public static String generateFacultyID(Faculty member){
         int randID = IdNumberGenDao.randIDGeneration();
         for(int i = 0; i < FacultyDao.getFaculty(member.getCollegeID()).size(); i++){
             if(String.valueOf(randID).equals(FacultyDao.getFaculty(member.getCollegeID()).get(i))){
@@ -311,14 +311,14 @@ public class FacultyManager {
         return String.valueOf(randID);
     }
 
-    public static Boolean giveFacultyRaise(String collegeID, FacultyModel member, Boolean coach){
+    public static Boolean giveFacultyRaise(String collegeID, Faculty member, Boolean coach){
         FacultyDao fao = new FacultyDao();
-        ArrayList<FacultyModel> newEmployees;
+        ArrayList<Faculty> newEmployees;
         if(!coach)
-            newEmployees = (ArrayList<FacultyModel>) FacultyDao.getFaculty(collegeID);
+            newEmployees = (ArrayList<Faculty>) FacultyDao.getFaculty(collegeID);
         else {
             newEmployees = new ArrayList<>();
-            for(CoachModel c : CoachManager.getCollegeCoaches()){
+            for(Coach c : CoachManager.getCollegeCoaches()){
                 newEmployees.add((c));
             }
         }
@@ -330,7 +330,7 @@ public class FacultyManager {
         else{
             for(int i : getSalaryOptions()){
                 if(nextValueRaise){
-                    for(FacultyModel faculty : newEmployees){
+                    for(Faculty faculty : newEmployees){
                         if(member.getFacultyID().equals(faculty.getFacultyID())){
                             faculty.setSalary(i);
                             faculty.setRaiseRecentlyGiven(true);
@@ -347,19 +347,19 @@ public class FacultyManager {
         return true; // Statement should never be hit
     }
 
-    public static FacultyModel assignAdvisorToStudent(String collegeId){
+    public static Faculty assignAdvisorToStudent(String collegeId){
         Random r = new Random();
         int positionInFaculty = 0;
-        FacultyModel newAdvisor;
-        List<FacultyModel> updatedFaculty = FacultyDao.getFaculty(collegeId);
+        Faculty newAdvisor;
+        List<Faculty> updatedFaculty = FacultyDao.getFaculty(collegeId);
         int newAdvisorIndex = r.nextInt(FacultyDao.getFaculty(collegeId).size());
 
         return updatedFaculty.get(newAdvisorIndex);
     }
 
     private static void inspectFacultyPerformances(String collegeId){
-        List<FacultyModel> faculty = new ArrayList<>();
-        for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
+        List<Faculty> faculty = new ArrayList<>();
+        for(Faculty f : FacultyDao.getFaculty(collegeId)){
             if(f.getPerformance() < 45){
                 f.setUnderPerforming(true);
             }
@@ -382,7 +382,7 @@ public class FacultyManager {
 
     public static int getAverageFacultyPerformance(String collegeId){
         int sum = 0;
-        for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
+        for(Faculty f : FacultyDao.getFaculty(collegeId)){
             sum += f.getPerformance();
         }
         return sum/FacultyDao.getFaculty(collegeId).size();

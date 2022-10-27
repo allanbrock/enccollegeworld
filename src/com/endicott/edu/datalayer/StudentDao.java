@@ -1,7 +1,6 @@
 package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.CollegeModel;
-import com.endicott.edu.models.StudentModel;
+import com.endicott.edu.models.Student;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -17,15 +16,15 @@ public class StudentDao {
         return DaoUtils.getFilePathPrefix(runId) +  "student.dat";
     }
     private static Logger logger = Logger.getLogger("StudentDao");
-    private static HashMap<String, List<StudentModel>> cache = new HashMap<>();
+    private static HashMap<String, List<Student>> cache = new HashMap<>();
 
-    public static List<StudentModel> getStudents(String runId) {
+    public static List<Student> getStudents(String runId) {
         if (cache.containsKey(runId))
             return cache.get(runId);
 
         logger.info("Reading students from disk.");
-        ArrayList<StudentModel> students = new ArrayList<>();
-        StudentModel studentModel = null;
+        ArrayList<Student> students = new ArrayList<>();
+        Student studentModel = null;
         try {
             File file = new File(getFilePath(runId));
 
@@ -35,7 +34,7 @@ public class StudentDao {
             else{
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                students = (ArrayList<StudentModel>) ois.readObject();
+                students = (ArrayList<Student>) ois.readObject();
                 ois.close();
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -49,23 +48,23 @@ public class StudentDao {
     }
 
 
-    public static StudentModel[] getStudentsArray(String collegeId) {
-        List<StudentModel> students = getStudents(collegeId);
-        return students.toArray(new StudentModel[students.size()]);
+    public static Student[] getStudentsArray(String collegeId) {
+        List<Student> students = getStudents(collegeId);
+        return students.toArray(new Student[students.size()]);
     }
 
     public static int getNumberOfStudents(String collegeId) {
-        List<StudentModel> students = getStudents(collegeId);
+        List<Student> students = getStudents(collegeId);
         if (students == null)
             return 0;
         return students.size();
     }
 
-    public static List<StudentModel> getStudentsOnSport(String runId, String teamName) {
-        List<StudentModel> students = new ArrayList<>();
-        ArrayList<StudentModel> playerList = new ArrayList<>();
+    public static List<Student> getStudentsOnSport(String runId, String teamName) {
+        List<Student> students = new ArrayList<>();
+        ArrayList<Student> playerList = new ArrayList<>();
         students = getStudents(runId);
-        for( StudentModel student : students){
+        for( Student student : students){
             if(student.getTeam().equals(teamName)){
                 playerList.add(student);
             }
@@ -73,12 +72,12 @@ public class StudentDao {
         return playerList;
     }
 
-    public static void saveAllStudentsJustToCache(String runId, List<StudentModel> students){
+    public static void saveAllStudentsJustToCache(String runId, List<Student> students){
          cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
     }
 
     public static void saveAllStudentsUsingCache(String runId) {
-        List<StudentModel> students;
+        List<Student> students;
 
         if (!cache.containsKey(runId))
             return;
@@ -87,7 +86,7 @@ public class StudentDao {
         saveAllStudents(runId, students);
     }
 
-    public static void saveAllStudents(String runId, List<StudentModel> students){
+    public static void saveAllStudents(String runId, List<Student> students){
         logger.info("Saving all students to disk.");
         try {
             File file = new File(getFilePath(runId));
@@ -109,8 +108,8 @@ public class StudentDao {
         cache.put(runId,students);  // We need to update the cache so that next we get the up to date college.
     }
 
-    public void saveNewStudent(String runId, StudentModel student) {
-        List<StudentModel> students = getStudents(runId);
+    public void saveNewStudent(String runId, Student student) {
+        List<Student> students = getStudents(runId);
         student.setRunId(runId);
         students.add(student);
         saveAllStudents(runId, students);

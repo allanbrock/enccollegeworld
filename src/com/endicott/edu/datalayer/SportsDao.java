@@ -1,8 +1,6 @@
 package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.CoachModel;
 import com.endicott.edu.models.SportModel;
-import com.endicott.edu.simulators.SportManager;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;

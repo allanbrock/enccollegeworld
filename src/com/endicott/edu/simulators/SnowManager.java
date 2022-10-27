@@ -55,8 +55,8 @@ public class SnowManager {
         SnowModel snowStorm = SnowDao.getSnowStorm(collegeId);
         //for future use
         List<BuildingModel> buildings = BuildingDao.getBuildings(collegeId);
-        List<StudentModel> students = StudentDao.getStudents(collegeId);
-        List<FacultyModel> faculty = FacultyDao.getFaculty(collegeId);
+        List<Student> students = StudentDao.getStudents(collegeId);
+        List<Faculty> faculty = FacultyDao.getFaculty(collegeId);
 
         //snowSeasonPopup(hoursAlive,collegeId,popupManager);
         //if there is NO snow storm occurring, possibly start one:
@@ -377,8 +377,8 @@ public class SnowManager {
      * @return  the number of sick people
      * */
     public int getRandomNumOfSickStudents(String collegeId, int intensity){
-        List<StudentModel> allStudents = StudentDao.getStudents(collegeId);
-        List<FacultyModel> allFaculty = FacultyDao.getFaculty(collegeId);
+        List<Student> allStudents = StudentDao.getStudents(collegeId);
+        List<Faculty> allFaculty = FacultyDao.getFaculty(collegeId);
         int sick;
         if(intensity == 3){
             sick = (int)(Math.random() * 90) + 70;

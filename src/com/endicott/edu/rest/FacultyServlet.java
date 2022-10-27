@@ -1,11 +1,9 @@
 package com.endicott.edu.rest;
 
-import com.endicott.edu.datalayer.EventsDao;
 import com.endicott.edu.datalayer.EverythingDao;
 import com.endicott.edu.datalayer.FacultyDao;
-import com.endicott.edu.models.EventsModel;
 import com.endicott.edu.models.EverythingModel;
-import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.models.Faculty;
 import com.endicott.edu.simulators.FacultyManager;
 import com.google.gson.Gson;
 
@@ -45,14 +43,16 @@ public class FacultyServlet extends javax.servlet.http.HttpServlet {
         else {
             String facultyIndex = splits[3];
             int index = Integer.parseInt(facultyIndex);
-            List<FacultyModel> faculty;
+            List<Faculty> faculty;
             faculty = FacultyDao.getFaculty(collegeId);
-            FacultyModel facultyMember = faculty.get(index);
+            Faculty facultyMember = faculty.get(index);
             if (splits[2].equalsIgnoreCase("fire")) {
                 FacultyDao.removeSingleFaculty(collegeId, facultyMember);
             }
             else if (splits[2].equalsIgnoreCase("raise")) {
-                FacultyDao.giveRaise(collegeId, index);
+                String raiseValueString = splits[4];
+                int raiseValue = Integer.parseInt(raiseValueString);
+                FacultyDao.giveRaise(collegeId, index, raiseValue);
             }
         }
 

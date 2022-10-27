@@ -2,7 +2,6 @@ package com.endicott.edu.ui;
 
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
-import com.endicott.edu.simulators.InventoryManager;
 import com.endicott.edu.simulators.PopupEventManager;
 import com.endicott.edu.simulators.SportManager;
 
@@ -32,8 +31,8 @@ public class InterfaceUtils {
         AchievementModel[] achievements = AchievementDao.getAchievementArray(collegeId);
         SportModel[] sport = SportsDao.getSportsArray(collegeId);
         SportModel[] availableSports = SportManager.getAvailableSports(collegeId);
-        StudentModel[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
-        FacultyModel[] faculty = FacultyDao.getFacultyArray(collegeId);
+        Student[] students = StudentDao.getStudentsArray(collegeId); //   StudentSimTalker.getStudents(server, collegeId, msg);
+        Faculty[] faculty = FacultyDao.getFacultyArray(collegeId);
         FloodModel flood = FloodDao.getFlood(collegeId);
         PopupEventManager popupManager = new PopupEventManager();
         TutorialModel[] tutorials = TutorialDao.getTutorialsArray(collegeId);
