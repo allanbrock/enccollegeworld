@@ -1,4 +1,4 @@
-package com.endicott.edu.rest;
+package com.endicott.edu.api;
 
 import com.google.gson.Gson;
 
