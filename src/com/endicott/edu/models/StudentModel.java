@@ -29,6 +29,8 @@ public class StudentModel extends PersonModel implements Serializable {
     private int academicCenterHappinessRating = 0;  //Student's happiness when it comes to their academic building (0-100)
     private int dormHappinessRating = 0;            //Student's happiness when it comes to their dorm building (0-100)
     private int overallBuildingHappinessRating = 0; //Student's happiness when it comes to the quality of building on campus (0-100)
+
+    public HappinessModel happinessVals = null;
     private String advisor ="";                     //The advisor of a student
     private int classYear = 0;                      //The current year the student is in(1=freshman, 2=sophomore etc.)
 
@@ -57,6 +59,8 @@ public class StudentModel extends PersonModel implements Serializable {
         this.hourLastUpdated = hourLastUpdated;
         this.nature = nature;
         this.classYear = year;
+        this.happinessVals = new HappinessModel();
+
     }
 
     public int getAcademicRating() {

@@ -476,6 +476,7 @@ public class StudentManager {
         int diningHallHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(diningHallQuality, 15, 0, 100);
 
         student.setDiningHallHappinessRating(diningHallHappinessLevel);
+        student.happinessVals.setDiningRating(diningHallHappinessLevel);
     }
 
     private void setAcademicCenterHappinessRating(StudentModel student, CollegeModel college) {
@@ -484,6 +485,7 @@ public class StudentManager {
         int acadmicBuildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(academicBuildingQuality, 15, 0, 100);
 
         student.setAcademicCenterHappinessRating(acadmicBuildingHappinessLevel);
+        student.happinessVals.setAcademicCenterRating(acadmicBuildingHappinessLevel);
     }
 
     private void setDormHappinessRating(StudentModel student,CollegeModel college){
@@ -492,11 +494,13 @@ public class StudentManager {
         int dormHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(dormQuality, 15, 0, 100);
 
         student.setDormHappinessRating(dormHappinessLevel);
+        student.happinessVals.setDormRating(dormHappinessLevel);
     }
 
     private void setStudentFunHappiness(StudentModel s, CollegeModel college) {
          //TODO: how do we decide if students are having fun?
         s.setFunHappinessRating(50);
+        s.happinessVals.setFunRating(50);
     }
 
     /**
@@ -516,6 +520,7 @@ public class StudentManager {
             rating = college.getYearlyTuitionRating(); //Previous rating the student had
         }
         s.setMoneyHappinessRating(SimulatorUtilities.getRandomNumberWithNormalDistribution(rating, 15, 0, 100));
+        s.happinessVals.setMoneyRating(rating);
     }
 
     private void setStudentAdvisorHappiness(StudentModel s, CollegeModel college, boolean initial) {
@@ -552,6 +557,7 @@ public class StudentManager {
         happinessRating = Math.max(happinessRating, 0);
         happinessRating = Math.min(happinessRating, 100);
         s.setAdvisorHappinessHappinessRating(happinessRating);
+        s.happinessVals.setAdvisorRating(happinessRating);
     }
 
     private void setStudentAcademicHappiness(StudentModel s, CollegeModel college) {
@@ -569,6 +575,7 @@ public class StudentManager {
         int happinessRating = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 5, 0, 100);
 
         s.setAcademicHappinessRating(happinessRating);
+        s.happinessVals.setAcademicRating(happinessRating);
     }
 
     private void setStudentProfessorHappiness(String collegeId, StudentModel s, int aveFacultyPerformance){
@@ -581,6 +588,7 @@ public class StudentManager {
         }
         Math.min(100, happinessRating);
         s.setProfessorHappinessRating(happinessRating);
+        s.happinessVals.setProfessorRating(happinessRating);
     }
 
     /**
@@ -594,12 +602,14 @@ public class StudentManager {
         if (initial) {
             //When college starts
             s.setHealthHappinessRating(100);
+            s.happinessVals.setHealthRating(100);
         }
         else {
             //Calculation: Everyday they are sick is -48 happiness, plus a bit of random deviation
             int happiness = (100-2*s.getNumberHoursLeftBeingSick());
             happiness = SimulatorUtilities.getRandomNumberWithNormalDistribution(happiness, 10, 0, 100);
             s.setHealthHappinessRating(happiness);
+            s.happinessVals.setHealthRating(happiness);
         }
     }
 
@@ -665,7 +675,9 @@ public class StudentManager {
         buildingHappinessLevel = SimulatorUtilities.getRandomNumberWithNormalDistribution(avgBuildingQuality, 15, 0, 100) + entertainmentHappiness;
         buildingHappinessLevel = Math.min(buildingHappinessLevel, 100);
         s.setOverallBuildingHappinessRating(buildingHappinessLevel);
+        s.happinessVals.setOverallBuildingRating(buildingHappinessLevel);
     }
+
 
     private void calculateStudentFacultyRatio(String collegeId, List<StudentModel> students) {
         CollegeModel college = CollegeDao.getCollege(collegeId);
