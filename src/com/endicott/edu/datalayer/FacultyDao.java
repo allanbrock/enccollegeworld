@@ -1,7 +1,6 @@
 package com.endicott.edu.datalayer;
 
-import com.endicott.edu.models.FacultyModel;
-import com.endicott.edu.simulators.FacultyManager;
+import com.endicott.edu.models.Faculty;
 
 import java.io.File;
 import java.util.List;
@@ -18,13 +17,13 @@ public class FacultyDao {
 
     private static Logger logger = Logger.getLogger("FacultyDao");
 
-    public static List<FacultyModel> getFaculty(String collegeId) {
-        return DaoUtils.<FacultyModel>getListData(collegeId, filename);
+    public static List<Faculty> getFaculty(String collegeId) {
+        return DaoUtils.<Faculty>getListData(collegeId, filename);
     }
 
-    public static FacultyModel[] getFacultyArray(String collegeId) {
-        List<FacultyModel> faculty = getFaculty(collegeId);
-        return faculty.toArray(new FacultyModel[faculty.size()]);
+    public static Faculty[] getFacultyArray(String collegeId) {
+        List<Faculty> faculty = getFaculty(collegeId);
+        return faculty.toArray(new Faculty[faculty.size()]);
     }
 
     /**
@@ -34,14 +33,14 @@ public class FacultyDao {
      * @param collegeId sim id
      * @param member faculty object
      */
-    public void saveNewFaculty(String collegeId, FacultyModel member) {
-        List<FacultyModel> faculty = getFaculty(collegeId);
+    public void saveNewFaculty(String collegeId, Faculty member) {
+        List<Faculty> faculty = getFaculty(collegeId);
         faculty.add(member);
         saveAllFaculty(collegeId, faculty);
     }
 
-    public static void saveAllFaculty(String collegeId, List<FacultyModel> faculty) {
-        DaoUtils.<List<FacultyModel>>saveData(collegeId, faculty, filename);
+    public static void saveAllFaculty(String collegeId, List<Faculty> faculty) {
+        DaoUtils.<List<Faculty>>saveData(collegeId, faculty, filename);
     }
 
     /**
@@ -53,11 +52,11 @@ public class FacultyDao {
         file.delete();
     }
 
-    public static void removeSingleFaculty(String collegeId, FacultyModel member){
+    public static void removeSingleFaculty(String collegeId, Faculty member){
         logger.info("Removing faculty member..");
         String tmp = member.getFacultyID();
-        List<FacultyModel> newFacultyList = getFaculty(collegeId);
-        for(FacultyModel faculty : newFacultyList){
+        List<Faculty> newFacultyList = getFaculty(collegeId);
+        for(Faculty faculty : newFacultyList){
             if(tmp.equals(faculty.getFacultyID())){
                 logger.info("removing " + faculty.getFacultyName());
                 newFacultyList.remove(faculty);
@@ -69,10 +68,10 @@ public class FacultyDao {
         logger.info("Faculty member removed: " + tmp);
     }
 
-    public static FacultyModel getAdvisor(String collegeId, String facultyId){
-        FacultyModel tmp = null;
-        List<FacultyModel> newFacultyList = getFaculty(collegeId);
-        for(FacultyModel faculty : newFacultyList){
+    public static Faculty getAdvisor(String collegeId, String facultyId){
+        Faculty tmp = null;
+        List<Faculty> newFacultyList = getFaculty(collegeId);
+        for(Faculty faculty : newFacultyList){
             if(facultyId.equals(faculty.getFacultyID())){
                 tmp = faculty;
             }
@@ -83,7 +82,7 @@ public class FacultyDao {
 
     public static void giveRaise(String collegeId, int index){
         logger.info("Giving a raise...");
-        List<FacultyModel> FacultyList = getFaculty(collegeId);
+        List<Faculty> FacultyList = getFaculty(collegeId);
         FacultyList.get(index).setSalary(FacultyList.get(index).getSalary() + 25000);
         saveAllFaculty(collegeId, FacultyList);
     }

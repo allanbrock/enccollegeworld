@@ -1,30 +1,25 @@
 package com.endicott.edu.rest;
 
+import com.endicott.edu.api.ServletTemplate;
 import com.endicott.edu.datalayer.StudentDao;
-import com.endicott.edu.models.StudentModel;
-import com.google.gson.Gson;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Logger;
+import com.endicott.edu.models.Student;
 
 /**
  * Created by Timothy Amello on 10/02/2019.
  */
 
-public class StudentsServlet extends ServletTemplate<StudentModel> {
+public class StudentsServlet extends ServletTemplate<Student> {
     @Override
-    protected StudentModel handleGet(String[] pathSegments) {
+    protected Student handleGet(String[] pathSegments) {
         if (pathSegments.length < 2) {
             return null;
         }
 
         String collegeId = pathSegments[0];
         int id = Integer.parseInt(pathSegments[1]);
-        StudentModel[] students = StudentDao.getStudentsArray(collegeId);
+        Student[] students = StudentDao.getStudentsArray(collegeId);
 
-        for (StudentModel student : students) {
+        for (Student student : students) {
             if (student.getId() == id) {
                 return student;
             }
@@ -34,13 +29,13 @@ public class StudentsServlet extends ServletTemplate<StudentModel> {
     }
 
     @Override
-    protected StudentModel[] handleGetList(String[] pathSegments) {
+    protected Student[] handleGetList(String[] pathSegments) {
         if (pathSegments.length > 1) {
             return null;
         }
 
         String collegeId = pathSegments[0];
-        StudentModel[] students = StudentDao.getStudentsArray(collegeId);
+        Student[] students = StudentDao.getStudentsArray(collegeId);
         return students;
     }
 }

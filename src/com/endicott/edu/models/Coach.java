@@ -1,11 +1,11 @@
 package com.endicott.edu.models;
 
 import com.endicott.edu.simulators.CoachManager;
-public class CoachModel extends FacultyModel {
+public class Coach extends Faculty {
     private String sportName;
 
 
-    public CoachModel(String sportName, String title, String department, String collegeID, int salary, Boolean isFemale){
+    public Coach(String sportName, String title, String department, String collegeID, int salary, Boolean isFemale){
         super(title, department, collegeID, salary, isFemale);
         this.sportName = sportName;
         CoachManager.addToCollegeCoaches(this);

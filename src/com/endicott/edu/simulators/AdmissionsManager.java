@@ -3,7 +3,6 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,9 +50,9 @@ public class AdmissionsManager {
             CollegeModel cm = CollegeDao.getCollege(collegeId);
             int level = Math.min(cm.getGate(),5);
 
-            ArrayList<PotentialStudentModel> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
-            ArrayList<PotentialStudentModel> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
-            ArrayList<PotentialStudentModel> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
+            ArrayList<PotentialStudent> listA = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
+            ArrayList<PotentialStudent> listB = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
+            ArrayList<PotentialStudent> listC = generateNewCandidates(adm.getOpenCapacity()-tempCapacity, collegeId, level);
             adm.getGroupA().addAll(listA);
             adm.getGroupB().addAll(listB);
             adm.getGroupC().addAll(listC);
@@ -80,11 +79,11 @@ public class AdmissionsManager {
 
         // BUILD THE EXISTING STUDENT BODY!
         int numStudentsAdded = 0;
-        List<StudentModel> students = StudentDao.getStudents(collegeId); //Returns an empty List for us
+        List<Student> students = StudentDao.getStudents(collegeId); //Returns an empty List for us
         // create potential students and convert them
         for(int yr = 1; yr <= 4; yr++) {
-            ArrayList<PotentialStudentModel> studentClass = generateNewCandidates(numStudents / 4, collegeId, 0);
-            for(PotentialStudentModel potentialStudent : studentClass){
+            ArrayList<PotentialStudent> studentClass = generateNewCandidates(numStudents / 4, collegeId, 0);
+            for(PotentialStudent potentialStudent : studentClass){
                 students = convertToStudent(collegeId, potentialStudent, yr, students);
                 numStudentsAdded++;
             }
@@ -110,9 +109,9 @@ public class AdmissionsManager {
      * @param collegeLevelForTierDistributions used to determine the quality of students generated
      * @param collegeId The id of the college in use
      */
-    public static ArrayList<PotentialStudentModel> generateNewCandidates(int numNewStudents, String collegeId, int collegeLevelForTierDistributions){
+    public static ArrayList<PotentialStudent> generateNewCandidates(int numNewStudents, String collegeId, int collegeLevelForTierDistributions){
         Random rand = new Random();
-        ArrayList<PotentialStudentModel> potentialStudents = new ArrayList<PotentialStudentModel>();
+        ArrayList<PotentialStudent> potentialStudents = new ArrayList<PotentialStudent>();
         float tierDistributions[] = new float[4];
         tierDistributions[0] = class_tier_distributions[collegeLevelForTierDistributions][0];
         tierDistributions[1] = class_tier_distributions[collegeLevelForTierDistributions][1] + tierDistributions[0];
@@ -120,7 +119,7 @@ public class AdmissionsManager {
         tierDistributions[3] = 1 - tierDistributions[2];
 
         for (int i = 0; i < numNewStudents; i++) {
-            PotentialStudentModel potentialStudent = new PotentialStudentModel();
+            PotentialStudent potentialStudent = new PotentialStudent();
             // assign a personality and a quality
 
             int tier;
@@ -141,24 +140,25 @@ public class AdmissionsManager {
             QualityModel qm = QualityModel.generateRandomModel(tier);
 
             if(rand.nextInt(10) + 1 > 5) {
-                potentialStudent.setGender(GenderModel.MALE);
-                potentialStudent.getAvatar().generateStudentAvatar(false);
+                potentialStudent.setGender(Gender.CISGENDER_MALE);
+                potentialStudent.generateNewAvatar();
                 potentialStudent.setFirstName(NameGenDao.generateFirstName(false));
                 potentialStudent.setLastName(NameGenDao.generateLastName());
             }
             else {
                 potentialStudent.setFirstName(NameGenDao.generateFirstName(true));
                 potentialStudent.setLastName(NameGenDao.generateLastName());
-                potentialStudent.setGender(GenderModel.FEMALE);
-                potentialStudent.getAvatar().generateStudentAvatar(true);
+                potentialStudent.setGender(Gender.CISGENDER_FEMALE);
+                potentialStudent.generateNewAvatar();
             }
-            potentialStudent.setName(potentialStudent.getFirstName(), potentialStudent.getLastName());
+            potentialStudent.setFullName(potentialStudent.getFirstName(), potentialStudent.getLastName());
             int id = IdNumberGenDao.getID(collegeId);
 
             potentialStudent.setId(id);
             potentialStudent.setHobbies(HobbyGenDao.generateHobbies());
-            potentialStudent.getAvatar().generateHappyAvatar();
-            potentialStudent.setNature(StudentModel.assignRandomNature());
+            potentialStudent.generateNewAvatar();
+            potentialStudent.makeAvatarHappy();
+            potentialStudent.setNature(Student.assignRandomNature());
             potentialStudent.setHappiness(80);
             potentialStudent.setPersonality(pm);
             potentialStudent.setQuality(qm);
@@ -170,7 +170,7 @@ public class AdmissionsManager {
     public static void acceptGroup(String collegeID, String group) {
         AdmissionsModel am = AdmissionsDao.getAdmissions(collegeID);
         CollegeModel college = CollegeDao.getCollege(collegeID);
-        List<StudentModel> students = StudentDao.getStudents(collegeID);
+        List<Student> students = StudentDao.getStudents(collegeID);
 
         //Check for the right group of students to pull from
         if(group.equalsIgnoreCase("GroupA")) {
@@ -203,9 +203,9 @@ public class AdmissionsManager {
      */
     public static void resetGroups(String collegeId) {
         AdmissionsModel am = AdmissionsDao.getAdmissions(collegeId);
-        List<PotentialStudentModel> tempA =  am.getGroupA();
-        List<PotentialStudentModel> tempB =  am.getGroupB();
-        List<PotentialStudentModel> tempC =  am.getGroupC();
+        List<PotentialStudent> tempA =  am.getGroupA();
+        List<PotentialStudent> tempB =  am.getGroupB();
+        List<PotentialStudent> tempC =  am.getGroupC();
         tempA.clear();
         tempB.clear();
         tempC.clear();
@@ -226,20 +226,20 @@ public class AdmissionsManager {
      *
      * @return Returns the arraylist for the programmer to save on their own so we are not saving so many times
      */
-    public static List<StudentModel> convertToStudent(String collegeID, PotentialStudentModel psm, int year, List<StudentModel> students) {
+    public static List<Student> convertToStudent(String collegeID, PotentialStudent psm, int year, List<Student> students) {
         //Create the new model and setup all the extra managers and classes necessary to generate a student
-        StudentModel sm = new StudentModel();
+        Student sm = new Student();
         BuildingManager bm = new BuildingManager();
         StudentManager stuMgr = new StudentManager();
         Random rand = new Random();
 
         //Sets the PersonModel fields for the newly accepted student
-        sm.setName(psm.getName());
+        sm.setFullName(psm.getFullName());
         sm.setFirstName(psm.getFirstName());
         sm.setLastName(psm.getLastName());
         sm.setId(psm.getId());
-        sm.setGender(psm.getGenderType());
-        sm.setAvatar(psm.getAvatar());
+        sm.setGender(psm.getGender());
+        sm.setAvatarCode(psm.getAvatarCode());
 
         //Assigns the newly accepted student to the specific buildings and advisor
         sm.setAcademicBuilding(bm.assignAcademicBuilding(collegeID));

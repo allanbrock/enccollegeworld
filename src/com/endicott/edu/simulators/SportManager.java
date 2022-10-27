@@ -3,7 +3,6 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.*;
 import com.endicott.edu.models.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -381,7 +380,7 @@ public class SportManager {
      */
     public static void calculateNumberOfPlayersOnTeam(String collegeId, SportModel sport){
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
         for(int i = 0; i < students.size(); i++) {
             if(students.get(i).getTeam().equals(sport)){
                 sport.setCurrentPlayers(sport.getCurrentPlayers() + 1);
@@ -489,7 +488,7 @@ public class SportManager {
      */
     public static SportModel addPlayers(String collegeId, SportModel sport){
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
         for(int i = 0; i < students.size(); i++) {
             if (students.get(i).isAthlete() && ((students.get(i).getTeam().equals("")) || students.get(i).getTeam().equals("unknown"))) {
                 if (students.get(i).getGender().equals(sport.getGender())) {
@@ -619,11 +618,11 @@ public class SportManager {
         }
 
         StudentDao stuDao = new StudentDao();
-        List<StudentModel> students = stuDao.getStudentsOnSport(collegeId,sport.getName());
+        List<Student> students = stuDao.getStudentsOnSport(collegeId,sport.getName());
         int numOfPlayers = sport.getCurrentPlayers();
         int totalAthleticAbility = 0;
 
-        for (StudentModel student : students) {
+        for (Student student : students) {
             totalAthleticAbility = totalAthleticAbility + student.getAthleticAbility();
         }
 
@@ -689,7 +688,7 @@ public class SportManager {
     }
 
     private static void assignCoach(String collegeId, SportModel team){
-        CoachModel coach;
+        Coach coach;
         Boolean isFemale;
         double r = Math.random();
         if(r < 0.5)
@@ -698,9 +697,9 @@ public class SportManager {
             isFemale = false;
 
         CollegeManager.logger.info("Avatar created");
-        coach = new CoachModel(team.getSportName(), "Coach", "Athletics", collegeId, 100000, isFemale);
-        coach.getAvatar().generateStudentAvatar(isFemale);
-        team.setCoachName(coach.getName());
+        coach = new Coach(team.getSportName(), "Coach", "Athletics", collegeId, 100000, isFemale);
+        coach.generateNewAvatar();
+        team.setCoachName(coach.getFullName());
 
     }
 
@@ -713,7 +712,7 @@ public class SportManager {
     }
 
     private static void updateCoachPerformance(String collegeId, String coachName){
-        CoachModel coach = CoachManager.getCoachByName(coachName);
+        Coach coach = CoachManager.getCoachByName(coachName);
         if (coach == null)
             return;
         FacultyManager.computeFacultyHappiness(coach, true);

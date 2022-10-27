@@ -2,7 +2,7 @@ package com.endicott.edu.models;
 
 import java.io.Serializable;
 
-public class PotentialStudentModel extends PersonModel implements Serializable {
+public class PotentialStudent extends Person implements Serializable {
     private String feedback = "";                   //The student's thoughts about the college (Based off of happiness)
     private String[] hobbies;
 
@@ -12,12 +12,12 @@ public class PotentialStudentModel extends PersonModel implements Serializable {
     private PersonalityModel personality = null;    // the personality of the student -- how much the student needs to remain happy
 
     //Empty constructor, expects you to fill in all fields that a normal constructor will
-    public PotentialStudentModel() {
+    public PotentialStudent() {
 
     }
 
-    public PotentialStudentModel(String firstName, String lastName, GenderModel gender, int id, int happiness,
-                                 PersonalityModel pm, QualityModel qm) {
+    public PotentialStudent(String firstName, String lastName, Gender gender, int id, int happiness,
+                            PersonalityModel pm, QualityModel qm) {
 
         super(firstName,lastName, gender,id, happiness);
         setQuality(qm);

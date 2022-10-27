@@ -9,14 +9,14 @@ import java.util.List;
  */
 
 public class StudentsModel implements Serializable {
-    private List<StudentModel> studentList;
+    private List<Student> studentList;
     private int retentionRate;
     private int happinessLevel;
     private int graduationRate;
 
-    public List<StudentModel> getStudentList() {return studentList; }
+    public List<Student> getStudentList() {return studentList; }
 
-    public void setStudentList(List<StudentModel> studentList) { this.studentList = studentList; }
+    public void setStudentList(List<Student> studentList) { this.studentList = studentList; }
 
     public int getRetentionRate() {
         return retentionRate;

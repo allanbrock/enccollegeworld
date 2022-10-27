@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Implemented 9-28-17 by Mazlin Higbee
  * mhigb411@mail.endicott.edu
  */
-public class FacultyModel extends PersonModel implements Serializable{
+public class Faculty extends Person implements Serializable{
 
     private String facultyID; // a unique id for that member of the faculty.
     private String collegeID;
@@ -21,21 +21,21 @@ public class FacultyModel extends PersonModel implements Serializable{
     private Boolean raiseRecentlyGiven;
     private Boolean underPerforming;
 
-    public FacultyModel(){}
+    public Faculty(){}
 
-    public FacultyModel( String title, String department, int salary, String officeLocation, String facultyID, Boolean isFemale) {
+    public Faculty(String title, String department, int salary, String officeLocation, String facultyID, Boolean isFemale) {
         super.firstName = NameGenDao.generateFirstName(isFemale);
         super.lastName = NameGenDao.generateLastName();
-        super.name = "Dr. " + super.firstName + " " + super.lastName;
+        super.fullName = "Dr. " + super.firstName + " " + super.lastName;
         this.title = title;
         this.departmentName = department;
         this.facultyID = facultyID;
     }
 
-    public FacultyModel(String title, String department, String collegeID, int salary, Boolean isFemale) {
+    public Faculty(String title, String department, String collegeID, int salary, Boolean isFemale) {
         super.firstName = NameGenDao.generateFirstName(isFemale);
         super.lastName = NameGenDao.generateLastName();
-        super.name = "Dr. " + super.firstName + " " + super.lastName;
+        super.fullName = "Dr. " + super.firstName + " " + super.lastName;
         this.title = title;
         this.departmentName = department;
         this.collegeID = collegeID;
@@ -51,7 +51,7 @@ public class FacultyModel extends PersonModel implements Serializable{
     public void setUnderPerforming(Boolean underPerforming){ this.underPerforming = underPerforming; }
 
     public String getFacultyName() {
-        return name;
+        return fullName;
     }
 
 //    public void setFacultyName(String facultyName) {

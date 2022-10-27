@@ -74,8 +74,8 @@ public class FireManager {
 
     public void createFire(String runId,int hoursAlive) {
         ArrayList<BuildingModel> buildings = (ArrayList<BuildingModel>) BuildingDao.getBuildings(runId);
-        ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
-        ArrayList<FacultyModel> faculty = (ArrayList<FacultyModel>) FacultyDao.getFaculty(runId);
+        ArrayList<Student> students = (ArrayList<Student>) StudentDao.getStudents(runId);
+        ArrayList<Faculty> faculty = (ArrayList<Faculty>) FacultyDao.getFaculty(runId);
         List<FireModel> fires = FireDAO.getFires(runId);
         BuildingManager buildingManager = new BuildingManager();
         StudentManager studentManager = new StudentManager();
@@ -140,15 +140,15 @@ public class FireManager {
         return rand.nextInt(100) <= probability || CollegeManager.isMode(runId, CollegeMode.DEMO_FIRE);
     }
 
-    private String generateVictimString(int studentDeaths, int facultyDeaths,String victims, ArrayList<StudentModel> students,
-                                        ArrayList<FacultyModel> faculty){
+    private String generateVictimString(int studentDeaths, int facultyDeaths,String victims, ArrayList<Student> students,
+                                        ArrayList<Faculty> faculty){
         for (int i = 0; i < studentDeaths && (students.size() > 0); ++i) {
             int studentToRemove = new Random().nextInt(students.size());
-            victims += students.get(studentToRemove).getName().trim() + ", ";
+            victims += students.get(studentToRemove).getFullName().trim() + ", ";
         }
         for (int j = 0; j <facultyDeaths && (faculty.size() > 0); j++) {
             int facultyToRemove = new Random().nextInt(faculty.size());
-            victims += faculty.get(facultyToRemove).getName().trim() + ", ";
+            victims += faculty.get(facultyToRemove).getFullName().trim() + ", ";
         }
         return victims;
     }
@@ -184,7 +184,7 @@ public class FireManager {
 
 
     public int getNumStudentFatalities(Boolean isCatastrophic, BuildingModel buildingToBurn, String runId) {
-        ArrayList<StudentModel> students = (ArrayList<StudentModel>) StudentDao.getStudents(runId);
+        ArrayList<Student> students = (ArrayList<Student>) StudentDao.getStudents(runId);
         Random rand = new Random();
         int numDeaths = rand.nextInt(10);
         if(!isCatastrophic){
@@ -208,8 +208,8 @@ public class FireManager {
         return studentVictims/4;
     }
 
-    public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<StudentModel> students,
-                                     ArrayList<FacultyModel> faculty, String victims, String runId,FireModel fire){
+    public void removeFireVictims(int numStudentDeaths, int numFacultyDeaths, ArrayList<Student> students,
+                                  ArrayList<Faculty> faculty, String victims, String runId, FireModel fire){
         if (numFacultyDeaths == faculty.size()){
             numFacultyDeaths = numStudentDeaths/2;
         } else if (numStudentDeaths == students.size()){
@@ -254,7 +254,7 @@ public class FireManager {
         if (numStudentDeaths > 0 && !fire.isCatastrophic()) {
             for (int i = 0; i < numStudentDeaths && (students.size() > 0); ++i) {
                 int studentToRemove = new Random().nextInt(students.size());
-                victims += students.get(studentToRemove).getName().trim() + ", ";
+                victims += students.get(studentToRemove).getFullName().trim() + ", ";
                 students.remove(studentToRemove);
             }
             StudentDao.saveAllStudents(runId,students);
@@ -268,7 +268,7 @@ public class FireManager {
                         }
                     }
                 }
-                victims += faculty.get(facultyToRemove).getName().trim() + ", ";
+                victims += faculty.get(facultyToRemove).getFullName().trim() + ", ";
                 faculty.remove(facultyToRemove);
             }
             FacultyDao.saveAllFaculty(runId,faculty);

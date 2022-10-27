@@ -5,7 +5,6 @@ import com.endicott.edu.datalayer.StudentDao;
 import com.endicott.edu.models.*;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -147,14 +146,14 @@ public class PlagueManager {
             accountant.payBill(collegeId, "The Government charged you $"+billFromGov+".00 for their assistance.", billFromGov);
 
             StudentDao studentDao = new StudentDao();
-            List<StudentModel> students = studentDao.getStudents(collegeId);
+            List<Student> students = studentDao.getStudents(collegeId);
             int studentSickCount = 0;
             String studentString = "The Government was able to stop the infection from spreading, but needed to charge you for their assistance." +
                     "They also were not able to save the infected students. The students who passed due to the outbreak are: ";
             for(int i = 0; i < students.size(); i++){
-                StudentModel student = students.get(i);
+                Student student = students.get(i);
                 if(students.get(i).getNumberHoursLeftBeingSick() > 0){
-                    studentString = studentString + students.get(i).getName() + ", ";
+                    studentString = studentString + students.get(i).getFullName() + ", ";
                     students.remove(i);
                 }
             }
@@ -185,7 +184,7 @@ public class PlagueManager {
             accountant.receiveIncome(collegeId, "Congraulations on the award!", 300000);
         }else{
             StudentDao studentDao = new StudentDao();
-            List<StudentModel> students = studentDao.getStudents(collegeId);
+            List<Student> students = studentDao.getStudents(collegeId);
             int probOfStudentDeath = 90;
             double startingNumStudents = students.size();
             double endingNumStudents = students.size();
@@ -193,7 +192,7 @@ public class PlagueManager {
             int numDeaths = 0;
             for(int i = 0; i < students.size(); i++){
                 int randProb = SimulatorUtilities.getRandomNumberWithNormalDistribution(80, 5,60, 95);
-                StudentModel student = students.get(i);
+                Student student = students.get(i);
                 if(randProb < probOfStudentDeath){
                     numDeaths++;
                     students.remove(i);
@@ -239,10 +238,10 @@ public class PlagueManager {
      */
     private int getNumberSick(String collegeId) {
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
         int studentSickCount = 0;
         for(int i = 0; i < students.size(); i++){
-            StudentModel student = students.get(i);
+            Student student = students.get(i);
             if(students.get(i).getNumberHoursLeftBeingSick() > 0){
                 studentSickCount++;
             }
@@ -287,7 +286,7 @@ public class PlagueManager {
      */
     private static int plagueSpreadsThroughStudents(String collegeId, int currentHour, int hoursLeftInPlague, int studentSickCount, boolean quarantine) {
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
         int nSick = 0;
         String someoneSick = "";
 
@@ -318,11 +317,11 @@ public class PlagueManager {
             int probCatchesFromOutside = 10; // out of 100
             int totalProb = Math.min(100, probCatchesFromOthers + probCatchesFromOutside);
             for (int i = 0; i < students.size(); i++) {
-                StudentModel student = students.get(i);
+                Student student = students.get(i);
                 if (student.getNumberHoursLeftBeingSick() <= 0 && rand.nextInt(100) <= totalProb) {
                     student.setNumberHoursLeftBeingSick(hoursLeftInPlague);
                     nSick++;
-                    someoneSick = student.getName();
+                    someoneSick = student.getFullName();
                 } else {
                     student.setNumberHoursLeftBeingSick(0);
                 }
@@ -348,18 +347,18 @@ public class PlagueManager {
      */
     private void randomlyMakeSomeStudentsSicker(String collegeId, int currentDay){
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
 
         Random rand = new Random();
         int x = rand.nextInt(1) + 6;
 
         for(int i = 0; i < students.size(); i++){
-            StudentModel student = students.get(i);
+            Student student = students.get(i);
             int sickTime = student.getNumberHoursLeftBeingSick();
             if(sickTime > 0) {
                 if(x == 4){
                     student.setNumberHoursLeftBeingSick(sickTime + 24);
-                    NewsManager.createNews(collegeId,currentDay, student.getName() + " is sicker", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
+                    NewsManager.createNews(collegeId,currentDay, student.getFullName() + " is sicker", NewsType.COLLEGE_NEWS, NewsLevel.BAD_NEWS);
 
                 }
             }
@@ -375,11 +374,11 @@ public class PlagueManager {
      */
     private int makeStudentsBetter(String collegeId, int hoursAlive) {
         StudentDao dao = new StudentDao();
-        List<StudentModel> students = dao.getStudents(collegeId);
+        List<Student> students = dao.getStudents(collegeId);
         int nSick = 0;
 
         for(int i = 0; i < students.size(); i++){
-            StudentModel student = students.get(i);
+            Student student = students.get(i);
             if(students.get(i).getNumberHoursLeftBeingSick() > 0){
                 int studentLastUpdated = students.get(i).getHourLastUpdated();
                 int timeChange = hoursAlive - studentLastUpdated;

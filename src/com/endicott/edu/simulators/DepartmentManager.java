@@ -3,7 +3,7 @@ package com.endicott.edu.simulators;
 import com.endicott.edu.datalayer.FacultyDao;
 import com.endicott.edu.models.AcademicModel;
 import com.endicott.edu.models.DepartmentModel;
-import com.endicott.edu.models.FacultyModel;
+import com.endicott.edu.models.Faculty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class DepartmentManager {
         int numNewDepartmentEmployees = 6;
         for(int i = 0; i < numNewDepartmentEmployees; i++){
             title = FacultyManager.generateFacultyTitle(department);
-            FacultyModel faculty = FacultyManager.addFaculty(collegeId, 100000, title, department.getDepartmentName());
+            Faculty faculty = FacultyManager.addFaculty(collegeId, 100000, title, department.getDepartmentName());
             if(faculty.getTitle().equals("Dean") || faculty.getTitle().equals("Assistant Dean"))
                 department.putInEmployeeCounts(faculty.getTitle(), 1);
             else
@@ -85,8 +85,8 @@ public class DepartmentManager {
 
     private static int computeDepartmentRating(String collegeId, DepartmentModel department){
         int ratingSum = 0;
-        ArrayList<FacultyModel> departmentFaculty = new ArrayList<>();
-        for(FacultyModel f : FacultyDao.getFaculty(collegeId)){
+        ArrayList<Faculty> departmentFaculty = new ArrayList<>();
+        for(Faculty f : FacultyDao.getFaculty(collegeId)){
             if(f.getDepartmentName().equals(department.getDepartmentName())){
                 departmentFaculty.add(f);
             }
@@ -113,7 +113,7 @@ public class DepartmentManager {
     }
 
 
-    public static void removeEmployeeFromDepartment(FacultyModel member, DepartmentModel department){
+    public static void removeEmployeeFromDepartment(Faculty member, DepartmentModel department){
         department.putInEmployeeCounts(member.getTitle(), department.getEmployeeCounts().get(member.getTitle()) - 1);
     }
 }

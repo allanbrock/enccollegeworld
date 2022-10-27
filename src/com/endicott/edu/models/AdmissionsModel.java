@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class AdmissionsModel implements Serializable {
 
-    private List<PotentialStudentModel> groupA;
-    private List<PotentialStudentModel> groupB;
-    private List<PotentialStudentModel> groupC;
+    private List<PotentialStudent> groupA;
+    private List<PotentialStudent> groupB;
+    private List<PotentialStudent> groupC;
     private int weeksUntilAcceptance;
     private int numberOfRegenerationsLeft;
     private String selectedGroup;
@@ -28,13 +28,13 @@ public class AdmissionsModel implements Serializable {
         openCapacity = 0;                   //Number of students that can be accepted this year (Graduating students + current capacity)
     }
 
-    public List<PotentialStudentModel> getGroupA() { return groupA; }
-    public List<PotentialStudentModel> getGroupB() { return groupB; }
-    public List<PotentialStudentModel> getGroupC() { return groupC; }
+    public List<PotentialStudent> getGroupA() { return groupA; }
+    public List<PotentialStudent> getGroupB() { return groupB; }
+    public List<PotentialStudent> getGroupC() { return groupC; }
 
-    public void setGroupA(List<PotentialStudentModel> studentList) { this.groupA = studentList; }
-    public void setGroupB(List<PotentialStudentModel> studentList) { this.groupB = studentList; }
-    public void setGroupC(List<PotentialStudentModel> studentList) { this.groupC = studentList; }
+    public void setGroupA(List<PotentialStudent> studentList) { this.groupA = studentList; }
+    public void setGroupB(List<PotentialStudent> studentList) { this.groupB = studentList; }
+    public void setGroupC(List<PotentialStudent> studentList) { this.groupC = studentList; }
 
     public int getWeeksLeft() { return weeksUntilAcceptance; }
     public int getNumberOfRegenerationsLeft() { return numberOfRegenerationsLeft; }
@@ -46,25 +46,25 @@ public class AdmissionsModel implements Serializable {
     public void setSelectedGroup(String group) { this.selectedGroup = group; }
     public void setOpenCapacity(int num) { this.openCapacity = num; }
 
-    public void getAcademicImpact(List<PotentialStudentModel> studentGroup){
+    public void getAcademicImpact(List<PotentialStudent> studentGroup){
         academicRatingImpact = 0;
-        for (PotentialStudentModel student : studentGroup){
+        for (PotentialStudent student : studentGroup){
             academicRatingImpact += student.getQuality().getAcademicQuality();
         }
         academicRatingImpact = (academicRatingImpact/studentGroup.size());
     }
 
-    public void getAthleticImpact(List<PotentialStudentModel> studentGroup){
+    public void getAthleticImpact(List<PotentialStudent> studentGroup){
         athleticRatingImpact = 0;
-        for (PotentialStudentModel student : studentGroup){
+        for (PotentialStudent student : studentGroup){
             athleticRatingImpact += student.getQuality().getAthleticQuality();
         }
         athleticRatingImpact = (athleticRatingImpact/studentGroup.size());
     }
 
-    public void getSocialImpact(List<PotentialStudentModel> studentGroup){
+    public void getSocialImpact(List<PotentialStudent> studentGroup){
         socialRatingImpact = 0;
-        for (PotentialStudentModel student : studentGroup){
+        for (PotentialStudent student : studentGroup){
             socialRatingImpact += student.getQuality().getSocialQuality();
         }
         socialRatingImpact = (socialRatingImpact/studentGroup.size());

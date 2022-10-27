@@ -1,17 +1,14 @@
 package com.endicott.edu.rest;
 
 import com.endicott.edu.datalayer.SportsDao;
-import com.endicott.edu.models.CoachModel;
+import com.endicott.edu.models.Coach;
 import com.endicott.edu.models.SportModel;
 import com.endicott.edu.simulators.CoachManager;
 import com.endicott.edu.simulators.FacultyManager;
-import com.endicott.edu.simulators.PopupEventManager;
-import com.endicott.edu.simulators.SportManager;
 import com.endicott.edu.ui.InterfaceUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,10 +129,10 @@ public class SportsCoachesOptionServlet extends javax.servlet.http.HttpServlet {
 }
 
 class SportsCoachesOptionServletModel{
-    private CoachModel coachModel;
+    private Coach coachModel;
     private String actionId,collegeId;
 
-    public SportsCoachesOptionServletModel(CoachModel coachModel, String actionId, String collegeId) {
+    public SportsCoachesOptionServletModel(Coach coachModel, String actionId, String collegeId) {
         this.coachModel = coachModel;
         this.actionId = actionId;
         this.collegeId = collegeId;
@@ -144,11 +141,11 @@ class SportsCoachesOptionServletModel{
     public SportsCoachesOptionServletModel() {
     }
 
-    public CoachModel getCoachModel() {
+    public Coach getCoachModel() {
         return coachModel;
     }
 
-    public void setCoachModel(CoachModel coachModel) {
+    public void setCoachModel(Coach coachModel) {
         this.coachModel = coachModel;
     }
 
