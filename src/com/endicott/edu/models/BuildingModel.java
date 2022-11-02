@@ -57,6 +57,7 @@ public class BuildingModel implements Serializable {
         this.shownQuality = updateShownQuality(hiddenQuality);
         this.kindOfBuilding = kindOfBuilding;
         setStatsBasedOnSize(size);
+        this.upgrades = new ArrayList<Upgrade>();
     }
     //for AdministrativeBldgModel, LibraryModel, EntertainmentCenterModel, HealthCenterModel and SportsCenterModel
     public BuildingModel(String name, String kindOfBuilding){
@@ -67,6 +68,7 @@ public class BuildingModel implements Serializable {
         this.kindOfBuilding = kindOfBuilding;
         setStatsBasedOnSize("");
         this.capacity = setCapacityBasedOnSize(size);
+        this.upgrades = new ArrayList<Upgrade>();
     }
 
     public BuildingModel() {
