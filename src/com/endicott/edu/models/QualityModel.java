@@ -40,9 +40,29 @@ public class QualityModel implements Serializable {
     // generates a completely random model for the given tier of student
     public static QualityModel generateRandomModel(String collegeId, int academicTier, int sportsTier, int socialTier){
         QualityModel q = new QualityModel(collegeId);
+
         q.academics = q.schoolAcademics + generateDifference(academicTier);
+        // Makes sure the generated values will stay between a range of 0-100
+        if(q.academics > 100){
+            q.academics = 100;
+        } else if (q.academics < 0) {
+            q.academics = 0;
+        }
+
         q.sports = q.schoolSports + generateDifference(sportsTier);
+        // Makes sure the generated values will stay between a range of 0-100
+        if(q.sports > 100){
+            q.sports = 100;
+        } else if (q.sports < 0) {
+            q.sports = 0;
+        }
         q.social = q.schoolSocial + generateDifference(socialTier);
+        // Makes sure the generated values will stay between a range of 0-100
+        if(q.social > 100){
+            q.social = 100;
+        } else if (q.social < 0) {
+            q.social = 0;
+        }
         return q;
     }
 
