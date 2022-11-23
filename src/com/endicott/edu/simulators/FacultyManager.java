@@ -272,11 +272,11 @@ public class FacultyManager {
     // Used specifically for initial happiness computation
     private static int computeTemporaryHappiness(int salary){
         Random r = new Random();
-        if(salary == 100000)
+        if(salary <= 100000)
             return r.nextInt(100 - 50) + 50;
-        else if(salary == 125000)
+        else if(salary <= 125000)
             return r.nextInt(100 - 65) + 50;
-        else if(salary == 150000)
+        else if(salary <= 150000)
             return r.nextInt(100 - 75) + 50;
         else
             return r.nextInt(100 - 90) + 50;

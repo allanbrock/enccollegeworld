@@ -80,10 +80,10 @@ public class FacultyDao {
         return tmp;
     }
 
-    public static void giveRaise(String collegeId, int index){
+    public static void giveRaise(String collegeId, int index, int amount){
         logger.info("Giving a raise...");
         List<Faculty> FacultyList = getFaculty(collegeId);
-        FacultyList.get(index).setSalary(FacultyList.get(index).getSalary() + 25000);
+        FacultyList.get(index).setSalary(FacultyList.get(index).getSalary() + amount);
         saveAllFaculty(collegeId, FacultyList);
     }
 

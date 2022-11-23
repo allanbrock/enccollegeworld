@@ -503,7 +503,7 @@ public class StudentManager {
     }
 
     private void setStudentFunHappiness(Student s, CollegeModel college) {
-         //TODO: how do we decide if students are having fun?
+        //TODO: how do we decide if students are having fun?
         s.setFunHappinessRating(50);
     }
 
@@ -804,13 +804,13 @@ public class StudentManager {
             Collections.addAll(adjectives, "awful ", "bad ", "terrible ", "crummy ", "lousy ", "sad ");
             isNegative = true;
 
-        // Positive feedback
+            // Positive feedback
         } else if(student.getHappiness() > 70) {
             Collections.addAll(verbs, "love ", "am very pleased with ", "am ecstatic about ");
             Collections.addAll(adjectives, "great ", "fantastic ", "super ");
             isNegative = false;
 
-        // Neutral feedback
+            // Neutral feedback
         } else {
             useNoun                 = false;
             String[] neutralIntro   = {"All things considered, ", "All together, ", ""};
@@ -824,9 +824,9 @@ public class StudentManager {
             }
             else {
                 feedback =  neutralIntro[useNeutralIntro] +
-                            neutralMidro[new Random().nextInt(neutralMidro.length)].toLowerCase();
+                        neutralMidro[new Random().nextInt(neutralMidro.length)].toLowerCase();
             }
-                feedback += neutralOutro[new Random().nextInt(neutralOutro.length)];
+            feedback += neutralOutro[new Random().nextInt(neutralOutro.length)];
         }
 
         if(useNoun) {       //If it was not a neutral response
@@ -915,4 +915,3 @@ public class StudentManager {
             return "Normal";
     }
 }
-
